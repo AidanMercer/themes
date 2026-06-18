@@ -1,5 +1,4 @@
 import QtQuick
-import Qt5Compat.GraphicalEffects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Mpris
@@ -298,167 +297,113 @@ Item {
         return { fill: 1, active: true, sustain: true }                   // held: breathing
     }
 
-    // ---- rendering helpers ---------------------------------------------------
-    function hex(c) {
-        function h(x) { let v = Math.round(x * 255).toString(16); return v.length < 2 ? "0" + v : v }
-        return "#" + h(c.r) + h(c.g) + h(c.b)
-    }
+    // ---- scatter layout (Edgerunners kinetic text) -------------------------
+    // One line at a time: the active line's words form a tight bunch that jumps
+    // around a fixed box in the TOP-RIGHT (clear of the top bar and the mid-left
+    // clock), seeded per line so each line gets a fresh arrangement.
+    // Mono font → word width = chars * charW (exact layout). Big + bold.
+    property real lyricSize: Math.round(40 * pal.uiScale)
+    readonly property real charW: lyricSize * 0.58           // Noto Sans Mono advance
 
-    readonly property real uiScale: pal.uiScale
-    readonly property real lyricWidth: Math.min(root.width * 0.62, 1100)
+    // fixed bunch box, top-right (clear of the top bar and the mid-left clock)
+    readonly property real boxW: Math.round(root.width * 0.45)
+    readonly property real boxH: Math.round(root.height * 0.22)
+    readonly property real boxX: Math.round(root.width * 0.965 - boxW)
+    readonly property real boxY: Math.round(root.height * 0.07)
 
-    // ---- lyric display -------------------------------------------------------
-    Item {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(root.height * 0.12)
-        width: backing.width
-        height: backing.height
-        scale: root.uiScale
-        transformOrigin: Item.Bottom
-        visible: root.player !== null
-
-        Rectangle {
-            id: backing
-            width: col.width + 56
-            height: col.height + 36
-            radius: 6
-            color: Qt.rgba(0, 0, 0, 0.45)
-            border.color: Qt.rgba(root.neon.r, root.neon.g, root.neon.b, 0.30)
-            border.width: 1
-
-            Column {
-                id: col
-                anchors.centerIn: parent
-                width: root.lyricWidth
-                spacing: 10
-
-                // previous line (context, faint)
-                Text {
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
-                    wrapMode: Text.WordWrap
-                    textFormat: Text.PlainText
-                    visible: root.activeIndex > 0
-                    text: root.lineText(root.activeIndex - 1)
-                    color: Qt.rgba(1, 1, 1, 0.35)
-                    font.family: root.mono
-                    font.pixelSize: 18
-                }
-
-                // current line — per-word karaoke (clip-reveal fill + neon glow +
-                // held-note breath), or a fallback status when there's no line.
-                Item {
-                    width: parent.width
-                    height: 72
-
-                    Row {
-                        id: wordRow
-                        anchors.centerIn: parent
-                        spacing: 12
-                        visible: root.activeWords.length > 0
-                        // keep the line on one row: shrink to fit, but not unreadable
-                        scale: Math.max(0.62, implicitWidth > root.lyricWidth ? root.lyricWidth / implicitWidth : 1)
-                        transformOrigin: Item.Center
-
-                        Repeater {
-                            model: root.activeWords
-                            delegate: Item {
-                                id: wd
-                                required property int index
-                                required property string modelData
-                                readonly property var st: root.wordState(index, root.estMs)
-                                readonly property real fill: st.fill
-                                readonly property bool lit: st.active || st.sustain   // neon vs white/grey
-                                property real pulse: 0
-
-                                width: wbase.implicitWidth
-                                height: wbase.implicitHeight
-                                scale: 1 + (st.active ? 0.06 : 0) + pulse * 0.05
-                                transformOrigin: Item.Center
-
-                                Text {
-                                    id: wbase
-                                    text: wd.modelData
-                                    textFormat: Text.PlainText
-                                    color: "#8a8a93"                                  // upcoming
-                                    font.family: root.mono; font.pixelSize: 30; font.bold: true
-                                }
-                                // neon halo behind the lit fill only
-                                Glow {
-                                    anchors.fill: wfillClip
-                                    source: wfillClip
-                                    visible: wd.lit
-                                    color: root.neon
-                                    radius: 5 + wd.pulse * 7
-                                    samples: 25
-                                    spread: 0.25
-                                }
-                                // filled portion, revealed left→right by fill
-                                Item {
-                                    id: wfillClip
-                                    width: parent.width * Math.max(0, Math.min(1, wd.fill))
-                                    height: parent.height
-                                    clip: true
-                                    Text {
-                                        width: wbase.width
-                                        text: wd.modelData
-                                        textFormat: Text.PlainText
-                                        color: wd.lit ? root.neon : "#ffffff"         // active vs sung
-                                        font.family: root.mono; font.pixelSize: 30; font.bold: true
-                                    }
-                                }
-                                // held-note breath while sustaining; reset when it ends
-                                SequentialAnimation {
-                                    running: wd.st.sustain
-                                    loops: Animation.Infinite
-                                    NumberAnimation { target: wd; property: "pulse"; to: 1; duration: 480; easing.type: Easing.InOutSine }
-                                    NumberAnimation { target: wd; property: "pulse"; to: 0; duration: 480; easing.type: Easing.InOutSine }
-                                }
-                                onLitChanged: if (!lit) pulse = 0
-                            }
-                        }
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        visible: root.activeWords.length === 0
-                        textFormat: Text.RichText
-                        horizontalAlignment: Text.AlignHCenter
-                        font.family: root.mono
-                        font.pixelSize: 30
-                        text: !root.lyricsLoaded ? "<span style='color:#8a8a93'>…</span>"
-                              : !root.lyricsSynced ? "<span style='color:#8a8a93'>♪ no synced lyrics</span>"
-                              : "<span style='color:" + root.hex(root.neon) + "'>♪</span>"
-                    }
-                }
-
-                // next line (context, faint)
-                Text {
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
-                    wrapMode: Text.WordWrap
-                    textFormat: Text.PlainText
-                    visible: root.activeIndex + 1 < root.lines.length
-                    text: root.lineText(root.activeIndex + 1)
-                    color: Qt.rgba(1, 1, 1, 0.35)
-                    font.family: root.mono
-                    font.pixelSize: 18
-                }
-
-            }
+    function rng32(seed) {
+        let a = seed >>> 0
+        return function () {
+            a = (a + 0x6D2B79F5) | 0
+            let t = Math.imul(a ^ (a >>> 15), 1 | a)
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296
         }
     }
 
-    // Nothing playing on any player → quiet hint so we know it's alive, not stuck.
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(root.height * 0.12)
-        visible: root.player === null
-        text: "lyricvis: waiting for a player…"
-        color: root.dim
-        font.family: root.mono
-        font.pixelSize: 14
+    // [{x,y}] within the box — a tight jumping scatter (words kept close), seeded
+    // per line so each line lands in a fresh arrangement.
+    function scatter(seedIdx, words) {
+        const n = words.length
+        if (n === 0) return []
+        const rowH = lyricSize * 1.25
+        const r = rng32((seedIdx + 1) * 2654435761)
+        let out = [], cx = 0, cy = 0
+        for (let i = 0; i < n; i++) {
+            const wPx = Math.max(charW, words[i].length * charW)
+            if (cx + wPx > boxW) { cx = r() * boxW * 0.1; cy += rowH * (0.9 + r() * 0.4) }
+            out.push({ x: cx + (r() - 0.5) * charW * 0.4, y: cy + (r() - 0.5) * rowH * 0.3 })
+            cx += wPx + charW * (0.7 + r() * 0.9)                              // small gap, words kept close
+            if (r() < 0.22) { cy += rowH * (0.6 + r() * 0.5); cx = r() * boxW * 0.2 }  // occasional jump down
+        }
+        let maxY = 0
+        for (let i = 0; i < n; i++) maxY = Math.max(maxY, out[i].y)
+        if (maxY > boxH) { const k = boxH / maxY; for (let i = 0; i < n; i++) out[i].y *= k }
+        return out
+    }
+
+    readonly property var curLayout: scatter(activeIndex, activeWords)
+
+    // ---- lyric display (one line at a time, scattered top-right) ------------
+    // The active line builds up word-by-word as a tight bunch in the top-right box,
+    // full-strength neon, big & bold. On a line change it clears and the next line
+    // appears in a fresh arrangement. Only ever one line on screen.
+    Item {
+        id: region
+        anchors.fill: parent
+
+        Repeater {
+            model: root.activeWords
+            delegate: Item {
+                id: wd
+                required property int index
+                required property string modelData
+                readonly property var st: root.wordState(index, root.estMs)
+                readonly property bool shown: st.active || st.fill >= 1
+                readonly property var p: root.curLayout[index] ? root.curLayout[index] : ({ x: 0, y: 0 })
+
+                x: root.boxX + p.x
+                y: root.boxY + p.y
+                width: wt.width
+                height: wt.height
+                transformOrigin: Item.Center
+
+                opacity: shown ? 1 : 0                     // upcoming hidden until reached, then full strong
+                scale: shown ? 1 : 0.8
+                Behavior on opacity { NumberAnimation { duration: 130; easing.type: Easing.OutQuad } }
+                Behavior on scale  { NumberAnimation { duration: 200; easing.type: Easing.OutBack } }
+
+                Text {
+                    id: wt
+                    text: wd.modelData.toUpperCase()
+                    color: root.neon
+                    style: Text.Outline
+                    styleColor: Qt.rgba(0, 0, 0, 0.6)
+                    font.family: root.mono
+                    font.pixelSize: root.lyricSize
+                    font.weight: Font.Black
+                    font.letterSpacing: 1
+                }
+            }
+        }
+
+        // status when there's no active line (standby / loading / no lyrics)
+        Text {
+            x: root.boxX
+            y: root.boxY
+            visible: root.activeWords.length === 0
+            text: root.player === null ? "// STANDBY"
+                  : !root.lyricsLoaded ? "// SYNC…"
+                  : !root.lyricsSynced ? "// NO LYRICS"
+                  : "♪"
+            color: root.neon
+            opacity: 0.85
+            style: Text.Outline
+            styleColor: Qt.rgba(0, 0, 0, 0.6)
+            font.family: root.mono
+            font.pixelSize: Math.round(root.lyricSize * 0.6)
+            font.weight: Font.Black
+            font.letterSpacing: 3
+        }
     }
 }
