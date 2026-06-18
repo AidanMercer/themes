@@ -307,7 +307,7 @@ Item {
 
     // fixed bunch box, top-right (clear of the top bar and the mid-left clock)
     readonly property real boxW: Math.round(root.width * 0.45)
-    readonly property real boxH: Math.round(root.height * 0.22)
+    readonly property real boxH: Math.round(root.height * 0.27)
     readonly property real boxX: Math.round(root.width * 0.965 - boxW)
     readonly property real boxY: Math.round(root.height * 0.07)
 
@@ -321,24 +321,46 @@ Item {
         }
     }
 
-    // [{x,y}] within the box — a tight jumping scatter (words kept close), seeded
-    // per line so each line lands in a fresh arrangement.
+    function collides(rects, x, y, w, h) {
+        for (let i = 0; i < rects.length; i++) {
+            const o = rects[i]
+            if (x < o.x + o.w && x + w > o.x && y < o.y + o.h && y + h > o.y) return true
+        }
+        return false
+    }
+
+    // [{x,y,size}] within the box — a jumping scatter where every word gets its
+    // own size (some big, some small) and NO two words overlap: each word prefers
+    // its jumping-path spot, then gets pushed clear of the already-placed words.
+    // Seeded per line so each line lands in a fresh arrangement.
     function scatter(seedIdx, words) {
         const n = words.length
         if (n === 0) return []
-        const rowH = lyricSize * 1.25
         const r = rng32((seedIdx + 1) * 2654435761)
-        let out = [], cx = 0, cy = 0
+        const row = lyricSize * 1.15
+        let out = [], placed = [], cx = 0, cy = 0
         for (let i = 0; i < n; i++) {
-            const wPx = Math.max(charW, words[i].length * charW)
-            if (cx + wPx > boxW) { cx = r() * boxW * 0.1; cy += rowH * (0.9 + r() * 0.4) }
-            out.push({ x: cx + (r() - 0.5) * charW * 0.4, y: cy + (r() - 0.5) * rowH * 0.3 })
-            cx += wPx + charW * (0.7 + r() * 0.9)                              // small gap, words kept close
-            if (r() < 0.22) { cy += rowH * (0.6 + r() * 0.5); cx = r() * boxW * 0.2 }  // occasional jump down
+            const factor = r() < 0.25 ? (1.35 + r() * 0.5) : (0.9 + r() * 0.3)   // some words bigger
+            const fpx = lyricSize * factor
+            const cw = fpx * 0.58
+            const wPx = Math.max(cw, words[i].length * cw)
+            const hPx = fpx * 1.1
+            const pad = 6
+            if (cx + wPx > boxW) { cx = r() * boxW * 0.1; cy += row * (0.9 + r() * 0.4) }
+            let px = Math.max(0, cx + (r() - 0.5) * cw * 0.5)
+            let py = Math.max(0, cy + (r() - 0.5) * row * 0.3)
+            let tries = 0
+            while (tries < 80 && collides(placed, px - pad, py - pad, wPx + pad * 2, hPx + pad * 2)) {
+                py += row * 0.45
+                if (py + hPx > boxH) { py = r() * row * 0.4; px += wPx * 0.5 + cw }  // off the bottom → shift right
+                tries++
+            }
+            out.push({ x: px, y: py, size: fpx })
+            placed.push({ x: px, y: py, w: wPx, h: hPx })
+            cx = px + wPx + cw * (0.6 + r() * 0.8)
+            cy = py
+            if (r() < 0.2) { cy += row * (0.6 + r() * 0.5); cx = r() * boxW * 0.2 }  // occasional jump down
         }
-        let maxY = 0
-        for (let i = 0; i < n; i++) maxY = Math.max(maxY, out[i].y)
-        if (maxY > boxH) { const k = boxH / maxY; for (let i = 0; i < n; i++) out[i].y *= k }
         return out
     }
 
@@ -360,7 +382,9 @@ Item {
                 required property string modelData
                 readonly property var st: root.wordState(index, root.estMs)
                 readonly property bool shown: st.active || st.fill >= 1
-                readonly property var p: root.curLayout[index] ? root.curLayout[index] : ({ x: 0, y: 0 })
+                readonly property var p: root.curLayout[index] ? root.curLayout[index] : ({ x: 0, y: 0, size: root.lyricSize })
+                readonly property bool ripple: modelData.indexOf("?") !== -1   // ? words ripple
+                property real phase: 0
 
                 x: root.boxX + p.x
                 y: root.boxY + p.y
@@ -373,16 +397,44 @@ Item {
                 Behavior on opacity { NumberAnimation { duration: 130; easing.type: Easing.OutQuad } }
                 Behavior on scale  { NumberAnimation { duration: 200; easing.type: Easing.OutBack } }
 
+                // ripple driver — only for words containing '?'
+                NumberAnimation on phase {
+                    running: wd.ripple && wd.shown
+                    from: 0; to: 6.2832; duration: 1100; loops: Animation.Infinite
+                }
+
+                // plain word (also the size reference for the delegate)
                 Text {
                     id: wt
+                    visible: !wd.ripple
                     text: wd.modelData.toUpperCase()
                     color: root.neon
                     style: Text.Outline
                     styleColor: Qt.rgba(0, 0, 0, 0.6)
                     font.family: root.mono
-                    font.pixelSize: root.lyricSize
+                    font.pixelSize: wd.p.size
                     font.weight: Font.Black
                     font.letterSpacing: 1
+                }
+                // rippling word — per-letter travelling sine wave
+                Row {
+                    visible: wd.ripple
+                    Repeater {
+                        model: wd.ripple ? wd.modelData.toUpperCase().split("") : []
+                        delegate: Text {
+                            required property int index
+                            required property string modelData
+                            text: modelData
+                            y: Math.sin(wd.phase + index * 0.6) * (wd.p.size * 0.18)
+                            color: root.neon
+                            style: Text.Outline
+                            styleColor: Qt.rgba(0, 0, 0, 0.6)
+                            font.family: root.mono
+                            font.pixelSize: wd.p.size
+                            font.weight: Font.Black
+                            font.letterSpacing: 1
+                        }
+                    }
                 }
             }
         }
@@ -391,9 +443,8 @@ Item {
         Text {
             x: root.boxX
             y: root.boxY
-            visible: root.activeWords.length === 0
-            text: root.player === null ? "// STANDBY"
-                  : !root.lyricsLoaded ? "// SYNC…"
+            visible: root.player !== null && root.activeWords.length === 0
+            text: !root.lyricsLoaded ? "// SYNC…"
                   : !root.lyricsSynced ? "// NO LYRICS"
                   : "♪"
             color: root.neon
