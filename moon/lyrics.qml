@@ -366,6 +366,18 @@ Item {
 
     readonly property var curLayout: scatter(activeIndex, activeWords)
 
+    // clear a finished line early: once its last word is done plus a short hold,
+    // the line fades out instead of lingering through a long gap to the next line.
+    readonly property real lineHoldMs: 300
+    readonly property real lineDoneMs: { const sp = wordSpans; return sp.length ? sp[sp.length - 1].end : 0 }
+    readonly property bool lineExpired: activeIndex >= 0 && estMs > lineDoneMs + lineHoldMs
+
+    // brief blank "cut" on each line change so the old line is fully gone before
+    // the new one appears — guarantees only one line shows at a time.
+    property bool gate: true
+    onActiveIndexChanged: { gate = false; gateCut.restart() }
+    Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
+
     // ---- lyric display (one line at a time, scattered top-right) ------------
     // The active line builds up word-by-word as a tight bunch in the top-right box,
     // full-strength neon, big & bold. On a line change it clears and the next line
@@ -381,7 +393,7 @@ Item {
                 required property int index
                 required property string modelData
                 readonly property var st: root.wordState(index, root.estMs)
-                readonly property bool shown: st.active || st.fill >= 1
+                readonly property bool shown: (st.active || st.fill >= 1) && !root.lineExpired && root.gate
                 readonly property var p: root.curLayout[index] ? root.curLayout[index] : ({ x: 0, y: 0, size: root.lyricSize })
                 readonly property bool ripple: modelData.indexOf("?") !== -1   // ? words ripple
                 property real phase: 0
@@ -392,8 +404,10 @@ Item {
                 height: wt.height
                 transformOrigin: Item.Center
 
-                opacity: shown ? 1 : 0                     // upcoming hidden until reached, then full strong
-                scale: shown ? 1 : 0.8
+                // words appear one-by-one as sung; the whole line fades out once
+                // it's done (lineExpired) instead of lingering until the next line
+                opacity: shown ? 1 : 0
+                scale: shown ? 1 : 0.85
                 Behavior on opacity { NumberAnimation { duration: 130; easing.type: Easing.OutQuad } }
                 Behavior on scale  { NumberAnimation { duration: 200; easing.type: Easing.OutBack } }
 
@@ -439,7 +453,7 @@ Item {
             }
         }
 
-        // status when there's no active line (standby / loading / no lyrics)
+        // small status when a track's playing but there's no active lyric word
         Text {
             x: root.boxX
             y: root.boxY
