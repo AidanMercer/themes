@@ -7,56 +7,85 @@ give another theme lyrics, drop a `lyrics.qml` in its folder.
 
 ## How it works (3 parts)
 
-1. **Clock** — `lyrics.qml` reads spotifyd's position over MPRIS (`Quickshell.Services.Mpris`),
-   re-anchors once a second, and interpolates at 30fps → a smooth `estMs`.
-2. **Fetch** — on each track change it runs the shared
-   `~/.config/quickshell/scripts/lyricvis-fetch.py` over a `Process`. That pulls
-   line-level synced lyrics from **LRCLIB** (`/api/get`, then `/api/search`),
-   normalizes to `{lines:[{t,text}]}`, and caches per-track in `~/.cache/lyricvis/`.
-3. **Renderer** — `lyrics.qml` picks the active line, then paces words within it.
+1. **Clock** — `lyrics.qml` reads spotifyd's position over MPRIS, re-anchors once
+   a second and interpolates at 30fps → a smooth `estMs`. The re-anchor *slews*
+   (eases small disagreements off over a few ticks) instead of snapping, so there's
+   no 1s jump; a real seek/stall hard-snaps, and a scrub re-syncs immediately off
+   `onPositionChanged`. `estMs = position + offsetMs` — the offset is applied here,
+   once (see calibration below).
+2. **Fetch** — on each track change it runs `~/.config/quickshell/scripts/lyricvis-fetch.py`.
+   Source ladder: **AMLL** word-level TTML (`amll-ttml-db`, keyed by spotify id —
+   real per-word onsets, thin coverage) → **LRCLIB** enhanced-LRC inline word tags
+   (rare) → **LRCLIB** line-level. Normalized to `{lines:[{t,text,words:[…]}]}` and
+   cached per-track in `~/.cache/lyricvis/`.
+3. **Renderer** — picks the active line, builds an ordered **token** list and paces
+   the words.
 
 ## Word timing (the engine)
 
-- Each word gets a **natural duration** from its syllable count
-  (`baseWordMs + perSyllableMs * syllables`), packed from the line's start.
-- If the line is sung faster than that estimate → compress to fit. If there's
-  slack (slow songs) → the **last word absorbs it as a sustain**.
-- Two phases per word: **fill** (clip-reveal colour sweep) then **sustain**
-  (breathing glow). active = neon + Glow, sung = white, upcoming = grey.
+Each line is an ordered list of tokens `{text, bg, mainIdx, t, d}`:
+
+- **Real timing** (AMLL / enhanced-LRC): every token has a real onset (`t`, and
+  `t+d` when a duration is present) — used verbatim, no guessing.
+- **Estimate** (LRCLIB line-level): main tokens are spread across the line by
+  syllable weight, but only across a *capped* span (`naturalTotal * stretchSlack`)
+  so the last words never smear out into a trailing instrumental gap. The last main
+  word breathes as a capped sustain (`holdCapMs`).
+- **Adlibs** — anything in `(parens)` is a background token (`bg:true`). It's pulled
+  out of the **main** syllable budget so it can't push the real words off-beat, but
+  kept *in source order* so it anchors to the word it follows. Wholly-parenthetical
+  lines (e.g. `(You got it, mag)`) promote back to main so they still get a span.
+  Adlibs render smaller / dimmer / italic cyan, still wrapped in their parens.
+  Detection is done once in the fetcher; the renderer has the same paren-split as a
+  fallback for old cached files that predate `words[]`.
 
 ### Tuning knobs (top of lyrics.qml)
-- `perSyllableMs` (220) — sweep pace. Lower = faster. **Main dial** if highlight
-  lags (lower) or runs ahead (raise) the vocal.
+- `perSyllableMs` (220) — estimate sweep pace. Lower = faster.
 - `baseWordMs` (60) — fixed per-word cost.
-- `holdCapMs` (1500) — max end-of-line breath before settling (see below).
-- `offsetMs` (0) — global sync nudge for output buffering. Not yet hotkeyed.
+- `stretchSlack` (1.5) — how far past natural length onsets may stretch before the
+  cap kicks in (stops smearing into instrumental gaps).
+- `holdCapMs` (1500) — max end-of-line breath before settling.
+- `offsetMs` — audio-latency offset; see calibration.
 
-## Known limitations (line-level data ceiling)
+## Sync calibration (live, by ear)
 
-- **End-word false holds.** The last word breathes during the gap to the next
-  line — but a long gap is *usually just an instrumental beat*, not a held vocal,
-  and line-level timing **cannot distinguish a held note from an instrumental
-  gap**. `holdCapMs` keeps it short as a conservative default. Real fix = audio.
-- **Mid-line held words** can't be placed exactly (a held 1-syllable word mid-line
-  gets a short slice). Needs audio or true word-level data.
+Audible audio trails spotifyd's reported position (output + Bluetooth buffering),
+so `offsetMs` shifts the lyric clock. **Negative = lyrics later.** Default `-250`.
 
-## Deferred / TODO (rough priority)
+- `$mod + ]` — lyrics **later**, `$mod + [` — lyrics **earlier** (20ms steps).
+- `$mod + Shift + \` — reset to -250.
 
-1. **Look rework** — styling is going to change; the engine is stable, the
-   presentation isn't final.
+The value is owned by **one** IPC handler in `shell.qml` (`lyricOffset`, never
+duplicated across monitors), written to `Quickshell.stateDir/lyric-offset`; every
+per-monitor `lyrics.qml` *watches* that file, so a nudge re-syncs all screens at
+once and survives `qs kill; qs -d`. An OSD flashes the current value as you nudge.
+
+## Audio-reactive (silence-aware hold release)
+
+A dedicated cava reader (`cava-lyrics.conf`, autosens **off** so energy is absolute)
+runs on the **primary screen only** (gated by `isPrimary`, forwarded from
+`ThemeLyrics`, so the theme on 3 monitors doesn't spawn 3 readers). When the mix
+drops to genuine silence it releases a held end-of-line word to "sung" instead of
+glowing through an instrumental gap. Fully **fail-open**: no cava feed → behaves
+exactly as the estimate alone. Also drives a subtle bass swell on the active word.
+Thresholds `silenceEnter`/`silenceExit` in `lyrics.qml` may want tuning by ear
+(the default sink here is Bluetooth, which scales differently from analog).
+
+## Known limitations
+
+- **AMLL coverage is thin** (CJK-skewed) — most Western tracks miss and fall through
+  to LRCLIB line-level. Word-level is an opportunistic bonus, not the main path.
+- **Estimate is still a guess.** Line-level data has no real per-word onset; the
+  capped syllable spread is a good default but can't be exact.
+- **Silence release is mix-level**, not vocal-isolated — it catches whole-track
+  instrumental gaps, not a vocal stopping while instruments continue.
+
+## Deferred / TODO
+
+1. **Look rework** — presentation isn't final; the engine is stable.
 2. **Line transitions** — fade/slide as the active line advances (currently snaps).
-3. **Tuning hotkeys** — wire `offsetMs` + `perSyllableMs` to Super keybinds via
-   `qs ipc` so sync/pace can be nudged live by ear.
-4. **Word-level (AMLL)** — add the AMLL community word-level TTML DB as a source
-   above LRCLIB; real per-word timing for covered songs (no faking, fixes holds
-   for those songs).
-5. **Cheap audio pass** — the moon theme already runs **cava** (`cava.qml`,
-   `cava.conf`: 40 bars, raw ascii `;`-sep, 60fps, read via `Process`+`SplitParser`).
-   Reuse that feed for: audio-reactive glow/pulse on the active word, and
-   **silence-aware hold release** (release the end-hold when energy drops toward
-   silence — reliable even in a full mix). A center-channel (mid−side) band is a
-   crude vocal proxy. Tools present: `pw-cat`/`pw-record`/`parec`/`ffmpeg`
-   (numpy NOT installed — would need it, or band-derive from cava).
-6. **Heavy v2 (true accuracy)** — offline per-track: Demucs vocal isolation +
-   WhisperX forced alignment → real word/syllable onsets, which would fix both
-   limitations above. Big pre-processing pipeline; run once per track, cache.
+3. **Per-machine silence tuning** — auto-calibrate `silenceEnter`/`silenceExit`, or
+   a vocal-band cava variant (crude, but a better silence proxy than the full mix).
+4. **Heavy v2 (true accuracy)** — offline Demucs vocal isolation + WhisperX forced
+   alignment → real word/syllable onsets for every track. Big pipeline, run once
+   per track, cache.
