@@ -512,13 +512,20 @@ Item {
     // around a fixed box in the TOP-RIGHT (clear of the top bar and the mid-left
     // clock), seeded per line so each line gets a fresh arrangement.
     // Mono font → word width = chars * charW (exact layout). Big + bold.
-    property real lyricSize: Math.round(40 * pal.uiScale)
+    property real lyricSize: Math.round((ultrawide ? 58 : 40) * pal.uiScale)
     readonly property real charW: lyricSize * 0.58           // Noto Sans Mono advance
 
-    // fixed bunch box, top-right (clear of the top bar and the mid-left clock)
-    readonly property real boxW: Math.round(root.width * 0.45)
-    readonly property real boxH: Math.round(root.height * 0.27)
-    readonly property real boxX: Math.round(root.width * 0.965 - boxW)
+    // fixed bunch box, top-right (clear of the top bar and the mid-left clock).
+    // On a 32:9 ultrawide (Samsung G9, aspect ~3.56) a 0.45-wide box spans a huge
+    // horizontal stretch, so the scatter sprawls back toward the centre. Detect the
+    // ultrawide by aspect ratio (vs a 16:9 laptop ~1.78) and use a narrower box so
+    // the words cluster hard against the right edge. The scatter wraps to extra rows
+    // when a word exceeds boxW, so a narrower box just stacks taller — safe.
+    readonly property real aspect: root.height > 0 ? root.width / root.height : 1.78
+    readonly property bool ultrawide: aspect > 2.4
+    readonly property real boxW: Math.round(root.width * (ultrawide ? 0.24 : 0.45))
+    readonly property real boxH: Math.round(root.height * (ultrawide ? 0.42 : 0.27))
+    readonly property real boxX: Math.round(root.width * (ultrawide ? 0.95 : 0.965) - boxW)
     readonly property real boxY: Math.round(root.height * 0.07)
 
     function rng32(seed) {
