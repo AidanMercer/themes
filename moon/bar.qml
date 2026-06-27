@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Widgets
 import Quickshell.Io
+import Quickshell.Services.Mpris
 
 // Cyberpunk: Edgerunners top bar for the "moon" wallpaper.
 //
@@ -201,6 +202,78 @@ Item {
                     cursorShape: Qt.PointingHandCursor
                     onClicked: Quickshell.execDetached(["qs", "ipc", "call", "controlPopup", "toggle"])
                 }
+            }
+        }
+    }
+
+    // ── far left: now-playing (mpris / spotifyd), cyan-edged HUD chip ────────
+    Item {
+        id: media
+        readonly property var player: {
+            const ps = Mpris.players.values
+            if (ps.length === 0) return null
+            return ps.find(p => p.playbackState === MprisPlaybackState.Playing) ?? ps[0]
+        }
+        readonly property bool active: player !== null
+        readonly property bool playing: active && player.playbackState === MprisPlaybackState.Playing
+
+        visible: active
+        height: 30
+        width: active ? mediaRow.width + 22 : 0
+        anchors.left: parent.left
+        anchors.leftMargin: 12
+        anchors.verticalCenter: parent.verticalCenter
+
+        Canvas {
+            anchors.fill: parent
+            visible: media.active
+            onPaint: root.paintPanel(getContext("2d"), width, height, root.cyan)
+            onWidthChanged: requestPaint()
+            onHeightChanged: requestPaint()
+        }
+
+        Row {
+            id: mediaRow
+            anchors.centerIn: parent
+            spacing: 7
+
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: media.playing ? String.fromCodePoint(0xF03E4) : String.fromCodePoint(0xF040A)
+                color: root.neon
+                font.family: root.icon
+                font.pixelSize: 13
+                opacity: mediaMa.containsMouse ? 1.0 : 0.85
+                Behavior on opacity { NumberAnimation { duration: 150 } }
+            }
+
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                width: Math.min(implicitWidth, 200)
+                elide: Text.ElideRight
+                text: {
+                    if (!media.active) return ""
+                    const t = media.player.trackTitle || "—"
+                    const a = media.player.trackArtist
+                    return a ? t + "  ·  " + a : t
+                }
+                color: root.cyan
+                font.family: root.mono
+                font.pixelSize: 11
+                font.letterSpacing: 0.5
+            }
+        }
+
+        MouseArea {
+            id: mediaMa
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: if (media.active && media.player.canTogglePlaying) media.player.togglePlaying()
+            onWheel: (w) => {
+                if (!media.active) return
+                if (w.angleDelta.y > 0 && media.player.canGoNext) media.player.next()
+                else if (w.angleDelta.y < 0 && media.player.canGoPrevious) media.player.previous()
             }
         }
     }
