@@ -272,6 +272,13 @@ Item {
             onClicked: if (media.active && media.player.canTogglePlaying) media.player.togglePlaying()
             onWheel: (w) => {
                 if (!media.active) return
+                // Shift+scroll nudges the live lyric offset (up = earlier, down =
+                // later); the offset OSD flash on each monitor gives the feedback.
+                if (w.modifiers & Qt.ShiftModifier) {
+                    Quickshell.execDetached(["qs", "ipc", "call", "lyricOffset",
+                        w.angleDelta.y > 0 ? "earlier" : "later"])
+                    return
+                }
                 if (w.angleDelta.y > 0 && media.player.canGoNext) media.player.next()
                 else if (w.angleDelta.y < 0 && media.player.canGoPrevious) media.player.previous()
             }
