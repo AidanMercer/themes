@@ -52,11 +52,21 @@ Item {
         NumberAnimation { target: root; property: "gx"; to: 1.5; duration: 260; easing.type: Easing.OutQuad }
     }
 
+    // boot-in: slide/fade in from the left while the header types out, then one
+    // glitch burst as the "signal locks"
+    property real bootT: 0
+    SequentialAnimation {
+        running: true
+        NumberAnimation { target: root; property: "bootT"; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
+        ScriptAction { script: glitchBurst.restart() }
+    }
+
     Row {
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -Math.round(root.height * 0.04)
-        anchors.leftMargin: Math.round(root.width * 0.022)
+        anchors.leftMargin: Math.round(root.width * 0.022) - Math.round(18 * (1 - root.bootT))
+        opacity: root.bootT
         spacing: 22
 
         scale: pal.uiScale
@@ -150,7 +160,9 @@ Item {
                         }
                     }
                     Text {
-                        text: "NIGHT CITY ▸ NET.RUNNER"
+                        readonly property string full: "NIGHT CITY ▸ NET.RUNNER"
+                        // types out over the first ~2/3 of the boot-in
+                        text: full.substring(0, Math.round(Math.min(1, root.bootT * 1.5) * full.length))
                         color: root.cyan
                         font.family: root.mono
                         font.weight: Font.Bold

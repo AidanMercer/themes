@@ -7,10 +7,11 @@ import Quickshell.Io
 // Loaded by the ThemeSysInfo overlay while this wallpaper is showing. A full-screen
 // click-through scenery layer; the actual widget is a chamfered HUD panel pinned
 // bottom-right. Reads everything from /proc + nmcli, no repo modules (self-contained).
-//   CPU  — aggregate %, a segmented meter, per-core bars, load averages
+//   CPU  — aggregate %, a segmented meter, per-core bars, temp + load averages
+//   GPU  — nvidia util %, meter, vram + temp (hidden without nvidia-smi)
 //   MEM  — used %, meter, used / total GB
 //   PWR  — battery %, meter, charge glyph (hidden on desktops with no battery)
-//   NET / UP — connection + uptime
+//   NET  — connection + up/down rates, uptime below
 Item {
     id: root
     anchors.fill: parent
@@ -45,6 +46,24 @@ Item {
     property string connType: ""
     property string uptimeText: "—"
 
+    property bool hasGpu: false
+    property int gpuPercent: -1
+    property int gpuTemp: -1
+    property real gpuVramUsed: 0
+    property real gpuVramTotal: 0
+
+    property int cpuTemp: -1
+
+    property real rxRate: 0        // bytes/s, all interfaces minus lo
+    property real txRate: 0
+    property real prevRx: -1
+    property real prevTx: -1
+
+    // boot-in: the panel rises in once on load; the meters then fill naturally
+    // as the first polls land (their opacity/height behaviors do the rest)
+    property real bootT: 0
+    NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 800; easing.type: Easing.OutCubic }
+
     // remember last /proc/stat tallies so we can diff into a percentage
     property real prevTotal: 0
     property real prevIdle: 0
@@ -58,11 +77,11 @@ Item {
     // ── pollers ─────────────────────────────────────────────────────────────
     Timer {
         interval: 1500; running: true; repeat: true; triggeredOnStart: true
-        onTriggered: { statProc.running = true; loadProc.running = true; memProc.running = true }
+        onTriggered: { statProc.running = true; loadProc.running = true; memProc.running = true; devProc.running = true }
     }
     Timer {
         interval: 5000; running: true; repeat: true; triggeredOnStart: true
-        onTriggered: { batProc.running = true; upProc.running = true }
+        onTriggered: { batProc.running = true; upProc.running = true; gpuProc.running = true; tempProc.running = true }
     }
     Timer {
         interval: 10000; running: true; repeat: true; triggeredOnStart: true
@@ -153,6 +172,63 @@ Item {
         if (level >= 95) return String.fromCodePoint(0xF0079)
         if (level < 10) return String.fromCodePoint(0xF0083)
         return String.fromCodePoint(0xF0079 + Math.floor(level / 10))
+    }
+
+    Process {
+        id: devProc
+        command: ["cat", "/proc/net/dev"]
+        running: false
+        stdout: StdioCollector { onStreamFinished: root.parseDev(text) }
+    }
+    function parseDev(raw) {
+        let rx = 0, tx = 0
+        for (const line of raw.split("\n")) {
+            const i = line.indexOf(":")
+            if (i < 0) continue
+            if (line.slice(0, i).trim() === "lo") continue
+            const f = line.slice(i + 1).trim().split(/\s+/).map(Number)
+            rx += f[0] || 0
+            tx += f[8] || 0
+        }
+        if (prevRx >= 0) {                        // diff over the 1.5s poll
+            rxRate = Math.max(0, (rx - prevRx) / 1.5)
+            txRate = Math.max(0, (tx - prevTx) / 1.5)
+        }
+        prevRx = rx; prevTx = tx
+    }
+    function fmtRate(b) {
+        return b >= 1048576 ? (b / 1048576).toFixed(1) + " MB/s"
+                            : Math.round(b / 1024) + " KB/s"
+    }
+
+    // nvidia only (the desktop) — no nvidia-smi or no output means the whole
+    // GPU section stays hidden, so the intel laptop is untouched
+    Process {
+        id: gpuProc
+        command: ["sh", "-c", "command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null || true"]
+        running: false
+        stdout: StdioCollector { onStreamFinished: root.parseGpu(text) }
+    }
+    function parseGpu(raw) {
+        const line = raw.trim().split("\n")[0] || ""
+        const f = line.split(",").map(s => parseFloat(s))
+        if (f.length < 4 || isNaN(f[0])) { hasGpu = false; return }
+        hasGpu = true
+        gpuPercent = Math.round(f[0])
+        gpuTemp = Math.round(f[1])
+        gpuVramUsed = f[2] / 1024
+        gpuVramTotal = f[3] / 1024
+    }
+
+    Process {
+        id: tempProc
+        command: ["sh", "-c", "for h in /sys/class/hwmon/hwmon*; do case \"$(cat $h/name 2>/dev/null)\" in coretemp|k10temp|zenpower) cat $h/temp1_input 2>/dev/null; break;; esac; done"]
+        running: false
+        stdout: StdioCollector { onStreamFinished: root.parseTemp(text) }
+    }
+    function parseTemp(raw) {
+        const v = parseInt(raw.trim())
+        cpuTemp = isNaN(v) || v <= 0 ? -1 : Math.round(v / 1000)
     }
 
     Process {
@@ -256,7 +332,8 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: 26
-        anchors.bottomMargin: 26
+        anchors.bottomMargin: 26 - 12 * (1 - root.bootT)
+        opacity: root.bootT
 
         scale: pal.uiScale
         transformOrigin: Item.BottomRight
@@ -336,7 +413,8 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "SYSTEM"
+                        // types out over the first ~60% of the boot-in
+                        text: "SYSTEM".substring(0, Math.round(Math.min(1, root.bootT * 1.6) * 6))
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 13
@@ -396,11 +474,37 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: root.load1.toFixed(2) + "  " + root.load5.toFixed(2) + "  " + root.load15.toFixed(2)
+                    text: (root.cpuTemp > 0 ? root.cpuTemp + "°C  ·  " : "")
+                        + root.load1.toFixed(2) + "  " + root.load5.toFixed(2) + "  " + root.load15.toFixed(2)
                     font.family: root.mono
                     font.pixelSize: 9
                     color: root.dim
                 }
+            }
+
+            // GPU (nvidia desktops only)
+            StatLine {
+                visible: root.hasGpu
+                height: root.hasGpu ? implicitHeight : 0
+                label: "GPU"
+                value: root.gpuPercent
+                tone: root.tone(root.gpuPercent, 60, 85)
+            }
+            Meter {
+                visible: root.hasGpu
+                height: root.hasGpu ? 9 : 0
+                width: parent.width
+                value: root.gpuPercent < 0 ? 0 : root.gpuPercent
+                tone: root.tone(root.gpuPercent, 60, 85)
+            }
+            Text {
+                visible: root.hasGpu
+                height: root.hasGpu ? implicitHeight : 0
+                anchors.right: parent.right
+                text: root.gpuVramUsed.toFixed(1) + " / " + root.gpuVramTotal.toFixed(1) + " GB  ·  " + root.gpuTemp + "°C"
+                font.family: root.mono
+                font.pixelSize: 9
+                color: root.dim
             }
 
             // MEM
@@ -473,22 +577,35 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "UP " + root.uptimeText
+                    text: "↓ " + root.fmtRate(root.rxRate) + "  ↑ " + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 10
+                    font.pixelSize: 9
                     color: root.dim
                 }
             }
 
-            Text {
+            // uptime moved down here to make room for the net rates
+            Item {
                 width: parent.width
-                horizontalAlignment: Text.AlignRight
-                text: "// EDGERUNNER SYS"
-                font.family: root.mono
-                font.pixelSize: 8
-                font.letterSpacing: 2
-                color: root.neon
-                opacity: 0.55
+                height: 12
+                Text {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "UP " + root.uptimeText
+                    font.family: root.mono
+                    font.pixelSize: 9
+                    color: root.dim
+                }
+                Text {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "// EDGERUNNER SYS"
+                    font.family: root.mono
+                    font.pixelSize: 8
+                    font.letterSpacing: 2
+                    color: root.neon
+                    opacity: 0.55
+                }
             }
         }
     }

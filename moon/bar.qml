@@ -33,6 +33,12 @@ Item {
 
     readonly property var monitor: barScreen ? Hyprland.monitorFor(barScreen) : Hyprland.focusedMonitor
 
+    // boot-in: panels drop into place once on load (replays on theme reload).
+    // bootMedia trails bootT so the chip lands a beat after the workspaces.
+    property real bootT: 0
+    NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 800; easing.type: Easing.OutCubic }
+    readonly property real bootMedia: Math.max(0, (bootT - 0.35) / 0.65)
+
     // chamfered dark panel (cut top-left + bottom-right corners), neon edge
     function paintPanel(ctx, w, h, stroke) {
         const c = 9
@@ -59,6 +65,8 @@ Item {
         width: leftRow.width + 30
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -6 * (1 - root.bootT)
+        opacity: root.bootT
 
         Canvas {
             id: leftBg
@@ -224,6 +232,22 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 12
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -6 * (1 - root.bootMedia)
+        opacity: root.bootMedia
+
+        // track progress for the underline — mpris position re-read once a second
+        property real progress: 0
+        function updateProgress() {
+            const p = media.player
+            media.progress = (p && p.length > 0 && p.position >= 0)
+                ? Math.min(1, p.position / p.length) : 0
+        }
+        Timer {
+            interval: 1000; repeat: true
+            running: media.playing
+            triggeredOnStart: true
+            onTriggered: media.updateProgress()
+        }
 
         Canvas {
             anchors.fill: parent
@@ -263,6 +287,20 @@ Item {
                 font.pixelSize: 11
                 font.letterSpacing: 0.5
             }
+        }
+
+        // progress underline along the chip's bottom edge (stops short of the
+        // chamfered corner)
+        Rectangle {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.leftMargin: 2
+            anchors.bottomMargin: 1
+            height: 2
+            width: Math.max(0, (parent.width - 12) * media.progress)
+            color: root.cyan
+            opacity: 0.85
+            Behavior on width { NumberAnimation { duration: 900 } }
         }
 
         MouseArea {
