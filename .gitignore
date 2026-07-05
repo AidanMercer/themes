@@ -7,8 +7,5 @@ still.png
 preview.png
 *.still.png
 
-# leftover source cuts too big for github (avalon/old.mp4)
-old.mp4
-
 # over github's 100MB hard limit, has to stay local (176M)
 moon/wallpaper2.mp4
