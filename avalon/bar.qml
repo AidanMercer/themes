@@ -6,8 +6,9 @@ import Quickshell.Io
 import Quickshell.Services.Mpris
 
 // avalon: minimal top strip on moss glass. Workspaces as buds on the left,
-// serif time in the middle, quiet media/net/battery cluster on the right,
-// one gold hairline along the bottom edge.
+// serif time in the middle, media + vitals (cpu/mem/temp) + net + battery on
+// the right, one gold hairline along the bottom edge. Vitals moved up here
+// from a desktop ledger — the strip stays readable over any video.
 Item {
     id: root
     anchors.fill: parent
@@ -265,6 +266,33 @@ Item {
                 }
             }
 
+            // vitals live here — the glass strip keeps them readable over any video
+            Row {
+                spacing: 5
+                anchors.verticalCenter: parent.verticalCenter
+                Meter { value: root.cpuPct }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: Math.round(root.cpuPct * 100) + "%"
+                          + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
+                    color: root.ivoryA(0.70)
+                    font.family: pal.fontMono
+                    font.pixelSize: 10
+                }
+            }
+            Row {
+                spacing: 5
+                anchors.verticalCenter: parent.verticalCenter
+                Meter { value: root.memPct; tint: root.gold }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: Math.round(root.memPct * 100) + "%"
+                    color: root.ivoryA(0.70)
+                    font.family: pal.fontMono
+                    font.pixelSize: 10
+                }
+            }
+
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: String.fromCodePoint(root.connType === "ethernet" ? 0xF059F
@@ -297,6 +325,26 @@ Item {
         }
     }
 
+    component Meter: Item {
+        property real value: 0
+        property color tint: root.leaf
+        width: 4; height: 18
+        anchors.verticalCenter: parent.verticalCenter
+
+        Rectangle { anchors.fill: parent; radius: 2; color: root.ivoryA(0.18) }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            width: parent.width
+            radius: 2
+            height: Math.max(2, parent.height * Math.min(1, parent.value))
+            color: parent.value > 0.9 ? root.rose
+                 : parent.value > 0.75 ? root.amber
+                 : parent.tint
+            Behavior on height { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
+            Behavior on color { ColorAnimation { duration: 300 } }
+        }
+    }
+
     SystemClock { id: clock; precision: SystemClock.Minutes }
 
     // ── mpris ────────────────────────────────────────────────────────────────
@@ -325,29 +373,53 @@ Item {
         }
     }
 
-    // ── net + battery ────────────────────────────────────────────────────────
+    // ── vitals + net + battery ───────────────────────────────────────────────
     property string connType: "none"
+    property real cpuPct: 0
+    property int cpuTemp: -1
+    property real memPct: 0
     property int batPct: -1
     property bool batCharging: false
+    property var _prevCpu: null
 
     function parseStats(out) {
+        let memT = 0, memA = 0
         for (const raw of out.trim().split("\n")) {
             const l = raw.trim()
             if (l.startsWith("net:")) root.connType = l.slice(4) || "none"
+            else if (l.startsWith("cpu ")) {
+                const f = l.split(/\s+/).slice(1).map(Number)
+                const tot = f.reduce((a, b) => a + b, 0)
+                const idle = f[3] + (f[4] || 0)
+                if (root._prevCpu) {
+                    const dt = tot - root._prevCpu.tot, di = idle - root._prevCpu.idle
+                    if (dt > 0) root.cpuPct = Math.max(0, Math.min(1, (dt - di) / dt))
+                }
+                root._prevCpu = { tot: tot, idle: idle }
+            }
+            else if (l.startsWith("MemTotal")) memT = parseInt(l.split(/\s+/)[1])
+            else if (l.startsWith("MemAvailable")) memA = parseInt(l.split(/\s+/)[1])
+            else if (l.startsWith("temp:")) {
+                const v = parseInt(l.slice(5))
+                root.cpuTemp = isNaN(v) || v <= 0 ? -1 : Math.round(v / 1000)
+            }
             else if (/^[0-9]+$/.test(l)) root.batPct = parseInt(l)
             else if (/^(Charging|Discharging|Full|Not charging)$/.test(l)) root.batCharging = l === "Charging"
         }
+        if (memT > 0) root.memPct = Math.max(0, Math.min(1, 1 - memA / memT))
     }
     Process {
         id: statProc
         command: ["bash", "-c",
             'printf "net:%s\\n" "$(nmcli -t -f TYPE,STATE d 2>/dev/null | grep -m1 \':connected$\' | cut -d: -f1)"; ' +
+            "head -1 /proc/stat; grep -E '^(MemTotal|MemAvailable)' /proc/meminfo; " +
+            'for h in /sys/class/hwmon/hwmon*; do case "$(cat $h/name 2>/dev/null)" in coretemp|k10temp|zenpower) printf "temp:%s\\n" "$(cat $h/temp1_input 2>/dev/null)"; break;; esac; done; ' +
             "cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1; " +
             "cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1; true"]
         stdout: StdioCollector { onStreamFinished: root.parseStats(text) }
     }
     Timer {
-        interval: 5000; repeat: true; running: true; triggeredOnStart: true
+        interval: 3000; repeat: true; running: true; triggeredOnStart: true
         onTriggered: statProc.running = true
     }
 
