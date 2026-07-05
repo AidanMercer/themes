@@ -11,7 +11,7 @@ Item {
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property color rose:  pal.magenta
     readonly property color amber: pal.amber
@@ -119,7 +119,7 @@ Item {
             value: Math.max(0, root.batPct) / 100
             warn: false
             fill: root.batPct >= 0 && root.batPct < 20 && !root.batCharging ? root.rose
-                : root.batCharging ? root.gold : root.blue
+                : root.batCharging ? root.gold : root.leaf
             detail: root.batPct + "%" + (root.batCharging ? "+" : "")
         }
     }
@@ -129,7 +129,7 @@ Item {
         property real value: 0
         property string detail: ""
         property bool warn: true
-        property color fill: root.blue
+        property color fill: root.leaf
         anchors.right: parent.right
         spacing: 9
 

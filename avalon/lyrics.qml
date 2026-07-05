@@ -1,11 +1,11 @@
 import QtQuick
 
 // avalon: desktop lyrics — words catch the light. Top-left against the dark
-// foliage: the line waits as faint ivory shade, and each word fills gold on
-// its onset like sun through the flowers, settling to warm ivory. Held notes
-// breathe with the bass, adlibs whisper in ribbon-blue italics above the
-// line, and a gold diamond rides the rule underneath. Styling only — the
-// timing brains live in the shell's LyricsEngine.
+// canopy: the line waits as faint cream shade, and each word fills buttercup
+// on its onset like sun through the leaves, settling to warm cream. Held
+// notes breathe with the bass, adlibs whisper in moss-green italics above
+// the line, and a gold diamond rides the rule underneath. Styling only —
+// the timing brains live in the shell's LyricsEngine.
 Item {
     id: root
     anchors.fill: parent
@@ -16,7 +16,7 @@ Item {
     readonly property var eng: engine
 
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property string serif: "Noto Serif Display"
     function ivoryA(a) { return Qt.rgba(ivory.r, ivory.g, ivory.b, a) }
@@ -120,7 +120,7 @@ Item {
                     }
 
                     // the light, sweeping left→right as the word is sung — gold
-                    // while lit (blue for adlibs), settling to warm ivory
+                    // while lit (leaf for adlibs), settling to warm ivory
                     Item {
                         clip: true
                         width: Math.round(wd.st.fill * shade.implicitWidth)
@@ -130,8 +130,8 @@ Item {
                         Text {
                             y: shade.y
                             text: wd.word
-                            color: wd.st.active ? (wd.bg ? root.blue : root.gold)
-                                                : (wd.bg ? Qt.rgba(root.blue.r, root.blue.g, root.blue.b, 0.75)
+                            color: wd.st.active ? (wd.bg ? root.leaf : root.gold)
+                                                : (wd.bg ? Qt.rgba(root.leaf.r, root.leaf.g, root.leaf.b, 0.75)
                                                          : root.ivoryA(0.92))
                             Behavior on color { ColorAnimation { duration: 500 } }
                             opacity: wd.st.sustain ? 0.72 + 0.28 * root.breath : 1
@@ -175,7 +175,7 @@ Item {
     }
 
     // ---- quiet states: one small bud -------------------------------------------
-    // blue while fetching, gold heartbeat through instrumentals; nothing when a
+    // leaf while fetching, gold heartbeat through instrumentals; nothing when a
     // track simply has no lyrics
     Rectangle {
         x: root.blockX
@@ -183,7 +183,7 @@ Item {
         width: 6; height: 6; radius: 3
         visible: root.eng.player !== null && !root.lineShown
                  && (!root.eng.lyricsLoaded || (root.eng.lyricsSynced && root.eng.playing))
-        color: root.eng.lyricsLoaded ? root.gold : root.blue
+        color: root.eng.lyricsLoaded ? root.gold : root.leaf
         opacity: 0.35 + 0.65 * root.breath
         SequentialAnimation on scale {
             running: visible

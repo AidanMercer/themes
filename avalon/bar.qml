@@ -18,7 +18,7 @@ Item {
     required property var pal
 
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property color rose:  pal.magenta
     readonly property color dim:   pal.dim
@@ -29,7 +29,7 @@ Item {
 
     function ivoryA(a) { return Qt.rgba(ivory.r, ivory.g, ivory.b, a) }
     function goldA(a)  { return Qt.rgba(gold.r, gold.g, gold.b, a) }
-    function blueA(a)  { return Qt.rgba(blue.r, blue.g, blue.b, a) }
+    function leafA(a)  { return Qt.rgba(leaf.r, leaf.g, leaf.b, a) }
 
     readonly property var monitor: barScreen ? Hyprland.monitorFor(barScreen) : Hyprland.focusedMonitor
 
@@ -127,7 +127,7 @@ Item {
                             Rectangle {
                                 anchors.centerIn: parent
                                 width: 26; height: 26; radius: 9
-                                color: root.blueA(slot.isActive ? 0.20 : 0)
+                                color: root.leafA(slot.isActive ? 0.20 : 0)
                                 border.width: slot.isActive ? 1 : 0
                                 border.color: root.goldA(0.40)
                                 Behavior on color { ColorAnimation { duration: 180 } }
@@ -185,7 +185,7 @@ Item {
             Rectangle {
                 width: 4; height: 4
                 rotation: 45
-                color: root.blue
+                color: root.leaf
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
@@ -271,7 +271,7 @@ Item {
                     : root.connType === "wifi" ? 0xF05A9 : 0xF092F)
                 font.family: root.iconFont
                 font.pixelSize: 13
-                color: root.connType === "none" ? root.rose : root.blueA(0.85)
+                color: root.connType === "none" ? root.rose : root.leafA(0.85)
             }
 
             Row {

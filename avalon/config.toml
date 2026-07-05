@@ -1,22 +1,21 @@
-# avalon — saber resting in the flowers. deep moss glass, ivory text,
-# ribbon-blue + hair-gold accents, sampled from the wallpaper then lifted
-# enough to read on dark green.
+# avalon — the forest shrine. moss and buttercup over pond-dark glass,
+# sampled from the wallpaper then tamed enough to sit quiet on the dark.
 bar_position = "top"
 
-accent      = "#628fce"   # the ribbon, royal blue
-accent2     = "#d3b578"   # her hair, sunlit gold
-accent3     = "#c9707c"   # blush rose — danger / power
-accent_warn = "#cfa869"   # soft amber
-accent_dim  = "#5c6b60"   # sage traces, dividers
+accent      = "#8fbe58"   # fresh moss in the sunlight
+accent2     = "#e6d75a"   # the buttercups
+accent3     = "#c97e52"   # lantern rust — danger / power
+accent_warn = "#cfae5e"   # hay amber
+accent_dim  = "#4c5a42"   # dark sage traces, dividers
 
-text  = "#eee9dc"   # warm ivory
-glass = "#101713"   # deep moss panel tint
+text  = "#e9edd8"   # pale moss-cream
+glass = "#11170f"   # pond-dark panel tint
 
 # terminal base + the hues the accents don't cover; theme-colors.sh
 # builds the kitty/fuzzel/hyprlock palettes from these on switch
-bg        = "#0d1210"
-fg        = "#dfdacb"
-hue_green = "#7ea67c"   # leaf green
-hue_blue  = "#6f9ad0"   # steel blue
+bg        = "#0c110a"
+fg        = "#dde3c8"
+hue_green = "#8fbe58"   # moss
+hue_blue  = "#6c8d99"   # pond slate
 
 font_mono = "Noto Sans Mono"

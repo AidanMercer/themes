@@ -12,11 +12,11 @@ Item {
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property real ui: pal.uiScale
 
-    // sits in the shadowed blouse-fold, lower left
+    // sits at the pond's edge, lower left
     readonly property real cx: root.width * 0.20
     readonly property real cy: root.height * 0.72
     readonly property real coreR: 10 * ui
@@ -175,9 +175,9 @@ Item {
                 ctx.fillStyle = Qt.rgba(root.ivory.r, root.ivory.g, root.ivory.b,
                                         0.30 + 0.55 * lv)
                 ctx.fill()
-                // a whisper of ribbon-blue along the hot petal's rim
+                // a whisper of moss-light along the hot petal's rim
                 if (lv > 0.55) {
-                    ctx.strokeStyle = Qt.rgba(root.blue.r, root.blue.g, root.blue.b,
+                    ctx.strokeStyle = Qt.rgba(root.leaf.r, root.leaf.g, root.leaf.b,
                                               0.5 * (lv - 0.55) / 0.45)
                     ctx.lineWidth = 1
                     ctx.stroke()

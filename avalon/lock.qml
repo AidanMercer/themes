@@ -4,9 +4,9 @@ import Quickshell
 
 // avalon: bare lock (the bareLock marker tells LockStage we own the chrome).
 // The wallpaper video keeps playing full-bleed and sharp; a moss-glass panel
-// on the left blurs the flowers behind it and carries the time, the passcode
-// dots and a slow fall of petals. The gold seam draws down its edge as the
-// lock engages, and everything rides host.progress so unlock plays it back.
+// on the left blurs the forest behind it and carries the time, the passcode
+// dots and a slow rise of fireflies. The gold seam draws down its edge as
+// the lock engages, and everything rides host.progress so unlock plays it back.
 Item {
     id: root
     anchors.fill: parent
@@ -17,7 +17,7 @@ Item {
     readonly property bool bareLock: true
 
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property color rose:  pal.magenta
     readonly property color moss:  pal.glass
@@ -72,26 +72,26 @@ Item {
             color: root.goldA(0.55)
         }
 
-        // petals sinking through the glass
+        // fireflies rising through the glass
         Repeater {
             model: 9
             Rectangle {
-                id: fleck
+                id: mote
                 required property int index
                 readonly property real seed: (index * 0.61803) % 1
-                width: (4 + seed * 3) * root.ui
+                width: (2.5 + seed * 2.5) * root.ui
                 height: width
-                rotation: 45 + seed * 60
-                color: index % 4 === 0 ? root.goldA(0.5) : root.ivoryA(0.22 + seed * 0.15)
+                radius: width / 2
+                color: index % 3 === 0 ? root.goldA(0.75) : root.ivoryA(0.30 + seed * 0.20)
                 x: panel.width * ((seed * 7.13) % 0.9 + 0.05)
-                opacity: root.p * 0.8
+                opacity: root.p * (0.5 + 0.5 * seed)
 
                 NumberAnimation on y {
                     running: root.p > 0.2
                     loops: Animation.Infinite
-                    from: -30 - fleck.seed * panel.height * 0.4
-                    to: panel.height + 30
-                    duration: 21000 + fleck.seed * 26000
+                    from: panel.height + 20
+                    to: -20 - mote.seed * panel.height * 0.3
+                    duration: 24000 + mote.seed * 28000
                 }
             }
         }
@@ -149,7 +149,7 @@ Item {
                     Rectangle {
                         width: 4; height: 4
                         rotation: 45
-                        color: root.blue
+                        color: root.leaf
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
@@ -217,7 +217,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 34
-                text: "the ever-distant utopia"
+                text: "where the small gods sleep"
                 color: root.ivoryA(0.30)
                 font.family: root.serif
                 font.pixelSize: Math.round(11 * root.ui)

@@ -12,7 +12,7 @@ Item {
     required property var audio    // AudioBus — bass/mid/high, silent, ready
 
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property color rose:  pal.magenta
     readonly property color moss:  pal.glass
@@ -87,7 +87,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: 6; height: 6
                         rotation: 45
-                        color: chrome.blue
+                        color: chrome.leaf
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -110,7 +110,7 @@ Item {
                             model: [
                                 { px: 0,  band: "bass", col: chrome.gold },
                                 { px: 5,  band: "mid",  col: chrome.ivory },
-                                { px: 10, band: "high", col: chrome.blue }
+                                { px: 10, band: "high", col: chrome.leaf }
                             ]
                             delegate: Rectangle {
                                 required property var modelData
@@ -143,7 +143,7 @@ Item {
         }
     }
 
-    // ── footer: connection on the left, the sheath's promise on the right ──
+    // ── footer: connection on the left, the shrine's whisper on the right ──
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -169,7 +169,7 @@ Item {
                             : chrome.popup.connType === "wifi" ? 0xF05A9 : 0xF092F)
                         font.family: chrome.icon
                         font.pixelSize: 11
-                        color: chrome.popup.connType === "none" ? chrome.rose : chrome.blue
+                        color: chrome.popup.connType === "none" ? chrome.rose : chrome.leaf
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -185,7 +185,7 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "the ever-distant utopia"
+                    text: "where the small gods sleep"
                     font.family: chrome.serif
                     font.pixelSize: 9
                     font.italic: true

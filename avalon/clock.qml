@@ -1,8 +1,8 @@
 import QtQuick
 import Quickshell
 
-// avalon: desktop clock, bottom-right on the dark of her skirt. Serif ivory
-// time over a gold hairline; a small blossom sits at the line's start and
+// avalon: desktop clock, bottom-right over the mossbank. Serif cream time
+// over a buttercup hairline; a small blossom sits at the line's start and
 // lets one petal go when the minute turns.
 Item {
     id: root
@@ -11,7 +11,7 @@ Item {
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color ivory: pal.text
-    readonly property color blue:  pal.neon
+    readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property color moss:  pal.glass
     readonly property real ui: pal.uiScale
@@ -173,7 +173,7 @@ Item {
             Rectangle {
                 width: 5; height: 5
                 rotation: 45
-                color: root.blue
+                color: root.leaf
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
