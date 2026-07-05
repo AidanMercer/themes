@@ -1,3 +1,6 @@
+# local AI prompt, not part of the themes themselves
+AI-INSTRUCTION.md
+
 # big wallpaper/media files — keep the themes repo lean (qml/config + small assets only)
 wallpaper.png
 *.jpg

@@ -1,13 +1,16 @@
 # Desktop lyric visualizer — notes
 
-A Spotify lyric visualizer woven into the Hyprland desktop, currently built for
-the **moon** theme. Loaded by the quickshell `themelyrics` module while the moon
-wallpaper is showing (same per-theme mechanism as `clock.qml` / `cava.qml`); to
-give another theme lyrics, drop a `lyrics.qml` in its folder.
+A Spotify lyric visualizer woven into the Hyprland desktop. The **engine**
+(everything theme-independent) lives in the shell at
+`~/.config/quickshell/modules/themelyrics/LyricsEngine.qml`; the loader injects
+it into the active theme's `lyrics.qml` as `engine` (declare
+`property var engine`, same grep handshake as `pal`). This theme's `lyrics.qml`
+is **styling only** — the Edgerunners scatter/render. To give another theme
+lyrics, drop a `lyrics.qml` in its folder that binds to the same engine surface.
 
 ## How it works (3 parts)
 
-1. **Clock** — `lyrics.qml` reads spotifyd's position over MPRIS, re-anchors once
+1. **Clock** — the engine reads spotifyd's position over MPRIS, re-anchors once
    a second and interpolates at 30fps → a smooth `estMs`. The re-anchor *slews*
    (eases small disagreements off over a few ticks) instead of snapping, so there's
    no 1s jump; a real seek/stall hard-snaps, and a scrub re-syncs immediately off
@@ -18,8 +21,9 @@ give another theme lyrics, drop a `lyrics.qml` in its folder.
    real per-word onsets, thin coverage) → **LRCLIB** enhanced-LRC inline word tags
    (rare) → **LRCLIB** line-level. Normalized to `{lines:[{t,text,words:[…]}]}` and
    cached per-track in `~/.cache/lyricvis/`.
-3. **Renderer** — picks the active line, builds an ordered **token** list and paces
-   the words.
+3. **Renderer** — the engine picks the active line, builds an ordered **token**
+   list and paces the words (`tokens`, `tokenSpans`, `tokenState(i, estMs)`);
+   the theme's `lyrics.qml` decides how they look.
 
 ## Word timing (the engine)
 
@@ -39,13 +43,17 @@ Each line is an ordered list of tokens `{text, bg, mainIdx, t, d}`:
   Detection is done once in the fetcher; the renderer has the same paren-split as a
   fallback for old cached files that predate `words[]`.
 
-### Tuning knobs (top of lyrics.qml)
+### Tuning knobs (LyricsEngine.qml)
 - `perSyllableMs` (220) — estimate sweep pace. Lower = faster.
 - `baseWordMs` (60) — fixed per-word cost.
 - `stretchSlack` (1.5) — how far past natural length onsets may stretch before the
   cap kicks in (stops smearing into instrumental gaps).
 - `holdCapMs` (1500) — max end-of-line breath before settling.
 - `offsetMs` — audio-latency offset; see calibration.
+
+A theme may tweak the first three on its injected `engine` (e.g.
+`Component.onCompleted: engine.perSyllableMs = 180`); the loader resets them to
+defaults on every widget mount so a tweak can't leak into the next theme.
 
 ## Sync calibration (live, by ear)
 
@@ -57,19 +65,21 @@ so `offsetMs` shifts the lyric clock. **Negative = lyrics later.** Default `-250
 
 The value is owned by **one** IPC handler in `shell.qml` (`lyricOffset`, never
 duplicated across monitors), written to `Quickshell.stateDir/lyric-offset`; every
-per-monitor `lyrics.qml` *watches* that file, so a nudge re-syncs all screens at
-once and survives `qs kill; qs -d`. An OSD flashes the current value as you nudge.
+per-monitor engine *watches* that file, so a nudge re-syncs all screens at once
+and survives `qs kill; qs -d`. The engine fires `offsetNudged()` on each live
+nudge; this theme hooks it to flash an OSD with the current value.
 
 ## Audio-reactive (silence-aware hold release)
 
-A dedicated cava reader (`cava-lyrics.conf`, autosens **off** so energy is absolute)
-runs on the **primary screen only** (gated by `isPrimary`, forwarded from
-`ThemeLyrics`, so the theme on 3 monitors doesn't spawn 3 readers). When the mix
-drops to genuine silence it releases a held end-of-line word to "sung" instead of
-glowing through an instrumental gap. Fully **fail-open**: no cava feed → behaves
-exactly as the estimate alone. Also drives a subtle bass swell on the active word.
-Thresholds `silenceEnter`/`silenceExit` in `lyrics.qml` may want tuning by ear
-(the default sink here is Bluetooth, which scales differently from analog).
+A dedicated cava reader (`modules/themelyrics/cava-lyrics.conf`, autosens **off**
+so energy is absolute) runs on the **primary screen only** (the engine's
+`isPrimary`, wired by `ThemeLyrics`, so the theme on 3 monitors doesn't spawn 3
+readers). When the mix drops to genuine silence it releases a held end-of-line
+word to "sung" instead of glowing through an instrumental gap. Fully
+**fail-open**: no cava feed → behaves exactly as the estimate alone. Also drives
+a subtle bass swell on the active word. Thresholds `silenceEnter`/`silenceExit`
+in `LyricsEngine.qml` may want tuning by ear (the default sink here is
+Bluetooth, which scales differently from analog).
 
 ## Known limitations
 
