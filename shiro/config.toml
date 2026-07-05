@@ -1,0 +1,24 @@
+# white — airy light theme, vertical bar on the left
+bar_position = "left"
+
+# ── washed lilac & blush over near-white glass ──────────────────────
+# accents lifted from the wallpaper (wisteria eyes, blush cheeks) and
+# deepened just enough to read on white. `accent` also drives the
+# Super+M popup; light chrome is derived from `glass` being near-white.
+accent      = "#7f76b8"   # dusty wisteria — the eyes
+accent2     = "#bd7590"   # blush rose
+accent3     = "#c25e76"   # deep rose — danger / power
+accent_warn = "#bd8a52"   # soft amber
+accent_dim  = "#9a93b1"   # lilac-grey traces, dividers
+
+text  = "#443e52"   # ink violet
+glass = "#f6f3f8"   # the panel tint — near-white, whisper of lilac
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#faf8fb"
+fg        = "#443e52"
+hue_green = "#5f8f64"   # dusty sage
+hue_blue  = "#6d87c8"   # periwinkle
+
+font_mono = "Noto Sans Mono"
