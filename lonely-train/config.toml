@@ -1,0 +1,21 @@
+# lonely-train — last train home. sodium-lamp amber over dusk navy,
+# sampled from the girl's night ride: window blue, seat leather, tail lights.
+bar_position = "bottom"
+
+accent      = "#e8a45c"   # sodium lamp amber — the station lights
+accent2     = "#7fa3d8"   # dusk window blue
+accent3     = "#d95f52"   # tail-light red — danger / power
+accent_warn = "#e6c274"   # caution stripe yellow
+accent_dim  = "#31405e"   # seat-shadow traces, dividers
+
+text  = "#dce3f0"   # uniform white
+glass = "#0a1122"   # night-window panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#070b16"
+fg        = "#d5dcea"
+hue_green = "#7da58f"   # faded seat moss
+hue_blue  = "#6f95c9"   # window dusk
+
+font_mono = "Noto Sans Mono"
