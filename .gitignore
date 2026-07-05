@@ -1,13 +1,11 @@
 # local AI prompt, not part of the themes themselves
 AI-INSTRUCTION.md
 
-# big wallpaper/media files — keep the themes repo lean (qml/config + small assets only)
-wallpaper.png
+# generated on theme apply — the switcher/videowall re-extract these from the
+# wallpaper, no point versioning them
 still.png
 preview.png
-*.jpg
-*.jpeg
-*.webp
-*.mp4
-*.mov
-*.gif
+*.still.png
+
+# leftover source cuts too big for github (avalon/old.mp4)
+old.mp4
