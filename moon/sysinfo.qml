@@ -599,7 +599,7 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "// EDGERUNNER SYS"
+                    text: "// NETRUNNER SYS"
                     font.family: root.mono
                     font.pixelSize: 8
                     font.letterSpacing: 2

@@ -5,7 +5,7 @@ import QtQuick
 // The shell's ControlPopup loads this next to the wallpaper and mounts the
 // pieces around its shared tabs: backdrop behind the content (chamfered chassis,
 // corner brackets), header (blink pip + SYSTEM + live EQ // CTRL.DECK + uptime),
-// footer (NET status + EDGERUNNER sign-off), overlay on top (CRT scanlines,
+// footer (NET status + NETRUNNER sign-off), overlay on top (CRT scanlines,
 // optional scan beam). Self-contained like the other moon widgets. Item root
 // (not QtObject) because Loader refuses non-visual elements; it renders nothing
 // itself — the shell mounts the Components below into its own slots.
@@ -220,7 +220,7 @@ Item {
         }
     }
 
-    // ── footer: NET status (left) + EDGERUNNER sign-off (right) ──
+    // ── footer: NET status (left) + NETRUNNER sign-off (right) ──
     readonly property Component footer: Component {
         Column {
             spacing: 14
@@ -268,7 +268,7 @@ Item {
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "// EDGERUNNER CTRL"
+                        text: "// NETRUNNER CTRL"
                         font.family: chrome.mono
                         font.pixelSize: 8
                         font.letterSpacing: 2
