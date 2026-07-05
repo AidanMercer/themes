@@ -14,7 +14,8 @@ Item {
     id: root
     anchors.fill: parent
 
-    MoonPalette { id: pal }
+    // injected by the loader (setSource initial property)
+    required property var pal
     readonly property color neon:    pal.neon   // edgerunners yellow
     readonly property color cyan:    pal.cyan
     readonly property color magenta: pal.magenta

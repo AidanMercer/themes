@@ -21,7 +21,8 @@ Item {
     // injected by the bar wrapper after load (Loader.onLoaded)
     property var barScreen: null
 
-    MoonPalette { id: pal }
+    // injected by the loader (setSource initial property)
+    required property var pal
     readonly property color neon:    pal.neon
     readonly property color cyan:    pal.cyan
     readonly property color magenta: pal.magenta

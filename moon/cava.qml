@@ -13,14 +13,12 @@ import Quickshell.Io
 // and two arc segments that rotate — but only while audio is actually playing,
 // so a silent desktop costs nothing. Neon yellow with a steady, subtle
 // cyan/magenta chromatic fringe.
-//
-// The triangle version is parked next door as cava-triangle.qml; rename it over
-// this file to switch back.
 Item {
     id: root
     anchors.fill: parent
 
-    MoonPalette { id: pal }
+    // injected by the loader (setSource initial property)
+    required property var pal
     readonly property color neon:    pal.neon
     readonly property color cyan:    pal.cyan
     readonly property color magenta: pal.magenta

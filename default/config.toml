@@ -1,0 +1,22 @@
+# the stock look. every theme starts from these values and its own config.toml
+# overrides them per key — so a wallpaper-only theme gets exactly this. the same
+# values are mirrored in quickshell's ThemeTokens.js as a fallback for when this
+# file is missing; change one, change both.
+
+# accents for the shell chrome (control popup, default bar, osd)
+accent      = "#a8b5e8"   # primary — sliders, active tab, highlights
+accent2     = "#c8a5e8"   # secondary — volume gradient end
+accent3     = "#e8919b"   # danger — power actions, disconnect
+accent_warn = "#e8c89b"   # warnings, mid-threshold load
+accent_dim  = "#3b3f51"   # muted traces, dividers
+
+# chrome base. the dimmer text shades are derived from `text`, and `glass` is
+# the panel tint behind the blur
+text  = "#e6e6f0"
+glass = "#0f0f14"
+
+font_mono = "monospace"
+
+# flags a theme can flip:
+# bubbles = true   # glass pills behind the bar clusters
+# cyber   = true   # cyberpunk chrome on the control popup

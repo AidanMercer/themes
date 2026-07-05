@@ -2,9 +2,9 @@
 bubbles = true
 
 # ── cyberpunk palette ───────────────────────────────────────────────
-# accent colors for moon's custom widgets (clock, cava, bar, sysinfo), read by
-# MoonPalette.qml. edit these to re-tint the whole theme. `accent` doubles as the
-# Super+M control popup's accent (read by the repo's ThemeConfig).
+# accent colors for moon's custom widgets (clock, cava, bar, sysinfo, lyrics) —
+# the shell parses this file and hands the widgets a `pal` object. edit these to
+# re-tint the whole theme. `accent` doubles as the Super+M control popup's accent.
 accent      = "#fcee0a"   # primary neon yellow
 accent2     = "#00e5ff"   # secondary cyan
 accent3     = "#ff2e6c"   # alert magenta / chromatic fringe
@@ -20,3 +20,4 @@ hue_blue    = "#2d8cff"   # electric blue
 
 # cyberpunk chrome on the Super+M control popup (dark card, neon edges)
 cyber = true
+font_mono = "Noto Sans Mono"
