@@ -36,25 +36,15 @@ Item {
     // steady, subtle chromatic fringe — no glitch jumps.
     readonly property real gx: 1.6
 
-    // bass-onset shockwave: a ring fired out of the core on a sharp bass rise.
-    // shockP is its 0→1 progress (≥1 idle); shockHold is a refractory counter
-    // in frames so a sustained kick can't machine-gun rings.
-    property real shockP: 1
-    property real prevBass: 0
-    property int shockHold: 0
-
-    // boot-in: arcs sweep into place while the stage fades/scales up, then one
-    // shockwave fires. bootT drives bindings so pal.uiScale stays live.
+    // boot-in: arcs sweep into place while the stage fades/scales up.
+    // bootT drives bindings so pal.uiScale stays live.
     property real bootT: 0
     onSpinChanged: canvas.requestPaint()
 
-    SequentialAnimation {
+    ParallelAnimation {
         id: bootAnim
-        ParallelAnimation {
-            NumberAnimation { target: root; property: "bootT"; from: 0; to: 1; duration: 700; easing.type: Easing.OutCubic }
-            NumberAnimation { target: root; property: "spin"; from: 285; to: 360; duration: 700; easing.type: Easing.OutCubic }
-        }
-        ScriptAction { script: root.shockP = 0 }
+        NumberAnimation { target: root; property: "bootT"; from: 0; to: 1; duration: 700; easing.type: Easing.OutCubic }
+        NumberAnimation { target: root; property: "spin"; from: 285; to: 360; duration: 700; easing.type: Easing.OutCubic }
     }
 
     Component.onCompleted: {
@@ -115,19 +105,6 @@ Item {
             // a steady passage still spins. Frozen only at true silence.
             if (peak > 0.03) {
                 root.spin = (root.spin + 0.9) % 360
-                canvas.requestPaint()
-            }
-            // shockwave driver — fire on a sharp bass rise (raw levels, the eased
-            // copy is too smooth to show an onset), advance while one is live
-            const bassNow = ((l[0] || 0) + (l[1] || 0) + (l[2] || 0)) / 3
-            if (root.shockHold > 0) root.shockHold--
-            if (root.shockHold === 0 && bassNow - root.prevBass > 0.18 && bassNow > 0.5) {
-                root.shockP = 0
-                root.shockHold = 14
-            }
-            root.prevBass = bassNow
-            if (root.shockP < 1) {
-                root.shockP = Math.min(1, root.shockP + 0.045)
                 canvas.requestPaint()
             }
         }
@@ -220,18 +197,6 @@ Item {
                     ctx.stroke()
                 }
                 ctx.globalAlpha = 1
-
-                // bass shockwave — expanding ring, fading as it travels
-                if (root.shockP < 1) {
-                    const sp = root.shockP
-                    ctx.globalAlpha = 0.55 * (1 - sp)
-                    ctx.strokeStyle = root.neon
-                    ctx.lineWidth = 0.5 + 2.5 * (1 - sp)
-                    ctx.beginPath()
-                    ctx.arc(cx, cy, base + (tickR + 24 - base) * sp, 0, Math.PI * 2)
-                    ctx.stroke()
-                    ctx.globalAlpha = 1
-                }
 
                 // two opposed arc segments that rotate while audio plays
                 const arcR = base + barMax + 10

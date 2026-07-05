@@ -262,7 +262,7 @@ Item {
                 Row {
                     spacing: 7
                     Text {
-                        text: "// EDGERUNNER ONLINE"
+                        text: "// NETRUNNER ONLINE"
                         color: root.dim
                         font.family: root.mono
                         font.weight: Font.Bold
