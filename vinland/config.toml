@@ -1,0 +1,22 @@
+# vinland — thorfinn alone in the snow, waiting for a land with no war in it.
+# starlit ice + snow over deep night blue; his hair is the only warm thing on
+# screen. sampled from the wallpaper, lifted enough to read over the video.
+bar_position = "left"
+
+accent      = "#8ecfec"   # starlit ice — the horizon glow, primary
+accent2     = "#dfb75c"   # thorfinn's gold — the one warm color, sparingly
+accent3     = "#c8646c"   # blood on snow — danger / power
+accent_warn = "#d8b16b"   # pale amber
+accent_dim  = "#3a4e63"   # slate traces, dividers
+
+text  = "#e9f1f7"   # snow
+glass = "#0a1424"   # deep night panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0a1220"
+fg        = "#e2ebf2"
+hue_green = "#79b596"   # aurora green
+hue_blue  = "#6ba3d6"   # steel blue
+
+font_mono = "Noto Sans Mono"
