@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -285,6 +286,27 @@ Item {
             : 1
         readonly property int activeSlot: activeWsId - pageBase
 
+        // keep the .desktop database observed so heuristicLookup() works
+        readonly property int _keepAlive: DesktopEntries.applications.values.length
+
+        function iconForClass(cls) {
+            if (!cls) return ""
+            const entry = DesktopEntries.heuristicLookup(cls)
+            const name = (entry && entry.icon) ? entry.icon : cls.toLowerCase()
+            return Quickshell.iconPath(name, "application-x-executable")
+        }
+        function iconForWindows(wins) {
+            let best = null, bestFh = Infinity
+            for (const w of wins) {
+                const cls = w.lastIpcObject?.class ?? ""
+                if (!cls) continue
+                const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
+                if (fh < bestFh) { best = w; bestFh = fh }
+            }
+            return best ? iconForClass(best.lastIpcObject.class)
+                        : Quickshell.iconPath("application-x-executable")
+        }
+
         // keep toplevels fresh so occupied stations stay lit
         Component.onCompleted: Hyprland.refreshToplevels()
         Connections {
@@ -322,24 +344,34 @@ Item {
                     required property int index
                     readonly property int wsId: routePlate.pageBase + index
                     readonly property bool isActive: routePlate.activeWsId === wsId
-                    readonly property bool isOccupied: Hyprland.toplevels.values
-                        .some(t => (t.workspace?.id ?? -1) === wsId)
+                    readonly property var windowsHere: Hyprland.toplevels.values
+                        .filter(t => (t.workspace?.id ?? -1) === wsId)
+                    readonly property bool isOccupied: windowsHere.length > 0
 
                     width: 26
                     height: 28
 
-                    // station dot: occupied = lit, empty = hollow halt
+                    // empty station: a hollow halt on the line
                     Rectangle {
                         anchors.centerIn: parent
-                        width: slot.isOccupied ? 8 : 6
-                        height: width
-                        radius: width / 2
-                        color: slot.isOccupied ? root.amberA(0.9) : "transparent"
-                        border.width: slot.isOccupied ? 0 : 1.4
+                        visible: !slot.isOccupied
+                        width: 6; height: 6
+                        radius: 3
+                        color: "transparent"
+                        border.width: 1.4
                         border.color: root.duskA(0.65)
                         opacity: slot.isActive ? 0 : 1     // the train parks on top
                         Behavior on opacity { NumberAnimation { duration: 200 } }
-                        Behavior on width { NumberAnimation { duration: 150 } }
+                    }
+
+                    // occupied station: the app waiting on the platform
+                    IconImage {
+                        anchors.centerIn: parent
+                        visible: slot.isOccupied
+                        width: 15; height: 15
+                        source: slot.isOccupied ? routePlate.iconForWindows(slot.windowsHere) : ""
+                        opacity: slot.isActive ? 0 : 0.9   // the train parks on top
+                        Behavior on opacity { NumberAnimation { duration: 200 } }
                     }
 
                     MouseArea {
