@@ -1,4 +1,5 @@
 # big wallpaper/media files — keep the themes repo lean (qml/config + small assets only)
+wallpaper.png
 *.jpg
 *.jpeg
 *.webp
