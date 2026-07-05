@@ -3,6 +3,8 @@ AI-INSTRUCTION.md
 
 # big wallpaper/media files — keep the themes repo lean (qml/config + small assets only)
 wallpaper.png
+still.png
+preview.png
 *.jpg
 *.jpeg
 *.webp

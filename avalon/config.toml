@@ -1,0 +1,22 @@
+# avalon — saber resting in the flowers. deep moss glass, ivory text,
+# ribbon-blue + hair-gold accents, sampled from the wallpaper then lifted
+# enough to read on dark green.
+bar_position = "top"
+
+accent      = "#628fce"   # the ribbon, royal blue
+accent2     = "#d3b578"   # her hair, sunlit gold
+accent3     = "#c9707c"   # blush rose — danger / power
+accent_warn = "#cfa869"   # soft amber
+accent_dim  = "#5c6b60"   # sage traces, dividers
+
+text  = "#eee9dc"   # warm ivory
+glass = "#101713"   # deep moss panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0d1210"
+fg        = "#dfdacb"
+hue_green = "#7ea67c"   # leaf green
+hue_blue  = "#6f9ad0"   # steel blue
+
+font_mono = "Noto Sans Mono"
