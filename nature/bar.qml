@@ -318,6 +318,14 @@ Item {
     // ── a reusable hanging seed pod: stem + glass pill ──────────────────────
     // visible content goes in `content` (laid out in a Row inside the pill);
     // Timers/Processes/MouseAreas stay plain children of the pod Item itself.
+    // hover flag shared with sysinfo.qml — it watches this file and opens the
+    // field journal while it reads "1" (same mirror-file idiom as AudioBus)
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
+
     component Pod: Item {
         id: pod
         property alias content: podRow.data
@@ -429,6 +437,54 @@ Item {
         height: parent.height
         spacing: Math.round(10 * root.ui)
         opacity: root.bootLate
+
+        // field-journal pod — hover the daisy to open the journal (sysinfo)
+        Pod {
+            id: journalPod
+            content: [
+                Item {
+                    width: Math.round(14 * root.ui)
+                    height: Math.round(14 * root.ui)
+                    anchors.verticalCenter: parent.verticalCenter
+                    opacity: journalMa.containsMouse ? 1 : 0.75
+                    scale: journalMa.containsMouse ? 1.15 : 1
+                    Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutBack } }
+                    Canvas {
+                        id: journalDaisy
+                        anchors.fill: parent
+                        onPaint: {
+                            const ctx = getContext("2d")
+                            ctx.reset()
+                            const c = width / 2
+                            ctx.fillStyle = Qt.rgba(root.cream.r, root.cream.g, root.cream.b, 0.95)
+                            for (let i = 0; i < 5; i++) {
+                                const a = -Math.PI / 2 + i * Math.PI * 2 / 5
+                                ctx.beginPath()
+                                ctx.ellipse(c + Math.cos(a) * c * 0.52 - c * 0.30,
+                                            c + Math.sin(a) * c * 0.52 - c * 0.30,
+                                            c * 0.60, c * 0.60)
+                                ctx.fill()
+                            }
+                            ctx.beginPath()
+                            ctx.arc(c, c, c * 0.28, 0, Math.PI * 2)
+                            ctx.fillStyle = Qt.rgba(root.gold.r, root.gold.g, root.gold.b, 1)
+                            ctx.fill()
+                        }
+                        Connections {
+                            target: root.pal
+                            function onTextChanged() { journalDaisy.requestPaint() }
+                            function onNeonChanged() { journalDaisy.requestPaint() }
+                        }
+                    }
+                }
+            ]
+            MouseArea {
+                id: journalMa
+                anchors.fill: parent
+                hoverEnabled: true
+                onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
+            }
+        }
 
         // net seed pod
         Pod {

@@ -147,12 +147,14 @@ Item {
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "g o l d e n   h o u r"
-                    color: root.goldA(0.92)
+                    text: "golden hour"
+                    color: root.goldA(1.0)
                     font.family: root.serif
                     font.italic: true
-                    font.pixelSize: Math.round(13 * root.ui)
-                    font.letterSpacing: 4
+                    font.pixelSize: Math.round(15 * root.ui)
+                    font.letterSpacing: 5
+                    style: Text.Raised
+                    styleColor: Qt.rgba(0.08, 0.13, 0.09, 0.75)
                 }
             }
 

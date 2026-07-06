@@ -81,6 +81,24 @@ Item {
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
 
+    // hover reveal — the bar's daisy pod writes "1"/"0" here while hovered;
+    // the journal stays pressed shut until someone opens it
+    property bool hoverShown: false
+    property real showT: hoverShown ? 1 : 0
+    Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    property FileView _sysFlag: FileView {
+        id: sysFlag
+        path: root.sysFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
+
     // ── pollers ─────────────────────────────────────────────────────────────
     Timer {
         interval: 2000; running: true; repeat: true; triggeredOnStart: true
@@ -329,18 +347,19 @@ Item {
         }
     }
 
-    // ── the journal card ─────────────────────────────────────────────────────
+    // ── the journal card — tucked under the branch, opens on daisy hover ────
     Item {
         id: card
         width: Math.round(272 * root.ui)
         height: col.implicitHeight + Math.round(34 * root.ui)
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.rightMargin: Math.round(30 * root.ui)
-        anchors.bottomMargin: Math.round(232 * root.ui) - Math.round(14 * (1 - root.bootT))
-        opacity: root.bootT
-        rotation: -1.4 * root.bootT
-        transformOrigin: Item.BottomRight
+        anchors.top: parent.top
+        anchors.rightMargin: Math.round(470 * root.ui)
+        anchors.topMargin: Math.round(58 * root.ui) - Math.round(12 * (1 - root.showT))
+        opacity: root.bootT * root.showT
+        visible: root.showT > 0.01
+        rotation: -1.4 * root.showT
+        transformOrigin: Item.TopRight
 
         // soft ground shadow
         Rectangle {
