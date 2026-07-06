@@ -68,6 +68,24 @@ Item {
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 800; easing.type: Easing.OutCubic }
 
+    // hover reveal — the bar's DIAG label writes "1"/"0" to this flag file
+    // while hovered; the placard stays off the forecourt until then
+    property bool hoverShown: false
+    property real showT: hoverShown ? 1 : 0
+    Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    property FileView _sysFlag: FileView {
+        id: sysFlag
+        path: root.sysFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
+
     // ── pollers ─────────────────────────────────────────────────────────────
     Timer {
         interval: 2000; running: root.visible; repeat: true; triggeredOnStart: true
@@ -341,8 +359,9 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: 26
-        anchors.bottomMargin: 34 - 12 * (1 - root.bootT)
-        opacity: root.bootT
+        anchors.bottomMargin: 34 - 12 * (1 - root.showT)
+        opacity: root.bootT * root.showT
+        visible: root.showT > 0.01
         scale: pal.uiScale
         transformOrigin: Item.BottomRight
 

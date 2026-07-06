@@ -558,8 +558,50 @@ Item {
                     font.pixelSize: 10
                 }
             }
+
+            Rectangle { anchors.verticalCenter: parent.verticalCenter; width: 1; height: 14; color: root.dim; opacity: 0.6 }
+
+            // DIAG: hover to raise the pump diagnostic placard (sysinfo)
+            Item {
+                anchors.verticalCenter: parent.verticalCenter
+                width: diagLabel.width + 8; height: 24
+                Text {
+                    id: diagLabel
+                    anchors.centerIn: parent
+                    text: "DIAG"
+                    color: diagMa.containsMouse ? root.neon : root.iceA(0.55)
+                    font.family: root.mono
+                    font.pixelSize: 8
+                    font.letterSpacing: 2
+                    Behavior on color { ColorAnimation { duration: 150 } }
+                }
+                Rectangle {
+                    anchors.top: diagLabel.bottom
+                    anchors.topMargin: 1
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: diagLabel.width
+                    height: 1
+                    color: root.neon
+                    opacity: diagMa.containsMouse ? 0.9 : 0
+                    Behavior on opacity { NumberAnimation { duration: 150 } }
+                }
+                MouseArea {
+                    id: diagMa
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
+                }
+            }
         }
     }
+
+    // hover flag shared with sysinfo.qml — it watches this file and raises the
+    // diagnostic placard while it reads "1" (same mirror-file idiom as AudioBus)
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
 
     // the time as a mini price display
     Plate {
