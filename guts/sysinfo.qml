@@ -225,6 +225,23 @@ Item {
         }
     }
 
+    // hover reveal — the blade's notes seal writes "1"/"0" here while hovered
+    property bool hoverShown: false
+    property real showT: hoverShown ? 1 : 0
+    Behavior on showT { NumberAnimation { duration: 450; easing.type: Easing.InOutQuad } }
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    property FileView _sysFlag: FileView {
+        id: sysFlag
+        path: root.sysFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
+
     component NoteRow: Item {
         property string label: ""
         property string kanji: ""
@@ -263,19 +280,19 @@ Item {
         }
     }
 
-    // ── the margin-note scrap, bottom-right ──────────────────────────────────
+    // ── the margin-note scrap, pinned beside the blade, inked in on hover ────
     Item {
         id: panel
         width: Math.round(236 * root.ui)
         height: col.implicitHeight + Math.round(34 * root.ui)
-        anchors.right: parent.right
+        anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.rightMargin: Math.round(26 * root.ui)
-        anchors.bottomMargin: Math.round(26 * root.ui)
+        anchors.leftMargin: Math.round(64 * root.ui)
+        anchors.bottomMargin: Math.round(40 * root.ui)
+        visible: root.showT > 0.01
 
-        // the border brush-draws itself on load; contents fade in after
-        property real borderT: 0
-        NumberAnimation on borderT { running: true; from: 0; to: 1; duration: 900; easing.type: Easing.InOutQuad }
+        // the border brush-draws itself on each reveal; contents fade in after
+        readonly property real borderT: root.showT
 
         // torn paper scrap
         Canvas {

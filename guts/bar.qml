@@ -330,7 +330,7 @@ Item {
                         required property int index
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: Qt.formatDateTime(clock.date, "mm")[index]
-                        color: root.paperA(0.60)
+                        color: root.paperA(0.85)
                         font.family: root.serif
                         font.pixelSize: Math.round(17 * root.ui)
                         font.weight: Font.DemiBold
@@ -342,6 +342,29 @@ Item {
             Column {
                 spacing: Math.round(5 * root.ui)
                 anchors.horizontalCenter: parent.horizontalCenter
+
+                // notes seal: hover to ink in the margin notes (sysinfo)
+                Rectangle {
+                    width: Math.round(17 * root.ui); height: width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    rotation: -3
+                    color: notesMa.containsMouse ? Qt.rgba(root.blood.r, root.blood.g, root.blood.b, 0.85) : "transparent"
+                    border.color: notesMa.containsMouse ? root.blood : root.paperA(0.5)
+                    border.width: 1
+                    Behavior on color { ColorAnimation { duration: 150 } }
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: Math.round(9 * root.ui); height: 1.6
+                        rotation: -32
+                        color: notesMa.containsMouse ? root.paperA(0.95) : root.paperA(0.7)
+                    }
+                    MouseArea {
+                        id: notesMa
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
+                    }
+                }
 
                 // net: paper seal when online, bleeds red when offline
                 Rectangle {
@@ -371,12 +394,13 @@ Item {
                     border.color: root.batPct >= 0 && root.batPct <= 20 && !root.batCharging
                         ? root.fresh : root.paperA(0.5)
                     border.width: 1
+                    // ink rises as the charge drains — full red seal means empty
                     Rectangle {
                         anchors.bottom: parent.bottom
                         anchors.left: parent.left
                         anchors.right: parent.right
                         anchors.margins: 2
-                        height: Math.max(0, (parent.height - 4) * Math.max(0, root.batPct) / 100)
+                        height: Math.max(0, (parent.height - 4) * (100 - Math.max(0, root.batPct)) / 100)
                         color: root.batCharging ? root.paperA(0.7)
                              : root.batPct <= 20 ? root.fresh : root.paperA(0.4)
                     }
@@ -394,6 +418,14 @@ Item {
     }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
+
+    // hover flag shared with sysinfo.qml — it watches this file and inks the
+    // margin notes in while it reads "1" (same mirror-file idiom as AudioBus)
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
 
     // Hyprland.toplevels is empty until refreshed; re-query on window events
     // so the tally slashes track occupancy.
