@@ -176,7 +176,7 @@ Item {
                 opacity: root.seg(0.7, 1.0) * 0.8
                 text: Qt.formatDateTime(clock.date, "ddd dd MMM").toUpperCase()
                       + "  ·  " + root.watchName(clock.date.getHours())
-                color: root.slateA(1)
+                color: root.duskA(0.7)
                 font.family: root.mono
                 font.pixelSize: 12
                 font.letterSpacing: 4

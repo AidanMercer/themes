@@ -40,6 +40,14 @@ Item {
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
 
+    // hover flag shared with sysinfo.qml (it watches this file and shows the
+    // wheelhouse card while it reads "1") — same mirror-file idiom as AudioBus
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
+
     // boot-in: the rails draw out from the left, portholes light in sequence
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
@@ -194,7 +202,7 @@ Item {
 
         visible: active
         anchors.left: parent.left
-        anchors.leftMargin: 18
+        anchors.leftMargin: 30
         anchors.verticalCenter: parent.verticalCenter
         width: mediaRow.width
         height: parent.height
@@ -303,9 +311,9 @@ Item {
     Row {
         id: rightRow
         anchors.right: parent.right
-        anchors.rightMargin: 18
+        anchors.rightMargin: 30
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 14
+        spacing: 20
         opacity: root.bootT
 
         // radio mast: three arcs over a dot, lit while the ship has shore signal
@@ -384,6 +392,41 @@ Item {
                 font.family: root.mono
                 font.pixelSize: 13
                 font.letterSpacing: 2
+            }
+        }
+
+        Stanchion { anchors.verticalCenter: parent.verticalCenter; anchors.verticalCenterOffset: 1 }
+
+        // wheelhouse dial — hover to consult the instruments (sysinfo card)
+        Item {
+            anchors.verticalCenter: parent.verticalCenter
+            width: 20; height: 28
+            Rectangle {
+                anchors.centerIn: parent
+                width: 16; height: 16; radius: 8
+                color: root.glassA(0.6)
+                border.width: 1
+                border.color: gaugeMa.containsMouse ? root.lamp : root.slateA(0.8)
+                Behavior on border.color { ColorAnimation { duration: 150 } }
+                Rectangle {
+                    x: parent.width / 2 - 5.5; y: parent.height / 2 - 0.6
+                    width: 5.5; height: 1.2; radius: 0.6
+                    transformOrigin: Item.Right
+                    rotation: gaugeMa.containsMouse ? 210 : 320
+                    color: gaugeMa.containsMouse ? root.buoy : root.paleA(0.8)
+                    Behavior on rotation { NumberAnimation { duration: 400; easing.type: Easing.OutBack } }
+                }
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: 3; height: 3; radius: 1.5
+                    color: gaugeMa.containsMouse ? root.lamp : root.slateA(0.9)
+                }
+            }
+            MouseArea {
+                id: gaugeMa
+                anchors.fill: parent
+                hoverEnabled: true
+                onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
             }
         }
 

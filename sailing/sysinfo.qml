@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 
 // sailing: the wheelhouse — instrument cluster for the "THROUGH SILENCE"
@@ -28,6 +29,25 @@ Item {
     function lampA(a)  { return Qt.rgba(lamp.r, lamp.g, lamp.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
     function glassA(a) { return Qt.rgba(glass.r, glass.g, glass.b, a) }
+
+    // ── hover reveal ─────────────────────────────────────────────────────────
+    // The bar's wheelhouse dial writes "1"/"0" to this flag file while hovered;
+    // the card stays off the desktop until the officer consults the instruments.
+    property bool hoverShown: false
+    property real showT: hoverShown ? 1 : 0
+    Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    property FileView _sysFlag: FileView {
+        id: sysFlag
+        path: root.sysFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
 
     // ── live state ──────────────────────────────────────────────────────────
     property int cpuPercent: -1
@@ -319,8 +339,9 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: 26
-        anchors.bottomMargin: 70 - 12 * (1 - root.bootT)
-        opacity: root.bootT
+        anchors.bottomMargin: 70 - 12 * (1 - root.showT)
+        opacity: root.bootT * root.showT
+        visible: root.showT > 0.01
 
         scale: pal.uiScale
         transformOrigin: Item.BottomRight
