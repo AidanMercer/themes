@@ -1,0 +1,23 @@
+# stars — waiting with stars. a seaside night stop: deep twilight navy under a
+# star field, coral clouds low on the horizon, and one warm vending machine
+# humming amber light onto the wet platform. palette sampled from the frames:
+# sky #305394, shelf glow #eecf43, cloud coral #e08c84, ground #141f33.
+bar_position = "top"
+
+accent      = "#f2bb54"   # vending amber — the machine's shelf light
+accent2     = "#e89aa8"   # coral cloud pink — the horizon drift
+accent3     = "#e2695c"   # signal red-coral — danger / power
+accent_warn = "#df8f3e"   # deeper orange — the glow on wet ground
+accent_dim  = "#3d5378"   # starlit slate — traces, dividers, dark bottles
+
+text  = "#dbe6f5"   # pale starlight
+glass = "#0d1626"   # deep navy panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0b1322"
+fg        = "#d8e2f2"
+hue_green = "#83b79e"   # sea-glass green
+hue_blue  = "#6e97cf"   # open-sky blue
+
+font_mono = "Adwaita Mono"
