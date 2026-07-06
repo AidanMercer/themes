@@ -115,7 +115,11 @@ Item {
         anchors.bottomMargin: Math.round(root.height * 0.075)
         scale: pal.uiScale
         transformOrigin: Item.Bottom
-        opacity: root.bootT
+        // the machine face only exists while music plays — at true silence it
+        // fades out completely instead of squatting on the wallpaper
+        opacity: root.bootT * (root.humming ? 1 : 0)
+        visible: opacity > 0.01
+        Behavior on opacity { NumberAnimation { duration: 700; easing.type: Easing.InOutQuad } }
 
         // shelf chassis: a whisper of glass and a warm baseline, so the grid
         // reads as the machine's face without boxing the wallpaper in
