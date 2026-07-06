@@ -1,0 +1,24 @@
+# fuel — midnight fuel stop. a lonely snow-covered gas station at 3am:
+# neon orange canopy stripe, icy fluorescent tubes, retro striped pumps,
+# a black wedge supercar with red tail lights. sampled from the wallpaper.
+bar_position = "bottom"
+
+accent      = "#ff5a1e"   # canopy neon orange — the stripe that bends the corner
+accent2     = "#9ed4e6"   # icy fluorescent cyan-white — the tubes under the canopy
+accent3     = "#e0372a"   # tail-light red — danger / power
+accent_warn = "#e3b93d"   # bollard + pump-screen yellow
+accent_dim  = "#35434e"   # cold gray-blue traces, dividers
+
+text  = "#f0e8da"   # warm off-white, like the lit pump screen
+glass = "#06090d"   # near-black blue panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#06090d"
+fg        = "#e7e0d2"
+hue_green = "#57a08b"   # frozen teal — the misty ground reflections
+hue_blue  = "#5f97c2"   # icy blue
+
+# dark neon chrome on the Super+M control popup tabs
+cyber = true
+font_mono = "Adwaita Mono"
