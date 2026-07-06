@@ -228,7 +228,12 @@ Item {
 
         ParallelAnimation {
             id: ghostFall
-            NumberAnimation { target: ghost; property: "y"; from: root.bedY; to: root.bedY + 64 * root.ui; duration: 1300; easing.type: Easing.InQuad }
+            // clear the bed fast first — the next line blooms at bedY, so a
+            // slow-starting fall leaves the two lines overlapped
+            SequentialAnimation {
+                NumberAnimation { target: ghost; property: "y"; from: root.bedY; to: root.bedY + root.lyricSize * 1.6; duration: 220; easing.type: Easing.OutQuad }
+                NumberAnimation { target: ghost; property: "y"; to: root.bedY + root.lyricSize * 1.6 + 40 * root.ui; duration: 1080; easing.type: Easing.InOutSine }
+            }
             NumberAnimation { target: ghost; property: "x"; from: root.bedX; to: root.bedX + 36 * root.ui; duration: 1300; easing.type: Easing.InOutSine }
             NumberAnimation { target: ghost; property: "rotation"; from: 0; to: 2.5; duration: 1300 }
             SequentialAnimation {
