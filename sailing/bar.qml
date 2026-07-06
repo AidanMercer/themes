@@ -52,8 +52,8 @@ Item {
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
 
-    readonly property real railTopY: 14
-    readonly property real railBotY: 32
+    readonly property real railTopY: 8
+    readonly property real railBotY: 36
 
     // deck shadow behind the railing
     Rectangle {
