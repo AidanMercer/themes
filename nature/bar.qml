@@ -15,7 +15,7 @@ import Quickshell.Services.Mpris
 //   • now-playing hangs from the branch on a stem like a seed pod and sways
 //     gently while music plays
 //   • net + battery are two more hanging seed pods on the right
-//   • the clock nestles among a pair of leaves in a warm glass pill
+//   • the clock is the last pod on the right, its face framed by two leaves
 // Soft dark-pine glass pills keep everything legible over the bright video.
 Item {
     id: root
@@ -616,89 +616,69 @@ Item {
             ]
         }
 
-        // the clock, nestled between two leaves
-        Item {
-            width: clockPill.width
-            height: root.height
-
-            Rectangle {
-                id: clockPill
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: root.branchY - root.height / 2 + 1
-                height: Math.round(24 * root.ui)
-                width: clockRow.width + Math.round(22 * root.ui)
-                radius: height / 2
-                color: root.pineA(0.58)
-                border.width: 1
-                border.color: root.goldA(0.3)
-
-                Row {
-                    id: clockRow
-                    anchors.centerIn: parent
-                    spacing: Math.round(7 * root.ui)
-
-                    Canvas {
-                        id: clockLeafL
-                        width: Math.round(11 * root.ui); height: Math.round(11 * root.ui)
-                        anchors.verticalCenter: parent.verticalCenter
-                        onPaint: {
-                            const ctx = getContext("2d")
-                            ctx.reset()
-                            ctx.save()
-                            ctx.translate(width / 2, height / 2)
-                            ctx.rotate(-0.7)
-                            ctx.beginPath()
-                            ctx.ellipse(-width * 0.45, -height * 0.22, width * 0.9, height * 0.44)
-                            ctx.fillStyle = root.leafA(0.8)
-                            ctx.fill()
-                            ctx.restore()
-                        }
-                        Connections {
-                            target: root.pal
-                            function onCyanChanged() { clockLeafL.requestPaint() }
-                        }
+        // the clock pod, its face framed by two leaves
+        Pod {
+            id: clockPod
+            content: [
+                Canvas {
+                    id: clockLeafL
+                    width: Math.round(11 * root.ui); height: Math.round(11 * root.ui)
+                    anchors.verticalCenter: parent.verticalCenter
+                    onPaint: {
+                        const ctx = getContext("2d")
+                        ctx.reset()
+                        ctx.save()
+                        ctx.translate(width / 2, height / 2)
+                        ctx.rotate(-0.7)
+                        ctx.beginPath()
+                        ctx.ellipse(-width * 0.45, -height * 0.22, width * 0.9, height * 0.44)
+                        ctx.fillStyle = root.leafA(0.8)
+                        ctx.fill()
+                        ctx.restore()
                     }
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: Qt.formatDateTime(barClock.date, "HH:mm")
-                        color: root.cream
-                        font.family: root.serif
-                        font.pixelSize: Math.round(14 * root.ui)
-                        font.letterSpacing: 1
+                    Connections {
+                        target: root.pal
+                        function onCyanChanged() { clockLeafL.requestPaint() }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: Qt.formatDateTime(barClock.date, "ddd d")
-                        color: root.goldA(0.85)
-                        font.family: root.serif
-                        font.italic: true
-                        font.pixelSize: Math.round(11 * root.ui)
+                },
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: Qt.formatDateTime(barClock.date, "HH:mm")
+                    color: root.cream
+                    font.family: root.serif
+                    font.pixelSize: Math.round(13 * root.ui)
+                    font.letterSpacing: 1
+                },
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: Qt.formatDateTime(barClock.date, "ddd d")
+                    color: root.goldA(0.85)
+                    font.family: root.serif
+                    font.italic: true
+                    font.pixelSize: Math.round(10 * root.ui)
+                },
+                Canvas {
+                    id: clockLeafR
+                    width: Math.round(11 * root.ui); height: Math.round(11 * root.ui)
+                    anchors.verticalCenter: parent.verticalCenter
+                    onPaint: {
+                        const ctx = getContext("2d")
+                        ctx.reset()
+                        ctx.save()
+                        ctx.translate(width / 2, height / 2)
+                        ctx.rotate(0.7)
+                        ctx.beginPath()
+                        ctx.ellipse(-width * 0.45, -height * 0.22, width * 0.9, height * 0.44)
+                        ctx.fillStyle = root.leafA(0.8)
+                        ctx.fill()
+                        ctx.restore()
                     }
-
-                    Canvas {
-                        id: clockLeafR
-                        width: Math.round(11 * root.ui); height: Math.round(11 * root.ui)
-                        anchors.verticalCenter: parent.verticalCenter
-                        onPaint: {
-                            const ctx = getContext("2d")
-                            ctx.reset()
-                            ctx.save()
-                            ctx.translate(width / 2, height / 2)
-                            ctx.rotate(0.7)
-                            ctx.beginPath()
-                            ctx.ellipse(-width * 0.45, -height * 0.22, width * 0.9, height * 0.44)
-                            ctx.fillStyle = root.leafA(0.8)
-                            ctx.fill()
-                            ctx.restore()
-                        }
-                        Connections {
-                            target: root.pal
-                            function onCyanChanged() { clockLeafR.requestPaint() }
-                        }
+                    Connections {
+                        target: root.pal
+                        function onCyanChanged() { clockLeafR.requestPaint() }
                     }
                 }
-            }
+            ]
         }
     }
 
