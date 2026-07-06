@@ -398,6 +398,14 @@ Item {
         }
     }
 
+    // hover flag shared with sysinfo.qml — it watches this file and opens the
+    // service panel while it reads "1" (same mirror-file idiom as AudioBus)
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
+
     Row {
         id: rightRow
         spacing: 10
@@ -406,6 +414,47 @@ Item {
         y: 0
         height: parent.height
         opacity: root.bootDrop
+
+        // service bottle — hover to open the machine's service panel (sysinfo)
+        Item {
+            id: svcSlot
+            width: svcPlate.width
+            height: parent.height
+            readonly property real absX: rightRow.x + x + width / 2
+            Rectangle { x: svcSlot.width / 2 - 0.5; y: root.wireY(svcSlot.absX); width: 1; height: svcPlate.y - root.wireY(svcSlot.absX); color: root.slateA(0.7) }
+            Rectangle { x: svcSlot.width / 2 - 1.5; y: root.wireY(svcSlot.absX) - 1.5; width: 3; height: 3; radius: 1.5; color: root.slate }
+            Plate {
+                id: svcPlate
+                width: 20
+                height: 20
+                y: root.wireY(svcSlot.absX) + 8 - 5 * (1 - root.bootDrop)
+                // a tiny lit bottle
+                Item {
+                    anchors.centerIn: parent
+                    width: 7; height: 13
+                    scale: svcMa.containsMouse ? 1.2 : 1.0
+                    Behavior on scale { NumberAnimation { duration: 150 } }
+                    Rectangle {
+                        anchors.bottom: parent.bottom
+                        width: 7; height: 10; radius: 2.5
+                        color: svcMa.containsMouse ? root.amber : root.amberA(0.45)
+                        Behavior on color { ColorAnimation { duration: 150 } }
+                    }
+                    Rectangle {
+                        anchors.top: parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: 3; height: 3
+                        color: svcMa.containsMouse ? root.amberA(0.9) : root.slateA(0.9)
+                    }
+                }
+                MouseArea {
+                    id: svcMa
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
+                }
+            }
+        }
 
         // net plate
         Item {

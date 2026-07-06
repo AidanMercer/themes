@@ -66,6 +66,24 @@ Item {
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 800; easing.type: Easing.OutCubic }
 
+    // hover reveal — the bar's service bottle writes "1"/"0" here while
+    // hovered; the panel stays shut until a technician calls
+    property bool hoverShown: false
+    property real showT: hoverShown ? 1 : 0
+    Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    property FileView _sysFlag: FileView {
+        id: sysFlag
+        path: root.sysFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
+
     // ── pollers ─────────────────────────────────────────────────────────────
     Timer {
         interval: 2000; running: true; repeat: true; triggeredOnStart: true
@@ -293,18 +311,19 @@ Item {
         }
     }
 
-    // ── the panel, machine-front chrome, bottom-right ───────────────────────
+    // ── the panel, machine-front chrome — drops from the wire on hover ──────
     Rectangle {
         id: panel
         width: 300
         height: col.implicitHeight + 30
         anchors.right: parent.right
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
         anchors.rightMargin: 28
-        anchors.bottomMargin: 28 - 10 * (1 - root.bootT)
-        opacity: root.bootT
+        anchors.topMargin: 56 - 10 * (1 - root.showT)
+        opacity: root.bootT * root.showT
+        visible: root.showT > 0.01
         scale: pal.uiScale
-        transformOrigin: Item.BottomRight
+        transformOrigin: Item.TopRight
 
         radius: 11
         color: root.glassA(0.82)
