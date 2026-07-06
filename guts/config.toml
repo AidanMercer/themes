@@ -1,0 +1,22 @@
+# guts — "THE BLACK SWORDSMAN". Berserk manga ink: a monochrome world with a
+# single drop of blood. Paper-white sky, ink-black figure, blood-red brand.
+bar_position = "left"
+
+# accents: everything is ink or blood.
+accent      = "#9e1414"   # the Brand of Sacrifice — deep blood red (pal.neon)
+accent2     = "#26242b"   # ink black / graphite — secondary strokes (pal.cyan)
+accent3     = "#c22318"   # arterial red — danger, fresh blood (pal.magenta)
+accent_warn = "#7a4034"   # dried blood maroon — warnings (pal.amber)
+accent_dim  = "#8f8b81"   # halftone gray — traces, dividers (pal.dim)
+
+text  = "#16151a"   # ink black
+glass = "#f0ede5"   # paper-warm white — panel tint behind blur
+
+# terminal / launcher / lock palettes (theme-colors.sh reads these on switch).
+# hues stay readable on paper: grays pulled toward ink, one drop of red.
+bg        = "#edeae2"   # paper white
+fg        = "#16151a"   # ink
+hue_green = "#48583f"   # ink-wash moss — readable "green" on paper
+hue_blue  = "#3d4b63"   # graphite slate — readable "blue" on paper
+
+font_mono = "Noto Sans Mono"
