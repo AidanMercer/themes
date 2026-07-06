@@ -1,0 +1,22 @@
+# sailing — THROUGH SILENCE. a rainy dusk ferry crossing: cold sea air, warm
+# coat. deep slate navy water under a lavender-pink sky; the lifebuoy on the
+# cabin wall is the only warm loud thing on board — the accents follow suit.
+bar_position = "bottom"
+
+accent      = "#d1553c"   # lifebuoy red-orange — active / signature, sparingly
+accent2     = "#c9a0b4"   # dusk lavender-pink — the sky at the horizon
+accent3     = "#e8664d"   # signal red — alerts, the warning lamp
+accent_warn = "#c99a62"   # muted amber — deck lamp / brass
+accent_dim  = "#4d5a76"   # rain-gray slate — traces, railings, dividers
+
+text  = "#dfdaea"   # pale lavender-white — breath on cold glass
+glass = "#141b2c"   # deep blue translucent — cabin panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#151a28"   # deep slate navy — the sea after dusk
+fg        = "#d6d2e0"   # pale lavender-white
+hue_green = "#7fa596"   # sea-glass green
+hue_blue  = "#8b9cc4"   # dusk sky blue
+
+font_mono = "Noto Sans Mono"
