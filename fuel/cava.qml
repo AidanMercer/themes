@@ -53,6 +53,8 @@ Item {
         onTriggered: cava.running = true
     }
 
+    property double lastFrameMs: 0
+
     function parseFrame(line) {
         const parts = line.split(";")
         const out = []
@@ -60,14 +62,19 @@ Item {
             if (parts[i] === "") continue
             out.push(Math.min(1, parseInt(parts[i]) / 1000))
         }
-        if (out.length) root.levels = out
+        if (out.length) {
+            root.levels = out
+            root.lastFrameMs = Date.now()
+            smooth.start()
+        }
     }
 
     // smoothing pass — repaints only when something actually moved
     property real _lastSignal: 0
     Timer {
+        id: smooth
         interval: 33
-        running: root.visible
+        running: true
         repeat: true
         onTriggered: {
             const d = root.display
@@ -90,6 +97,10 @@ Item {
             const now = Date.now()
             if (peak > 0.03) root._lastSignal = now
             root.hot = (now - root._lastSignal) < 2500
+            // cava sleeps at silence (sleep_timer) — stop once everything settled; parseFrame rearms
+            if (moved <= 0.002 && !root.hot && root.level < 0.003
+                    && now - root.lastFrameMs > 2000)
+                smooth.stop()
         }
     }
 

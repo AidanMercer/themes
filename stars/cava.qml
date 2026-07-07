@@ -48,6 +48,8 @@ Item {
         onTriggered: cava.running = true
     }
 
+    property double lastFrameMs: 0
+
     function parseFrame(line) {
         const parts = line.split(";")
         const out = []
@@ -55,7 +57,11 @@ Item {
             if (parts[i] === "") continue
             out.push(Math.min(1, parseInt(parts[i]) / 1000))
         }
-        if (out.length) root.levels = out
+        if (out.length) {
+            root.levels = out
+            root.lastFrameMs = Date.now()
+            smooth.start()
+        }
     }
 
     // smoothing pump — repaints only while something is moving; at true
@@ -63,6 +69,7 @@ Item {
     // cheap no-op that stops dirtying the scene.
     property int stillFrames: 0
     Timer {
+        id: smooth
         interval: 33
         running: true
         repeat: true
@@ -82,6 +89,9 @@ Item {
                 root.stillFrames = 0
                 root.humming = true
                 strand.requestPaint()
+            } else if (Date.now() - root.lastFrameMs > 2000 && !root.humming) {
+                // cava sleeps at silence (sleep_timer) — strand cleared; parseFrame rearms
+                smooth.stop()
             } else if (root.humming) {
                 root.stillFrames++
                 if (root.stillFrames > 45) {   // ~1.5s of stillness → lights out

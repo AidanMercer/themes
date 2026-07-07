@@ -58,6 +58,8 @@ Item {
         onTriggered: cava.running = true
     }
 
+    property double lastFrameMs: 0
+
     function parseFrame(line) {
         const parts = line.split(";")
         const out = []
@@ -65,7 +67,11 @@ Item {
             if (parts[i] === "") continue
             out.push(Math.min(1, parseInt(parts[i]) / 1000))
         }
-        if (out.length) root.levels = out
+        if (out.length) {
+            root.levels = out
+            root.lastFrameMs = Date.now()
+            smooth.start()
+        }
     }
 
     // deterministic per-blade jitter
@@ -78,6 +84,7 @@ Item {
     }
 
     Timer {
+        id: smooth
         interval: 33
         running: true
         repeat: true
@@ -106,6 +113,9 @@ Item {
                 root.bloom = bl
                 meadow.requestPaint()
             }
+            // cava sleeps at silence (sleep_timer) — nothing left to ease; parseFrame rearms
+            else if (Date.now() - root.lastFrameMs > 2000)
+                smooth.stop()
         }
     }
 
