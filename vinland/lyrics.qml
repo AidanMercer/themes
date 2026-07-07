@@ -143,6 +143,7 @@ Item {
                         color: root.iceA(0.18)
                         font.family: root.serif
                         font.pixelSize: wd.sizePx
+                        font.weight: Font.Medium
                         font.italic: wd.bg
                     }
 
@@ -163,6 +164,7 @@ Item {
                             opacity: wd.st.sustain ? 0.70 + 0.30 * root.breath : 1
                             font.family: root.serif
                             font.pixelSize: wd.sizePx
+                            font.weight: Font.Medium
                             font.italic: wd.bg
                         }
                     }
@@ -256,6 +258,7 @@ Item {
         font.family: root.serif
         font.pixelSize: Math.round(root.lyricSize * 0.42)
         font.italic: true
+        font.weight: Font.Medium
         font.letterSpacing: 2
         Behavior on opacity { NumberAnimation { duration: 160 } }
         Timer { id: osdHide; interval: 1200; onTriggered: offsetOsd.opacity = 0 }

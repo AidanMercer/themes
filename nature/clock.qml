@@ -151,6 +151,7 @@ Item {
                     color: root.goldA(1.0)
                     font.family: root.serif
                     font.italic: true
+                    font.weight: Font.Medium
                     font.pixelSize: Math.round(15 * root.ui)
                     font.letterSpacing: 5
                     style: Text.Raised
@@ -166,7 +167,7 @@ Item {
                 color: root.cream
                 font.family: root.serif
                 font.pixelSize: Math.round(118 * root.ui)
-                font.weight: Font.Light
+                font.weight: Font.Medium
                 font.letterSpacing: 3
             }
 
@@ -211,6 +212,7 @@ Item {
                     color: root.creamA(0.72)
                     font.family: root.serif
                     font.italic: true
+                    font.weight: Font.Medium
                     font.pixelSize: Math.round(15 * root.ui)
                     font.letterSpacing: 3
                 }
@@ -224,6 +226,7 @@ Item {
                     color: root.creamA(0.72)
                     font.family: root.serif
                     font.italic: true
+                    font.weight: Font.Medium
                     font.pixelSize: Math.round(15 * root.ui)
                     font.letterSpacing: 3
                 }

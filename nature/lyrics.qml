@@ -144,7 +144,7 @@ Item {
                         styleColor: root.pineA(0.85)
                         font.family: root.serif
                         font.pixelSize: wd.sizePx
-                        font.weight: wd.bg ? Font.Normal : Font.Medium
+                        font.weight: wd.bg ? Font.Medium : Font.Bold
                         font.italic: wd.bg
                         font.letterSpacing: 1
                     }
@@ -224,6 +224,7 @@ Item {
         font.family: root.serif
         font.pixelSize: Math.round(root.lyricSize * 0.9)
         font.letterSpacing: 1
+        font.weight: Font.Medium
         transformOrigin: Item.Left
 
         ParallelAnimation {
@@ -256,6 +257,7 @@ Item {
         styleColor: root.pineA(0.8)
         font.family: root.serif
         font.italic: true
+        font.weight: Font.Medium
         font.pixelSize: Math.round(root.lyricSize * 0.5)
         font.letterSpacing: 2
     }
@@ -273,6 +275,7 @@ Item {
         styleColor: root.pineA(0.85)
         font.family: root.serif
         font.italic: true
+        font.weight: Font.Medium
         font.pixelSize: Math.round(root.lyricSize * 0.45)
         font.letterSpacing: 2
         Behavior on opacity { NumberAnimation { duration: 160 } }

@@ -92,7 +92,7 @@ Item {
             color: root.snow
             font.family: root.serif
             font.pixelSize: 118
-            font.weight: Font.Light
+            font.weight: Font.Medium
             font.letterSpacing: 3
         }
 
@@ -168,6 +168,7 @@ Item {
                 color: root.snowA(0.55)
                 font.family: "Noto Sans"
                 font.pixelSize: 14
+                font.weight: Font.Medium
                 font.letterSpacing: 6
             }
             Rectangle {
@@ -181,6 +182,7 @@ Item {
                 color: root.snowA(0.55)
                 font.family: "Noto Sans"
                 font.pixelSize: 14
+                font.weight: Font.Medium
                 font.letterSpacing: 6
             }
         }

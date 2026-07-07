@@ -165,6 +165,7 @@ Item {
                         text: "golden hour"
                         font.family: chrome.serif
                         font.italic: true
+                        font.weight: Font.Medium
                         font.pixelSize: Math.round(14 * chrome.ui)
                         font.letterSpacing: 2
                         color: chrome.gold
@@ -206,6 +207,7 @@ Item {
                     text: "in bloom " + chrome.popup.uptimeText.replace("up ", "")
                     font.family: chrome.serif
                     font.italic: true
+                    font.weight: Font.Medium
                     font.pixelSize: Math.round(10 * chrome.ui)
                     color: chrome.creamA(0.5)
                 }
@@ -289,6 +291,7 @@ Item {
                             : (chrome.popup.connName || "on the breeze")
                         font.family: chrome.serif
                         font.italic: true
+                        font.weight: Font.Medium
                         font.pixelSize: Math.round(10 * chrome.ui)
                         color: chrome.popup.connType === "none" ? chrome.rose : chrome.creamA(0.7)
                     }
@@ -300,6 +303,7 @@ Item {
                     text: "· grown in the meadow ·"
                     font.family: chrome.serif
                     font.italic: true
+                    font.weight: Font.Medium
                     font.pixelSize: Math.round(9 * chrome.ui)
                     font.letterSpacing: 1.5
                     color: chrome.goldA(0.55)

@@ -331,6 +331,7 @@ Item {
                 elide: Text.ElideRight
                 font.family: root.serif
                 font.italic: true
+                font.weight: Font.Medium
                 font.pixelSize: Math.round(13 * root.ui)
                 color: root.inkA(0.9)
             }
@@ -453,6 +454,7 @@ Item {
                 text: "field notes"
                 font.family: root.serif
                 font.italic: true
+                font.weight: Font.Medium
                 font.pixelSize: Math.round(17 * root.ui)
                 color: root.ink
             }
@@ -461,6 +463,7 @@ Item {
                 font.family: root.serif
                 font.pixelSize: Math.round(10 * root.ui)
                 font.letterSpacing: 1.5
+                font.weight: Font.Medium
                 color: root.inkA(0.55)
             }
             Item { width: 1; height: Math.round(4 * root.ui) }
@@ -544,6 +547,7 @@ Item {
                 text: "— in bloom " + root.uptimeText
                 font.family: root.serif
                 font.italic: true
+                font.weight: Font.Medium
                 font.pixelSize: Math.round(10 * root.ui)
                 color: root.inkA(0.5)
             }

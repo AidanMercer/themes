@@ -127,6 +127,7 @@ Item {
                         font.pixelSize: 14
                         font.letterSpacing: 6
                         font.italic: true
+                        font.weight: Font.Medium
                         color: chrome.snow
                     }
 
@@ -208,6 +209,7 @@ Item {
                             : (chrome.popup.connName || "online")
                         font.family: "Noto Sans"
                         font.pixelSize: 9
+                        font.weight: Font.Medium
                         font.letterSpacing: 1
                         color: chrome.snowA(0.55)
                     }
@@ -220,6 +222,7 @@ Item {
                     font.family: chrome.serif
                     font.pixelSize: 9
                     font.italic: true
+                    font.weight: Font.Medium
                     font.letterSpacing: 2
                     color: chrome.goldA(0.55)
                 }

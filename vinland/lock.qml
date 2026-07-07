@@ -148,7 +148,7 @@ Item {
             color: root.snow
             font.family: root.serif
             font.pixelSize: Math.round(96 * root.ui)
-            font.weight: Font.Light
+            font.weight: Font.Medium
             font.letterSpacing: 3
         }
         // carved stave with a gold star at its heart
@@ -196,6 +196,7 @@ Item {
                 color: root.snowA(0.55)
                 font.family: "Noto Sans"
                 font.pixelSize: Math.round(12 * root.ui)
+                font.weight: Font.Medium
                 font.letterSpacing: 5
             }
             Rectangle {
@@ -209,6 +210,7 @@ Item {
                 color: root.snowA(0.55)
                 font.family: "Noto Sans"
                 font.pixelSize: Math.round(12 * root.ui)
+                font.weight: Font.Medium
                 font.letterSpacing: 5
             }
         }
@@ -264,6 +266,7 @@ Item {
             font.family: root.serif
             font.pixelSize: Math.round(14 * root.ui)
             font.italic: true
+            font.weight: Font.Medium
             font.letterSpacing: 2
         }
     }
@@ -290,6 +293,7 @@ Item {
         font.family: root.serif
         font.pixelSize: Math.round(11 * root.ui)
         font.italic: true
+        font.weight: Font.Medium
         font.letterSpacing: 3
     }
 }

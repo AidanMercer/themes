@@ -93,6 +93,7 @@ Item {
                 color: root.iceA(0.88)
                 font.family: root.sans
                 font.pixelSize: 9
+                font.weight: Font.Medium
                 font.letterSpacing: 3
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -137,6 +138,7 @@ Item {
             color: root.iceA(0.88)
             font.family: root.sans
             font.pixelSize: 9
+            font.weight: Font.Medium
             font.letterSpacing: 3
             anchors.verticalCenter: parent.verticalCenter
         }

@@ -242,6 +242,7 @@ Item {
                         color: root.snowA(0.55)
                         font.family: root.sans
                         font.pixelSize: 10
+                        font.weight: Font.Medium
                         font.letterSpacing: 0.4
                     }
                 }
@@ -335,6 +336,7 @@ Item {
                     color: root.snowA(0.40)
                     font.family: root.sans
                     font.pixelSize: 8
+                    font.weight: Font.Medium
                 }
             }
 
@@ -372,6 +374,7 @@ Item {
                     color: root.snowA(0.38)
                     font.family: root.sans
                     font.pixelSize: 7
+                    font.weight: Font.Medium
                     font.letterSpacing: 1.5
                 }
             }

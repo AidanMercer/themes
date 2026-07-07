@@ -407,6 +407,7 @@ Item {
                 color: root.creamA(0.9)
                 font.family: root.serif
                 font.italic: true
+                font.weight: Font.Medium
                 font.pixelSize: Math.round(12 * root.ui)
                 font.letterSpacing: 0.5
             }
@@ -532,6 +533,7 @@ Item {
                     color: root.creamA(0.8)
                     font.family: root.sans
                     font.pixelSize: Math.round(10 * root.ui)
+                    font.weight: Font.Medium
                 }
             ]
         }
@@ -612,6 +614,7 @@ Item {
                     color: root.creamA(0.8)
                     font.family: root.sans
                     font.pixelSize: Math.round(10 * root.ui)
+                    font.weight: Font.Medium
                 }
             ]
         }
@@ -647,6 +650,7 @@ Item {
                     color: root.cream
                     font.family: root.serif
                     font.pixelSize: Math.round(13 * root.ui)
+                    font.weight: Font.Medium
                     font.letterSpacing: 1
                 },
                 Text {
@@ -655,6 +659,7 @@ Item {
                     color: root.goldA(0.85)
                     font.family: root.serif
                     font.italic: true
+                    font.weight: Font.Medium
                     font.pixelSize: Math.round(10 * root.ui)
                 },
                 Canvas {
