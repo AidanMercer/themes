@@ -84,7 +84,8 @@ Item {
     // hover reveal — the bar's daisy pod writes "1"/"0" here while hovered;
     // the journal stays pressed shut until someone opens it
     property bool hoverShown: false
-    property real showT: hoverShown ? 1 : 0
+    property bool pinShown: false
+    property real showT: (hoverShown || pinShown) ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
@@ -97,6 +98,20 @@ Item {
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
+    // Super+. pin — the shell writes "1"/"0" here (`qs ipc call sysinfo toggle`);
+    // pinned props the journal open without hovering the daisy
+    readonly property string pinFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-pin"
+    }
+    property FileView _pinFlag: FileView {
+        id: pinFlag
+        path: root.pinFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.pinShown = pinFlag.text().trim() === "1"
     }
 
     // ── pollers ─────────────────────────────────────────────────────────────

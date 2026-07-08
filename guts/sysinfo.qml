@@ -227,7 +227,8 @@ Item {
 
     // hover reveal — the blade's notes seal writes "1"/"0" here while hovered
     property bool hoverShown: false
-    property real showT: hoverShown ? 1 : 0
+    property bool pinShown: false
+    property real showT: (hoverShown || pinShown) ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 450; easing.type: Easing.InOutQuad } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
@@ -240,6 +241,20 @@ Item {
         watchChanges: true
         onFileChanged: reload()
         onLoaded: root.hoverShown = sysFlag.text().trim() === "1"
+    }
+    // Super+. pin — the shell writes "1"/"0" here (`qs ipc call sysinfo toggle`);
+    // pinned keeps the notes inked without hovering the seal
+    readonly property string pinFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-pin"
+    }
+    property FileView _pinFlag: FileView {
+        id: pinFlag
+        path: root.pinFlagPath
+        printErrors: false
+        watchChanges: true
+        onFileChanged: reload()
+        onLoaded: root.pinShown = pinFlag.text().trim() === "1"
     }
 
     component NoteRow: Item {
