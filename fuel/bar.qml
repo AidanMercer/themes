@@ -559,10 +559,15 @@ Item {
                 }
             }
 
-            Rectangle { anchors.verticalCenter: parent.verticalCenter; width: 1; height: 14; color: root.dim; opacity: 0.6 }
+            Rectangle {
+                visible: root.pal.sysinfoOn !== false
+                anchors.verticalCenter: parent.verticalCenter; width: 1; height: 14; color: root.dim; opacity: 0.6
+            }
 
-            // DIAG: hover to raise the pump diagnostic placard (sysinfo)
+            // DIAG: hover to raise the pump diagnostic placard (sysinfo);
+            // gone while the readout is toggled off in settings
             Item {
+                visible: root.pal.sysinfoOn !== false
                 anchors.verticalCenter: parent.verticalCenter
                 width: diagLabel.width + 8; height: 24
                 Text {

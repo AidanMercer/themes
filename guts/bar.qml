@@ -343,8 +343,10 @@ Item {
                 spacing: Math.round(5 * root.ui)
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                // notes seal: hover to ink in the margin notes (sysinfo)
+                // notes seal: hover to ink in the margin notes (sysinfo);
+                // gone while the readout is toggled off in settings
                 Rectangle {
+                    visible: root.pal.sysinfoOn !== false
                     width: Math.round(17 * root.ui); height: width
                     anchors.horizontalCenter: parent.horizontalCenter
                     rotation: -3

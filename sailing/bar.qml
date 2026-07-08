@@ -397,8 +397,10 @@ Item {
 
         Stanchion { anchors.verticalCenter: parent.verticalCenter; anchors.verticalCenterOffset: 1 }
 
-        // wheelhouse dial — hover to consult the instruments (sysinfo card)
+        // wheelhouse dial — hover to consult the instruments (sysinfo card);
+        // gone while the readout is toggled off in settings
         Item {
+            visible: root.pal.sysinfoOn !== false
             anchors.verticalCenter: parent.verticalCenter
             width: 20; height: 28
             Rectangle {

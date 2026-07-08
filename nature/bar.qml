@@ -439,9 +439,11 @@ Item {
         spacing: Math.round(10 * root.ui)
         opacity: root.bootLate
 
-        // field-journal pod — hover the daisy to open the journal (sysinfo)
+        // field-journal pod — hover the daisy to open the journal (sysinfo);
+        // gone while the readout is toggled off in settings
         Pod {
             id: journalPod
+            visible: root.pal.sysinfoOn !== false
             content: [
                 Item {
                     width: Math.round(14 * root.ui)

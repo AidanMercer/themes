@@ -415,9 +415,11 @@ Item {
         height: parent.height
         opacity: root.bootDrop
 
-        // service bottle — hover to open the machine's service panel (sysinfo)
+        // service bottle — hover to open the machine's service panel (sysinfo);
+        // gone while the readout is toggled off in settings
         Item {
             id: svcSlot
+            visible: root.pal.sysinfoOn !== false
             width: svcPlate.width
             height: parent.height
             readonly property real absX: rightRow.x + x + width / 2
