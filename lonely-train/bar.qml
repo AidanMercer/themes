@@ -40,6 +40,14 @@ Item {
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
 
+    // hover flag shared with sysinfo.qml — it watches this file and lights the
+    // arrivals board while it reads "1"
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
+
     // boot-in: plates rise from the platform edge
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 750; easing.type: Easing.OutCubic }
@@ -419,6 +427,12 @@ Item {
             height: 30
             width: statusRow.width + 22
             anchors.verticalCenter: parent.verticalCenter
+
+            // hovering the guard's panel lights the arrivals board
+            // (sysinfo.qml watches the shared hover flag file)
+            HoverHandler {
+                onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
+            }
 
             Row {
                 id: statusRow

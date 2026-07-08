@@ -266,10 +266,15 @@ Item {
                 }
             }
 
-            // vitals live here — the glass strip keeps them readable over any video
+            // vitals live here — the glass strip keeps them readable over any video.
+            // hovering either hangs the offerings ledger up (sysinfo.qml watches
+            // the shared hover flag file)
             Row {
                 spacing: 5
                 anchors.verticalCenter: parent.verticalCenter
+                HoverHandler {
+                    onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
+                }
                 Meter { value: root.cpuPct }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
@@ -283,6 +288,9 @@ Item {
             Row {
                 spacing: 5
                 anchors.verticalCenter: parent.verticalCenter
+                HoverHandler {
+                    onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
+                }
                 Meter { value: root.memPct; tint: root.gold }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
@@ -346,6 +354,14 @@ Item {
     }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
+
+    // hover flag shared with sysinfo.qml — it watches this file and hangs the
+    // offerings ledger up while it reads "1"
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
 
     // ── mpris ────────────────────────────────────────────────────────────────
     readonly property var player: {

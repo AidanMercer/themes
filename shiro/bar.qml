@@ -275,6 +275,12 @@ Item {
                 spacing: 4
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                // hovering the micro-meters raises the margin-notes slip
+                // (sysinfo.qml watches the shared hover flag file)
+                HoverHandler {
+                    onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
+                }
+
                 Row {
                     spacing: 6
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -362,6 +368,14 @@ Item {
     }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
+
+    // hover flag shared with sysinfo.qml — it watches this file and raises the
+    // margin-notes slip while it reads "1"
+    readonly property string sysFlagPath: {
+        const rt = Quickshell.env("XDG_RUNTIME_DIR")
+        return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
+    }
+    FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
 
     // ── mpris ────────────────────────────────────────────────────────────────
     readonly property var player: {
