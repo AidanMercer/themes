@@ -70,7 +70,9 @@ Item {
     // hovered; the panel stays shut until a technician calls
     property bool hoverShown: false
     property bool pinShown: false
-    property real showT: (hoverShown || pinShown) ? 1 : 0
+    readonly property bool shown: hoverShown || pinShown
+    onShownChanged: if (shown) sway.restart()
+    property real showT: shown ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
@@ -339,6 +341,15 @@ Item {
         visible: root.showT > 0.01
         scale: pal.uiScale
         transformOrigin: Item.TopRight
+
+        // swings on its wire as it drops, settles plumb
+        SequentialAnimation on rotation {
+            id: sway
+            running: false
+            NumberAnimation { from: -3.0; to: 1.3; duration: 650; easing.type: Easing.InOutSine }
+            NumberAnimation { from: 1.3; to: -0.5; duration: 550; easing.type: Easing.InOutSine }
+            NumberAnimation { from: -0.5; to: 0; duration: 450; easing.type: Easing.OutSine }
+        }
 
         radius: 11
         color: root.glassA(0.82)

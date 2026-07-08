@@ -85,8 +85,10 @@ Item {
     // the journal stays pressed shut until someone opens it
     property bool hoverShown: false
     property bool pinShown: false
-    property real showT: (hoverShown || pinShown) ? 1 : 0
-    Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    readonly property bool shown: hoverShown || pinShown
+    onShownChanged: if (shown) sway.restart()
+    property real showT: shown ? 1 : 0
+    Behavior on showT { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
         return ((rt && String(rt).length) ? String(rt) : "/tmp") + "/theme-sysinfo-hover"
@@ -374,8 +376,17 @@ Item {
         anchors.topMargin: Math.round(58 * root.ui) - Math.round(12 * (1 - root.showT))
         opacity: root.bootT * root.showT
         visible: root.showT > 0.01
-        rotation: -1.4 * root.showT
+        rotation: -1.4
         transformOrigin: Item.TopRight
+
+        // laid down in the grass: swings from its corner, rocks once, settles into its tilt
+        SequentialAnimation on rotation {
+            id: sway
+            running: false
+            NumberAnimation { from: -6.5; to: 0.4; duration: 650; easing.type: Easing.InOutSine }
+            NumberAnimation { from: 0.4; to: -2.4; duration: 550; easing.type: Easing.InOutSine }
+            NumberAnimation { from: -2.4; to: -1.4; duration: 450; easing.type: Easing.OutSine }
+        }
 
         // soft ground shadow
         Rectangle {

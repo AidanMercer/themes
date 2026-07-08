@@ -35,7 +35,9 @@ Item {
     // the card stays off the desktop until the officer consults the instruments.
     property bool hoverShown: false
     property bool pinShown: false
-    property real showT: (hoverShown || pinShown) ? 1 : 0
+    readonly property bool shown: hoverShown || pinShown
+    onShownChanged: if (shown) sway.restart()
+    property real showT: shown ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
@@ -360,6 +362,15 @@ Item {
 
         scale: pal.uiScale
         transformOrigin: Item.BottomRight
+
+        // takes the deck's roll as it's brought up, then steadies
+        SequentialAnimation on rotation {
+            id: sway
+            running: false
+            NumberAnimation { from: -2.0; to: 1.0; duration: 800; easing.type: Easing.InOutSine }
+            NumberAnimation { from: 1.0; to: -0.4; duration: 700; easing.type: Easing.InOutSine }
+            NumberAnimation { from: -0.4; to: 0; duration: 550; easing.type: Easing.OutSine }
+        }
 
         radius: 10
         color: root.glassA(0.78)

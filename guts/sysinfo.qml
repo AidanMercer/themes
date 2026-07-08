@@ -228,7 +228,9 @@ Item {
     // hover reveal — the blade's notes seal writes "1"/"0" here while hovered
     property bool hoverShown: false
     property bool pinShown: false
-    property real showT: (hoverShown || pinShown) ? 1 : 0
+    readonly property bool shown: hoverShown || pinShown
+    onShownChanged: if (shown) sway.restart()
+    property real showT: shown ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 450; easing.type: Easing.InOutQuad } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
@@ -305,6 +307,16 @@ Item {
         anchors.leftMargin: Math.round(64 * root.ui)
         anchors.bottomMargin: Math.round(40 * root.ui)
         visible: root.showT > 0.01
+        transformOrigin: Item.Top
+
+        // slapped up beside the blade — rocks on its pin, settles
+        SequentialAnimation on rotation {
+            id: sway
+            running: false
+            NumberAnimation { from: -3.5; to: 1.4; duration: 700; easing.type: Easing.InOutSine }
+            NumberAnimation { from: 1.4; to: -0.6; duration: 550; easing.type: Easing.InOutSine }
+            NumberAnimation { from: -0.6; to: 0; duration: 450; easing.type: Easing.OutSine }
+        }
 
         // the border brush-draws itself on each reveal; contents fade in after
         readonly property real borderT: root.showT

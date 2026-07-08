@@ -72,7 +72,9 @@ Item {
     // while hovered; the placard stays off the forecourt until then
     property bool hoverShown: false
     property bool pinShown: false
-    property real showT: (hoverShown || pinShown) ? 1 : 0
+    readonly property bool shown: hoverShown || pinShown
+    onShownChanged: if (shown) sway.restart()
+    property real showT: shown ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
     readonly property string sysFlagPath: {
         const rt = Quickshell.env("XDG_RUNTIME_DIR")
@@ -379,6 +381,15 @@ Item {
         visible: root.showT > 0.01
         scale: pal.uiScale
         transformOrigin: Item.BottomRight
+
+        // hung on the shop wall with one nail — knocks, rocks, settles
+        SequentialAnimation on rotation {
+            id: sway
+            running: false
+            NumberAnimation { from: 2.6; to: -1.1; duration: 600; easing.type: Easing.InOutSine }
+            NumberAnimation { from: -1.1; to: 0.4; duration: 500; easing.type: Easing.InOutSine }
+            NumberAnimation { from: 0.4; to: 0; duration: 400; easing.type: Easing.OutSine }
+        }
 
         Canvas {
             id: plate
