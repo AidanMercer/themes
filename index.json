@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "a68ca19",
+  "commit": "56829cb",
   "themes": [
     {
       "name": "avalon",
@@ -15,7 +15,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/avalon.webp",
+      "thumb": ".catalog/thumbs/avalon.jpg",
       "bytes": 21441160,
       "files": [
         {
@@ -89,7 +89,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/fuel.webp",
+      "thumb": ".catalog/thumbs/fuel.jpg",
       "bytes": 16578353,
       "files": [
         {
@@ -163,7 +163,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/guts.webp",
+      "thumb": ".catalog/thumbs/guts.jpg",
       "bytes": 26364390,
       "files": [
         {
@@ -237,7 +237,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/lonely-train.webp",
+      "thumb": ".catalog/thumbs/lonely-train.jpg",
       "bytes": 29012033,
       "files": [
         {
@@ -311,7 +311,7 @@
       "light": false,
       "video": true,
       "variants": 2,
-      "thumb": ".catalog/thumbs/moon.webp",
+      "thumb": ".catalog/thumbs/moon.jpg",
       "bytes": 44061356,
       "files": [
         {
@@ -399,7 +399,7 @@
       "light": false,
       "video": true,
       "variants": 3,
-      "thumb": ".catalog/thumbs/nature.webp",
+      "thumb": ".catalog/thumbs/nature.jpg",
       "bytes": 42445260,
       "files": [
         {
@@ -481,7 +481,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/sailing.webp",
+      "thumb": ".catalog/thumbs/sailing.jpg",
       "bytes": 21544927,
       "files": [
         {
@@ -555,7 +555,7 @@
       "light": false,
       "video": true,
       "variants": 2,
-      "thumb": ".catalog/thumbs/shiro.webp",
+      "thumb": ".catalog/thumbs/shiro.jpg",
       "bytes": 26722250,
       "files": [
         {
@@ -633,7 +633,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/stars.webp",
+      "thumb": ".catalog/thumbs/stars.jpg",
       "bytes": 23315207,
       "files": [
         {
@@ -707,7 +707,7 @@
       "light": false,
       "video": true,
       "variants": 1,
-      "thumb": ".catalog/thumbs/vinland.webp",
+      "thumb": ".catalog/thumbs/vinland.jpg",
       "bytes": 3238459,
       "files": [
         {

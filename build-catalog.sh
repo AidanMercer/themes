@@ -42,10 +42,12 @@ for d in */; do
   [ "${#walls[@]}" -gt 0 ] || { echo "skip $name: no tracked wallpaper" >&2; continue; }
   IFS=$'\n' walls=($(sort -V <<<"${walls[*]}")); unset IFS
 
-  # thumbnail from the first tracked variant → 480px webp
+  # thumbnail from the first tracked variant → 480px jpeg. jpeg (not webp) so
+  # Qt's Image can decode it with just the libqjpeg plugin that ships with
+  # qt6-base — no qt6-imageformats dependency on the user's machine.
   src="${walls[0]}"
-  ffmpeg -y -v error -i "$src" -frames:v 1 -vf "scale=480:-1" -c:v libwebp -quality 80 \
-    "$THUMBS/$name.webp" </dev/null || { echo "thumb failed for $name" >&2; continue; }
+  ffmpeg -y -v error -i "$src" -frames:v 1 -vf "scale=480:-1" -q:v 3 \
+    "$THUMBS/$name.jpg" </dev/null || { echo "thumb failed for $name" >&2; continue; }
 
   video=false; for w in "${walls[@]}"; do [ "${w##*.}" = mp4 ] && video=true && break; done
 
@@ -74,7 +76,7 @@ for d in */; do
     --argjson accents "$accents" \
     --argjson cyber "$(getbool cyber "$cfg")" --argjson light "$(getbool light "$cfg")" \
     --argjson video "$video" --argjson variants "${#walls[@]}" \
-    --arg thumb "$THUMBS/$name.webp" --argjson bytes "$total" \
+    --arg thumb "$THUMBS/$name.jpg" --argjson bytes "$total" \
     --argjson files "$files_json" --argjson oversizedOmitted "$over_json" \
     '{name:$name,tagline:$tagline,accents:$accents,cyber:$cyber,light:$light,
       video:$video,variants:$variants,thumb:$thumb,bytes:$bytes,
