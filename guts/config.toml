@@ -20,3 +20,6 @@ hue_green = "#48583f"   # ink-wash moss — readable "green" on paper
 hue_blue  = "#3d4b63"   # graphite slate — readable "blue" on paper
 
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "the black swordsman — crimson and cold iron"

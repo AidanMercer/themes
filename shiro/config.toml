@@ -22,3 +22,6 @@ hue_green = "#5f8f64"   # dusty sage
 hue_blue  = "#6d87c8"   # periwinkle
 
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "ink, wisteria, and a poem that writes itself"

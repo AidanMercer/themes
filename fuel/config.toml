@@ -22,3 +22,6 @@ hue_blue  = "#5f97c2"   # icy blue
 # dark neon chrome on the Super+M control popup tabs
 cyber = true
 font_mono = "Adwaita Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "neon fuel — a roadside sign humming at dusk"

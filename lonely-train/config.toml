@@ -19,3 +19,6 @@ hue_green = "#7da58f"   # faded seat moss
 hue_blue  = "#6f95c9"   # window dusk
 
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "a lonely train, and rain on the glass"

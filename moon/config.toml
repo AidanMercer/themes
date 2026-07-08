@@ -21,3 +21,6 @@ hue_blue    = "#2d8cff"   # electric blue
 # cyberpunk chrome on the Super+M control popup (dark card, neon edges)
 cyber = true
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "night city neon — edgerunners chrome and CRT glow"

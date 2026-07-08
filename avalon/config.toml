@@ -19,3 +19,6 @@ hue_green = "#8fbe58"   # moss
 hue_blue  = "#6c8d99"   # pond slate
 
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "petals and gold — a knight asleep in the meadow"

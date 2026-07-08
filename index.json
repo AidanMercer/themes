@@ -1,0 +1,773 @@
+{
+  "repo": "AidanMercer/themes",
+  "branch": "master",
+  "commit": "a68ca19",
+  "themes": [
+    {
+      "name": "avalon",
+      "tagline": "petals and gold — a knight asleep in the meadow",
+      "accents": [
+        "#8fbe58",
+        "#e6d75a",
+        "#c97e52"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/avalon.webp",
+      "bytes": 21441160,
+      "files": [
+        {
+          "path": "avalon/bar.qml",
+          "bytes": 20706
+        },
+        {
+          "path": "avalon/bokeh.frag",
+          "bytes": 1531
+        },
+        {
+          "path": "avalon/bokeh.frag.qsb",
+          "bytes": 3424
+        },
+        {
+          "path": "avalon/cava.conf",
+          "bytes": 395
+        },
+        {
+          "path": "avalon/cava.qml",
+          "bytes": 8351
+        },
+        {
+          "path": "avalon/clock.qml",
+          "bytes": 8481
+        },
+        {
+          "path": "avalon/config.toml",
+          "bytes": 893
+        },
+        {
+          "path": "avalon/frostify.qml",
+          "bytes": 4589
+        },
+        {
+          "path": "avalon/lock.qml",
+          "bytes": 9139
+        },
+        {
+          "path": "avalon/lyrics.qml",
+          "bytes": 9667
+        },
+        {
+          "path": "avalon/notif.qml",
+          "bytes": 3126
+        },
+        {
+          "path": "avalon/popup.qml",
+          "bytes": 7870
+        },
+        {
+          "path": "avalon/sysinfo.qml",
+          "bytes": 23126
+        },
+        {
+          "path": "avalon/wallpaper.mp4",
+          "bytes": 21339862
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "fuel",
+      "tagline": "neon fuel — a roadside sign humming at dusk",
+      "accents": [
+        "#ff5a1e",
+        "#9ed4e6",
+        "#e0372a"
+      ],
+      "cyber": true,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/fuel.webp",
+      "bytes": 16578353,
+      "files": [
+        {
+          "path": "fuel/bar.qml",
+          "bytes": 26407
+        },
+        {
+          "path": "fuel/cava.conf",
+          "bytes": 409
+        },
+        {
+          "path": "fuel/cava.qml",
+          "bytes": 13868
+        },
+        {
+          "path": "fuel/clock.qml",
+          "bytes": 14699
+        },
+        {
+          "path": "fuel/config.toml",
+          "bytes": 1198
+        },
+        {
+          "path": "fuel/frostify.qml",
+          "bytes": 4113
+        },
+        {
+          "path": "fuel/lock.qml",
+          "bytes": 22414
+        },
+        {
+          "path": "fuel/lyrics.qml",
+          "bytes": 13136
+        },
+        {
+          "path": "fuel/mist.frag",
+          "bytes": 1170
+        },
+        {
+          "path": "fuel/mist.frag.qsb",
+          "bytes": 2698
+        },
+        {
+          "path": "fuel/notif.qml",
+          "bytes": 5654
+        },
+        {
+          "path": "fuel/popup.qml",
+          "bytes": 13575
+        },
+        {
+          "path": "fuel/sysinfo.qml",
+          "bytes": 27161
+        },
+        {
+          "path": "fuel/wallpaper.mp4",
+          "bytes": 16431851
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "guts",
+      "tagline": "the black swordsman — crimson and cold iron",
+      "accents": [
+        "#9e1414",
+        "#26242b",
+        "#c22318"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/guts.webp",
+      "bytes": 26364390,
+      "files": [
+        {
+          "path": "guts/bar.qml",
+          "bytes": 24756
+        },
+        {
+          "path": "guts/cava.conf",
+          "bytes": 409
+        },
+        {
+          "path": "guts/cava.qml",
+          "bytes": 9995
+        },
+        {
+          "path": "guts/clock.qml",
+          "bytes": 15150
+        },
+        {
+          "path": "guts/config.toml",
+          "bytes": 1206
+        },
+        {
+          "path": "guts/frostify.qml",
+          "bytes": 4615
+        },
+        {
+          "path": "guts/lock.qml",
+          "bytes": 11324
+        },
+        {
+          "path": "guts/lyrics.qml",
+          "bytes": 10176
+        },
+        {
+          "path": "guts/notif.qml",
+          "bytes": 6502
+        },
+        {
+          "path": "guts/paper.frag",
+          "bytes": 1069
+        },
+        {
+          "path": "guts/paper.frag.qsb",
+          "bytes": 2302
+        },
+        {
+          "path": "guts/popup.qml",
+          "bytes": 12895
+        },
+        {
+          "path": "guts/sysinfo.qml",
+          "bytes": 23566
+        },
+        {
+          "path": "guts/wallpaper.mp4",
+          "bytes": 26240425
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "lonely-train",
+      "tagline": "a lonely train, and rain on the glass",
+      "accents": [
+        "#e8a45c",
+        "#7fa3d8",
+        "#d95f52"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/lonely-train.webp",
+      "bytes": 29012033,
+      "files": [
+        {
+          "path": "lonely-train/bar.qml",
+          "bytes": 20630
+        },
+        {
+          "path": "lonely-train/cava.conf",
+          "bytes": 410
+        },
+        {
+          "path": "lonely-train/cava.qml",
+          "bytes": 12478
+        },
+        {
+          "path": "lonely-train/clock.qml",
+          "bytes": 12474
+        },
+        {
+          "path": "lonely-train/config.toml",
+          "bytes": 931
+        },
+        {
+          "path": "lonely-train/frostify.qml",
+          "bytes": 3900
+        },
+        {
+          "path": "lonely-train/lock.qml",
+          "bytes": 16737
+        },
+        {
+          "path": "lonely-train/lyrics.qml",
+          "bytes": 9193
+        },
+        {
+          "path": "lonely-train/notif.qml",
+          "bytes": 4537
+        },
+        {
+          "path": "lonely-train/popup.qml",
+          "bytes": 12681
+        },
+        {
+          "path": "lonely-train/rain.frag",
+          "bytes": 1310
+        },
+        {
+          "path": "lonely-train/rain.frag.qsb",
+          "bytes": 2743
+        },
+        {
+          "path": "lonely-train/sysinfo.qml",
+          "bytes": 21645
+        },
+        {
+          "path": "lonely-train/wallpaper.mp4",
+          "bytes": 28892364
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "moon",
+      "tagline": "night city neon — edgerunners chrome and CRT glow",
+      "accents": [
+        "#fcee0a",
+        "#00e5ff",
+        "#ff2e6c"
+      ],
+      "cyber": true,
+      "light": false,
+      "video": true,
+      "variants": 2,
+      "thumb": ".catalog/thumbs/moon.webp",
+      "bytes": 44061356,
+      "files": [
+        {
+          "path": "moon/LYRICS-NOTES.md",
+          "bytes": 5813
+        },
+        {
+          "path": "moon/bar.qml",
+          "bytes": 12969
+        },
+        {
+          "path": "moon/cava.conf",
+          "bytes": 407
+        },
+        {
+          "path": "moon/cava.qml",
+          "bytes": 10887
+        },
+        {
+          "path": "moon/clock.qml",
+          "bytes": 13291
+        },
+        {
+          "path": "moon/config.toml",
+          "bytes": 1302
+        },
+        {
+          "path": "moon/frostify.qml",
+          "bytes": 4400
+        },
+        {
+          "path": "moon/lock.qml",
+          "bytes": 14261
+        },
+        {
+          "path": "moon/lyrics.qml",
+          "bytes": 12225
+        },
+        {
+          "path": "moon/notif.qml",
+          "bytes": 3389
+        },
+        {
+          "path": "moon/popup.qml",
+          "bytes": 14096
+        },
+        {
+          "path": "moon/reactor.png",
+          "bytes": 47317
+        },
+        {
+          "path": "moon/scanline.frag",
+          "bytes": 2114
+        },
+        {
+          "path": "moon/scanline.frag.qsb",
+          "bytes": 3752
+        },
+        {
+          "path": "moon/sysinfo.qml",
+          "bytes": 24122
+        },
+        {
+          "path": "moon/wallpaper.jpg",
+          "bytes": 7788389
+        },
+        {
+          "path": "moon/wallpaper3.mp4",
+          "bytes": 36102622
+        }
+      ],
+      "oversizedOmitted": [
+        "moon/wallpaper2.mp4"
+      ]
+    },
+    {
+      "name": "nature",
+      "tagline": "golden hour — a botanist's field journal",
+      "accents": [
+        "#e8a63c",
+        "#93b077",
+        "#d4877c"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 3,
+      "thumb": ".catalog/thumbs/nature.webp",
+      "bytes": 42445260,
+      "files": [
+        {
+          "path": "nature/bar.qml",
+          "bytes": 30227
+        },
+        {
+          "path": "nature/cava.conf",
+          "bytes": 405
+        },
+        {
+          "path": "nature/cava.qml",
+          "bytes": 9511
+        },
+        {
+          "path": "nature/clock.qml",
+          "bytes": 13537
+        },
+        {
+          "path": "nature/config.toml",
+          "bytes": 1259
+        },
+        {
+          "path": "nature/frostify.qml",
+          "bytes": 3545
+        },
+        {
+          "path": "nature/godray.frag",
+          "bytes": 975
+        },
+        {
+          "path": "nature/godray.frag.qsb",
+          "bytes": 2100
+        },
+        {
+          "path": "nature/lock.qml",
+          "bytes": 10572
+        },
+        {
+          "path": "nature/lyrics.qml",
+          "bytes": 13486
+        },
+        {
+          "path": "nature/notif.qml",
+          "bytes": 6058
+        },
+        {
+          "path": "nature/popup.qml",
+          "bytes": 15150
+        },
+        {
+          "path": "nature/sysinfo.qml",
+          "bytes": 23498
+        },
+        {
+          "path": "nature/wallpaper.mp4",
+          "bytes": 15209786
+        },
+        {
+          "path": "nature/wallpaper2.mp4",
+          "bytes": 15275938
+        },
+        {
+          "path": "nature/wallpaper3.mp4",
+          "bytes": 11829213
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "sailing",
+      "tagline": "open water — salt, rope, and the deck's slow roll",
+      "accents": [
+        "#d1553c",
+        "#c9a0b4",
+        "#e8664d"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/sailing.webp",
+      "bytes": 21544927,
+      "files": [
+        {
+          "path": "sailing/bar.qml",
+          "bytes": 18815
+        },
+        {
+          "path": "sailing/cava.conf",
+          "bytes": 478
+        },
+        {
+          "path": "sailing/cava.qml",
+          "bytes": 7271
+        },
+        {
+          "path": "sailing/clock.qml",
+          "bytes": 8270
+        },
+        {
+          "path": "sailing/config.toml",
+          "bytes": 1229
+        },
+        {
+          "path": "sailing/frostify.qml",
+          "bytes": 1690
+        },
+        {
+          "path": "sailing/lock.qml",
+          "bytes": 13541
+        },
+        {
+          "path": "sailing/lyrics.qml",
+          "bytes": 11004
+        },
+        {
+          "path": "sailing/notif.qml",
+          "bytes": 4041
+        },
+        {
+          "path": "sailing/popup.qml",
+          "bytes": 11855
+        },
+        {
+          "path": "sailing/sea.frag",
+          "bytes": 1543
+        },
+        {
+          "path": "sailing/sea.frag.qsb",
+          "bytes": 3013
+        },
+        {
+          "path": "sailing/sysinfo.qml",
+          "bytes": 20635
+        },
+        {
+          "path": "sailing/wallpaper.mp4",
+          "bytes": 21441542
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "shiro",
+      "tagline": "ink, wisteria, and a poem that writes itself",
+      "accents": [
+        "#7f76b8",
+        "#bd7590",
+        "#c25e76"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 2,
+      "thumb": ".catalog/thumbs/shiro.webp",
+      "bytes": 26722250,
+      "files": [
+        {
+          "path": "shiro/bar.qml",
+          "bytes": 20498
+        },
+        {
+          "path": "shiro/cava.conf",
+          "bytes": 396
+        },
+        {
+          "path": "shiro/cava.qml",
+          "bytes": 10409
+        },
+        {
+          "path": "shiro/clock.qml",
+          "bytes": 3705
+        },
+        {
+          "path": "shiro/config.toml",
+          "bytes": 1149
+        },
+        {
+          "path": "shiro/frostify.qml",
+          "bytes": 3891
+        },
+        {
+          "path": "shiro/lock.qml",
+          "bytes": 7229
+        },
+        {
+          "path": "shiro/lyrics.qml",
+          "bytes": 9651
+        },
+        {
+          "path": "shiro/notif.qml",
+          "bytes": 3105
+        },
+        {
+          "path": "shiro/popup.qml",
+          "bytes": 11223
+        },
+        {
+          "path": "shiro/sysinfo.qml",
+          "bytes": 21923
+        },
+        {
+          "path": "shiro/wallpaper.jpg",
+          "bytes": 931683
+        },
+        {
+          "path": "shiro/wallpaper2.mp4",
+          "bytes": 25693105
+        },
+        {
+          "path": "shiro/washi.frag",
+          "bytes": 1400
+        },
+        {
+          "path": "shiro/washi.frag.qsb",
+          "bytes": 2883
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "stars",
+      "tagline": "under the nebula — a quiet night-sky observatory",
+      "accents": [
+        "#f2bb54",
+        "#e89aa8",
+        "#e2695c"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/stars.webp",
+      "bytes": 23315207,
+      "files": [
+        {
+          "path": "stars/bar.qml",
+          "bytes": 27248
+        },
+        {
+          "path": "stars/cava.conf",
+          "bytes": 415
+        },
+        {
+          "path": "stars/cava.qml",
+          "bytes": 6949
+        },
+        {
+          "path": "stars/clock.qml",
+          "bytes": 11938
+        },
+        {
+          "path": "stars/config.toml",
+          "bytes": 1164
+        },
+        {
+          "path": "stars/frostify.qml",
+          "bytes": 5392
+        },
+        {
+          "path": "stars/lock.qml",
+          "bytes": 12802
+        },
+        {
+          "path": "stars/lyrics.qml",
+          "bytes": 15726
+        },
+        {
+          "path": "stars/nebula.frag",
+          "bytes": 1442
+        },
+        {
+          "path": "stars/nebula.frag.qsb",
+          "bytes": 3112
+        },
+        {
+          "path": "stars/notif.qml",
+          "bytes": 4705
+        },
+        {
+          "path": "stars/popup.qml",
+          "bytes": 13187
+        },
+        {
+          "path": "stars/sysinfo.qml",
+          "bytes": 22206
+        },
+        {
+          "path": "stars/wallpaper.mp4",
+          "bytes": 23188921
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "vinland",
+      "tagline": "thorfinn in the snow — ice, gold, and a north star",
+      "accents": [
+        "#8ecfec",
+        "#dfb75c",
+        "#c8646c"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/vinland.webp",
+      "bytes": 3238459,
+      "files": [
+        {
+          "path": "vinland/aurora.frag",
+          "bytes": 1516
+        },
+        {
+          "path": "vinland/aurora.frag.qsb",
+          "bytes": 2897
+        },
+        {
+          "path": "vinland/bar.qml",
+          "bytes": 22739
+        },
+        {
+          "path": "vinland/cava.conf",
+          "bytes": 397
+        },
+        {
+          "path": "vinland/cava.qml",
+          "bytes": 6799
+        },
+        {
+          "path": "vinland/clock.qml",
+          "bytes": 7878
+        },
+        {
+          "path": "vinland/config.toml",
+          "bytes": 1031
+        },
+        {
+          "path": "vinland/frostify.qml",
+          "bytes": 4601
+        },
+        {
+          "path": "vinland/lock.qml",
+          "bytes": 11431
+        },
+        {
+          "path": "vinland/lyrics.qml",
+          "bytes": 11861
+        },
+        {
+          "path": "vinland/notif.qml",
+          "bytes": 3985
+        },
+        {
+          "path": "vinland/popup.qml",
+          "bytes": 9561
+        },
+        {
+          "path": "vinland/sysinfo.qml",
+          "bytes": 9622
+        },
+        {
+          "path": "vinland/wallpaper.mp4",
+          "bytes": 3144141
+        }
+      ],
+      "oversizedOmitted": []
+    }
+  ]
+}

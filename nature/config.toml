@@ -22,3 +22,6 @@ hue_green = "#93b077"   # leaf
 hue_blue  = "#7ba3b5"   # misty wetland blue (frame 2 sky / frame 3 haze)
 
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "golden hour — a botanist's field journal"

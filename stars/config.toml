@@ -21,3 +21,6 @@ hue_green = "#83b79e"   # sea-glass green
 hue_blue  = "#6e97cf"   # open-sky blue
 
 font_mono = "Adwaita Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "under the nebula — a quiet night-sky observatory"

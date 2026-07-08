@@ -20,3 +20,6 @@ hue_green = "#79b596"   # aurora green
 hue_blue  = "#6ba3d6"   # steel blue
 
 font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "thorfinn in the snow — ice, gold, and a north star"
