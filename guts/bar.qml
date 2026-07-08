@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -178,6 +179,21 @@ Item {
                         ? Math.floor((activeWsId - 1) / wsCount) * wsCount + 1
                         : 1
 
+                    // resolve the app icon: most-recently-focused window's .desktop
+                    function iconForWindows(wins) {
+                        let best = null, bestFh = Infinity
+                        for (const w of wins) {
+                            const cls = w.lastIpcObject?.class ?? ""
+                            if (!cls) continue
+                            const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
+                            if (fh < bestFh) { best = w; bestFh = fh }
+                        }
+                        if (!best) return Quickshell.iconPath("application-x-executable")
+                        const entry = DesktopEntries.heuristicLookup(best.lastIpcObject.class)
+                        const name = (entry && entry.icon) ? entry.icon : best.lastIpcObject.class.toLowerCase()
+                        return Quickshell.iconPath(name, "application-x-executable")
+                    }
+
                     Repeater {
                         model: wsCol.wsCount
                         delegate: Item {
@@ -191,6 +207,17 @@ Item {
 
                             width: Math.round(30 * root.ui)
                             height: Math.round(18 * root.ui)
+
+                            // the app that lives here — the slash cuts across it
+                            IconImage {
+                                anchors.centerIn: parent
+                                visible: slot.isOccupied
+                                width: Math.round(14 * root.ui)
+                                height: width
+                                source: slot.isOccupied ? wsCol.iconForWindows(slot.windowsHere) : ""
+                                opacity: slot.isActive ? 0.9 : 0.5
+                                Behavior on opacity { NumberAnimation { duration: 180 } }
+                            }
 
                             // the slash — a diagonal cut through the blade
                             Rectangle {

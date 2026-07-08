@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -130,6 +131,22 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         opacity: root.bootDrop
 
+        // resolve the app icon for the message-in-a-bottle: pick the
+        // most-recently-focused window on the workspace, look up its .desktop
+        function iconForWindows(wins) {
+            let best = null, bestFh = Infinity
+            for (const w of wins) {
+                const cls = w.lastIpcObject?.class ?? ""
+                if (!cls) continue
+                const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
+                if (fh < bestFh) { best = w; bestFh = fh }
+            }
+            if (!best) return Quickshell.iconPath("application-x-executable")
+            const entry = DesktopEntries.heuristicLookup(best.lastIpcObject.class)
+            const name = (entry && entry.icon) ? entry.icon : best.lastIpcObject.class.toLowerCase()
+            return Quickshell.iconPath(name, "application-x-executable")
+        }
+
         Repeater {
             model: wsCluster.wsCount
             delegate: Item {
@@ -137,8 +154,9 @@ Item {
                 required property int index
                 readonly property int wsId: wsCluster.pageBase + index
                 readonly property bool isActive: wsCluster.activeWsId === wsId
-                readonly property bool isOccupied: Hyprland.toplevels.values
-                    .some(t => (t.workspace?.id ?? -1) === wsId)
+                readonly property var windowsHere: Hyprland.toplevels.values
+                    .filter(t => (t.workspace?.id ?? -1) === wsId)
+                readonly property bool isOccupied: windowsHere.length > 0
                 readonly property real absX: wsCluster.x + index * wsCluster.slotW + wsCluster.slotW / 2
                 readonly property real hangY: root.wireY(absX)
 
@@ -204,6 +222,18 @@ Item {
                             width: 2; height: 6; radius: 1
                             color: root.inkA(slot.isActive ? 0.55 : 0.18)
                         }
+                    }
+
+                    // the message in the bottle: the app's icon, corked inside
+                    IconImage {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        y: 6
+                        width: 9
+                        height: 9
+                        visible: slot.isOccupied
+                        source: slot.isOccupied ? wsCluster.iconForWindows(slot.windowsHere) : ""
+                        opacity: slot.isActive ? 1.0 : 0.72
+                        Behavior on opacity { NumberAnimation { duration: 180 } }
                     }
 
                     // a small swing when this bottle becomes the active one

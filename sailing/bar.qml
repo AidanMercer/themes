@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -106,6 +107,21 @@ Item {
             ? Math.floor((activeWsId - 1) / wsCount) * wsCount + 1
             : 1
 
+        // resolve the app seen through a porthole: its most-recently-focused .desktop
+        function iconForWindows(wins) {
+            let best = null, bestFh = Infinity
+            for (const w of wins) {
+                const cls = w.lastIpcObject?.class ?? ""
+                if (!cls) continue
+                const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
+                if (fh < bestFh) { best = w; bestFh = fh }
+            }
+            if (!best) return Quickshell.iconPath("application-x-executable")
+            const entry = DesktopEntries.heuristicLookup(best.lastIpcObject.class)
+            const name = (entry && entry.icon) ? entry.icon : best.lastIpcObject.class.toLowerCase()
+            return Quickshell.iconPath(name, "application-x-executable")
+        }
+
         // keep toplevels fresh so occupancy tracks windows
         Component.onCompleted: Hyprland.refreshToplevels()
         Connections {
@@ -137,8 +153,9 @@ Item {
                     required property int index
                     readonly property int wsId: wsCluster.pageBase + index
                     readonly property bool isActive: wsCluster.activeWsId === wsId
-                    readonly property bool isOccupied: Hyprland.toplevels.values
-                        .some(t => (t.workspace?.id ?? -1) === wsId)
+                    readonly property var windowsHere: Hyprland.toplevels.values
+                        .filter(t => (t.workspace?.id ?? -1) === wsId)
+                    readonly property bool isOccupied: windowsHere.length > 0
 
                     width: 18
                     height: 30
@@ -169,13 +186,23 @@ Item {
                         Behavior on color { ColorAnimation { duration: 200 } }
                         Behavior on border.color { ColorAnimation { duration: 200 } }
 
-                        // the lamp behind the glass
+                        // the lamp behind the glass — lit only on an empty porthole
                         Rectangle {
                             anchors.centerIn: parent
                             width: 5; height: 5; radius: 2.5
-                            color: port.isActive ? root.buoy
-                                 : port.isOccupied ? root.duskA(0.6) : "transparent"
+                            visible: !port.isOccupied
+                            color: port.isActive ? root.buoy : "transparent"
                             Behavior on color { ColorAnimation { duration: 200 } }
+                        }
+
+                        // occupied porthole: the app seen through the glass
+                        IconImage {
+                            anchors.centerIn: parent
+                            visible: port.isOccupied
+                            width: 11; height: 11
+                            source: port.isOccupied ? wsCluster.iconForWindows(port.windowsHere) : ""
+                            opacity: port.isActive ? 1.0 : 0.75
+                            Behavior on opacity { NumberAnimation { duration: 180 } }
                         }
                     }
 

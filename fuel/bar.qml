@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Widgets
 import Quickshell.Io
 import Quickshell.Services.Mpris
 
@@ -305,6 +306,21 @@ Item {
             ? Math.floor((activeWsId - 1) / wsCount) * wsCount + 1
             : 1
 
+        // resolve the app icon for a bay: most-recently-focused window's .desktop
+        function iconForWindows(wins) {
+            let best = null, bestFh = Infinity
+            for (const w of wins) {
+                const cls = w.lastIpcObject?.class ?? ""
+                if (!cls) continue
+                const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
+                if (fh < bestFh) { best = w; bestFh = fh }
+            }
+            if (!best) return Quickshell.iconPath("application-x-executable")
+            const entry = DesktopEntries.heuristicLookup(best.lastIpcObject.class)
+            const name = (entry && entry.icon) ? entry.icon : best.lastIpcObject.class.toLowerCase()
+            return Quickshell.iconPath(name, "application-x-executable")
+        }
+
         Component.onCompleted: Hyprland.refreshToplevels()
         Connections {
             target: Hyprland
@@ -344,22 +360,36 @@ Item {
                         required property int index
                         readonly property int wsId: bays.pageBase + index
                         readonly property bool isActive: bays.activeWsId === wsId
-                        readonly property bool isOccupied: Hyprland.toplevels.values
-                            .some(t => (t.workspace?.id ?? -1) === slot.wsId)
+                        readonly property var windowsHere: Hyprland.toplevels.values
+                            .filter(t => (t.workspace?.id ?? -1) === slot.wsId)
+                        readonly property bool isOccupied: windowsHere.length > 0
 
                         width: 18
                         height: 26
 
+                        // empty bay: its number. occupied bay: the app fuelling in it.
                         Text {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.top: parent.top
                             anchors.topMargin: 3
+                            visible: !slot.isOccupied
                             text: (slot.wsId % 10).toString()
-                            color: slot.isActive ? root.ink : slot.isOccupied ? root.neon : root.ink
-                            opacity: slot.isActive ? 1.0 : slot.isOccupied ? 0.9 : 0.22
+                            color: slot.isActive ? root.neon : root.ink
+                            opacity: slot.isActive ? 1.0 : 0.22
                             font.family: root.mono
                             font.weight: slot.isActive ? Font.Black : Font.Bold
                             font.pixelSize: 12
+                            Behavior on opacity { NumberAnimation { duration: 180 } }
+                        }
+
+                        IconImage {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: parent.top
+                            anchors.topMargin: 2
+                            visible: slot.isOccupied
+                            width: 15; height: 15
+                            source: slot.isOccupied ? bays.iconForWindows(slot.windowsHere) : ""
+                            opacity: slot.isActive ? 1.0 : 0.72
                             Behavior on opacity { NumberAnimation { duration: 180 } }
                         }
 
