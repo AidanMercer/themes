@@ -173,6 +173,7 @@ Item {
                     id: wt
                     visible: !wd.ripple
                     text: wd.bg ? ("(" + wd.modelData.text + ")") : wd.modelData.text.toUpperCase()
+                    textFormat: Text.PlainText
                     color: wd.baseCol
                     style: Text.Outline
                     styleColor: Qt.rgba(0, 0, 0, 0.6)
@@ -192,6 +193,7 @@ Item {
                             required property int index
                             required property string modelData
                             text: modelData
+                            textFormat: Text.PlainText
                             y: Math.sin(wd.phase + index * 0.6) * (wd.sizePx * 0.18)
                             color: wd.baseCol
                             style: Text.Outline

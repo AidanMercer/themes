@@ -218,6 +218,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: chrome.popup.connType === "none" ? "RADIO — NO SIGNAL"
                             : "RADIO — " + (chrome.popup.connName || "SHORE LINK").toUpperCase()
+                        textFormat: Text.PlainText
                         font.family: chrome.mono
                         font.pixelSize: 9
                         font.letterSpacing: 2

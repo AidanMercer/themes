@@ -252,6 +252,7 @@ Item {
                     const a = media.player.trackArtist
                     return a ? t + "  ·  " + a : t
                 }
+                textFormat: Text.PlainText
                 color: root.paleA(0.85)
                 font.family: root.mono
                 font.pixelSize: 11
@@ -363,6 +364,7 @@ Item {
                     width: Math.min(implicitWidth, 130)
                     elide: Text.ElideRight
                     text: root.online ? root.connName.toUpperCase() : "NO SIGNAL"
+                    textFormat: Text.PlainText
                     color: root.online ? root.duskA(0.75) : root.alarm
                     font.family: root.mono
                     font.pixelSize: 9

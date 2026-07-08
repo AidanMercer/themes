@@ -289,6 +289,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: chrome.popup.connType === "none" ? "still air"
                             : (chrome.popup.connName || "on the breeze")
+                        textFormat: Text.PlainText
                         font.family: chrome.serif
                         font.italic: true
                         font.weight: Font.Medium

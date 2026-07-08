@@ -127,6 +127,7 @@ Item {
                     Text {
                         anchors.centerIn: base
                         text: base.text
+                        textFormat: Text.PlainText
                         font: base.font
                         color: root.gold
                         scale: 1.07
@@ -139,6 +140,7 @@ Item {
                         id: base
                         anchors.verticalCenter: parent.verticalCenter
                         text: wd.bg ? "(" + wd.modelData.text + ")" : wd.modelData.text
+                        textFormat: Text.PlainText
                         color: Qt.rgba(root.cream.r, root.cream.g, root.cream.b, 0.92)
                         style: Text.Raised
                         styleColor: root.pineA(0.85)
@@ -158,6 +160,7 @@ Item {
                         clip: true
                         Text {
                             text: base.text
+                            textFormat: Text.PlainText
                             color: root.gold
                             style: Text.Raised
                             styleColor: root.pineA(0.85)
@@ -217,6 +220,7 @@ Item {
         y: root.bedY
         width: root.bedW
         wrapMode: Text.Wrap
+        textFormat: Text.PlainText
         opacity: 0
         color: Qt.rgba(root.cream.r, root.cream.g, root.cream.b, 0.9)
         style: Text.Raised
@@ -252,6 +256,7 @@ Item {
         text: !root.engine.lyricsLoaded ? "gathering seeds…"
               : !root.engine.lyricsSynced ? "no lyrics on this breeze"
               : "❀"
+        textFormat: Text.PlainText
         color: root.goldA(0.8)
         style: Text.Raised
         styleColor: root.pineA(0.8)

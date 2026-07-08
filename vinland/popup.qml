@@ -207,6 +207,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: chrome.popup.connType === "none" ? "offline"
                             : (chrome.popup.connName || "online")
+                        textFormat: Text.PlainText
                         font.family: "Noto Sans"
                         font.pixelSize: 9
                         font.weight: Font.Medium

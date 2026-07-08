@@ -167,6 +167,8 @@ Item {
     }
 
     // ── data ─────────────────────────────────────────────────────────────────
+    // pushed live by the loader: true while the session is locked → stop polling
+    property bool occluded: false
     property real cpuPct: 0
     property int cpuTemp: -1
     property real memPct: 0
@@ -230,7 +232,7 @@ Item {
         stdout: StdioCollector { onStreamFinished: root.parseStats(text) }
     }
     Timer {
-        interval: 2500; repeat: true; running: true; triggeredOnStart: true
+        interval: 2500; repeat: true; running: !root.occluded; triggeredOnStart: true
         onTriggered: statProc.running = true
     }
 }

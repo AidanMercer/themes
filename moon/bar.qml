@@ -282,6 +282,7 @@ Item {
                     const a = media.player.trackArtist
                     return a ? t + "  ·  " + a : t
                 }
+                textFormat: Text.PlainText
                 color: root.cyan
                 font.family: root.mono
                 font.pixelSize: 11

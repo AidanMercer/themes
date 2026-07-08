@@ -404,6 +404,7 @@ Item {
                     const a = media.player.trackArtist
                     return a ? t + "  ·  " + a : t
                 }
+                textFormat: Text.PlainText
                 color: root.creamA(0.9)
                 font.family: root.serif
                 font.italic: true
@@ -530,6 +531,7 @@ Item {
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     text: netPod.online ? netPod.connName : "offline"
+                    textFormat: Text.PlainText
                     width: Math.min(implicitWidth, 110 * root.ui)
                     elide: Text.ElideRight
                     color: root.creamA(0.8)

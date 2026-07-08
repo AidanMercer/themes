@@ -132,6 +132,7 @@ Item {
                 Text {
                     id: tube
                     text: wd.shown
+                    textFormat: Text.PlainText
                     color: root.glassTube
                     opacity: 0.38
                     font.family: root.mono
@@ -155,6 +156,7 @@ Item {
                     Text {
                         anchors.centerIn: core
                         text: wd.shown
+                        textFormat: Text.PlainText
                         color: wd.litCol
                         opacity: 0.30 * wd.powerT
                         scale: 1.10
@@ -163,6 +165,7 @@ Item {
                     Text {
                         anchors.centerIn: core
                         text: wd.shown
+                        textFormat: Text.PlainText
                         color: wd.litCol
                         opacity: 0.55 * wd.powerT
                         scale: 1.04
@@ -172,6 +175,7 @@ Item {
                     Text {
                         id: core
                         text: wd.shown
+                        textFormat: Text.PlainText
                         color: Qt.rgba(
                             wd.litCol.r + (1 - wd.litCol.r) * 0.55,
                             wd.litCol.g + (1 - wd.litCol.g) * 0.55,

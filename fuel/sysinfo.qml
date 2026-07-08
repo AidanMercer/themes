@@ -73,6 +73,7 @@ Item {
     property bool hoverShown: false
     property bool pinShown: false
     readonly property bool shown: hoverShown || pinShown
+    property bool occluded: false   // loader pushes "session locked" here
     onShownChanged: if (shown) sway.restart()
     property real showT: shown ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
@@ -104,16 +105,17 @@ Item {
     }
 
     // ── pollers ─────────────────────────────────────────────────────────────
+    // poll only while the card is actually up (reveal refreshes instantly via triggeredOnStart)
     Timer {
-        interval: 2000; running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 2000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { statProc.running = true; memProc.running = true; devProc.running = true }
     }
     Timer {
-        interval: 6000; running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 6000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { batProc.running = true; upProc.running = true; gpuProc.running = true; tempProc.running = true; loadProc.running = true }
     }
     Timer {
-        interval: 12000; running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 12000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: netProc.running = true
     }
 
@@ -171,7 +173,8 @@ Item {
 
     Process {
         id: gpuProc
-        command: ["sh", "-c", "command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null || true"]
+        // module check keeps the AMD boot of this disk from forking nvidia-smi
+        command: ["sh", "-c", "[ -d /sys/module/nvidia ] && command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null || true"]
         running: false
         stdout: StdioCollector { onStreamFinished: root.parseGpu(text) }
     }
@@ -457,7 +460,7 @@ Item {
                         width: 6; height: 6; radius: 3
                         color: root.amber
                         SequentialAnimation on opacity {
-                            running: root.visible
+                            running: root.shown && !root.occluded
                             loops: Animation.Infinite
                             NumberAnimation { to: 0.25; duration: 1600; easing.type: Easing.InOutSine }
                             NumberAnimation { to: 1.0; duration: 1600; easing.type: Easing.InOutSine }

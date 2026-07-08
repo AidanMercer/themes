@@ -62,9 +62,12 @@ Item {
     function seg(from, to) { return Math.max(0, Math.min(1, (bootT - from) / (to - from))) }
 
     // ── the swell: one slow animation, ±2px ─────────────────────────────────
+    // loader pushes true while the session is locked or a fullscreen window
+    // covers this monitor — still the swell when nothing sees it
+    property bool occluded: false
     property real sway: 0
     SequentialAnimation on sway {
-        running: true; loops: Animation.Infinite
+        running: !root.occluded; loops: Animation.Infinite
         NumberAnimation { to: 1; duration: 6500; easing.type: Easing.InOutSine }
         NumberAnimation { to: 0; duration: 6500; easing.type: Easing.InOutSine }
     }

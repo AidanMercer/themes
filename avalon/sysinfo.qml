@@ -58,6 +58,7 @@ Item {
     property bool hoverShown: false
     property bool pinShown: false
     readonly property bool shown: hoverShown || pinShown
+    property bool occluded: false   // loader pushes "session locked" here
     onShownChanged: if (shown) sway.restart()
     property real showT: shown ? 1 : 0
     Behavior on showT { NumberAnimation { duration: 380; easing.type: Easing.OutCubic } }
@@ -86,15 +87,16 @@ Item {
         onLoaded: root.pinShown = pinFlag.text().trim() === "1"
     }
 
-    // ── pollers — fast while shown, a slow warm tick while hidden ───────
+    // ── pollers ─────────────────────────────────────────────────────────
+    // poll only while the tablet is actually up (reveal refreshes instantly via triggeredOnStart)
     Timer {
-        interval: root.shown ? 3000 : 30000
-        running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 3000
+        running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: statProc.running = true
     }
     Timer {
-        interval: root.shown ? 10000 : 60000
-        running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 10000
+        running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: slowProc.running = true
     }
 
@@ -113,8 +115,8 @@ Item {
         id: slowProc
         command: ["bash", "-c",
             'if [ "$1" = probe ]; then ' +
-            '  if command -v nvidia-smi >/dev/null 2>&1; then o=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -1); [ -n "$o" ] && echo "G $o"; fi; ' +
-            '  if ! command -v nvidia-smi >/dev/null 2>&1 || [ -z "$o" ]; then for f in /sys/class/drm/card*/device/gpu_busy_percent; do [ -r "$f" ] && { read -r v <"$f"; echo "G $v"; break; }; done; fi; ' +
+            '  if [ -d /sys/module/nvidia ] && command -v nvidia-smi >/dev/null 2>&1; then o=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -1); [ -n "$o" ] && echo "G $o"; fi; ' +
+            '  if [ -z "$o" ]; then for f in /sys/class/drm/card*/device/gpu_busy_percent; do [ -r "$f" ] && { read -r v <"$f"; echo "G $v"; break; }; done; fi; ' +
             'fi; ' +
             'echo "C $(nmcli -t -f NAME,TYPE connection show --active 2>/dev/null | grep -vi ":loopback\\|:bridge\\|:tun" | head -1)"; true',
             "_", (root.gpuPct >= 0 || root.gpuTries < 3) ? "probe" : "skip"]
@@ -474,7 +476,7 @@ Item {
                         width: 4; height: 4; radius: 2
                         color: root.gold
                         SequentialAnimation on opacity {
-                            running: root.batCharging && root.visible
+                            running: root.batCharging && root.shown && !root.occluded
                             loops: Animation.Infinite
                             NumberAnimation { to: 0.2; duration: 1800; easing.type: Easing.InOutSine }
                             NumberAnimation { to: 1.0; duration: 1800; easing.type: Easing.InOutSine }

@@ -29,6 +29,10 @@ Item {
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
 
+    // loader pushes true while the session is locked or a fullscreen window
+    // covers this monitor — still the sparkles when nothing sees them
+    property bool occluded: false
+
     // ── flicker-on: the tube stutters, then holds ───────────────────────────
     property real lit: 0
     SequentialAnimation {
@@ -270,7 +274,7 @@ Item {
                 font.pixelSize: modelData.s
                 opacity: 0.25
                 SequentialAnimation on opacity {
-                    running: root.lit >= 1 && root.visible
+                    running: root.lit >= 1 && root.visible && !root.occluded
                     loops: Animation.Infinite
                     NumberAnimation { to: 0.75; duration: modelData.d; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 0.22; duration: modelData.d * 1.2; easing.type: Easing.InOutSine }

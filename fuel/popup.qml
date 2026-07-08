@@ -235,6 +235,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: chrome.popup.connType === "none" ? "LINE DOWN"
                             : "LINE · " + (chrome.popup.connName || "ONLINE")
+                        textFormat: Text.PlainText
                         font.family: chrome.mono
                         font.pixelSize: 9
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.pal.cyan

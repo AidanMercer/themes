@@ -26,6 +26,9 @@ Item {
     readonly property string mono:   "Noto Sans Mono"
     readonly property string icon:   "Symbols Nerd Font"
 
+    // pushed live by the loader: true while the session is locked → stop polling
+    property bool occluded: false
+
     // ── live state ──────────────────────────────────────────────────────────
     property int cpuPercent: -1
     property var coreLoads: []
@@ -76,15 +79,15 @@ Item {
 
     // ── pollers ─────────────────────────────────────────────────────────────
     Timer {
-        interval: 1500; running: true; repeat: true; triggeredOnStart: true
+        interval: 1500; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { statProc.running = true; loadProc.running = true; memProc.running = true; devProc.running = true }
     }
     Timer {
-        interval: 5000; running: true; repeat: true; triggeredOnStart: true
+        interval: 5000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { batProc.running = true; upProc.running = true; gpuProc.running = true; tempProc.running = true }
     }
     Timer {
-        interval: 10000; running: true; repeat: true; triggeredOnStart: true
+        interval: 10000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: netProc.running = true
     }
 
@@ -201,11 +204,12 @@ Item {
                             : Math.round(b / 1024) + " KB/s"
     }
 
-    // nvidia only (the desktop) — no nvidia-smi or no output means the whole
-    // GPU section stays hidden, so the intel laptop is untouched
+    // nvidia only (the desktop) — the /sys/module/nvidia guard means no probe
+    // fires on the amd laptop (same disk, nvidia-smi binary present), and no
+    // output hides the whole GPU section
     Process {
         id: gpuProc
-        command: ["sh", "-c", "command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null || true"]
+        command: ["sh", "-c", "[ -d /sys/module/nvidia ] && command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu,temperature.gpu,memory.used,memory.total --format=csv,noheader,nounits 2>/dev/null || true"]
         running: false
         stdout: StdioCollector { onStreamFinished: root.parseGpu(text) }
     }
@@ -406,7 +410,7 @@ Item {
                         width: 6; height: 6; radius: 1
                         color: root.magenta
                         SequentialAnimation on opacity {
-                            running: true; loops: Animation.Infinite
+                            running: !root.occluded; loops: Animation.Infinite
                             NumberAnimation { to: 0.25; duration: 700 }
                             NumberAnimation { to: 1.0; duration: 700 }
                         }

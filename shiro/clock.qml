@@ -15,6 +15,9 @@ Item {
     readonly property color blush:    pal.cyan
     function inkA(a) { return Qt.rgba(ink.r, ink.g, ink.b, a) }
 
+    // pushed live by the loader: true while locked or a fullscreen window covers this monitor
+    property bool occluded: false
+
     SystemClock { id: clock; precision: SystemClock.Minutes }
 
     // boot-in: rise + fade
@@ -65,7 +68,7 @@ Item {
                 color: root.wisteria
                 opacity: 0.8
                 SequentialAnimation on x {
-                    loops: Animation.Infinite
+                    running: !root.occluded; loops: Animation.Infinite
                     NumberAnimation { to: timeText.width - 56; duration: 9000; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 0; duration: 9000; easing.type: Easing.InOutSine }
                 }
@@ -87,7 +90,7 @@ Item {
                 color: root.blush
                 anchors.verticalCenter: parent.verticalCenter
                 SequentialAnimation on opacity {
-                    loops: Animation.Infinite
+                    running: !root.occluded; loops: Animation.Infinite
                     NumberAnimation { to: 0.25; duration: 2100; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 1.0; duration: 2100; easing.type: Easing.InOutSine }
                 }

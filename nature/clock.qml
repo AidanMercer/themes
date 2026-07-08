@@ -27,6 +27,10 @@ Item {
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
 
+    // loader pushes true while the session is locked or a fullscreen window
+    // covers this monitor — freeze the halo's breath when nothing's watching
+    property bool occluded: false
+
     // boot-in: the clock blooms up out of nothing
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 1200; easing.type: Easing.OutCubic }
@@ -98,11 +102,13 @@ Item {
             }
             // one slow breath — transform only, no repaints
             SequentialAnimation on scale {
+                running: !root.occluded
                 loops: Animation.Infinite
                 NumberAnimation { to: 1.12; duration: 4200; easing.type: Easing.InOutSine }
                 NumberAnimation { to: 0.94; duration: 4200; easing.type: Easing.InOutSine }
             }
             SequentialAnimation on opacity {
+                running: !root.occluded
                 loops: Animation.Infinite
                 NumberAnimation { to: 0.7; duration: 4200; easing.type: Easing.InOutSine }
                 NumberAnimation { to: 1.0; duration: 4200; easing.type: Easing.InOutSine }

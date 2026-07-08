@@ -59,6 +59,7 @@ Item {
         y: root.lineY
         width: root.lineW
         wrapMode: Text.Wrap
+        textFormat: Text.PlainText
         opacity: 0
         color: root.duskA(0.7)
         font.family: root.serif
@@ -115,6 +116,7 @@ Item {
                     Text {
                         anchors.centerIn: parent
                         text: base.text
+                        textFormat: Text.PlainText
                         color: root.duskA(0.4)
                         scale: 1.10 + 0.12 * (1 - wd.reveal)
                         opacity: 0.4 * (1 - wd.reveal)
@@ -131,6 +133,7 @@ Item {
                     Text {
                         id: base
                         text: wd.adlib ? "(" + wd.modelData.text + ")" : wd.modelData.text
+                        textFormat: Text.PlainText
                         color: root.duskA(0.55)
                         opacity: 0.34 + 0.30 * wd.reveal
                         Behavior on opacity { NumberAnimation { duration: 320 } }
@@ -149,6 +152,7 @@ Item {
                         clip: true
                         Text {
                             text: base.text
+                            textFormat: Text.PlainText
                             color: wd.adlib ? root.duskA(0.9) : root.paleA(0.96)
                             font.family: root.serif
                             font.pixelSize: wd.sizePx
@@ -208,6 +212,7 @@ Item {
         text: !root.engine.lyricsLoaded ? "· TUNING ·"
               : !root.engine.lyricsSynced ? "· NO WORDS FROM SHORE ·"
               : "· · —"
+        textFormat: Text.PlainText
         color: root.duskA(0.55)
         font.family: root.mono
         font.pixelSize: Math.round(12 * root.ui)

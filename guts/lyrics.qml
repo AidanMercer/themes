@@ -139,6 +139,7 @@ Item {
                 Text {
                     id: baseText
                     text: wd.shownText
+                    textFormat: Text.PlainText
                     color: wd.bg ? root.halft : (wd.done ? Qt.rgba(root.halft.r, root.halft.g, root.halft.b, 1) : root.ink)
                     font.family: root.serif
                     font.pixelSize: wd.sizePx
@@ -157,6 +158,7 @@ Item {
                     visible: !wd.bg && wd.st.fill > 0.01
                     Text {
                         text: wd.shownText
+                        textFormat: Text.PlainText
                         color: wd.done ? root.dried : root.fresh
                         font.family: root.serif
                         font.pixelSize: wd.sizePx

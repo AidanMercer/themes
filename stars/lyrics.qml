@@ -256,6 +256,7 @@ Item {
                         x: index * wd.cw
                         y: lit ? restY : (wd.stars[index] ? wd.stars[index].y - wd.p.size * 0.6 : restY)
                         text: wd.word.charAt(index)
+                        textFormat: Text.PlainText
                         color: wd.bg ? root.coral : root.ink
                         opacity: lit ? (wd.bg ? 0.8 : 1) : 0
                         scale: lit ? 1 : 0.55
@@ -309,6 +310,7 @@ Item {
             text: !root.engine.lyricsLoaded ? "✦ reading the sky…"
                   : !root.engine.lyricsSynced ? "✧ no stars charted for this song"
                   : "✦"
+            textFormat: Text.PlainText
             color: root.slateA(1)
             font.family: root.mono
             font.pixelSize: Math.round(root.lyricSize * 0.45)

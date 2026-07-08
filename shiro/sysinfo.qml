@@ -9,7 +9,7 @@ import Quickshell.Io
 // stroke down the left edge warms from wisteria to rose as the machine works.
 // Hover-reveal: hidden until the bar's micro-meters are hovered or the
 // Super+. pin flips (the shared flag-file contract). One bash poll every 3s
-// while shown (pure builtins), a slow warm tick while hidden.
+// while shown (pure builtins), idle — no polling — while hidden.
 Item {
     id: root
     anchors.fill: parent
@@ -29,6 +29,8 @@ Item {
     function tone(v) { return v >= 90 ? rose : v >= 75 ? amber : wisteria }
 
     // ── live state ──────────────────────────────────────────────────────
+    // pushed live by the loader: true while the session is locked → stop polling
+    property bool occluded: false
     property int cpuPct: -1
     property var coreLoads: []
     property int cpuTemp: -1
@@ -90,15 +92,15 @@ Item {
         onLoaded: root.pinShown = pinFlag.text().trim() === "1"
     }
 
-    // ── pollers — fast while shown, a slow warm tick while hidden ───────
+    // poll only while the card is actually up (reveal refreshes instantly via triggeredOnStart)
     Timer {
-        interval: root.shown ? 3000 : 30000
-        running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 3000
+        running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: statProc.running = true
     }
     Timer {
-        interval: root.shown ? 10000 : 60000
-        running: root.visible; repeat: true; triggeredOnStart: true
+        interval: 10000
+        running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: slowProc.running = true
     }
 
@@ -118,8 +120,8 @@ Item {
         id: slowProc
         command: ["bash", "-c",
             'if [ "$1" = probe ]; then ' +
-            '  if command -v nvidia-smi >/dev/null 2>&1; then o=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -1); [ -n "$o" ] && echo "G $o"; fi; ' +
-            '  if ! command -v nvidia-smi >/dev/null 2>&1 || [ -z "$o" ]; then for f in /sys/class/drm/card*/device/gpu_busy_percent; do [ -r "$f" ] && { read -r v <"$f"; echo "G $v"; break; }; done; fi; ' +
+            '  if [ -d /sys/module/nvidia ] && command -v nvidia-smi >/dev/null 2>&1; then o=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null | head -1); [ -n "$o" ] && echo "G $o"; fi; ' +
+            '  if [ -z "$o" ]; then for f in /sys/class/drm/card*/device/gpu_busy_percent; do [ -r "$f" ] && { read -r v <"$f"; echo "G $v"; break; }; done; fi; ' +
             'fi; ' +
             'echo "C $(nmcli -t -f NAME,TYPE connection show --active 2>/dev/null | grep -vi ":loopback\\|:bridge\\|:tun" | head -1)"; true',
             "_", (root.gpuPct >= 0 || root.gpuTries < 3) ? "probe" : "skip"]
@@ -482,7 +484,7 @@ Item {
                     width: 5; height: 5; radius: 2.5
                     color: root.blush
                     SequentialAnimation on opacity {
-                        running: root.batCharging && root.visible
+                        running: root.batCharging && root.shown && !root.occluded
                         loops: Animation.Infinite
                         NumberAnimation { to: 0.25; duration: 2100; easing.type: Easing.InOutSine }
                         NumberAnimation { to: 1.0; duration: 2100; easing.type: Easing.InOutSine }

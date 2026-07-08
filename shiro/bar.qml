@@ -199,6 +199,7 @@ Item {
                         elide: Text.ElideRight
                         horizontalAlignment: Text.AlignHCenter
                         text: root.mediaLabel
+                        textFormat: Text.PlainText
                         color: root.inkA(0.60)
                         font.family: root.sans
                         font.pixelSize: 10

@@ -233,6 +233,7 @@ Item {
                         id: mediaTitle
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.mediaLabel
+                        textFormat: Text.PlainText
                         color: root.ivoryA(0.72)
                         elide: Text.ElideRight
                         width: Math.min(implicitWidth, 170)

@@ -85,6 +85,7 @@ Item {
     // the journal stays pressed shut until someone opens it
     property bool hoverShown: false
     property bool pinShown: false
+    property bool occluded: false   // loader writes true while the session is locked
     readonly property bool shown: hoverShown || pinShown
     onShownChanged: if (shown) sway.restart()
     property real showT: shown ? 1 : 0
@@ -117,16 +118,17 @@ Item {
     }
 
     // ── pollers ─────────────────────────────────────────────────────────────
+    // poll only while the card is actually up (reveal refreshes instantly via triggeredOnStart)
     Timer {
-        interval: 2000; running: true; repeat: true; triggeredOnStart: true
+        interval: 2000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { statProc.running = true; memProc.running = true; devProc.running = true }
     }
     Timer {
-        interval: 6000; running: true; repeat: true; triggeredOnStart: true
+        interval: 6000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { batProc.running = true; upProc.running = true; gpuProc.running = true; tempProc.running = true }
     }
     Timer {
-        interval: 10000; running: true; repeat: true; triggeredOnStart: true
+        interval: 10000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: netProc.running = true
     }
 
@@ -181,7 +183,7 @@ Item {
 
     Process {
         id: gpuProc
-        command: ["sh", "-c", "command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null || true"]
+        command: ["sh", "-c", "[ -d /sys/module/nvidia ] && command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null || true"]
         running: false
         stdout: StdioCollector {
             onStreamFinished: {

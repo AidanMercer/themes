@@ -22,6 +22,9 @@ Item {
     readonly property color dim:     pal.dim    // burnt-out yellow trace
     readonly property string mono:   "Noto Sans Mono"
 
+    // pushed live by the loader: true while locked or a fullscreen window covers this monitor
+    property bool occluded: false
+
     SystemClock {
         id: clock
         precision: SystemClock.Seconds
@@ -152,7 +155,7 @@ Item {
                         width: 9; height: 9; color: root.neon
                         anchors.verticalCenter: parent.verticalCenter
                         SequentialAnimation on opacity {
-                            loops: Animation.Infinite
+                            running: !root.occluded; loops: Animation.Infinite
                             NumberAnimation { to: 0.15; duration: 0 }
                             PauseAnimation { duration: 620 }
                             NumberAnimation { to: 1; duration: 0 }
@@ -241,7 +244,7 @@ Item {
                         width: 46; height: 3; color: root.neon
                         x: 0
                         SequentialAnimation on x {
-                            loops: Animation.Infinite
+                            running: !root.occluded; loops: Animation.Infinite
                             NumberAnimation { to: timeText.width - 46; duration: 3200; easing.type: Easing.InOutSine }
                             NumberAnimation { to: 0; duration: 3200; easing.type: Easing.InOutSine }
                         }
@@ -274,7 +277,7 @@ Item {
                         width: 8; height: 13; color: root.neon
                         anchors.verticalCenter: parent.verticalCenter
                         SequentialAnimation on opacity {
-                            loops: Animation.Infinite
+                            running: !root.occluded; loops: Animation.Infinite
                             NumberAnimation { to: 0; duration: 0 }
                             PauseAnimation { duration: 440 }
                             NumberAnimation { to: 1; duration: 0 }
@@ -309,7 +312,7 @@ Item {
                 color: root.cyan
                 opacity: 0.25
                 SequentialAnimation on y {
-                    loops: Animation.Infinite
+                    running: !root.occluded; loops: Animation.Infinite
                     NumberAnimation { to: frame.height; duration: 4200; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 0; duration: 0 }
                     PauseAnimation { duration: 1600 }

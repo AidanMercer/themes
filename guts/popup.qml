@@ -213,6 +213,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: chrome.popup.connType === "none" ? "severed"
                             : (chrome.popup.connName || "connected")
+                        textFormat: Text.PlainText
                         font.family: chrome.serif
                         font.italic: true
                         font.pixelSize: 10

@@ -310,6 +310,7 @@ Item {
                     const a = media.player.trackArtist
                     return a ? t + "  ·  " + a : t
                 }
+                textFormat: Text.PlainText
                 color: root.inkA(0.85)
                 font.family: root.mono
                 font.pixelSize: 10

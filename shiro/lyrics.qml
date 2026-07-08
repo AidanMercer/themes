@@ -113,6 +113,7 @@ Item {
                         id: ghost
                         y: wd.bg ? -Math.round(wd.sizePx * 0.28) + 4 : 4
                         text: wd.word
+                        textFormat: Text.PlainText
                         color: root.inkA(0.15)
                         font.family: root.serif
                         font.pixelSize: wd.sizePx
@@ -130,6 +131,7 @@ Item {
                         Text {
                             y: ghost.y
                             text: wd.word
+                            textFormat: Text.PlainText
                             color: wd.st.active ? (wd.bg ? root.blush : root.wisteria)
                                                 : (wd.bg ? Qt.rgba(root.blush.r, root.blush.g, root.blush.b, 0.75)
                                                          : root.inkA(0.88))

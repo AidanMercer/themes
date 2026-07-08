@@ -139,6 +139,7 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: wd.bg ? ("(" + wd.modelData.text + ")") : wd.modelData.text.toUpperCase()
+                    textFormat: Text.PlainText
                     color: wd.bg ? root.duskA(0.9)
                          : wd.sung ? root.amberA(0.95)
                          : root.inkA(0.96)
@@ -173,6 +174,7 @@ Item {
                 text: !root.engine.lyricsLoaded ? "TUNING…"
                       : !root.engine.lyricsSynced ? "NO ANNOUNCEMENT"
                       : "♪"
+                textFormat: Text.PlainText
                 color: root.duskA(0.8)
                 style: Text.Outline
                 styleColor: Qt.rgba(0, 0, 0, 0.5)

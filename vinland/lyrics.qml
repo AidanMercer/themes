@@ -140,6 +140,7 @@ Item {
                         id: shade
                         y: wd.bg ? -Math.round(wd.sizePx * 0.28) + 4 : 4
                         text: wd.word
+                        textFormat: Text.PlainText
                         color: root.iceA(0.18)
                         font.family: root.serif
                         font.pixelSize: wd.sizePx
@@ -158,6 +159,7 @@ Item {
                         Text {
                             y: shade.y
                             text: wd.word
+                            textFormat: Text.PlainText
                             color: wd.st.active ? (wd.bg ? root.gold : root.ice)
                                                 : (wd.bg ? root.goldA(0.75) : root.snowA(0.94))
                             Behavior on color { ColorAnimation { duration: 500 } }
