@@ -19,19 +19,7 @@ import Quickshell.Services.Mpris
 // a while. Self-contained: hyprland via Quickshell.Hyprland, /proc + nmcli.
 Item {
     id: root
-
-    // this bar reads a touch small at the shared 44px height, so it asks the
-    // wrapper (Bar.qml) for a 1.20x taller panel and scales its whole design up
-    // to match. The design still lives in its original 44px-tall coordinate
-    // space — the catenary/plate/font math is untouched; only the top-left
-    // Scale blows it up to fill the reserved zone.
-    property real barScale: 1.20
-    anchors.left: parent.left
-    anchors.top: parent.top
-    width: (parent ? parent.width : 0) / barScale
-    height: (parent ? parent.height : 0) / barScale
-    transformOrigin: Item.TopLeft
-    scale: barScale
+    anchors.fill: parent
 
     // injected by the bar wrapper after load (Loader.onLoaded)
     property var barScreen: null
