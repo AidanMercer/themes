@@ -1,11 +1,14 @@
 import QtQuick
 import Quickshell.Io
 
-// stars: a strand of starlight. One thin luminous line low over the platform
-// that ripples with the music — amber core, soft glow, and tiny star sparks
-// where a band peaks. At true silence it fades out completely and stops
-// painting; the platform (and the cat) stay unobstructed. Runs its own cava
-// against cava.conf next door; click-through scenery.
+// stars: a meteor shower. A low, centered radiant sits over the platform —
+// exactly where the old starlight strand lived — and music peaks fling
+// shooting-star streaks up out of it. Louder bands throw brighter, longer,
+// faster meteors; the spectrum fans left→right so bass and treble streak to
+// opposite sides. Amber cores with coral-hot heads, tapering luminous tails,
+// a faint radiant pool where they're born. At true silence it drains, fades
+// out completely and stops painting; the platform (and the cat) stay clear.
+// Runs its own cava against cava.conf next door; click-through scenery.
 Item {
     id: root
     anchors.fill: parent
@@ -17,20 +20,25 @@ Item {
     readonly property color slate: pal.dim
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
     function coralA(a) { return Qt.rgba(coral.r, coral.g, coral.b, a) }
+    function colA(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }
 
     readonly property int bins: 24
 
     property var levels: []       // raw cava bins 0..1
-    property var display: []      // smoothed values the strand binds to
-    property bool humming: false  // false = true silence, nothing on screen
+    property var display: []      // smoothed values, for onset detection
+    property var prev: []         // previous display, for rising-edge onsets
+    property var meteors: []      // live particles
+    property real energy: 0       // smoothed overall loudness → radiant glow
+    property bool humming: false  // audio present or meteors still in flight
 
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
 
     Component.onCompleted: {
-        const z = []
-        for (let i = 0; i < bins; i++) z.push(0)
+        const z = [], p = []
+        for (let i = 0; i < bins; i++) { z.push(0); p.push(0) }
         display = z
+        prev = p
     }
 
     Process {
@@ -60,55 +68,99 @@ Item {
         if (out.length) {
             root.levels = out
             root.lastFrameMs = Date.now()
-            smooth.start()
+            if (!tick.running) tick.start()
         }
     }
 
-    // smoothing pump — repaints only while something is moving; at true
-    // silence `humming` drops, the strand fades, and the timer's work is a
-    // cheap no-op that stops dirtying the scene.
-    property int stillFrames: 0
+    // spawn one meteor from bin i (spectral position) with strength s (0..1)
+    function spawnMeteor(i, s) {
+        const w = sky.width, h = sky.height
+        const rx = w * 0.5, ry = h - 10          // radiant: low, centered
+        const fx = i / (bins - 1) - 0.5          // -0.5..0.5 across spectrum
+        const ang = fx * 1.15 + (Math.random() - 0.5) * 0.34   // 0 = straight up
+        const dirx = Math.sin(ang)
+        const diry = -Math.cos(ang)              // upward
+        const speed = 3.4 + s * 5.6 + Math.random() * 1.6
+        const m = {
+            x: rx + fx * (w * 0.30) + (Math.random() - 0.5) * 10,
+            y: ry - Math.random() * 6,
+            vx: dirx * speed,
+            vy: diry * speed,
+            life: 1,
+            decay: Math.max(0.011, 0.017 - s * 0.005) + Math.random() * 0.009,
+            len: 22 + s * 66,
+            wd: 0.9 + s * 1.9,
+            hot: s
+        }
+        const arr = root.meteors
+        arr.push(m)
+        root.meteors = arr
+    }
+
+    // physics + spawn pump — advances meteors, launches new ones on onsets,
+    // and gates itself off at true silence so nothing dirties the scene.
     Timer {
-        id: smooth
+        id: tick
         interval: 33
         running: true
         repeat: true
         onTriggered: {
-            const d = root.display
-            const l = root.levels
-            let moved = 0
+            const d = root.display, l = root.levels, p = root.prev
+            let loud = 0
             for (let i = 0; i < root.bins; i++) {
                 let t = l[i] || 0
                 if (t < 0.04) t = 0
-                const nv = d[i] + (t - d[i]) * 0.4
-                moved += Math.abs(nv - d[i])
-                d[i] = nv
+                d[i] = d[i] + (t - d[i]) * 0.45
+                if (d[i] > loud) loud = d[i]
             }
-            if (moved > 0.003) {
-                root.display = d
-                root.stillFrames = 0
-                root.humming = true
-                strand.requestPaint()
-            } else if (Date.now() - root.lastFrameMs > 2000 && !root.humming) {
-                // cava sleeps at silence (sleep_timer) — strand cleared; parseFrame rearms
-                smooth.stop()
-            } else if (root.humming) {
-                root.stillFrames++
-                if (root.stillFrames > 45) {   // ~1.5s of stillness → lights out
-                    for (let i = 0; i < root.bins; i++) d[i] = 0
-                    root.display = d
-                    root.humming = false
-                    strand.requestPaint()
+            root.energy = root.energy + (loud - root.energy) * 0.2
+
+            const now = Date.now()
+            const audioActive = loud > 0.06
+
+            // launch meteors on rising edges, rationed so peaks burst and
+            // quiet passages only sparkle now and then
+            if (audioActive && root.meteors.length < 44) {
+                for (let i = 0; i < root.bins; i++) {
+                    const edge = d[i] - p[i]
+                    if (d[i] > 0.40 && edge > 0.09 && Math.random() < 0.32 + d[i] * 0.42)
+                        root.spawnMeteor(i, d[i])
                 }
+            }
+            for (let i = 0; i < root.bins; i++) p[i] = d[i]
+
+            // advance + cull
+            const alive = []
+            const w = sky.width, h = sky.height
+            const ms = root.meteors
+            for (let k = 0; k < ms.length; k++) {
+                const m = ms[k]
+                m.x += m.vx; m.y += m.vy
+                m.vy += 0.035            // gentle gravity → a soft arc
+                m.vx *= 0.996
+                m.life -= m.decay
+                if (m.life > 0 && m.y > -30 && m.x > -40 && m.x < w + 40) alive.push(m)
+            }
+            root.meteors = alive
+
+            const nowHumming = audioActive || alive.length > 0
+            if (nowHumming !== root.humming) root.humming = nowHumming
+            if (audioActive) root.lastFrameMs = now
+
+            if (nowHumming) {
+                sky.requestPaint()
+            } else {
+                sky.requestPaint()   // final clear as it fades out
+                if (now - root.lastFrameMs > 2000) tick.stop()  // cava asleep
             }
         }
     }
 
-    // ── the strand ──────────────────────────────────────────────────────────
+    // ── the shower ──────────────────────────────────────────────────────────
     Canvas {
-        id: strand
-        width: Math.round(root.width * 0.46)
-        height: 130
+        id: sky
+        width: Math.round(root.width * 0.60)
+        height: Math.round(root.height * 0.42)
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(root.height * 0.10)
@@ -122,68 +174,73 @@ Item {
         onPaint: {
             const ctx = getContext("2d")
             ctx.reset()
-            const n = root.bins
-            const d = root.display
             const w = width, h = height
-            const inset = 10
-            const baseY = h - 14
-            const rise = h - 40
+            const rx = w * 0.5, ry = h - 10
 
-            // curve points, softly pinched at the ends so the strand tapers
-            const pts = []
-            for (let i = 0; i < n; i++) {
-                const f = i / (n - 1)
-                const taper = Math.sin(Math.PI * f) * 0.35 + 0.65
-                const v = (d[i] || 0) * taper
-                pts.push({ x: inset + f * (w - inset * 2), y: baseY - v * rise, v: v })
-            }
+            // luminous additive stacking for that hot-meteor glow
+            ctx.globalCompositeOperation = "lighter"
 
-            function trace() {
-                ctx.beginPath()
-                ctx.moveTo(pts[0].x, pts[0].y)
-                for (let i = 1; i < n - 1; i++) {
-                    const mx = (pts[i].x + pts[i + 1].x) / 2
-                    const my = (pts[i].y + pts[i + 1].y) / 2
-                    ctx.quadraticCurveTo(pts[i].x, pts[i].y, mx, my)
-                }
-                ctx.lineTo(pts[n - 1].x, pts[n - 1].y)
+            // radiant pool — a faint amber breath where meteors are born
+            if (root.energy > 0.02) {
+                const rr = 120 * (0.6 + root.energy)
+                const g = ctx.createRadialGradient(rx, ry, 0, rx, ry, rr)
+                g.addColorStop(0, root.amberA(0.15 * Math.min(1, root.energy * 1.6)))
+                g.addColorStop(1, root.amberA(0))
+                ctx.fillStyle = g
+                ctx.fillRect(0, 0, w, h)
             }
 
             ctx.lineCap = "round"
-            ctx.lineJoin = "round"
-            // wide soft glow, then the bright core
-            ctx.strokeStyle = root.amberA(0.14)
-            ctx.lineWidth = 6
-            trace(); ctx.stroke()
-            ctx.strokeStyle = root.amberA(0.85)
-            ctx.lineWidth = 1.6
-            trace(); ctx.stroke()
+            const ms = root.meteors
+            for (let k = 0; k < ms.length; k++) {
+                const m = ms[k]
+                const sp = Math.hypot(m.vx, m.vy) || 1
+                const ux = m.vx / sp, uy = m.vy / sp
+                const hx = m.x, hy = m.y
+                const ex = hx - ux * m.len, ey = hy - uy * m.len
+                const a = Math.min(1, m.life * 1.5)
+                const head = m.hot > 0.6 ? root.coral : root.amber
 
-            // star sparks where a band sings
-            for (let i = 0; i < n; i++) {
-                const p = pts[i]
-                if (p.v < 0.5) continue
-                const s = (p.v - 0.5) * 2          // 0..1 above threshold
-                const r = 1.2 + s * 1.6
-                ctx.fillStyle = s > 0.6 ? root.coralA(0.95) : root.amberA(0.6 + s * 0.4)
-                ctx.beginPath()
-                ctx.arc(p.x, p.y, r, 0, Math.PI * 2)
-                ctx.fill()
-                // a tiny cross flare on the strongest peaks
-                if (s > 0.55) {
-                    ctx.strokeStyle = root.coralA(0.5 * s)
-                    ctx.lineWidth = 0.8
+                // tapering tail
+                const grad = ctx.createLinearGradient(hx, hy, ex, ey)
+                grad.addColorStop(0, root.colA(head, 0.9 * a))
+                grad.addColorStop(0.4, root.amberA(0.32 * a))
+                grad.addColorStop(1, root.amberA(0))
+                ctx.strokeStyle = grad
+                ctx.lineWidth = m.wd
+                ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(ex, ey); ctx.stroke()
+
+                // soft glow bloom around the head
+                const hr = (m.wd * 1.6 + m.hot * 1.4) * 3
+                const gg = ctx.createRadialGradient(hx, hy, 0, hx, hy, hr)
+                gg.addColorStop(0, root.colA(head, 0.85 * a))
+                gg.addColorStop(0.5, root.colA(head, 0.22 * a))
+                gg.addColorStop(1, root.colA(head, 0))
+                ctx.fillStyle = gg
+                ctx.beginPath(); ctx.arc(hx, hy, hr, 0, Math.PI * 2); ctx.fill()
+
+                // bright core
+                ctx.fillStyle = root.colA(head, a)
+                ctx.beginPath(); ctx.arc(hx, hy, Math.max(0.6, m.wd * 0.7), 0, Math.PI * 2); ctx.fill()
+
+                // cross flare on the hottest heads
+                if (m.hot > 0.62) {
+                    const fr = hr * 0.8
+                    ctx.strokeStyle = root.coralA(0.5 * a * m.hot)
+                    ctx.lineWidth = 0.7
                     ctx.beginPath()
-                    ctx.moveTo(p.x - r * 2.6, p.y); ctx.lineTo(p.x + r * 2.6, p.y)
-                    ctx.moveTo(p.x, p.y - r * 2.6); ctx.lineTo(p.x, p.y + r * 2.6)
+                    ctx.moveTo(hx - fr, hy); ctx.lineTo(hx + fr, hy)
+                    ctx.moveTo(hx, hy - fr); ctx.lineTo(hx, hy + fr)
                     ctx.stroke()
                 }
             }
+
+            ctx.globalCompositeOperation = "source-over"
         }
         Connections {
             target: root.pal
-            function onNeonChanged() { strand.requestPaint() }
-            function onCyanChanged() { strand.requestPaint() }
+            function onNeonChanged() { sky.requestPaint() }
+            function onCyanChanged() { sky.requestPaint() }
         }
     }
 }
