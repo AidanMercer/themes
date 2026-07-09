@@ -16,6 +16,8 @@ Item {
     property var barScreen: null
     // injected by the loader (setSource initial property)
     required property var pal
+    // injected by the loader — true while the session is locked, so pollers park
+    property bool occluded: false
 
     readonly property color ink:      pal.text
     readonly property color wisteria: pal.neon
@@ -395,7 +397,7 @@ Item {
     property real mediaProgress: 0
     Timer {
         interval: 1000; repeat: true
-        running: root.mediaPlaying
+        running: root.mediaPlaying && !root.occluded
         triggeredOnStart: true
         onTriggered: {
             const p = root.player
@@ -441,7 +443,7 @@ Item {
         stdout: StdioCollector { onStreamFinished: root.parseStats(text) }
     }
     Timer {
-        interval: 2500; repeat: true; running: true; triggeredOnStart: true
+        interval: 2500; repeat: true; running: !root.occluded; triggeredOnStart: true
         onTriggered: statProc.running = true
     }
 
