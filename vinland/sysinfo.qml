@@ -8,6 +8,10 @@ Item {
     id: root
     anchors.fill: parent
 
+    // always-on readout: desktop scenery, not a popup — the loader parks this
+    // under windows on the Bottom layer instead of floating it over them
+    readonly property bool desktopSysinfo: true
+
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color snow:  pal.text
