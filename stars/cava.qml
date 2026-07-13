@@ -15,6 +15,10 @@ Item {
 
     // injected by the loader (setSource initial property)
     required property var pal
+    // pushed by the loader after mount: lock/fullscreen cover + mpris playing
+    property bool occluded: false
+    property bool playing: true
+    readonly property bool feedOn: playing && !occluded
     readonly property color amber: pal.neon
     readonly property color coral: pal.cyan
     readonly property color slate: pal.dim
@@ -43,17 +47,19 @@ Item {
 
     Process {
         id: cava
-        running: true
+        running: root.feedOn
         command: ["cava", "-p", Qt.resolvedUrl("cava.conf").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: line => root.parseFrame(line)
         }
-        onRunningChanged: if (!running) cavaRestart.start()
+        onRunningChanged: if (root.feedOn && !running) cavaRestart.start()
     }
     Timer {
         id: cavaRestart
         interval: 2000
-        onTriggered: cava.running = true
+        // re-assign the binding, not `= true`, or one crash restart would strip
+        // the feed gate and leak the reader forever (same trick as AudioBus)
+        onTriggered: cava.running = Qt.binding(() => root.feedOn)
     }
 
     property double lastFrameMs: 0

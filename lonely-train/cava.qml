@@ -34,7 +34,10 @@ Item {
         if (ps.length === 0) return null
         return ps.find(p => p.playbackState === MprisPlaybackState.Playing) ?? ps[0]
     }
-    readonly property bool playing: player !== null && player.playbackState === MprisPlaybackState.Playing
+    // pushed by the loader after mount: lock/fullscreen cover + mpris playing
+    property bool occluded: false
+    property bool playing: true
+    readonly property bool feedOn: playing && !occluded
     property real progress: 0.4
     Timer {
         interval: 1000; repeat: true
@@ -61,17 +64,19 @@ Item {
 
     Process {
         id: cava
-        running: true
+        running: root.feedOn
         command: ["cava", "-p", Qt.resolvedUrl("cava.conf").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: line => root.parseFrame(line)
         }
-        onRunningChanged: if (!running) cavaRestart.start()
+        onRunningChanged: if (root.feedOn && !running) cavaRestart.start()
     }
     Timer {
         id: cavaRestart
         interval: 2000
-        onTriggered: cava.running = true
+        // re-assign the binding, not `= true`, or one crash restart would strip
+        // the feed gate and leak the reader forever (same trick as AudioBus)
+        onTriggered: cava.running = Qt.binding(() => root.feedOn)
     }
 
     property double lastFrameMs: 0
