@@ -23,6 +23,7 @@ Item {
 
     // injected by the bar wrapper after load (Loader.onLoaded)
     property var barScreen: null
+    property bool occluded: false   // pushed by the wrapper: session locked
 
     // injected by the loader (setSource initial property)
     required property var pal
@@ -498,7 +499,7 @@ Item {
             property string connType: ""
 
             Timer {
-                interval: 10000; running: true; repeat: true; triggeredOnStart: true
+                interval: 10000; running: !root.occluded; repeat: true; triggeredOnStart: true
                 onTriggered: netProc.running = true
             }
             Process {
@@ -550,7 +551,7 @@ Item {
             visible: percent >= 0
 
             Timer {
-                interval: 30000; running: true; repeat: true; triggeredOnStart: true
+                interval: 30000; running: !root.occluded; repeat: true; triggeredOnStart: true
                 onTriggered: batProc.running = true
             }
             Process {
