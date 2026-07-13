@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "56829cb",
+  "commit": "f6be2e3",
   "themes": [
     {
       "name": "avalon",
@@ -16,7 +16,7 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21441160,
+      "bytes": 21445780,
       "files": [
         {
           "path": "avalon/bar.qml",
@@ -36,7 +36,7 @@
         },
         {
           "path": "avalon/cava.qml",
-          "bytes": 8351
+          "bytes": 8758
         },
         {
           "path": "avalon/clock.qml",
@@ -57,6 +57,10 @@
         {
           "path": "avalon/lyrics.qml",
           "bytes": 9667
+        },
+        {
+          "path": "avalon/mica.qml",
+          "bytes": 4213
         },
         {
           "path": "avalon/notif.qml",
@@ -90,11 +94,11 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/fuel.jpg",
-      "bytes": 16578353,
+      "bytes": 16583943,
       "files": [
         {
           "path": "fuel/bar.qml",
-          "bytes": 26407
+          "bytes": 27986
         },
         {
           "path": "fuel/cava.conf",
@@ -102,7 +106,7 @@
         },
         {
           "path": "fuel/cava.qml",
-          "bytes": 13868
+          "bytes": 14275
         },
         {
           "path": "fuel/clock.qml",
@@ -123,6 +127,10 @@
         {
           "path": "fuel/lyrics.qml",
           "bytes": 13136
+        },
+        {
+          "path": "fuel/mica.qml",
+          "bytes": 3604
         },
         {
           "path": "fuel/mist.frag",
@@ -164,11 +172,11 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26364390,
+      "bytes": 26370750,
       "files": [
         {
           "path": "guts/bar.qml",
-          "bytes": 24756
+          "bytes": 26366
         },
         {
           "path": "guts/cava.conf",
@@ -176,7 +184,7 @@
         },
         {
           "path": "guts/cava.qml",
-          "bytes": 9995
+          "bytes": 10402
         },
         {
           "path": "guts/clock.qml",
@@ -197,6 +205,10 @@
         {
           "path": "guts/lyrics.qml",
           "bytes": 10176
+        },
+        {
+          "path": "guts/mica.qml",
+          "bytes": 4343
         },
         {
           "path": "guts/notif.qml",
@@ -238,7 +250,7 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/lonely-train.jpg",
-      "bytes": 29012033,
+      "bytes": 29016065,
       "files": [
         {
           "path": "lonely-train/bar.qml",
@@ -250,7 +262,7 @@
         },
         {
           "path": "lonely-train/cava.qml",
-          "bytes": 12478
+          "bytes": 12778
         },
         {
           "path": "lonely-train/clock.qml",
@@ -271,6 +283,10 @@
         {
           "path": "lonely-train/lyrics.qml",
           "bytes": 9193
+        },
+        {
+          "path": "lonely-train/mica.qml",
+          "bytes": 3732
         },
         {
           "path": "lonely-train/notif.qml",
@@ -312,7 +328,7 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/moon.jpg",
-      "bytes": 44061356,
+      "bytes": 44065631,
       "files": [
         {
           "path": "moon/LYRICS-NOTES.md",
@@ -328,7 +344,7 @@
         },
         {
           "path": "moon/cava.qml",
-          "bytes": 10887
+          "bytes": 11294
         },
         {
           "path": "moon/clock.qml",
@@ -349,6 +365,10 @@
         {
           "path": "moon/lyrics.qml",
           "bytes": 12225
+        },
+        {
+          "path": "moon/mica.qml",
+          "bytes": 3664
         },
         {
           "path": "moon/notif.qml",
@@ -372,7 +392,7 @@
         },
         {
           "path": "moon/sysinfo.qml",
-          "bytes": 24122
+          "bytes": 24326
         },
         {
           "path": "moon/wallpaper.jpg",
@@ -400,11 +420,11 @@
       "video": true,
       "variants": 3,
       "thumb": ".catalog/thumbs/nature.jpg",
-      "bytes": 42445260,
+      "bytes": 42448893,
       "files": [
         {
           "path": "nature/bar.qml",
-          "bytes": 30227
+          "bytes": 30324
         },
         {
           "path": "nature/cava.conf",
@@ -412,7 +432,7 @@
         },
         {
           "path": "nature/cava.qml",
-          "bytes": 9511
+          "bytes": 9918
         },
         {
           "path": "nature/clock.qml",
@@ -441,6 +461,10 @@
         {
           "path": "nature/lyrics.qml",
           "bytes": 13486
+        },
+        {
+          "path": "nature/mica.qml",
+          "bytes": 3129
         },
         {
           "path": "nature/notif.qml",
@@ -482,11 +506,11 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sailing.jpg",
-      "bytes": 21544927,
+      "bytes": 21548005,
       "files": [
         {
           "path": "sailing/bar.qml",
-          "bytes": 18815
+          "bytes": 20280
         },
         {
           "path": "sailing/cava.conf",
@@ -494,7 +518,7 @@
         },
         {
           "path": "sailing/cava.qml",
-          "bytes": 7271
+          "bytes": 7678
         },
         {
           "path": "sailing/clock.qml",
@@ -515,6 +539,10 @@
         {
           "path": "sailing/lyrics.qml",
           "bytes": 11004
+        },
+        {
+          "path": "sailing/mica.qml",
+          "bytes": 1206
         },
         {
           "path": "sailing/notif.qml",
@@ -556,11 +584,11 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26722250,
+      "bytes": 26726122,
       "files": [
         {
           "path": "shiro/bar.qml",
-          "bytes": 20498
+          "bytes": 20644
         },
         {
           "path": "shiro/cava.conf",
@@ -568,7 +596,7 @@
         },
         {
           "path": "shiro/cava.qml",
-          "bytes": 10409
+          "bytes": 10816
         },
         {
           "path": "shiro/clock.qml",
@@ -589,6 +617,10 @@
         {
           "path": "shiro/lyrics.qml",
           "bytes": 9651
+        },
+        {
+          "path": "shiro/mica.qml",
+          "bytes": 3319
         },
         {
           "path": "shiro/notif.qml",
@@ -634,11 +666,11 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stars.jpg",
-      "bytes": 23315207,
+      "bytes": 23324946,
       "files": [
         {
           "path": "stars/bar.qml",
-          "bytes": 27248
+          "bytes": 28798
         },
         {
           "path": "stars/cava.conf",
@@ -646,7 +678,7 @@
         },
         {
           "path": "stars/cava.qml",
-          "bytes": 6949
+          "bytes": 10212
         },
         {
           "path": "stars/clock.qml",
@@ -667,6 +699,10 @@
         {
           "path": "stars/lyrics.qml",
           "bytes": 15726
+        },
+        {
+          "path": "stars/mica.qml",
+          "bytes": 4926
         },
         {
           "path": "stars/nebula.frag",
@@ -708,7 +744,7 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/vinland.jpg",
-      "bytes": 3238459,
+      "bytes": 3243364,
       "files": [
         {
           "path": "vinland/aurora.frag",
@@ -720,7 +756,7 @@
         },
         {
           "path": "vinland/bar.qml",
-          "bytes": 22739
+          "bytes": 22885
         },
         {
           "path": "vinland/cava.conf",
@@ -728,7 +764,7 @@
         },
         {
           "path": "vinland/cava.qml",
-          "bytes": 6799
+          "bytes": 7206
         },
         {
           "path": "vinland/clock.qml",
@@ -751,6 +787,10 @@
           "bytes": 11861
         },
         {
+          "path": "vinland/mica.qml",
+          "bytes": 4148
+        },
+        {
           "path": "vinland/notif.qml",
           "bytes": 3985
         },
@@ -760,7 +800,7 @@
         },
         {
           "path": "vinland/sysinfo.qml",
-          "bytes": 9622
+          "bytes": 9826
         },
         {
           "path": "vinland/wallpaper.mp4",

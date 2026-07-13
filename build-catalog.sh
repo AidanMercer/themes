@@ -88,4 +88,4 @@ printf '%s\n' "${theme_objs[@]}" | jq -s \
   --arg repo "$REPO" --arg branch "$BRANCH" --arg commit "$(git rev-parse --short HEAD)" \
   '{repo:$repo, branch:$branch, commit:$commit, themes:(.|sort_by(.name))}' > index.json
 
-echo "wrote index.json ($(jq '.themes|length' index.json) themes) + $THUMBS/*.webp" >&2
+echo "wrote index.json ($(jq '.themes|length' index.json) themes) + $THUMBS/*.jpg" >&2

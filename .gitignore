@@ -9,3 +9,7 @@ preview.png
 
 # over github's 100MB hard limit, has to stay local (176M)
 moon/wallpaper2.mp4
+
+# stamped by theme-install.sh into marketplace-installed themes (the catalog
+# commit at install time) — a local install artifact, not theme content
+.mkt-version
