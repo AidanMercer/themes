@@ -1,5 +1,6 @@
 # bar style for the moon theme
 bubbles = true
+bar_position = "top"
 
 # ── cyberpunk palette ───────────────────────────────────────────────
 # accent colors for moon's custom widgets (clock, cava, bar, sysinfo, lyrics) —
@@ -15,6 +16,11 @@ accent_dim  = "#7c7a3a"   # muted trace — dividers, ghosts
 # theme-colors.sh, which builds the kitty/fuzzel/hyprlock palettes on switch.
 bg          = "#0a0a12"   # near-black background
 fg          = "#d8ecff"   # cool white text
+
+# shell chrome base (was inherited from default — pinned so moon is
+# self-contained; same values, no visual change)
+text  = "#e6e6f0"
+glass = "#0f0f14"
 hue_green   = "#00e5a0"   # cyber teal-green
 hue_blue    = "#2d8cff"   # electric blue
 
