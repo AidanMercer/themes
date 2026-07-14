@@ -31,6 +31,82 @@ Item {
     property int cardRadius: 6
     property bool cardSpine: false   // the morse spine below replaces it
 
+    // notification center: the wireless room's message spike — cabin-dark
+    // board, dashed telegram frame, a morse call sign under the header and
+    // the RECD stamp pressed at the foot
+    property color panelBg: Qt.rgba(glass.r, glass.g, glass.b, 0.96)
+    property color panelBorder: paleA(0.22)
+    property int panelBorderWidth: 1
+    property int panelRadius: 8
+    property string panelTitle: "Radio log"
+    property Component panelBackdrop: Component {
+        Item {
+            id: cabin
+            property var panel: null
+
+            Canvas {
+                id: pframe
+                anchors.fill: parent
+                anchors.margins: 5
+                onWidthChanged: requestPaint()
+                onHeightChanged: requestPaint()
+                Connections {
+                    target: root.pal
+                    function onCyanChanged() { pframe.requestPaint() }
+                }
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.strokeStyle = root.duskA(0.30)
+                    ctx.lineWidth = 1
+                    ctx.setLineDash([4, 3])
+                    ctx.strokeRect(0.5, 0.5, width - 1, height - 1)
+                }
+            }
+
+            // call sign in morse, running under the header
+            Row {
+                anchors { top: parent.top; left: parent.left; topMargin: 46; leftMargin: 18 }
+                spacing: 4
+                Repeater {
+                    model: [3, 9, 3, 3, 9, 9, 3]
+                    Rectangle {
+                        required property int modelData
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: modelData
+                        height: 2.5
+                        radius: 1
+                        color: cabin.panel && cabin.panel.dnd ? root.slate : root.buoy
+                        opacity: 0.8
+                    }
+                }
+            }
+
+            Item {
+                anchors { right: parent.right; bottom: parent.bottom; margins: 10 }
+                width: 34; height: 34
+                rotation: -14
+                opacity: 0.30
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 17
+                    color: "transparent"
+                    border.width: 1.4
+                    border.color: root.dusk
+                }
+                Text {
+                    anchors.centerIn: parent
+                    text: "RECD"
+                    color: root.dusk
+                    font.family: root.pal.fontMono
+                    font.pixelSize: 8
+                    font.letterSpacing: 1
+                }
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

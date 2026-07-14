@@ -20,6 +20,79 @@ Item {
     property int cardRadius: 0
     property bool cardSpine: false               // the splash replaces it
 
+    // notification center: the full manga page the panels are pasted onto —
+    // hand-ruled double frame, screentone up the top-right, page number
+    property color panelBg: Qt.rgba(paper.r, paper.g, paper.b, 0.98)
+    property color panelBorder: "transparent"    // the backdrop rules this frame too
+    property int panelBorderWidth: 0
+    property int panelRadius: 0
+    property string panelTitle: "Dispatches"
+    property Component panelBackdrop: Component {
+        Item {
+            id: page
+            property var panel: null
+
+            Canvas {
+                id: pcv
+                anchors.fill: parent
+                onWidthChanged: requestPaint()
+                onHeightChanged: requestPaint()
+                Connections {
+                    target: root.pal
+                    function onTextChanged() { pcv.requestPaint() }
+                }
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    const w = width, h = height
+                    if (w <= 0 || h <= 0) return
+
+                    // hand-ruled outer frame, same waver as the cards
+                    ctx.strokeStyle = root.inkA(0.9)
+                    ctx.lineWidth = 2.5
+                    ctx.lineJoin = "round"
+                    ctx.beginPath()
+                    ctx.moveTo(1.5, 1.5)
+                    for (let x = 1.5; x < w; x += 11) ctx.lineTo(x, 1.5 + Math.sin(x * 0.07) * 1.1)
+                    ctx.lineTo(w - 1.5, 1.5)
+                    for (let y = 1.5; y < h; y += 11) ctx.lineTo(w - 1.5 + Math.sin(y * 0.08) * 1.1, y)
+                    ctx.lineTo(w - 1.5, h - 1.5)
+                    for (let x = w - 1.5; x > 1.5; x -= 11) ctx.lineTo(x, h - 1.5 + Math.sin(x * 0.06) * 1.1)
+                    ctx.lineTo(1.5, h - 1.5)
+                    ctx.closePath()
+                    ctx.stroke()
+                    // thin inner rule
+                    ctx.strokeStyle = root.inkA(0.35)
+                    ctx.lineWidth = 1
+                    ctx.strokeRect(6.5, 6.5, w - 13, h - 13)
+
+                    // screentone wedge, top-right (clear of the cards' torn corners)
+                    ctx.fillStyle = root.inkA(0.10)
+                    const rad = Math.min(w, h) * 0.30
+                    for (let gy = 9; gy < rad; gy += 6) {
+                        for (let gx = w - 9; gx > w - rad; gx -= 6) {
+                            const dd = Math.hypot(w - gx, gy) / rad
+                            if (dd > 1) continue
+                            ctx.beginPath()
+                            ctx.arc(gx + ((gy / 6) % 2 ? 3 : 0), gy, 1.3 * (1 - dd), 0, Math.PI * 2)
+                            ctx.fill()
+                        }
+                    }
+                }
+            }
+
+            // page number, bottom-center, like a tankōbon leaf
+            Text {
+                anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter; bottomMargin: 8 }
+                text: "— " + (page.panel ? page.panel.count : 0) + " —"
+                color: root.inkA(0.45)
+                font.family: root.pal.fontMono
+                font.pixelSize: 8
+                font.letterSpacing: 2
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

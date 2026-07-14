@@ -17,6 +17,69 @@ Item {
     property int cardRadius: 9
     property bool cardSpine: false   // the route spine below replaces it
 
+    // notification center: the platform notice board — night glass, amber
+    // sign band across the top, a full route line running down the left
+    // margin between the placards, roundel at the foot
+    property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
+    property color panelBorder: inkA(0.16)
+    property int panelBorderWidth: 1
+    property int panelRadius: 11
+    property string panelTitle: "Service notices"
+    property Component panelBackdrop: Component {
+        Item {
+            id: board
+            property var panel: null
+
+            Rectangle {
+                anchors { top: parent.top; left: parent.left; right: parent.right; margins: 1 }
+                height: 3
+                radius: 1.5
+                color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b,
+                               board.panel && board.panel.dnd ? 0.35 : 0.8)
+            }
+
+            // route line down the left margin, stops spaced out along it
+            Item {
+                anchors { left: parent.left; top: parent.top; bottom: parent.bottom; leftMargin: 4; topMargin: 54; bottomMargin: 26 }
+                width: 6
+                Rectangle {
+                    anchors { horizontalCenter: parent.horizontalCenter; top: parent.top; bottom: parent.bottom }
+                    width: 1.5
+                    color: root.inkA(0.14)
+                }
+                Column {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 34
+                    Repeater {
+                        model: 6
+                        Rectangle {
+                            width: 4; height: 4; radius: 2
+                            color: "transparent"
+                            border.width: 1
+                            border.color: root.inkA(0.3)
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                anchors { right: parent.right; bottom: parent.bottom; margins: 9 }
+                width: 15; height: 15; radius: 7.5
+                color: "transparent"
+                border.width: 1.2
+                border.color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.5)
+                Text {
+                    anchors.centerIn: parent
+                    text: "LT"
+                    color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.6)
+                    font.family: root.pal.fontMono
+                    font.pixelSize: 6
+                    font.weight: Font.Black
+                }
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

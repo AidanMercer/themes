@@ -20,6 +20,66 @@ Item {
     property int cardRadius: 9
     property bool cardSpine: false   // the ticket stub below replaces it
 
+    // notification center: the vending machine's lit window — night glass
+    // with a slate frame, a row of bottle-lights across the top (dimmed to
+    // embers while DND holds), and a punched star at the foot
+    property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
+    property color panelBorder: slateA(0.75)
+    property int panelBorderWidth: 1
+    property int panelRadius: 11
+    property string panelTitle: "The window"
+    property Component panelBackdrop: Component {
+        Item {
+            id: machine
+            property var panel: null
+            readonly property bool quiet: panel ? panel.dnd : false
+
+            // bottle-lights at the foot, opposite the punched star
+            Row {
+                anchors { bottom: parent.bottom; left: parent.left; bottomMargin: 7; leftMargin: 16 }
+                spacing: 9
+                Repeater {
+                    model: 3
+                    Item {
+                        required property int index
+                        width: 5; height: 9
+                        opacity: machine.quiet ? 0.35 : 0.55 + index * 0.15
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: 0
+                            width: 2.5; height: 1.5; radius: 0.5
+                            color: root.pal.neon
+                        }
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            y: 1.5
+                            width: 5; height: 7.5; radius: 2
+                            color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.9)
+                        }
+                    }
+                }
+            }
+
+            // light pooled in from the top of the window
+            Rectangle {
+                anchors { top: parent.top; left: parent.left; right: parent.right; margins: 1 }
+                height: Math.min(46, parent.height * 0.2)
+                radius: 10
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, machine.quiet ? 0.04 : 0.09) }
+                    GradientStop { position: 1.0; color: "transparent" }
+                }
+            }
+
+            Text {
+                anchors { right: parent.right; bottom: parent.bottom; rightMargin: 10; bottomMargin: 7 }
+                text: "✧"
+                font.pixelSize: 11
+                color: root.inkA(0.32)
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

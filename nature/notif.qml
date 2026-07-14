@@ -29,6 +29,70 @@ Item {
     property int cardRadius: Math.round(12 * pal.uiScale)
     property bool cardSpine: false   // the stalk below replaces it
 
+    // notification center: the flower press itself — evening paper with a
+    // deckle double edge, sun catching the top of the page, one pressed
+    // daisy in the foot corner keeping gold
+    property color panelBg: Qt.rgba(paper.r, paper.g, paper.b, 0.96)
+    property color panelBorder: creamA(0.24)
+    property int panelBorderWidth: 1
+    property int panelRadius: 14
+    property string panelTitle: "Field notes"
+    property Component panelBackdrop: Component {
+        Item {
+            property var panel: null
+
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 5
+                radius: 10
+                color: "transparent"
+                border.width: 1
+                border.color: root.creamA(0.10)
+            }
+
+            Rectangle {
+                anchors { top: parent.top; left: parent.left; right: parent.right }
+                height: 26
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.06) }
+                    GradientStop { position: 1.0; color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0) }
+                }
+            }
+
+            Canvas {
+                id: pressDaisy
+                width: 30; height: 30
+                anchors { right: parent.right; bottom: parent.bottom; margins: 10 }
+                opacity: 0.55
+                Connections {
+                    target: root.pal
+                    function onNeonChanged() { pressDaisy.requestPaint() }
+                }
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    const c = width / 2, pr = width * 0.3
+                    const t = root.pal.neon
+                    ctx.fillStyle = Qt.rgba(t.r, t.g, t.b, 0.45)
+                    for (let i = 0; i < 5; i++) {
+                        const a = -Math.PI / 2 + 0.3 + i * Math.PI * 2 / 5
+                        ctx.save()
+                        ctx.translate(c + Math.cos(a) * pr * 0.8, c + Math.sin(a) * pr * 0.8)
+                        ctx.rotate(a + Math.PI / 2)
+                        ctx.beginPath()
+                        ctx.ellipse(-pr * 0.34, -pr * 0.8, pr * 0.68, pr * 1.6)
+                        ctx.fill()
+                        ctx.restore()
+                    }
+                    ctx.beginPath()
+                    ctx.arc(c, c, pr * 0.34, 0, Math.PI * 2)
+                    ctx.fillStyle = root.creamA(0.6)
+                    ctx.fill()
+                }
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

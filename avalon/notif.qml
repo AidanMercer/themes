@@ -15,6 +15,58 @@ Item {
     property int cardRadius: 12
     property bool cardSpine: false   // the stem below replaces it
 
+    // notification center: moss glass sheet with a gold inner hairline and a
+    // scatter of petals drifting from the top-right corner
+    property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.94)
+    property color panelBorder: goldA(0.35)
+    property int panelBorderWidth: 1
+    property int panelRadius: 14
+    property string panelTitle: "Missives"
+    property Component panelBackdrop: Component {
+        Item {
+            property var panel: null
+
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 5
+                radius: 10
+                color: "transparent"
+                border.width: 1
+                border.color: root.goldA(0.16)
+            }
+
+            // petals settled near the top-right, out of the header's way
+            Repeater {
+                model: [
+                    { px: 0.86, py: 0.055, r: 35,  s: 1.0,  o: 0.50 },
+                    { px: 0.93, py: 0.085, r: 120, s: 0.75, o: 0.38 },
+                    { px: 0.80, py: 0.100, r: 210, s: 0.6,  o: 0.28 }
+                ]
+                Rectangle {
+                    required property var modelData
+                    x: parent.width * modelData.px
+                    y: parent.height * modelData.py
+                    width: 9 * modelData.s; height: 5 * modelData.s
+                    radius: height / 2
+                    rotation: modelData.r
+                    color: root.pal.neon
+                    opacity: modelData.o
+                }
+            }
+
+            // gold diamond seal at the foot, echoing the cards
+            Rectangle {
+                anchors { right: parent.right; bottom: parent.bottom; margins: 11 }
+                width: 8; height: 8
+                rotation: 45
+                color: "transparent"
+                border.width: 1
+                border.color: root.pal.cyan
+                opacity: 0.45
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

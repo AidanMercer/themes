@@ -9,9 +9,76 @@ Item {
 
     property color cardBg: Qt.rgba(0.03, 0.03, 0.06, 0.92)
     property color cardBorder: Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, 0.35)
-    property int cardBorderWidth: 1
     property int cardRadius: 0
+    property int cardBorderWidth: 1
     property bool cardSpine: false   // the data-rail below replaces it
+
+    // notification center: the breach-deck log — darker slab, neon top rail
+    // with a live tick, brackets on the panel corners, same scanline wash
+    property color panelBg: Qt.rgba(0.02, 0.02, 0.045, 0.96)
+    property color panelBorder: Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, 0.45)
+    property int panelBorderWidth: 1
+    property int panelRadius: 0
+    property string panelTitle: "COMMS LOG"
+    property Component panelBackdrop: Component {
+        Item {
+            id: deck
+            property var panel: null
+            readonly property color live: panel && panel.dnd ? root.pal.magenta : root.pal.neon
+
+            // top rail: hairline + a pulsing status block (magenta when muted)
+            Rectangle {
+                anchors { top: parent.top; left: parent.left; right: parent.right; margins: 6 }
+                height: 2
+                color: deck.live
+                opacity: 0.7
+            }
+            Rectangle {
+                id: tick
+                anchors { top: parent.top; right: parent.right; topMargin: 12; rightMargin: 14 }
+                width: 6; height: 6
+                color: deck.live
+                SequentialAnimation on opacity {
+                    running: true
+                    loops: Animation.Infinite
+                    NumberAnimation { from: 1; to: 0.25; duration: 900 }
+                    NumberAnimation { from: 0.25; to: 1; duration: 900 }
+                }
+            }
+
+            Item {
+                x: -1; y: -1
+                width: 18; height: 18
+                Rectangle { width: parent.width; height: 2; color: root.pal.neon }
+                Rectangle { width: 2; height: parent.height; color: root.pal.neon }
+            }
+            Item {
+                x: parent.width - 17; y: parent.height - 17
+                width: 18; height: 18
+                Rectangle { y: parent.height - 2; width: parent.width; height: 2; color: root.pal.neon }
+                Rectangle { x: parent.width - 2; width: 2; height: parent.height; color: root.pal.neon }
+            }
+
+            Canvas {
+                anchors.fill: parent
+                opacity: 0.10
+                onWidthChanged: requestPaint()
+                onHeightChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.strokeStyle = "#000000"
+                    ctx.lineWidth = 1
+                    for (let y = 0; y < height; y += 3) {
+                        ctx.beginPath()
+                        ctx.moveTo(0, y + 0.5)
+                        ctx.lineTo(width, y + 0.5)
+                        ctx.stroke()
+                    }
+                }
+            }
+        }
+    }
 
     property Component backdrop: Component {
         Item {

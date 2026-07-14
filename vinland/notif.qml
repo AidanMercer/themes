@@ -17,6 +17,82 @@ Item {
     property int cardRadius: 10
     property bool cardSpine: false   // the stave below replaces it
 
+    // notification center: a night-glass stave board — carved top border of
+    // twig runes, the north star holding the corner, frost creeping at the foot
+    property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.95)
+    property color panelBorder: iceA(0.34)
+    property int panelBorderWidth: 1
+    property int panelRadius: 12
+    property string panelTitle: "Tidings"
+    property Component panelBackdrop: Component {
+        Item {
+            property var panel: null
+
+            // carved rune row along the top edge, under the header text
+            Canvas {
+                anchors { top: parent.top; left: parent.left; right: parent.right; margins: 7 }
+                height: 10
+                opacity: 0.5
+                onWidthChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    ctx.strokeStyle = root.iceA(0.8)
+                    ctx.lineWidth = 1
+                    ctx.beginPath()
+                    ctx.moveTo(0, 9.5)
+                    ctx.lineTo(width, 9.5)
+                    ctx.stroke()
+                    let side = 1
+                    for (let x = 10; x < width - 10; x += 16) {
+                        ctx.beginPath()
+                        ctx.moveTo(x, 9)
+                        ctx.lineTo(x + side * 4, 2)
+                        ctx.stroke()
+                        side = -side
+                    }
+                }
+            }
+
+            // the north star, top-right corner
+            Canvas {
+                id: pole
+                anchors { top: parent.top; right: parent.right; topMargin: 22; rightMargin: 14 }
+                width: 13; height: 13
+                opacity: 0.75
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    const c = width / 2, R = width / 2
+                    ctx.beginPath()
+                    ctx.moveTo(c, c - R)
+                    ctx.quadraticCurveTo(c, c, c + R, c)
+                    ctx.quadraticCurveTo(c, c, c, c + R)
+                    ctx.quadraticCurveTo(c, c, c - R, c)
+                    ctx.quadraticCurveTo(c, c, c, c - R)
+                    ctx.closePath()
+                    ctx.fillStyle = root.goldA(0.9)
+                    ctx.fill()
+                }
+                Connections {
+                    target: root.pal
+                    function onCyanChanged() { pole.requestPaint() }
+                }
+            }
+
+            // frost mist along the foot
+            Rectangle {
+                anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+                height: parent.height * 0.16
+                radius: 12
+                gradient: Gradient {
+                    GradientStop { position: 0; color: "transparent" }
+                    GradientStop { position: 1; color: root.iceA(0.10) }
+                }
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

@@ -19,6 +19,41 @@ Item {
     property int cardRadius: 5
     property bool cardSpine: false   // the brush stroke below replaces it
 
+    // notification center: a taller sheet of the same washi — binding thread
+    // stitched down the left margin, one big hanko pressed at the foot
+    property color panelBg: Qt.rgba(paper.r, paper.g, paper.b, 0.97)
+    property color panelBorder: Qt.rgba(pal.text.r, pal.text.g, pal.text.b, 0.20)
+    property int panelBorderWidth: 1
+    property int panelRadius: 5
+    property string panelTitle: "Letters"
+    property Component panelBackdrop: Component {
+        Item {
+            property var panel: null
+
+            Column {
+                anchors { top: parent.top; bottom: parent.bottom; left: parent.left; leftMargin: 6; topMargin: 16; bottomMargin: 16 }
+                spacing: 14
+                Repeater {
+                    model: Math.max(0, Math.floor((parent.height + 14) / 22))
+                    Rectangle {
+                        width: 2; height: 8; radius: 1
+                        color: Qt.rgba(root.pal.text.r, root.pal.text.g, root.pal.text.b, 0.18)
+                    }
+                }
+            }
+
+            Rectangle {
+                anchors { right: parent.right; bottom: parent.bottom; margins: 10 }
+                width: 15; height: 15; radius: 3
+                color: "transparent"
+                border.width: 1
+                border.color: root.pal.cyan
+                opacity: 0.4
+                Rectangle { anchors.centerIn: parent; width: 5; height: 5; radius: 1; color: root.pal.cyan }
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis

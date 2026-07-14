@@ -19,6 +19,60 @@ Item {
 
     function inkA(a) { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
 
+    // notification center: the pump's printer housing — dark casing with the
+    // three-stripe livery under the header and a printer slot the tickets
+    // hang out of; receipts (the cards) stack straight off the roll
+    property color panelBg: Qt.rgba(0.05, 0.055, 0.07, 0.96)
+    property color panelBorder: inkA(0.22)
+    property int panelBorderWidth: 1
+    property int panelRadius: 4
+    property string panelTitle: "Station log"
+    property Component panelBackdrop: Component {
+        Item {
+            id: housing
+            property var panel: null
+
+            // livery stripes under the header, full width
+            Column {
+                anchors { top: parent.top; left: parent.left; right: parent.right; topMargin: 46; leftMargin: 6; rightMargin: 6 }
+                spacing: 1
+                Rectangle { width: parent.width; height: 1.5; color: root.pal.amber; opacity: 0.55 }
+                Rectangle { width: parent.width; height: 2.5; color: root.pal.neon; opacity: 0.8 }
+                Rectangle { width: parent.width; height: 1.5; color: root.pal.magenta; opacity: 0.40 }
+            }
+
+            // printer slot: a dark mouth with a highlight lip
+            Rectangle {
+                anchors { top: parent.top; horizontalCenter: parent.horizontalCenter; topMargin: 41 }
+                width: parent.width - 60
+                height: 3
+                radius: 1.5
+                color: "#000000"
+                opacity: 0.8
+            }
+
+            // pump badge at the foot
+            Row {
+                anchors { right: parent.right; bottom: parent.bottom; rightMargin: 12; bottomMargin: 9 }
+                spacing: 5
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 4; height: 4; rotation: 45
+                    color: root.pal.neon
+                    opacity: 0.7
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "FUEL · PUMP 07 · ROLL"
+                    color: root.inkA(0.30)
+                    font.family: root.pal.fontMono
+                    font.pixelSize: 7
+                    font.letterSpacing: 2
+                }
+            }
+        }
+    }
+
     property Component backdrop: Component {
         Item {
             id: chassis
