@@ -13,6 +13,13 @@ import QtQuick
 // crosses the chart and the old constellation dims back to faint stars
 // until the next line is drawn. Adlibs float as small coral star-clusters
 // without hairlines. Click-through scenery.
+//
+// Staging: a CHORUS is a whole-sky moment — the line charts larger and higher,
+// up into the star field, hairlines burning brighter, a shooting star greeting
+// its first line. The whole chart breathes on the kick drum. Instrumental
+// breaks bring a sparse meteor shower, and three stars go out one by one as a
+// countdown to the next verse. The lit starlight is graded toward each song's
+// album art.
 Item {
     id: root
     anchors.fill: parent
@@ -28,6 +35,19 @@ Item {
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
+
+    // the lit starlight takes each song's own hue (fail-open: identity until
+    // the album-art palette lands; the touches re-evaluate the binding then)
+    readonly property color amberLive: (engine.trackPaletteReady, engine.trackVivid,
+                                        engine.trackTint(amber, 0.30))
+
+    // whole-sky staging: the chorus charts bigger, up into the star field
+    readonly property bool skywide: engine.inChorus
+    readonly property real stageK: skywide ? 1.22 : 1
+
+    // the chart breathes on the kick drum
+    property real beatKick: 0
+    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 160; easing.type: Easing.OutQuad }
 
     // ---- chart geometry ----------------------------------------------------
     readonly property real lyricSize: Math.round(30 * pal.uiScale)
@@ -51,12 +71,19 @@ Item {
 
     // layout: words strung left→right along a sagging wire of stars, wrapping
     // to further rows; every row is centered and dips through its middle.
-    // returns [{x,y,size}] in box coordinates, seeded per line.
-    function chart(seedIdx, toks) {
+    // returns [{x,y,size}] in box coordinates, seeded per line. A chorus line
+    // (`big`) charts scaled up across a wider box — the region bindings move
+    // it up into the sky at the same moment, hidden by the line-change cut.
+    function chart(seedIdx, toks, big) {
         const n = toks.length
         if (n === 0) return []
         const r = rng32((seedIdx + 1) * 2654435761)
-        const gap = charW * 1.1
+        const sz = lyricSize * (big ? 1.22 : 1)
+        const cw = sz * 0.60
+        const bw = big ? Math.round(root.width * 0.72) : boxW
+        const rH = sz * 2.15
+        const sg = sz * 0.85
+        const gap = cw * 1.1
         // first pass: assign words to rows
         const rows = []
         let cur = [], curW = 0
@@ -64,8 +91,8 @@ Item {
             const f = toks[i].bg ? 0.62 : 1.0
             // adlibs render wrapped in their parens — width includes them
             const chars = toks[i].text.length + (toks[i].bg ? 2 : 0)
-            const wPx = Math.max(1, chars) * charW * f
-            if (curW > 0 && curW + gap + wPx > boxW) {
+            const wPx = Math.max(1, chars) * cw * f
+            if (curW > 0 && curW + gap + wPx > bw) {
                 rows.push({ words: cur, w: curW })
                 cur = []; curW = 0
             }
@@ -77,16 +104,16 @@ Item {
         const out = new Array(n)
         for (let ri = 0; ri < rows.length; ri++) {
             const row = rows[ri]
-            let x = (boxW - row.w) / 2
+            let x = (bw - row.w) / 2
             for (let k = 0; k < row.words.length; k++) {
                 const wd = row.words[k]
-                const t = boxW > 0 ? (x + wd.w / 2) / boxW : 0.5
-                const dip = sag * (1 - (2 * t - 1) * (2 * t - 1))
-                const jit = (r() - 0.5) * lyricSize * 0.55
+                const t = bw > 0 ? (x + wd.w / 2) / bw : 0.5
+                const dip = sg * (1 - (2 * t - 1) * (2 * t - 1))
+                const jit = (r() - 0.5) * sz * 0.55
                 out[wd.i] = {
                     x: x,
-                    y: ri * rowH + dip + jit,
-                    size: lyricSize * wd.f * (0.94 + r() * 0.12)
+                    y: ri * rH + dip + jit,
+                    size: sz * wd.f * (0.94 + r() * 0.12)
                 }
                 x += wd.w + gap
             }
@@ -95,7 +122,7 @@ Item {
     }
 
     readonly property var curLayout:
-        chart(engine.activeIndex, engine.tokens)
+        chart(engine.activeIndex, engine.tokens, engine.inChorus)
 
     // per-line star jitter seeds (one rng stream per line for letter stars)
     readonly property int lineSeed: (engine.activeIndex + 1) * 40503
@@ -110,9 +137,17 @@ Item {
     Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
     Connections {
         target: root.engine
-        function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
+        function onActiveIndexChanged() {
+            root.gate = false; gateCut.restart()
+            // a shooting star greets the chorus as its first line is charted
+            if (root.engine.inChorus && !root.wasChorus) streakAnim.restart()
+            root.wasChorus = root.engine.inChorus
+        }
         function onOffsetNudged() { offsetOsd.flash() }
+        // quantized: the chart's breath lands on the kick drum
+        function onBeat() { if (root.gate && !root.lineExpired && root.engine.tokens.length > 0) beatKickAnim.restart() }
     }
+    property bool wasChorus: false
 
     // the line-complete shooting star
     property real streakT: -1
@@ -126,10 +161,15 @@ Item {
     // ---- the chart ----------------------------------------------------------
     Item {
         id: region
-        x: root.boxX
-        y: root.boxY
-        width: root.boxW
+        // the chorus charts up into the star field, wider; verses stay over the
+        // sea band. The jump happens under the line-change cut.
+        x: root.skywide ? Math.round((root.width - width) / 2) : root.boxX
+        y: root.skywide ? Math.round(root.height * 0.42) : root.boxY
+        width: root.skywide ? Math.round(root.width * 0.72) : root.boxW
         height: root.rowH * 3 + root.sag
+        // the whole chart breathes on the kick drum
+        scale: 1 + root.beatKick * 0.012
+        transformOrigin: Item.Center
 
         Repeater {
             model: root.engine.tokens
@@ -146,6 +186,7 @@ Item {
                 readonly property var p: root.curLayout[index] ? root.curLayout[index]
                                        : ({ x: 0, y: 0, size: root.lyricSize })
                 readonly property real cw: p.size * 0.60
+                readonly property real wh: root.wordH * root.stageK
                 readonly property real fillW: Math.max(0, Math.min(1, st.fill)) * width
 
                 // deterministic star spots, one per letter
@@ -155,7 +196,7 @@ Item {
                     for (let j = 0; j < nCh; j++) {
                         a.push({
                             x: j * cw + cw * (0.25 + r() * 0.5),
-                            y: root.wordH * (0.12 + r() * 0.72),
+                            y: wd.wh * (0.12 + r() * 0.72),
                             big: r() < 0.3
                         })
                     }
@@ -165,7 +206,7 @@ Item {
                 x: wd.p.x
                 y: wd.p.y
                 width: nCh * cw
-                height: root.wordH
+                height: wd.wh
 
                 visible: root.gate && root.engine.tokens.length > 0
                 opacity: root.lineExpired ? 0.22 : 1
@@ -231,15 +272,23 @@ Item {
                         width: wd.width
                         height: wd.height
                         onPaint: paintLit()
+                        // graded starlight; chorus hairlines burn brighter. Both
+                        // read at paint time only — delegates recreate per line,
+                        // so no new per-frame repaint triggers.
                         function paintLit() {
                             wd.paintStars(getContext("2d"),
-                                          String(wd.bg ? root.coral : root.amber),
-                                          0.95, wd.bg ? 0 : 0.5)
+                                          String(wd.bg ? root.coral : root.amberLive),
+                                          0.95, wd.bg ? 0 : (root.skywide ? 0.75 : 0.5))
                         }
                         Connections {
                             target: root.pal
                             function onNeonChanged() { litStars.requestPaint() }
                             function onCyanChanged() { litStars.requestPaint() }
+                        }
+                        // the album-art palette can land mid-line
+                        Connections {
+                            target: root.engine
+                            function onTrackVividChanged() { litStars.requestPaint() }
                         }
                         Component.onCompleted: requestPaint()
                     }
@@ -252,7 +301,7 @@ Item {
                         id: ch
                         required property int index
                         readonly property bool lit: wd.st.fill * wd.nCh >= index + 0.5
-                        readonly property real restY: (root.wordH - wd.p.size * 1.25) / 2
+                        readonly property real restY: (wd.wh - wd.p.size * 1.25) / 2
                         x: index * wd.cw
                         y: lit ? restY : (wd.stars[index] ? wd.stars[index].y - wd.p.size * 0.6 : restY)
                         text: wd.word.charAt(index)
@@ -335,6 +384,70 @@ Item {
             styleColor: Qt.rgba(0, 0, 0, 0.55)
             Behavior on opacity { NumberAnimation { duration: 160 } }
             Timer { id: osdHide; interval: 1200; onTriggered: offsetOsd.opacity = 0 }
+        }
+
+        // three stars go out one by one — the next verse is almost charted
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: -root.lyricSize * 1.1
+            spacing: Math.round(root.lyricSize * 0.5)
+            visible: root.countdownOn
+            Repeater {
+                model: 3
+                Text {
+                    required property int index
+                    readonly property bool lit: Math.ceil(root.engine.nextLineInMs / 1067) > index
+                    text: "✦"
+                    textFormat: Text.PlainText
+                    color: root.amberLive
+                    opacity: lit ? 0.9 : 0.12
+                    scale: lit ? 1 : 0.7
+                    font.pixelSize: Math.round(root.lyricSize * 0.5)
+                    style: Text.Outline
+                    styleColor: Qt.rgba(0, 0, 0, 0.5)
+                    Behavior on opacity { NumberAnimation { duration: 220 } }
+                    Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutQuad } }
+                }
+            }
+        }
+    }
+
+    // during the countdown the chart is dark; the stars above region stand in
+    readonly property bool countdownOn:
+        engine.player !== null && engine.lyricsSynced && engine.playing
+        && engine.nextLineInMs >= 0 && engine.nextLineInMs < 3200
+        && (engine.inInterlude || engine.activeIndex < 0)
+
+    // ---- interlude: a sparse meteor shower through the break ----------------
+    Repeater {
+        model: 3
+        Item {
+            id: meteor
+            required property int index
+            readonly property bool on: root.engine.inInterlude && root.engine.playing
+            property real t: -1
+            visible: on && t >= 0 && t <= 1
+            x: root.width * (0.12 + index * 0.27) + root.width * 0.30 * Math.max(0, t) - 60
+            y: root.height * (0.09 + index * 0.08) + root.height * 0.07 * Math.max(0, t)
+            rotation: -11
+            opacity: 0.5 * (1 - Math.max(0, t))
+            SequentialAnimation {
+                running: meteor.on
+                loops: Animation.Infinite
+                PauseAnimation { duration: 500 + meteor.index * 1400 }
+                NumberAnimation { target: meteor; property: "t"; from: 0; to: 1; duration: 950; easing.type: Easing.InOutQuad }
+                PropertyAction { target: meteor; property: "t"; value: -1 }
+                PauseAnimation { duration: 2600 }
+            }
+            Rectangle {
+                width: 90; height: 1.4; radius: 1
+                gradient: Gradient {
+                    orientation: Gradient.Horizontal
+                    GradientStop { position: 0.0; color: root.inkA(0.0) }
+                    GradientStop { position: 1.0; color: root.inkA(0.8) }
+                }
+            }
+            Rectangle { x: 88; y: -1.2; width: 3.6; height: 3.6; radius: 1.8; color: root.ink }
         }
     }
 }

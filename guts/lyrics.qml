@@ -11,6 +11,13 @@ import QtQuick
 // held notes tremble like a straining grip; finished words spatter a
 // fleck or two and dry from red to a dead gray. Adlibs are small gray
 // whispers in parens. One line on screen, ever.
+//
+// Staging: a CHORUS is cut larger and claims the center of the paper, the
+// sword falling across the stage as it enters. The blood throbs with the
+// kick drum — the Brand hearing the battle. In instrumental breaks the
+// quiet slash-mark waits, and three drops of blood dry one by one as the
+// verse returns. No album-art tint here on purpose: this world is
+// monochrome with a single drop of blood, and the drop stays blood.
 Item {
     id: root
     anchors.fill: parent
@@ -26,12 +33,30 @@ Item {
     readonly property string serif: "Noto Serif Display"
     function inkA(a) { return Qt.rgba(ink.r, ink.g, ink.b, a) }
 
-    // the sky under the clock — left half of the screen
+    // the sky under the clock — left half of the screen. A chorus (warcry)
+    // is cut ~30% larger and claims the center of the paper; the layout is
+    // per-line, so the gate's blank beat hides the move.
+    readonly property bool warcry: engine.inChorus
     property real lyricSize: Math.round(46 * pal.uiScale)
     readonly property real boxX: Math.round(root.width * 0.055)
     readonly property real boxY: Math.round(root.height * 0.44)
     readonly property real boxW: Math.round(root.width * 0.38)
     readonly property real boxH: Math.round(root.height * 0.34)
+    readonly property real boxXNow: warcry ? Math.round(root.width * 0.26) : boxX
+    readonly property real boxYNow: warcry ? Math.round(root.height * 0.36) : boxY
+    readonly property real boxWNow: warcry ? Math.round(root.width * 0.48) : boxW
+
+    // the Brand throbs with the drum
+    property real beatKick: 0
+    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 190; easing.type: Easing.OutQuad }
+
+    // the sword falls on a chorus entry: one diagonal cut across the stage
+    property real slashT: -1
+    SequentialAnimation {
+        id: slashAnim
+        NumberAnimation { target: root; property: "slashT"; from: 0; to: 1; duration: 380; easing.type: Easing.OutCubic }
+        PropertyAction { target: root; property: "slashT"; value: -1 }
+    }
 
     function rng32(seed) {
         let a = seed >>> 0
@@ -44,12 +69,14 @@ Item {
     }
 
     // hand-set flow: words run left→right, wrap inside the box, each with its
-    // own cut size, baseline drift and tilt. Seeded per line index.
-    function handSet(seedIdx, words) {
+    // own cut size, baseline drift and tilt. Seeded per line index. A warcry
+    // line is set from a bigger base inside the wider center box.
+    function handSet(seedIdx, words, cry) {
         const n = words.length
         if (n === 0) return []
         const r = rng32((seedIdx + 1) * 2654435761)
-        const base = lyricSize
+        const base = lyricSize * (cry ? 1.3 : 1)
+        const bw = cry ? boxWNow : boxW
         const row = base * 1.22
         const out = []
         let x = 0, y = 0
@@ -58,7 +85,7 @@ Item {
             const factor = big ? (1.35 + r() * 0.4) : (0.88 + r() * 0.28)
             const fpx = base * factor
             const wPx = Math.max(fpx * 0.6, words[i].length * fpx * 0.56)
-            if (x > 0 && x + wPx > boxW) {
+            if (x > 0 && x + wPx > bw) {
                 x = r() * base * 0.5
                 y += row * (0.95 + r() * 0.3)
             }
@@ -75,7 +102,8 @@ Item {
     }
 
     readonly property var curLayout:
-        handSet(engine.activeIndex, engine.tokens.map(function (t) { return t.text }))
+        handSet(engine.activeIndex, engine.tokens.map(function (t) { return t.text }),
+                engine.inChorus)
 
     // clear a finished line after a short hold instead of letting it linger
     readonly property real lineHoldMs: 350
@@ -84,11 +112,20 @@ Item {
 
     // a blank beat between lines so only one line ever shows
     property bool gate: true
+    readonly property bool countdownOn:
+        engine.player !== null && engine.lyricsSynced && engine.playing
+        && engine.nextLineInMs >= 0 && engine.nextLineInMs < 3200
+        && (engine.inInterlude || engine.activeIndex < 0)
     Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
     Connections {
         target: root.engine
-        function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
+        function onActiveIndexChanged() {
+            root.gate = false; gateCut.restart()
+            if (root.engine.inChorus) slashAnim.restart()   // the sword falls
+        }
         function onOffsetNudged() { offsetOsd.flash() }
+        // the Brand throbs on the kick while words stand on the paper
+        function onBeat() { if (root.gate && !root.lineExpired) beatKickAnim.restart() }
     }
 
     Item {
@@ -112,12 +149,19 @@ Item {
                 readonly property real sizePx: wd.bg ? wd.p.size * 0.58 : wd.p.size
                 readonly property string shownText: wd.bg ? "(" + modelData.text + ")" : modelData.text
 
-                x: root.boxX + p.x + trembleX
-                y: root.boxY + p.y + (wd.bg ? wd.p.size * 0.30 : 0) + trembleY
+                x: root.boxXNow + p.x + trembleX
+                y: root.boxYNow + p.y + (wd.bg ? wd.p.size * 0.30 : 0) + trembleY
                 width: baseText.implicitWidth
                 height: baseText.implicitHeight
                 rotation: p.rot
                 transformOrigin: Item.Center
+                // the Brand's throb: the word being sung pulses on the kick
+                transform: Scale {
+                    origin.x: wd.width / 2
+                    origin.y: wd.height / 2
+                    xScale: 1 + (wd.st.active && !wd.bg ? root.beatKick * 0.045 : 0)
+                    yScale: 1 + (wd.st.active && !wd.bg ? root.beatKick * 0.045 : 0)
+                }
 
                 // the stamp-down
                 opacity: shown ? (wd.bg ? 0.62 : 1) : 0
@@ -186,12 +230,28 @@ Item {
             }
         }
 
-        // quiet status caption when a track plays but no words are up
+        // the cut itself — a diagonal blood line flashing across a chorus entry
+        Rectangle {
+            visible: root.slashT >= 0
+            x: root.boxXNow + root.boxWNow * 0.5 - width / 2
+            y: root.boxYNow + root.boxH * 0.30
+            width: (root.boxWNow * 1.15) * Math.min(1, Math.max(0, root.slashT) * 1.6)
+            height: Math.round(3 * root.pal.uiScale)
+            rotation: -32
+            transformOrigin: Item.Center
+            color: root.fresh
+            opacity: root.slashT >= 0 ? 0.85 * (1 - root.slashT) : 0
+        }
+
+        // quiet status caption when a track plays but no words are up — it also
+        // keeps watch through instrumental breaks (tokens stay non-empty there,
+        // so inInterlude is checked on its own)
         Row {
             x: root.boxX
             y: root.boxY
             spacing: Math.round(10 * root.pal.uiScale)
-            visible: root.engine.player !== null && root.engine.tokens.length === 0
+            visible: root.engine.player !== null && !root.countdownOn
+                     && (root.engine.tokens.length === 0 || root.engine.inInterlude)
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 width: Math.round(16 * root.pal.uiScale); height: Math.round(2.5 * root.pal.uiScale)
@@ -207,6 +267,29 @@ Item {
                 font.italic: true
                 font.pixelSize: Math.round(root.lyricSize * 0.42)
                 font.letterSpacing: 2
+            }
+        }
+
+        // three drops of blood dry one by one — the verse returns
+        Row {
+            x: root.boxX
+            y: root.boxY + Math.round(root.lyricSize * 0.2)
+            spacing: Math.round(9 * root.pal.uiScale)
+            visible: root.countdownOn
+            Repeater {
+                model: 3
+                Rectangle {
+                    required property int index
+                    readonly property bool wet:
+                        Math.ceil(root.engine.nextLineInMs / 1067) > index
+                    width: Math.round(7 * root.pal.uiScale)
+                    height: Math.round(9 * root.pal.uiScale)
+                    radius: width / 2
+                    color: wet ? root.fresh : root.halft
+                    opacity: wet ? 0.9 : 0.25
+                    Behavior on color { ColorAnimation { duration: 260 } }
+                    Behavior on opacity { NumberAnimation { duration: 260 } }
+                }
             }
         }
 

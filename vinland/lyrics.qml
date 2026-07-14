@@ -6,6 +6,12 @@ import QtQuick
 // whisper in gold italics, and a small north star rides the carved stave
 // under the line. When a line clears, a snowflake settles off its end.
 // Styling only — the timing brains live in the shell's LyricsEngine.
+//
+// Staging: a CHORUS is carved deeper — the line swells and goes bold under an
+// aurora flare that breathes with the mix, and the north star glints on the
+// kick drum. In instrumental breaks snow drifts down through the words' place,
+// and three carved notches fade one by one as a countdown to the next verse.
+// The starlit ice is graded toward each song's album art.
 Item {
     id: root
     anchors.fill: parent
@@ -23,6 +29,17 @@ Item {
     function iceA(a)  { return Qt.rgba(ice.r, ice.g, ice.b, a) }
     function goldA(a) { return Qt.rgba(gold.r, gold.g, gold.b, a) }
 
+    // the starlight takes each song's own cast (fail-open: identity until the
+    // album-art palette lands; the touches re-evaluate the binding when it does)
+    readonly property color iceLive: (eng.trackPaletteReady, eng.trackVivid,
+                                      eng.trackTint(ice, 0.28))
+    function iceLiveA(a) { return Qt.rgba(iceLive.r, iceLive.g, iceLive.b, a) }
+
+    // the chorus is carved deeper
+    readonly property bool carved: eng.inChorus
+    property real beatKick: 0
+    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 200; easing.type: Easing.OutQuad }
+
     readonly property real lyricSize: Math.round(30 * pal.uiScale)
     readonly property real blockX: Math.round(root.width * 0.055)
     readonly property real blockY: Math.round(root.height * 0.64)
@@ -36,6 +53,8 @@ Item {
         target: root.eng
         function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
         function onOffsetNudged() { offsetOsd.flash() }
+        // the north star glints on the kick drum
+        function onBeat() { if (root.lineShown) beatKickAnim.restart() }
     }
     Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
 
@@ -99,6 +118,25 @@ Item {
         }
     }
 
+    // ---- chorus aurora: a flare hanging over the carved line -------------------
+    Rectangle {
+        x: block.x - root.lyricSize * 1.2
+        y: block.y - root.lyricSize * 2.6
+        width: Math.min(flow.childrenRect.width, flow.width) + root.lyricSize * 2.4
+        height: root.lyricSize * 2.2
+        rotation: -2
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "transparent" }
+            GradientStop { position: 0.72; color: root.iceLiveA(0.13) }
+            GradientStop { position: 1.0; color: "transparent" }
+        }
+        // breathes with the mix when the feed is live (audioLift rests at 1 without it)
+        opacity: root.carved && root.lineShown
+                 ? 0.75 + (root.eng.audioReady ? Math.max(-0.25, Math.min(0.25, (root.eng.audioLift - 1) * 0.6)) : 0)
+                 : 0
+        Behavior on opacity { NumberAnimation { duration: 320; easing.type: Easing.OutQuad } }
+    }
+
     // ---- the frosted line -------------------------------------------------------
     Item {
         id: block
@@ -106,6 +144,10 @@ Item {
         y: root.blockY + (root.lineShown ? 0 : 8)
         width: root.blockW
         opacity: root.lineShown ? 1 : 0
+        // the chorus swells, carved a size deeper into the night
+        scale: root.carved ? 1.12 : 1
+        transformOrigin: Item.TopLeft
+        Behavior on scale { NumberAnimation { duration: 340; easing.type: Easing.OutBack } }
         Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.OutQuad } }
         Behavior on y { NumberAnimation { duration: 260; easing.type: Easing.OutQuad } }
 
@@ -144,7 +186,7 @@ Item {
                         color: root.iceA(0.18)
                         font.family: root.serif
                         font.pixelSize: wd.sizePx
-                        font.weight: Font.Medium
+                        font.weight: root.carved && !wd.bg ? Font.Bold : Font.Medium
                         font.italic: wd.bg
                     }
 
@@ -160,13 +202,13 @@ Item {
                             y: shade.y
                             text: wd.word
                             textFormat: Text.PlainText
-                            color: wd.st.active ? (wd.bg ? root.gold : root.ice)
+                            color: wd.st.active ? (wd.bg ? root.gold : root.iceLive)
                                                 : (wd.bg ? root.goldA(0.75) : root.snowA(0.94))
                             Behavior on color { ColorAnimation { duration: 500 } }
                             opacity: wd.st.sustain ? 0.70 + 0.30 * root.breath : 1
                             font.family: root.serif
                             font.pixelSize: wd.sizePx
-                            font.weight: Font.Medium
+                            font.weight: root.carved && !wd.bg ? Font.Bold : Font.Medium
                             font.italic: wd.bg
                         }
                     }
@@ -206,6 +248,8 @@ Item {
                 width: 11; height: 11
                 anchors.verticalCenter: parent.verticalCenter
                 x: Math.round((parent.width - width) * rule.prog)
+                // the glint: a transform-only kick on each beat, no repaint
+                scale: 1 + root.beatKick * 0.4
                 onPaint: {
                     const ctx = getContext("2d")
                     ctx.reset()
@@ -228,15 +272,53 @@ Item {
         }
     }
 
+    // ---- interlude: snow drifting through the words' place ---------------------
+    Repeater {
+        model: 6
+        Rectangle {
+            id: drift
+            required property int index
+            readonly property real seed: (index * 0.618 + 0.11) % 1
+            readonly property bool on: root.eng.inInterlude && root.eng.playing
+            width: (2.5 + seed * 2.5) * pal.uiScale
+            height: width
+            radius: width / 2
+            color: root.snowA(0.75)
+            visible: on
+            opacity: 0
+            x: root.blockX + root.blockW * ((index * 0.19 + 0.03) % 1)
+            SequentialAnimation {
+                running: drift.on
+                loops: Animation.Infinite
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: drift; property: "y"
+                        from: root.blockY - root.lyricSize * (1.5 + drift.seed)
+                        to: root.blockY + root.lyricSize * (2 + drift.seed * 1.5)
+                        duration: 4000 + drift.seed * 2600
+                        easing.type: Easing.InOutSine
+                    }
+                    SequentialAnimation {
+                        NumberAnimation { target: drift; property: "opacity"; from: 0; to: 0.7; duration: 500 }
+                        NumberAnimation { target: drift; property: "opacity"; to: 0; duration: 3500 + drift.seed * 2600 }
+                    }
+                }
+            }
+        }
+    }
+
     // ---- quiet states: one small star ------------------------------------------
     // ice while fetching, gold heartbeat through instrumentals; nothing when a
-    // track simply has no lyrics
+    // track simply has no lyrics. The final ~3s hand over to the notch countdown.
+    readonly property bool countdownOn:
+        eng.player !== null && !lineShown && eng.lyricsSynced && eng.playing
+        && eng.nextLineInMs >= 0 && eng.nextLineInMs < 3200
     Rectangle {
         x: root.blockX
         y: root.blockY + Math.round(root.lyricSize * 0.5)
         width: 6; height: 6
         rotation: 45
-        visible: root.eng.player !== null && !root.lineShown
+        visible: root.eng.player !== null && !root.lineShown && !root.countdownOn
                  && (!root.eng.lyricsLoaded || (root.eng.lyricsSynced && root.eng.playing))
         color: root.eng.lyricsLoaded ? root.gold : root.ice
         opacity: 0.35 + 0.65 * root.breath
@@ -245,6 +327,26 @@ Item {
             loops: Animation.Infinite
             NumberAnimation { to: 1.25; duration: 1100; easing.type: Easing.InOutSine }
             NumberAnimation { to: 1.0; duration: 1100; easing.type: Easing.InOutSine }
+        }
+    }
+
+    // three carved notches fade one by one — the next verse approaches
+    Row {
+        x: root.blockX
+        y: root.blockY + Math.round(root.lyricSize * 0.4)
+        spacing: 10
+        visible: root.countdownOn
+        Repeater {
+            model: 3
+            Rectangle {
+                required property int index
+                readonly property bool held: Math.ceil(root.eng.nextLineInMs / 1067) > index
+                width: 2; height: 9
+                rotation: 20
+                color: root.iceLive
+                opacity: held ? 0.85 : 0.1
+                Behavior on opacity { NumberAnimation { duration: 220 } }
+            }
         }
     }
 

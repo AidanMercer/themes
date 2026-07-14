@@ -6,6 +6,12 @@ import QtQuick
 // notes breathe with the bass, adlibs whisper in moss-green italics above
 // the line, and a gold diamond rides the rule underneath. Styling only —
 // the timing brains live in the shell's LyricsEngine.
+//
+// Staging: a CHORUS floods the clearing — the block swells inside a gold
+// radiance that pulses on the kick drum, and a gust of petals lifts past the
+// line. In instrumental breaks petals drift down through the shade, and three
+// gold petals lift away one by one as a countdown to the verse coming back.
+// The buttercup light is graded toward each song's album art.
 Item {
     id: root
     anchors.fill: parent
@@ -22,6 +28,17 @@ Item {
     function ivoryA(a) { return Qt.rgba(ivory.r, ivory.g, ivory.b, a) }
     function goldA(a)  { return Qt.rgba(gold.r, gold.g, gold.b, a) }
 
+    // the sunlight takes each song's own warmth (fail-open: identity until the
+    // album-art palette lands; the touches re-evaluate the binding when it does)
+    readonly property color goldLive: (eng.trackPaletteReady, eng.trackVivid,
+                                       eng.trackTint(gold, 0.30))
+    function goldLiveA(a) { return Qt.rgba(goldLive.r, goldLive.g, goldLive.b, a) }
+
+    // the chorus floods the clearing
+    readonly property bool sunlit: eng.inChorus
+    property real beatKick: 0
+    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 180; easing.type: Easing.OutQuad }
+
     readonly property real lyricSize: Math.round(30 * pal.uiScale)
     readonly property real blockX: Math.round(root.width * 0.055)
     readonly property real blockY: Math.round(root.height * 0.13)
@@ -35,6 +52,8 @@ Item {
         target: root.eng
         function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
         function onOffsetNudged() { offsetOsd.flash() }
+        // the radiance pulses on the kick drum while the clearing is lit
+        function onBeat() { if (root.sunlit && !root.lineExpired) beatKickAnim.restart() }
     }
     Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
 
@@ -72,6 +91,60 @@ Item {
         }
     }
 
+    // ---- chorus radiance: sun flooding the clearing behind the line -----------
+    Rectangle {
+        x: block.x - root.lyricSize * 0.9
+        y: block.y - root.lyricSize * 0.5
+        width: Math.min(flow.childrenRect.width, flow.width) + root.lyricSize * 1.8
+        height: flow.childrenRect.height + root.lyricSize * 1.35
+        radius: height / 2
+        color: root.goldLiveA(0.09)
+        opacity: root.sunlit && root.lineShown ? 1 : 0
+        scale: (root.sunlit && root.lineShown ? 1 : 0.86) + root.beatKick * 0.05
+        transformOrigin: Item.Left
+        Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutQuad } }
+    }
+
+    // ---- chorus gust: petals lifting past the line -----------------------------
+    Repeater {
+        model: 6
+        Rectangle {
+            id: gustPetal
+            required property int index
+            readonly property real seed: (index * 0.618 + 0.13) % 1
+            readonly property bool on: root.sunlit && root.lineShown && root.eng.playing
+            x: root.blockX + root.blockW * ((seed + index * 0.17) % 1)
+            width: (4 + seed * 3) * pal.uiScale
+            height: width
+            rotation: 45 + seed * 60
+            color: index % 2 ? root.goldLiveA(0.8)
+                             : Qt.rgba(root.leaf.r, root.leaf.g, root.leaf.b, 0.6)
+            visible: on
+            opacity: 0
+            SequentialAnimation {
+                running: gustPetal.on
+                loops: Animation.Infinite
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: gustPetal; property: "y"
+                        from: root.blockY + root.lyricSize * 2.2
+                        to: root.blockY - root.lyricSize * (1.5 + gustPetal.seed * 2)
+                        duration: 2400 + gustPetal.seed * 1600
+                    }
+                    NumberAnimation {
+                        target: gustPetal; property: "rotation"
+                        from: 45 + gustPetal.seed * 60; to: 200 + gustPetal.seed * 120
+                        duration: 2400 + gustPetal.seed * 1600
+                    }
+                    SequentialAnimation {
+                        NumberAnimation { target: gustPetal; property: "opacity"; from: 0; to: 0.8; duration: 320 }
+                        NumberAnimation { target: gustPetal; property: "opacity"; to: 0; duration: 2100 + gustPetal.seed * 1600 }
+                    }
+                }
+            }
+        }
+    }
+
     // ---- the lit line ----------------------------------------------------------
     Item {
         id: block
@@ -79,6 +152,10 @@ Item {
         y: root.blockY + (root.lineShown ? 0 : -8)
         width: root.blockW
         opacity: root.lineShown ? 1 : 0
+        // the chorus swells the whole line in the flood of light
+        scale: root.sunlit ? 1.12 : 1
+        transformOrigin: Item.TopLeft
+        Behavior on scale { NumberAnimation { duration: 340; easing.type: Easing.OutBack } }
         Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.OutQuad } }
         Behavior on y { NumberAnimation { duration: 260; easing.type: Easing.OutQuad } }
 
@@ -132,7 +209,7 @@ Item {
                             y: shade.y
                             text: wd.word
                             textFormat: Text.PlainText
-                            color: wd.st.active ? (wd.bg ? root.leaf : root.gold)
+                            color: wd.st.active ? (wd.bg ? root.leaf : root.goldLive)
                                                 : (wd.bg ? Qt.rgba(root.leaf.r, root.leaf.g, root.leaf.b, 0.75)
                                                          : root.ivoryA(0.92))
                             Behavior on color { ColorAnimation { duration: 500 } }
@@ -171,19 +248,62 @@ Item {
                 rotation: 45
                 anchors.verticalCenter: parent.verticalCenter
                 x: Math.round((parent.width - width) * rule.prog)
-                color: root.gold
+                color: root.goldLive
+            }
+        }
+    }
+
+    // ---- interlude: petals drifting down through the shade ---------------------
+    Repeater {
+        model: 5
+        Rectangle {
+            id: driftPetal
+            required property int index
+            readonly property real seed: (index * 0.618 + 0.29) % 1
+            readonly property bool on: root.eng.inInterlude && root.eng.playing
+            width: (3.5 + seed * 3) * pal.uiScale
+            height: width
+            color: index % 2 ? root.goldLiveA(0.55)
+                             : Qt.rgba(root.leaf.r, root.leaf.g, root.leaf.b, 0.45)
+            visible: on
+            opacity: 0
+            x: root.blockX + root.blockW * ((index * 0.21 + 0.04) % 1)
+            SequentialAnimation {
+                running: driftPetal.on
+                loops: Animation.Infinite
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: driftPetal; property: "y"
+                        from: root.blockY - root.lyricSize * (1 + driftPetal.seed)
+                        to: root.blockY + root.lyricSize * (2.5 + driftPetal.seed * 1.5)
+                        duration: 3600 + driftPetal.seed * 2400
+                        easing.type: Easing.InOutSine
+                    }
+                    NumberAnimation {
+                        target: driftPetal; property: "rotation"
+                        from: driftPetal.seed * 90; to: 160 + driftPetal.seed * 120
+                        duration: 3600 + driftPetal.seed * 2400
+                    }
+                    SequentialAnimation {
+                        NumberAnimation { target: driftPetal; property: "opacity"; from: 0; to: 0.7; duration: 500 }
+                        NumberAnimation { target: driftPetal; property: "opacity"; to: 0; duration: 3100 + driftPetal.seed * 2400 }
+                    }
+                }
             }
         }
     }
 
     // ---- quiet states: one small bud -------------------------------------------
     // leaf while fetching, gold heartbeat through instrumentals; nothing when a
-    // track simply has no lyrics
+    // track simply has no lyrics. The final ~3s hand over to the petal countdown.
+    readonly property bool countdownOn:
+        eng.player !== null && !lineShown && eng.lyricsSynced && eng.playing
+        && eng.nextLineInMs >= 0 && eng.nextLineInMs < 3200
     Rectangle {
         x: root.blockX
         y: root.blockY + Math.round(root.lyricSize * 0.5)
         width: 6; height: 6; radius: 3
-        visible: root.eng.player !== null && !root.lineShown
+        visible: root.eng.player !== null && !root.lineShown && !root.countdownOn
                  && (!root.eng.lyricsLoaded || (root.eng.lyricsSynced && root.eng.playing))
         color: root.eng.lyricsLoaded ? root.gold : root.leaf
         opacity: 0.35 + 0.65 * root.breath
@@ -192,6 +312,28 @@ Item {
             loops: Animation.Infinite
             NumberAnimation { to: 1.25; duration: 1000; easing.type: Easing.InOutSine }
             NumberAnimation { to: 1.0; duration: 1000; easing.type: Easing.InOutSine }
+        }
+    }
+
+    // three gold petals lift away one by one — the verse is coming back
+    Row {
+        x: root.blockX
+        y: root.blockY + Math.round(root.lyricSize * 0.5)
+        spacing: 9
+        visible: root.countdownOn
+        Repeater {
+            model: 3
+            Rectangle {
+                required property int index
+                readonly property bool resting: Math.ceil(root.eng.nextLineInMs / 1067) > index
+                width: 6; height: 6
+                rotation: 45
+                color: root.goldLive
+                opacity: resting ? 0.8 : 0
+                scale: resting ? 1 : 1.8
+                Behavior on opacity { NumberAnimation { duration: 220 } }
+                Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutQuad } }
+            }
         }
     }
 
