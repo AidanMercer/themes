@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "46f6c81",
+  "commit": "521c0ad",
   "themes": [
     {
       "name": "avalon",
@@ -16,7 +16,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21452650,
+      "bytes": 21447723,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "avalon/bar.qml",
@@ -56,7 +57,7 @@
         },
         {
           "path": "avalon/lyrics.qml",
-          "bytes": 16537
+          "bytes": 9667
         },
         {
           "path": "avalon/mica.qml",
@@ -64,7 +65,7 @@
         },
         {
           "path": "avalon/notif.qml",
-          "bytes": 3126
+          "bytes": 5069
         },
         {
           "path": "avalon/popup.qml",
@@ -94,7 +95,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/fuel.jpg",
-      "bytes": 16587945,
+      "bytes": 16586221,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "fuel/bar.qml",
@@ -126,7 +128,7 @@
         },
         {
           "path": "fuel/lyrics.qml",
-          "bytes": 17138
+          "bytes": 13136
         },
         {
           "path": "fuel/mica.qml",
@@ -142,7 +144,7 @@
         },
         {
           "path": "fuel/notif.qml",
-          "bytes": 5654
+          "bytes": 7932
         },
         {
           "path": "fuel/popup.qml",
@@ -172,7 +174,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26375073,
+      "bytes": 26374066,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "guts/bar.qml",
@@ -204,7 +207,7 @@
         },
         {
           "path": "guts/lyrics.qml",
-          "bytes": 14424
+          "bytes": 10176
         },
         {
           "path": "guts/mica.qml",
@@ -212,7 +215,7 @@
         },
         {
           "path": "guts/notif.qml",
-          "bytes": 6502
+          "bytes": 9743
         },
         {
           "path": "guts/paper.frag",
@@ -250,7 +253,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/lonely-train.jpg",
-      "bytes": 29022465,
+      "bytes": 29018685,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "lonely-train/bar.qml",
@@ -282,7 +286,7 @@
         },
         {
           "path": "lonely-train/lyrics.qml",
-          "bytes": 15593
+          "bytes": 9193
         },
         {
           "path": "lonely-train/mica.qml",
@@ -290,7 +294,7 @@
         },
         {
           "path": "lonely-train/notif.qml",
-          "bytes": 4537
+          "bytes": 7157
         },
         {
           "path": "lonely-train/popup.qml",
@@ -328,11 +332,12 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/moon.jpg",
-      "bytes": 44072602,
+      "bytes": 44068553,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "moon/LYRICS-NOTES.md",
-          "bytes": 7882
+          "bytes": 5813
         },
         {
           "path": "moon/bar.qml",
@@ -364,7 +369,7 @@
         },
         {
           "path": "moon/lyrics.qml",
-          "bytes": 16950
+          "bytes": 12225
         },
         {
           "path": "moon/mica.qml",
@@ -372,7 +377,7 @@
         },
         {
           "path": "moon/notif.qml",
-          "bytes": 3389
+          "bytes": 6134
         },
         {
           "path": "moon/popup.qml",
@@ -420,7 +425,8 @@
       "video": true,
       "variants": 3,
       "thumb": ".catalog/thumbs/nature.jpg",
-      "bytes": 42455796,
+      "bytes": 42451516,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "nature/bar.qml",
@@ -460,7 +466,7 @@
         },
         {
           "path": "nature/lyrics.qml",
-          "bytes": 20389
+          "bytes": 13486
         },
         {
           "path": "nature/mica.qml",
@@ -468,7 +474,7 @@
         },
         {
           "path": "nature/notif.qml",
-          "bytes": 6058
+          "bytes": 8681
         },
         {
           "path": "nature/popup.qml",
@@ -506,7 +512,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sailing.jpg",
-      "bytes": 21552552,
+      "bytes": 21550752,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "sailing/bar.qml",
@@ -538,7 +545,7 @@
         },
         {
           "path": "sailing/lyrics.qml",
-          "bytes": 15551
+          "bytes": 11004
         },
         {
           "path": "sailing/mica.qml",
@@ -546,7 +553,7 @@
         },
         {
           "path": "sailing/notif.qml",
-          "bytes": 4041
+          "bytes": 6788
         },
         {
           "path": "sailing/popup.qml",
@@ -584,7 +591,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26730717,
+      "bytes": 26727679,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "shiro/bar.qml",
@@ -616,7 +624,7 @@
         },
         {
           "path": "shiro/lyrics.qml",
-          "bytes": 14171
+          "bytes": 9651
         },
         {
           "path": "shiro/mica.qml",
@@ -624,7 +632,7 @@
         },
         {
           "path": "shiro/notif.qml",
-          "bytes": 3105
+          "bytes": 4587
         },
         {
           "path": "shiro/popup.qml",
@@ -666,7 +674,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stars.jpg",
-      "bytes": 23330803,
+      "bytes": 23327555,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "stars/bar.qml",
@@ -698,7 +707,7 @@
         },
         {
           "path": "stars/lyrics.qml",
-          "bytes": 21583
+          "bytes": 15726
         },
         {
           "path": "stars/mica.qml",
@@ -714,7 +723,7 @@
         },
         {
           "path": "stars/notif.qml",
-          "bytes": 4705
+          "bytes": 7314
         },
         {
           "path": "stars/popup.qml",
@@ -744,7 +753,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/vinland.jpg",
-      "bytes": 3248283,
+      "bytes": 3246355,
+      "rev": "521c0ad",
       "files": [
         {
           "path": "vinland/aurora.frag",
@@ -784,7 +794,7 @@
         },
         {
           "path": "vinland/lyrics.qml",
-          "bytes": 16780
+          "bytes": 11861
         },
         {
           "path": "vinland/mica.qml",
@@ -792,7 +802,7 @@
         },
         {
           "path": "vinland/notif.qml",
-          "bytes": 3985
+          "bytes": 6976
         },
         {
           "path": "vinland/popup.qml",

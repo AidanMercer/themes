@@ -71,15 +71,20 @@ for d in */; do
   files_json=$(printf '%s\n' "${file_objs[@]}" | jq -s '.')
   over_json=$(printf '%s\n' "${oversized[@]:-}" | jq -R '.' | jq -s 'map(select(.!=""))')
 
+  # per-theme revision: the last commit touching this dir. installs stamp it
+  # into .mkt-version; the marketplace shows "update" when they stop matching
+  rev=$(git log -1 --format=%h -- "$name/" || true)
+
   theme_objs+=("$(jq -n \
     --arg name "$name" --arg tagline "$(getstr tagline "$cfg")" \
     --argjson accents "$accents" \
     --argjson cyber "$(getbool cyber "$cfg")" --argjson light "$(getbool light "$cfg")" \
     --argjson video "$video" --argjson variants "${#walls[@]}" \
     --arg thumb "$THUMBS/$name.jpg" --argjson bytes "$total" \
+    --arg rev "$rev" \
     --argjson files "$files_json" --argjson oversizedOmitted "$over_json" \
     '{name:$name,tagline:$tagline,accents:$accents,cyber:$cyber,light:$light,
-      video:$video,variants:$variants,thumb:$thumb,bytes:$bytes,
+      video:$video,variants:$variants,thumb:$thumb,bytes:$bytes,rev:$rev,
       files:$files,oversizedOmitted:$oversizedOmitted}')")
   echo "cataloged $name (${#walls[@]} variant(s), $((total/1048576))MB)" >&2
 done
