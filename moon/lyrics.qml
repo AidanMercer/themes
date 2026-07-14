@@ -10,9 +10,17 @@ import QtQuick
 // so each line lands in a fresh arrangement. Active words are full-strength
 // neon, adlibs italic cyan, '?' words ripple per-letter.
 //
+// Staging: a CHORUS line abandons the corner box and takes the center of the
+// screen, bigger, with CRT chromatic fringes that kick on every beat and a
+// glitch-slice rip on entry. Instrumental breaks drop to a HUD readout
+// (// INTERLUDE + live BPM) whose blocks drain as a countdown to the next
+// vocal, and the neon itself is graded toward each song's album art.
+//
 // Engine surface used here: tokens, activeIndex, estMs, tokenState(i, est),
 // lineDoneMs, player, lyricsLoaded, lyricsSynced, audioReady/audioSilent/
-// audioPulse, offsetMs (+ offsetNudged() for the calibration OSD).
+// audioPulse, offsetMs (+ offsetNudged() for the calibration OSD), plus the
+// staging signals: inChorus, inInterlude/nextLineInMs, beat()/beatConfident/
+// bpm, trackTint/trackVivid.
 Item {
     id: root
     anchors.fill: parent
@@ -23,6 +31,17 @@ Item {
     readonly property color neon: pal.neon
     readonly property color cyan: pal.cyan
     readonly property string mono: "Noto Sans Mono"
+
+    // per-song grade: the word neon leans toward the album art's vivid swatch.
+    // trackTint is fail-open (identity until the palette lands); the leading
+    // touches make the binding re-evaluate when it does.
+    readonly property color neonLive: (engine.trackPaletteReady, engine.trackVivid,
+                                       engine.trackTint(pal.neon, 0.30))
+
+    // beat kick: beat() flicks the chorus fringe out for a frame and it decays
+    property real beatKick: 0
+    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 150; easing.type: Easing.OutQuad }
+    readonly property real fringePx: 2.2 + beatKick * 3.5
 
     // ---- scatter layout (Edgerunners kinetic text) -------------------------
     // Mono font → word width = chars * charW (exact layout). Big + bold.
@@ -60,43 +79,61 @@ Item {
         return false
     }
 
-    // [{x,y,size}] within the box — a jumping scatter where every word gets its
+    // [{x,y,size}] in SCREEN coords — a jumping scatter where every word gets its
     // own size (some big, some small) and NO two words overlap: each word prefers
     // its jumping-path spot, then gets pushed clear of the already-placed words.
-    // Seeded per line so each line lands in a fresh arrangement.
-    function scatter(seedIdx, words) {
+    // Seeded per line so each line lands in a fresh arrangement. A chorus line
+    // (`big`) abandons the corner box for a wider bunch dead center, scaled up —
+    // verse in the corner, chorus owning the screen. The gate's 90ms blank cut
+    // hides the relocation, so it reads as a camera cut, not a slide.
+    function scatter(seedIdx, words, big) {
         const n = words.length
         if (n === 0) return []
         const r = rng32((seedIdx + 1) * 2654435761)
-        const row = lyricSize * 1.15
+        const base = lyricSize * (big ? 1.28 : 1)
+        const bw = big ? Math.round(root.width * (ultrawide ? 0.4 : 0.62)) : boxW
+        const bh = big ? Math.round(root.height * 0.4) : boxH
+        const ox = big ? Math.round((root.width - bw) / 2) : boxX
+        const oy = big ? Math.round(root.height * 0.3) : boxY
+        const row = base * 1.15
         let out = [], placed = [], cx = 0, cy = 0
         for (let i = 0; i < n; i++) {
             const factor = r() < 0.25 ? (1.35 + r() * 0.5) : (0.9 + r() * 0.3)   // some words bigger
-            const fpx = lyricSize * factor
+            const fpx = base * factor
             const cw = fpx * 0.58
             const wPx = Math.max(cw, words[i].length * cw)
             const hPx = fpx * 1.1
             const pad = 6
-            if (cx + wPx > boxW) { cx = r() * boxW * 0.1; cy += row * (0.9 + r() * 0.4) }
+            if (cx + wPx > bw) { cx = r() * bw * 0.1; cy += row * (0.9 + r() * 0.4) }
             let px = Math.max(0, cx + (r() - 0.5) * cw * 0.5)
             let py = Math.max(0, cy + (r() - 0.5) * row * 0.3)
             let tries = 0
             while (tries < 80 && collides(placed, px - pad, py - pad, wPx + pad * 2, hPx + pad * 2)) {
                 py += row * 0.45
-                if (py + hPx > boxH) { py = r() * row * 0.4; px += wPx * 0.5 + cw }  // off the bottom → shift right
+                if (py + hPx > bh) { py = r() * row * 0.4; px += wPx * 0.5 + cw }  // off the bottom → shift right
                 tries++
             }
-            out.push({ x: px, y: py, size: fpx })
+            out.push({ x: ox + px, y: oy + py, size: fpx })
             placed.push({ x: px, y: py, w: wPx, h: hPx })
             cx = px + wPx + cw * (0.6 + r() * 0.8)
             cy = py
-            if (r() < 0.2) { cy += row * (0.6 + r() * 0.5); cx = r() * boxW * 0.2 }  // occasional jump down
+            if (r() < 0.2) { cy += row * (0.6 + r() * 0.5); cx = r() * bw * 0.2 }  // occasional jump down
         }
         return out
     }
 
     readonly property var curLayout:
-        scatter(engine.activeIndex, engine.tokens.map(function (t) { return t.text }))
+        scatter(engine.activeIndex, engine.tokens.map(function (t) { return t.text }),
+                engine.inChorus)
+
+    // interlude readout: live BPM while the break plays; the last ~3.3s drain
+    // countdown blocks toward the incoming vocal
+    readonly property string interludeHud: {
+        const inMs = engine.nextLineInMs
+        if (inMs >= 0 && inMs < 3300)
+            return "// " + "▮".repeat(Math.max(1, Math.ceil(inMs / 1100)))
+        return "// INTERLUDE" + (engine.beatConfident ? "  " + engine.bpm + " BPM" : "")
+    }
 
     // clear a finished line early: once its last word is done plus a short hold,
     // the line fades out instead of lingering through a long gap to the next line.
@@ -110,8 +147,21 @@ Item {
     Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
     Connections {
         target: root.engine
-        function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
+        function onActiveIndexChanged() {
+            root.gate = false; gateCut.restart()
+            if (root.engine.inChorus) sliceAnim.restart()   // rip into the chorus
+        }
         function onOffsetNudged() { offsetOsd.flash() }
+        // quantized: the fringe kick lands ON the kick drum, not near it
+        function onBeat() { if (root.engine.inChorus) beatKickAnim.restart() }
+    }
+
+    // chorus-entry glitch: three scan slices ripping across the stage
+    property real sliceT: -1
+    SequentialAnimation {
+        id: sliceAnim
+        NumberAnimation { target: root; property: "sliceT"; from: 0; to: 1; duration: 300; easing.type: Easing.OutQuad }
+        PropertyAction { target: root; property: "sliceT"; value: -1 }
     }
 
     // ---- lyric display (one line at a time, scattered top-right) ------------
@@ -141,15 +191,17 @@ Item {
                 // adlibs render smaller, dimmer, italic cyan and sit a touch lower,
                 // so the main vocal line still scans cleanly above the backing chatter.
                 readonly property real sizePx: wd.bg ? wd.p.size * 0.62 : wd.p.size
-                readonly property color baseCol: wd.bg ? root.cyan : root.neon
+                readonly property color baseCol: wd.bg ? root.cyan : root.neonLive
                 readonly property real maxOpacity: wd.bg ? 0.7 : 1
                 // subtle bass-driven swell on the active main word (no-op without cava)
                 readonly property real pulseBoost:
                     (st.active && !st.sustain && !wd.bg && root.engine.audioReady)
                         ? root.engine.audioPulse * 0.06 : 0
+                // chorus words wear CRT chromatic fringes (beat-kicked via fringePx)
+                readonly property bool fringed: root.engine.inChorus && !wd.bg && !wd.ripple
 
-                x: root.boxX + p.x
-                y: root.boxY + p.y + (wd.bg ? wd.p.size * 0.22 : 0)
+                x: p.x
+                y: p.y + (wd.bg ? wd.p.size * 0.22 : 0)
                 width: wd.ripple ? rippleRow.width : wt.width
                 height: wd.ripple ? rippleRow.height : wt.height
                 transformOrigin: Item.Center
@@ -165,6 +217,25 @@ Item {
                 NumberAnimation on phase {
                     running: wd.ripple && wd.shown
                     from: 0; to: 6.2832; duration: 1100; loops: Animation.Infinite
+                }
+
+                // the chromatic double-print behind a chorus word — magenta left,
+                // cyan right, the classic CRT misconvergence
+                Text {
+                    visible: wd.fringed
+                    x: -root.fringePx
+                    text: wt.text
+                    textFormat: Text.PlainText
+                    color: Qt.rgba(root.cyan.r, root.cyan.g, root.cyan.b, 0.55)
+                    font: wt.font
+                }
+                Text {
+                    visible: wd.fringed
+                    x: root.fringePx
+                    text: wt.text
+                    textFormat: Text.PlainText
+                    color: Qt.rgba(pal.magenta.r, pal.magenta.g, pal.magenta.b, 0.55)
+                    font: wt.font
                 }
 
                 // plain word (also the size reference for the delegate); adlibs keep
@@ -208,13 +279,33 @@ Item {
             }
         }
 
-        // small status when a track's playing but there's no active lyric word
+        // the glitch-slice rip on chorus entry — three thin bars streaking across
+        Repeater {
+            model: 3
+            Rectangle {
+                required property int index
+                readonly property real t: Math.max(0, Math.min(1, root.sliceT * 1.5 - index * 0.18))
+                visible: root.sliceT >= 0 && t > 0 && t < 1
+                x: -root.width * 0.2 + root.width * 1.3 * t
+                y: Math.round(root.height * (0.3 + index * 0.07))
+                width: Math.round(root.width * 0.22)
+                height: index === 1 ? 3 : 2
+                color: index === 0 ? root.neonLive : index === 1 ? root.cyan : pal.magenta
+                opacity: 0.85 * (1 - t)
+            }
+        }
+
+        // status when a track's playing but there's no active lyric word — and
+        // the interlude HUD: BPM readout while the break plays, then the blocks
+        // drain 3-2-1 as the next vocal approaches
         Text {
             x: root.boxX
             y: root.boxY
-            visible: root.engine.player !== null && root.engine.tokens.length === 0
+            visible: root.engine.player !== null
+                     && (root.engine.tokens.length === 0 || root.engine.inInterlude)
             text: !root.engine.lyricsLoaded ? "// SYNC…"
                   : !root.engine.lyricsSynced ? "// NO LYRICS"
+                  : root.engine.inInterlude ? root.interludeHud
                   : "♪"
             color: root.neon
             opacity: 0.85

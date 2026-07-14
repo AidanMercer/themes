@@ -9,6 +9,13 @@ import QtQuick
 // breathe (and swell with the bass), adlibs whisper in blush italics above
 // the line, a hairline sweeps underneath with the line's progress, and the
 // pen flicks a tiny ink fleck when the line completes.
+//
+// Staging: the poem accumulates — finished lines drift up the scroll as dried
+// ink before fading. A chorus is written bolder: the block swells and an
+// ink-wash blot blooms behind it, the rule sweeping blush. In instrumental
+// breaks the brush rests (the quiet dot ticks on the beat when one is heard)
+// and three ink dots lift away as a countdown to the next verse. The wet ink
+// itself is graded toward each song's album art.
 Item {
     id: root
     anchors.fill: parent
@@ -24,6 +31,14 @@ Item {
     readonly property string serif:   "Noto Serif Display"
     function inkA(a) { return Qt.rgba(ink.r, ink.g, ink.b, a) }
 
+    // the wet ink takes each song's own pigment (fail-open: identity until the
+    // album-art palette lands; the touches re-evaluate the binding when it does)
+    readonly property color wet: (eng.trackPaletteReady, eng.trackVivid,
+                                  eng.trackTint(wisteria, 0.30))
+
+    // the refrain is written bolder
+    readonly property bool refrain: eng.inChorus
+
     readonly property real lyricSize: Math.round(30 * pal.uiScale)
     readonly property real blockX: Math.round(root.width * 0.05)
     readonly property real blockY: Math.round(root.height * 0.09)
@@ -35,10 +50,24 @@ Item {
     property bool gate: true
     Connections {
         target: root.eng
-        function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
+        function onActiveIndexChanged() {
+            // the finished line joins the poem above before the brush moves on
+            if (root.lastIdx >= 0 && root.lastIdx !== root.eng.activeIndex) {
+                const t = root.eng.lineText(root.lastIdx)
+                if (t.length > 0) root.trail = [t].concat(root.trail).slice(0, 2)
+            }
+            root.lastIdx = root.eng.activeIndex
+            root.gate = false; gateCut.restart()
+        }
+        function onLinesChanged() { root.trail = []; root.lastIdx = -1 }   // new song, fresh scroll
         function onOffsetNudged() { offsetOsd.flash() }
+        // the resting dot ticks on the kick drum while the brush is lifted
+        function onBeat() { if (!root.lineShown) dotKickAnim.restart() }
     }
     Timer { id: gateCut; interval: 90; repeat: false; onTriggered: root.gate = true }
+
+    property real dotKick: 0
+    NumberAnimation { id: dotKickAnim; target: root; property: "dotKick"; from: 1; to: 0; duration: 200; easing.type: Easing.OutQuad }
 
     readonly property bool lineShown: eng.tokens.length > 0 && gate && !lineExpired
 
@@ -72,6 +101,42 @@ Item {
         }
     }
 
+    // ---- the poem so far: finished lines drying up the scroll -----------------
+    property var trail: []
+    property int lastIdx: -1
+    Repeater {
+        model: root.trail
+        delegate: Text {
+            required property int index
+            required property string modelData
+            x: root.blockX
+            y: root.blockY - Math.round(root.lyricSize * 1.15) * (index + 1)
+            width: root.blockW
+            elide: Text.ElideRight
+            maximumLineCount: 1
+            text: modelData
+            textFormat: Text.PlainText
+            color: root.inkA(index === 0 ? 0.3 : 0.14)
+            font.family: root.serif
+            font.pixelSize: Math.round(root.lyricSize * 0.78)
+        }
+    }
+
+    // ---- chorus ink-wash: a soft blot blooming behind the refrain -------------
+    Rectangle {
+        x: block.x - root.lyricSize * 0.9
+        y: block.y - root.lyricSize * 0.5
+        width: Math.min(flow.childrenRect.width, flow.width) + root.lyricSize * 1.8
+        height: flow.childrenRect.height + root.lyricSize * 1.35
+        radius: height / 2
+        color: Qt.rgba(root.wet.r, root.wet.g, root.wet.b, 0.10)
+        opacity: root.refrain && root.lineShown ? 1 : 0
+        scale: root.refrain && root.lineShown ? 1 : 0.86
+        transformOrigin: Item.Left
+        Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutQuad } }
+        Behavior on scale { NumberAnimation { duration: 420; easing.type: Easing.OutBack } }
+    }
+
     // ---- the written line ----------------------------------------------------
     Item {
         id: block
@@ -79,6 +144,10 @@ Item {
         y: root.blockY + (root.lineShown ? 0 : -8)
         width: root.blockW
         opacity: root.lineShown ? 1 : 0
+        // the refrain is written a size larger, swelling from the scroll's edge
+        scale: root.refrain ? 1.12 : 1
+        transformOrigin: Item.TopLeft
+        Behavior on scale { NumberAnimation { duration: 340; easing.type: Easing.OutBack } }
         Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.OutQuad } }
         Behavior on y { NumberAnimation { duration: 260; easing.type: Easing.OutQuad } }
 
@@ -118,6 +187,7 @@ Item {
                         font.family: root.serif
                         font.pixelSize: wd.sizePx
                         font.italic: wd.bg
+                        font.weight: root.refrain && !wd.bg ? Font.DemiBold : Font.Normal
                     }
 
                     // the ink, revealed left→right as the word is sung; wet
@@ -132,7 +202,7 @@ Item {
                             y: ghost.y
                             text: wd.word
                             textFormat: Text.PlainText
-                            color: wd.st.active ? (wd.bg ? root.blush : root.wisteria)
+                            color: wd.st.active ? (wd.bg ? root.blush : root.wet)
                                                 : (wd.bg ? Qt.rgba(root.blush.r, root.blush.g, root.blush.b, 0.75)
                                                          : root.inkA(0.88))
                             Behavior on color { ColorAnimation { duration: 500 } }
@@ -140,6 +210,7 @@ Item {
                             font.family: root.serif
                             font.pixelSize: wd.sizePx
                             font.italic: wd.bg
+                            font.weight: root.refrain && !wd.bg ? Font.DemiBold : Font.Normal
                         }
                     }
                 }
@@ -169,7 +240,7 @@ Item {
             Rectangle {
                 width: 34 * pal.uiScale; height: 2; radius: 1
                 x: Math.round((parent.width - width) * rule.prog)
-                color: root.wisteria
+                color: root.refrain ? root.blush : root.wisteria
                 opacity: 0.8
             }
         }
@@ -177,13 +248,17 @@ Item {
     }
 
     // ---- quiet states: one small dot ------------------------------------------
-    // wisteria while fetching, blush heartbeat through instrumentals; nothing
-    // when a track simply has no lyrics
+    // wisteria while fetching, blush heartbeat through instrumentals (ticking on
+    // the kick drum when the engine hears one); nothing when a track simply has
+    // no lyrics. The final ~3s hand over to the countdown dots below.
+    readonly property bool countdownOn:
+        eng.player !== null && !lineShown && eng.lyricsSynced && eng.playing
+        && eng.nextLineInMs >= 0 && eng.nextLineInMs < 3200
     Rectangle {
         x: root.blockX
         y: root.blockY + Math.round(root.lyricSize * 0.5)
-        width: 6; height: 6; radius: 3
-        visible: root.eng.player !== null && !root.lineShown
+        width: 6 + root.dotKick * 4; height: width; radius: width / 2
+        visible: root.eng.player !== null && !root.lineShown && !root.countdownOn
                  && (!root.eng.lyricsLoaded || (root.eng.lyricsSynced && root.eng.playing))
         color: root.eng.lyricsLoaded ? root.blush : root.wisteria
         opacity: 0.35 + 0.65 * root.breath
@@ -192,6 +267,24 @@ Item {
             loops: Animation.Infinite
             NumberAnimation { to: 1.25; duration: 1000; easing.type: Easing.InOutSine }
             NumberAnimation { to: 1.0; duration: 1000; easing.type: Easing.InOutSine }
+        }
+    }
+
+    // three ink dots lift off the paper one by one as the verse comes back
+    Row {
+        x: root.blockX
+        y: root.blockY + Math.round(root.lyricSize * 0.5)
+        spacing: 8
+        visible: root.countdownOn
+        Repeater {
+            model: 3
+            Rectangle {
+                required property int index
+                width: 6; height: 6; radius: 3
+                color: root.wet
+                opacity: Math.ceil(root.eng.nextLineInMs / 1067) > index ? 0.8 : 0.12
+                Behavior on opacity { NumberAnimation { duration: 220 } }
+            }
         }
     }
 
