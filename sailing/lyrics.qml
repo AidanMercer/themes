@@ -10,13 +10,6 @@ import QtQuick
 // a pale front line with droplets trailing beneath it. Held words breathe
 // with a faint ripple. When the line finishes it sinks back into the mist
 // and drifts astern — sliding slowly left as the ferry carries on.
-//
-// Staging: a CHORUS is full sail — the line rides larger over the water and
-// its sung words take the lifebuoy warmth (the one warm loud thing on board,
-// graded toward each song's album art), while the deck lifts a breath on
-// each kick of the swell. In instrumental breaks the crossing carries on:
-// rain drifts through the empty stage, and three deck lamps go dark one by
-// one as the words come back from shore.
 Item {
     id: root
     anchors.fill: parent
@@ -33,20 +26,6 @@ Item {
     function paleA(a)  { return Qt.rgba(pale.r, pale.g, pale.b, a) }
     function duskA(a)  { return Qt.rgba(dusk.r, dusk.g, dusk.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
-
-    // the lifebuoy warmth, saved for the chorus — graded toward the album
-    // art's vivid swatch (identity until the palette lands; the touches make
-    // the binding re-evaluate when it does)
-    readonly property color buoyLive: (engine.trackPaletteReady, engine.trackVivid,
-                                       engine.trackTint(pal.neon, 0.30))
-    function buoyLiveA(a) { return Qt.rgba(buoyLive.r, buoyLive.g, buoyLive.b, a) }
-
-    // full sail: the chorus rides larger over the water
-    readonly property bool fullSail: engine.inChorus
-
-    // the deck lifts a breath on each kick of the swell
-    property real swellKick: 0
-    NumberAnimation { id: swellKickAnim; target: root; property: "swellKick"; from: 1; to: 0; duration: 260; easing.type: Easing.OutQuad }
 
     // the line hangs over the water, below the horizon, above the swell
     readonly property real lineX: Math.round(root.width * 0.05)
@@ -105,12 +84,6 @@ Item {
         width: root.lineW
         height: flow.height
         opacity: root.lineExpired ? 0 : 1
-        // full sail on the chorus; the swell kick rides its own transform so
-        // it can't fight the scale Behavior
-        scale: root.fullSail ? 1.14 : 1
-        transformOrigin: Item.TopLeft
-        transform: Translate { y: -3 * root.swellKick * root.ui }
-        Behavior on scale { NumberAnimation { duration: 500; easing.type: Easing.OutQuad } }
         Behavior on opacity { NumberAnimation { duration: 700; easing.type: Easing.InQuad } }
 
         Flow {
@@ -171,8 +144,7 @@ Item {
                         font.letterSpacing: 2
                     }
 
-                    // the rain-wipe: the sung part, revealed top-down. On a
-                    // chorus the surfaced words take the lifebuoy warmth.
+                    // the rain-wipe: the sung part, revealed top-down
                     Item {
                         id: wipe
                         width: parent.width
@@ -181,8 +153,7 @@ Item {
                         Text {
                             text: base.text
                             textFormat: Text.PlainText
-                            color: wd.adlib ? root.duskA(0.9)
-                                            : (root.fullSail ? root.buoyLive : root.paleA(0.96))
+                            color: wd.adlib ? root.duskA(0.9) : root.paleA(0.96)
                             font.family: root.serif
                             font.pixelSize: wd.sizePx
                             font.weight: wd.adlib ? Font.Light : Font.Normal
@@ -233,73 +204,11 @@ Item {
         }
     }
 
-    // ── interlude: the crossing carries on — rain through the empty stage ───
-    Repeater {
-        model: 6
-        Rectangle {
-            id: drop
-            required property int index
-            readonly property real seed: ((index * 41) % 13) / 13
-            readonly property bool on: root.engine.inInterlude && root.engine.playing
-            visible: on
-            opacity: 0
-            x: root.lineX + root.lineW * ((index * 0.17 + seed * 0.1) % 1)
-            width: 1
-            height: (10 + seed * 12) * root.ui
-            color: root.paleA(0.35)
-            SequentialAnimation {
-                running: drop.on
-                loops: Animation.Infinite
-                ParallelAnimation {
-                    NumberAnimation {
-                        target: drop; property: "y"
-                        from: root.lineY - root.lyricSize * (1.5 + drop.seed)
-                        to: root.lineY + root.lyricSize * (1.2 + drop.seed * 0.6)
-                        duration: 1400 + drop.seed * 900
-                        easing.type: Easing.InQuad
-                    }
-                    SequentialAnimation {
-                        NumberAnimation { target: drop; property: "opacity"; from: 0; to: 0.55; duration: 250 }
-                        NumberAnimation { target: drop; property: "opacity"; to: 0; duration: 1100 + drop.seed * 900 }
-                    }
-                }
-            }
-        }
-    }
-
-    // ── three deck lamps go dark one by one: words coming back from shore ───
-    readonly property bool countdownOn:
-        engine.player !== null && engine.lyricsSynced && engine.playing
-        && engine.nextLineInMs >= 0 && engine.nextLineInMs < 3200
-        && (engine.inInterlude || engine.activeIndex < 0)
-    Row {
-        x: root.lineX
-        y: root.lineY + Math.round(root.lyricSize * 0.35)
-        spacing: Math.round(9 * root.ui)
-        visible: root.countdownOn
-        Repeater {
-            model: 3
-            Rectangle {
-                required property int index
-                readonly property bool lit: Math.ceil(root.engine.nextLineInMs / 1067) > index
-                width: 6 * root.ui
-                height: width
-                radius: width / 2
-                color: root.buoyLiveA(0.9)
-                border.width: 1
-                border.color: root.slateA(0.8)
-                opacity: lit ? 0.9 : 0.15
-                Behavior on opacity { NumberAnimation { duration: 240 } }
-            }
-        }
-    }
-
     // ── status: the radio room, when there's nothing to sing ────────────────
     Text {
         x: root.lineX
         y: root.lineY + 6
         visible: root.engine.player !== null && root.engine.tokens.length === 0
-                 && !root.countdownOn
         text: !root.engine.lyricsLoaded ? "· TUNING ·"
               : !root.engine.lyricsSynced ? "· NO WORDS FROM SHORE ·"
               : "· · —"
@@ -329,8 +238,5 @@ Item {
     Connections {
         target: root.engine
         function onOffsetNudged() { offsetOsd.flash() }
-        // the swell only kicks when the engine actually hears a beat, and only
-        // while a line is up — quantized to the music, absent without cava
-        function onBeat() { if (!root.lineExpired && root.engine.tokens.length > 0) swellKickAnim.restart() }
     }
 }

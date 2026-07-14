@@ -9,12 +9,6 @@ import QtQuick
 // light sweeps through the letters (karaoke fill). A held note swells with a
 // slow radiance and sheds drifting pollen motes. When a line finishes it
 // detaches and settles like a falling petal while the next bed is planted.
-//
-// Staging: a CHORUS is full bloom — the whole bed swells inside a golden-hour
-// radiance that breathes on the kick drum, and gold petals rise through the
-// light. In instrumental breaks fireflies wander the evening meadow, and three
-// closed buds burst one by one as a countdown to the verse coming back. The
-// gold itself is graded toward each song's album art.
 Item {
     id: root
     anchors.fill: parent
@@ -31,17 +25,6 @@ Item {
     readonly property string serif: "Noto Serif Display"
     function goldA(a) { return Qt.rgba(gold.r, gold.g, gold.b, a) }
     function pineA(a) { return Qt.rgba(pine.r, pine.g, pine.b, a) }
-
-    // per-song grade: the gold light leans toward the album art's vivid swatch
-    // (fail-open — identity until the palette lands; the touches re-evaluate)
-    readonly property color goldLive: (engine.trackPaletteReady, engine.trackVivid,
-                                       engine.trackTint(gold, 0.25))
-    function goldLiveA(a) { return Qt.rgba(goldLive.r, goldLive.g, goldLive.b, a) }
-
-    // full bloom: the chorus swells the whole bed
-    readonly property bool fullBloom: engine.inChorus
-    property real beatKick: 0
-    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 180; easing.type: Easing.OutQuad }
 
     readonly property real lyricSize: Math.round(38 * ui)
     readonly property real bedW: Math.round(root.width * 0.56)
@@ -66,8 +49,6 @@ Item {
             root.curLineJoined = root.joinTokens()
         }
         function onOffsetNudged() { offsetOsd.flash() }
-        // the radiance breathes on the kick drum during full bloom
-        function onBeat() { if (root.fullBloom && !root.lineExpired) beatKickAnim.restart() }
     }
     property string curLineJoined: ""
     function joinTokens() {
@@ -75,55 +56,6 @@ Item {
         let out = []
         for (let i = 0; i < t.length; i++) out.push(t[i].bg ? "(" + t[i].text + ")" : t[i].text)
         return out.join(" ")
-    }
-
-    // ── the chorus radiance: golden-hour light swelling behind the bed ──────
-    Rectangle {
-        x: bed.x - root.lyricSize * 2
-        y: bed.y - root.lyricSize * 1.2
-        width: bed.width + root.lyricSize * 4
-        height: bed.childrenRect.height + root.lyricSize * 2.4
-        radius: height / 2
-        color: root.goldLiveA(0.10)
-        opacity: root.fullBloom && !root.lineExpired && root.engine.tokens.length > 0 ? 1 : 0
-        scale: (root.fullBloom ? 1 : 0.9) + root.beatKick * 0.05
-        Behavior on opacity { NumberAnimation { duration: 350; easing.type: Easing.OutQuad } }
-    }
-
-    // ── chorus petals: gold motes rising through the light ──────────────────
-    Repeater {
-        model: 6
-        Rectangle {
-            id: petal
-            required property int index
-            readonly property real seed: (index * 0.618 + 0.21) % 1
-            readonly property bool on: root.fullBloom && !root.lineExpired
-                                       && root.engine.playing && root.engine.tokens.length > 0
-            x: root.bedX + root.bedW * ((seed + index * 0.15) % 1)
-            width: (3 + seed * 3) * root.ui
-            height: width
-            radius: width / 2
-            color: index % 2 ? root.goldLiveA(0.85)
-                             : Qt.rgba(root.rose.r, root.rose.g, root.rose.b, 0.7)
-            visible: on
-            opacity: 0
-            SequentialAnimation {
-                running: petal.on
-                loops: Animation.Infinite
-                ParallelAnimation {
-                    NumberAnimation {
-                        target: petal; property: "y"
-                        from: root.bedY + root.lyricSize * 1.5
-                        to: root.bedY - root.lyricSize * (2 + petal.seed * 2)
-                        duration: 2200 + petal.seed * 1600
-                    }
-                    SequentialAnimation {
-                        NumberAnimation { target: petal; property: "opacity"; from: 0; to: 0.9; duration: 300 }
-                        NumberAnimation { target: petal; property: "opacity"; to: 0; duration: 1900 + petal.seed * 1600 }
-                    }
-                }
-            }
-        }
     }
 
     // ── the flower bed: current line, blooming word by word ────────────────
@@ -134,10 +66,6 @@ Item {
         width: root.bedW
         spacing: Math.round(13 * root.ui)
         opacity: root.lineExpired ? 0 : 1
-        // full bloom: the whole bed swells with the refrain
-        scale: root.fullBloom ? 1.1 : 1
-        transformOrigin: Item.Center
-        Behavior on scale { NumberAnimation { duration: 420; easing.type: Easing.OutBack } }
         Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutQuad } }
 
         Repeater {
@@ -201,7 +129,7 @@ Item {
                         text: base.text
                         textFormat: Text.PlainText
                         font: base.font
-                        color: root.goldLive
+                        color: root.gold
                         scale: 1.07
                         opacity: wd.st.active ? 0.32 : 0
                         Behavior on opacity { NumberAnimation { duration: 260 } }
@@ -233,7 +161,7 @@ Item {
                         Text {
                             text: base.text
                             textFormat: Text.PlainText
-                            color: root.goldLive
+                            color: root.gold
                             style: Text.Raised
                             styleColor: root.pineA(0.85)
                             font: base.font
@@ -320,79 +248,11 @@ Item {
         }
     }
 
-    // ── interlude: fireflies wandering the evening meadow ───────────────────
-    Repeater {
-        model: 5
-        Rectangle {
-            id: fly
-            required property int index
-            readonly property real seed: (index * 0.618 + 0.07) % 1
-            readonly property bool on: root.engine.inInterlude && root.engine.playing
-            width: (2.5 + seed * 2) * root.ui
-            height: width
-            radius: width / 2
-            color: root.goldLiveA(0.9)
-            visible: on
-            opacity: 0
-            x: root.bedX + root.bedW * ((index * 0.23 + 0.05) % 1)
-            y: root.bedY + root.lyricSize * (0.2 + seed)
-            SequentialAnimation on x {
-                running: fly.on
-                loops: Animation.Infinite
-                NumberAnimation { to: root.bedX + root.bedW * fly.seed; duration: 3000 + fly.seed * 2000; easing.type: Easing.InOutSine }
-                NumberAnimation { to: root.bedX + root.bedW * ((fly.seed + 0.4) % 1); duration: 3400; easing.type: Easing.InOutSine }
-            }
-            SequentialAnimation on y {
-                running: fly.on
-                loops: Animation.Infinite
-                NumberAnimation { to: root.bedY - root.lyricSize * (0.5 + fly.seed); duration: 2600 + fly.seed * 1800; easing.type: Easing.InOutSine }
-                NumberAnimation { to: root.bedY + root.lyricSize * (0.3 + fly.seed * 0.8); duration: 3000; easing.type: Easing.InOutSine }
-            }
-            // the firefly blink
-            SequentialAnimation on opacity {
-                running: fly.on
-                loops: Animation.Infinite
-                NumberAnimation { to: 0.9; duration: 700 + fly.seed * 600; easing.type: Easing.InOutSine }
-                NumberAnimation { to: 0.15; duration: 900 + fly.seed * 700; easing.type: Easing.InOutSine }
-            }
-        }
-    }
-
-    // ── three closed buds burst one by one: the verse is coming back ────────
-    readonly property bool countdownOn:
-        engine.player !== null && engine.lyricsSynced && engine.playing
-        && engine.nextLineInMs >= 0 && engine.nextLineInMs < 3200
-        && (engine.inInterlude || engine.activeIndex < 0)
-    Row {
-        x: root.bedX
-        y: root.bedY + Math.round(root.lyricSize * 0.45)
-        spacing: Math.round(10 * root.ui)
-        visible: root.countdownOn
-        Repeater {
-            model: 3
-            Rectangle {
-                required property int index
-                readonly property bool closed: Math.ceil(root.engine.nextLineInMs / 1067) > index
-                width: 7 * root.ui
-                height: 10 * root.ui
-                radius: width / 2
-                color: root.goldA(0.75)
-                border.width: 1
-                border.color: Qt.rgba(root.leaf.r, root.leaf.g, root.leaf.b, 0.9)
-                opacity: closed ? 0.85 : 0
-                scale: closed ? 1 : 1.9
-                Behavior on opacity { NumberAnimation { duration: 220 } }
-                Behavior on scale { NumberAnimation { duration: 260; easing.type: Easing.OutQuad } }
-            }
-        }
-    }
-
     // ── status whisper when a track plays but no words are up ──────────────
     Text {
         x: root.bedX
         y: root.bedY + root.lyricSize * 0.3
         visible: root.engine.player !== null && root.engine.tokens.length === 0
-                 && !root.countdownOn
         text: !root.engine.lyricsLoaded ? "gathering seeds…"
               : !root.engine.lyricsSynced ? "no lyrics on this breeze"
               : "❀"

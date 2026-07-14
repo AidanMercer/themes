@@ -81,38 +81,6 @@ a subtle bass swell on the active word. Thresholds `silenceEnter`/`silenceExit`
 in `LyricsEngine.qml` may want tuning by ear (the default sink here is
 Bluetooth, which scales differently from analog).
 
-## Staging signals (the music-video layer)
-
-Everything below is theme-independent and computed in the engine; themes stage
-against it. All of it is **fail-open** — gate every effect on its ready flag
-and the widget must degrade to the plain karaoke treatment.
-
-- **Chorus detection** — `chorusMask` (bool per line), `isChorus(i)`,
-  `inChorus`. Purely lexical: a normalized line that repeats elsewhere AND sits
-  in a run of repeats (or is a 4+-times hook) is chorus. Songs where nearly
-  everything repeats get an all-false mask (no contrast worth staging).
-  Reference `chorusMask` itself in bindings so they re-evaluate when lyrics land.
-- **Gap awareness** — `nextLineStartMs` / `nextLineInMs` (-1 with nothing
-  ahead) count down to the next vocal, including before the first line;
-  `inInterlude` flags a real instrumental break (line done + >4.5s dead air,
-  intro/outro included). Themes recede in interludes and run a countdown when
-  `nextLineInMs` drops under ~3s.
-- **Energy** — `audioEnergy` (live full-band envelope, absolute),
-  `audioEnergyAvg` (~4s rolling mean of raw frames), `audioLift` (their ratio:
-  >1.2 ≈ hot section/drop, <0.7 ≈ breakdown). Primary screen only, like
-  `audioPulse` — gate on `audioReady`.
-- **Beat clock** — bass onsets from the same cava feed, inter-onset gaps folded
-  into one tempo octave (80–160 BPM) and medianed: `bpm`, `beatPhase` (saws
-  0..1 per beat, updated on the 30fps tick), `beatConfident`, and a `beat()`
-  signal on each wrap. No drums / inconsistent gaps / no cava → `beatConfident`
-  stays false. Resets on track change (~3–4s to reacquire).
-- **Album-art palette** — `scripts/lyricvis-art.py` (ffmpeg decode, no Pillow)
-  reduces the cover to three swatches cached in `~/.cache/lyricvis/art-*.json`:
-  `trackPrimary` (dominant), `trackVivid` (most saturated, lum-normalized),
-  `trackDeep` (darkest). `trackPaletteReady` gates them;
-  `trackTint(base, amt)` blends a theme color toward `trackVivid` and is the
-  identity until a palette loads, so it's always safe to call inline.
-
 ## Known limitations
 
 - **AMLL coverage is thin** (CJK-skewed) — most Western tracks miss and fall through

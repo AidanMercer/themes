@@ -10,13 +10,6 @@ import QtQuick.Effects
 // bass (engine.audioPulse). A bent-corner neon underline — the canopy
 // stripe — draws beneath the line as it completes. Released lines power
 // down to dead glass and fade. Adlibs are small icy-cyan side tubes.
-//
-// Staging: a CHORUS re-hangs the sign FULL BLAZE — bigger, dead center,
-// halos surging on the kick drum, the stripe drawn heavy. Instrumental
-// breaks idle the sign (status stripes breathing, live BPM readout when
-// the engine hears one) and a drag-tree of three lamps steps down to the
-// icy GO as the vocal returns. The canopy orange itself is graded toward
-// each song's album art.
 // Styling only — all timing lives in the shell's LyricsEngine.
 Item {
     id: root
@@ -36,34 +29,16 @@ Item {
     // unpowered tube glass: cold desaturated gray-blue
     readonly property color glassTube: Qt.rgba(0.42, 0.46, 0.50, 1)
 
-    // per-song grade: the canopy orange leans toward the album art's vivid
-    // swatch (fail-open — identity until the palette lands; the touches make
-    // the binding re-evaluate when it does)
-    readonly property color neonLive: (engine.trackPaletteReady, engine.trackVivid,
-                                       engine.trackTint(neon, 0.30))
-
-    // FULL BLAZE: the chorus re-hangs the sign bigger, dead center; the kick
-    // drum surges the halos while it burns
-    readonly property bool blaze: engine.inChorus
-    property real beatKick: 0
-    NumberAnimation { id: beatKickAnim; target: root; property: "beatKick"; from: 1; to: 0; duration: 160; easing.type: Easing.OutQuad }
-
     // ---- sign geometry: upper-right box, clear of clock (left) and bar -----
-    // (a blaze line trades the corner for center stage — the gate's blank cut
-    // hides the re-hang, so it reads as a different sign lighting up)
     readonly property real aspect: root.height > 0 ? root.width / root.height : 1.78
     readonly property bool ultrawide: aspect > 2.4
-    property real lyricSize: Math.round((ultrawide ? 46 : 38) * (blaze ? 1.22 : 1) * pal.uiScale)
+    property real lyricSize: Math.round((ultrawide ? 46 : 38) * pal.uiScale)
     readonly property real charW: lyricSize * 0.62          // mono advance + tracking
     readonly property real rowH: lyricSize * 1.5
-    readonly property real boxW: blaze
-        ? Math.min(Math.round(1100 * pal.uiScale), Math.round(root.width * 0.58))
-        : Math.min(Math.round((ultrawide ? 760 : 640) * pal.uiScale),
-                   Math.round(root.width * 0.40))
-    readonly property real boxX: blaze ? Math.round((root.width - boxW) / 2)
-                                       : Math.round(root.width * 0.955) - boxW
-    readonly property real boxY: blaze ? Math.round(root.height * 0.30)
-                                       : Math.round(root.height * 0.075)
+    readonly property real boxW: Math.min(Math.round((ultrawide ? 760 : 640) * pal.uiScale),
+                                          Math.round(root.width * 0.40))
+    readonly property real boxX: Math.round(root.width * 0.955) - boxW
+    readonly property real boxY: Math.round(root.height * 0.075)
 
     // sequential wrap layout: [{x,y,w,scale}] per token
     function layoutTokens(tokens) {
@@ -94,8 +69,6 @@ Item {
         target: root.engine
         function onActiveIndexChanged() { root.gate = false; gateCut.restart() }
         function onOffsetNudged() { offsetOsd.flash() }
-        // quantized: the halo surge lands ON the kick, blaze only
-        function onBeat() { if (root.blaze && root.lineShown) beatKickAnim.restart() }
     }
     readonly property bool lineShown: engine.tokens.length > 0 && gate && !lineExpired
 
@@ -135,7 +108,7 @@ Item {
                 readonly property real sizePx: root.lyricSize * p.scale
                 readonly property string shown: wd.bg
                     ? "(" + modelData.text + ")" : modelData.text.toUpperCase()
-                readonly property color litCol: wd.bg ? root.ice : root.neonLive
+                readonly property color litCol: wd.bg ? root.ice : root.neon
 
                 // buzz-in: when the word first goes active, stutter like a
                 // starter; powerT multiplies the lit tube's strength
@@ -179,15 +152,14 @@ Item {
                     height: tube.height
                     Behavior on width { NumberAnimation { duration: 70 } }
 
-                    // halo: two soft scaled copies behind the core (the kick
-                    // drum surges them during full blaze via beatKick)
+                    // halo: two soft scaled copies behind the core
                     Text {
                         anchors.centerIn: core
                         text: wd.shown
                         textFormat: Text.PlainText
                         color: wd.litCol
-                        opacity: (0.30 + root.beatKick * 0.18) * wd.powerT
-                        scale: 1.10 + root.beatKick * 0.03
+                        opacity: 0.30 * wd.powerT
+                        scale: 1.10
                         font: core.font
                     }
                     Text {
@@ -195,7 +167,7 @@ Item {
                         text: wd.shown
                         textFormat: Text.PlainText
                         color: wd.litCol
-                        opacity: (0.55 + root.beatKick * 0.2) * wd.powerT
+                        opacity: 0.55 * wd.powerT
                         scale: 1.04
                         font: core.font
                     }
@@ -272,12 +244,12 @@ Item {
                 ctx.stroke()
                 if (stripe.t > 0.02) {
                     path(stripe.t)
-                    ctx.strokeStyle = root.neonLive
+                    ctx.strokeStyle = root.pal.neon
                     ctx.globalAlpha = 0.22
-                    ctx.lineWidth = root.blaze ? 6.5 : 4.5   // heavier tube in full blaze
+                    ctx.lineWidth = 4.5
                     ctx.stroke()
                     ctx.globalAlpha = 0.95
-                    ctx.lineWidth = root.blaze ? 2.1 : 1.6
+                    ctx.lineWidth = 1.6
                     ctx.stroke()
                 }
                 ctx.globalAlpha = 1
@@ -285,29 +257,12 @@ Item {
         }
     }
 
-    // status when a track's playing but there's no line to light; doubles as
-    // the interlude idle readout (during breaks the stale line's tokens are
-    // still non-empty, so this checks inInterlude itself), breathing like a
-    // sign left humming
-    readonly property bool countdownOn:
-        engine.player !== null && engine.lyricsSynced && engine.playing
-        && engine.nextLineInMs >= 0 && engine.nextLineInMs < 3200
-        && (engine.inInterlude || engine.activeIndex < 0)
+    // status when a track's playing but there's no line to light
     Row {
-        id: statusRow
         x: root.boxX + root.boxW - width
         y: root.boxY
         spacing: 10
-        visible: root.engine.player !== null && !root.countdownOn
-                 && (root.engine.tokens.length === 0 || root.engine.inInterlude)
-        opacity: 0.9
-        SequentialAnimation on opacity {
-            running: root.engine.inInterlude && root.engine.playing && statusRow.visible
-            loops: Animation.Infinite
-            onStopped: statusRow.opacity = 0.9
-            NumberAnimation { to: 0.4; duration: 1400; easing.type: Easing.InOutSine }
-            NumberAnimation { to: 0.9; duration: 1400; easing.type: Easing.InOutSine }
-        }
+        visible: root.engine.player !== null && root.engine.tokens.length === 0
         Column {
             anchors.verticalCenter: parent.verticalCenter
             spacing: 2
@@ -319,8 +274,6 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: !root.engine.lyricsLoaded ? "SIGN WARMING UP…"
                   : !root.engine.lyricsSynced ? "SIGN DARK — NO LYRICS"
-                  : root.engine.inInterlude
-                    ? (root.engine.beatConfident ? "IDLE — " + root.engine.bpm + " BPM" : "IDLE")
                   : "♪"
             color: root.glassTube
             opacity: 0.8
@@ -329,33 +282,6 @@ Item {
             font.letterSpacing: 3
             style: Text.Outline
             styleColor: Qt.rgba(0, 0, 0, 0.45)
-        }
-    }
-
-    // the drag tree: three lamps step down — amber, amber, icy GO — and the
-    // verse launches
-    Column {
-        x: root.boxX + root.boxW - width
-        y: root.boxY
-        spacing: Math.round(7 * pal.uiScale)
-        visible: root.countdownOn
-        Repeater {
-            model: 3
-            Rectangle {
-                required property int index
-                readonly property bool lit:
-                    Math.ceil(root.engine.nextLineInMs / 1067) <= 3 - index
-                width: Math.round(13 * root.pal.uiScale)
-                height: width
-                radius: width / 2
-                color: index < 2 ? root.amber : root.ice
-                border.width: 1
-                border.color: Qt.rgba(0, 0, 0, 0.35)
-                opacity: lit ? 0.95 : 0.18
-                scale: lit ? 1 : 0.85
-                Behavior on opacity { NumberAnimation { duration: 180 } }
-                Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
-            }
         }
     }
 
