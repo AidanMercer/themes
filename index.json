@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "521c0ad",
+  "commit": "8b00015",
   "themes": [
     {
       "name": "avalon",
@@ -16,8 +16,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21447723,
-      "rev": "521c0ad",
+      "bytes": 21452291,
+      "rev": "8b00015",
       "files": [
         {
           "path": "avalon/bar.qml",
@@ -76,6 +76,10 @@
           "bytes": 23126
         },
         {
+          "path": "avalon/vellum.qml",
+          "bytes": 4568
+        },
+        {
           "path": "avalon/wallpaper.mp4",
           "bytes": 21339862
         }
@@ -95,8 +99,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/fuel.jpg",
-      "bytes": 16586221,
-      "rev": "521c0ad",
+      "bytes": 16590121,
+      "rev": "8b00015",
       "files": [
         {
           "path": "fuel/bar.qml",
@@ -155,6 +159,10 @@
           "bytes": 27161
         },
         {
+          "path": "fuel/vellum.qml",
+          "bytes": 3900
+        },
+        {
           "path": "fuel/wallpaper.mp4",
           "bytes": 16431851
         }
@@ -174,8 +182,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26374066,
-      "rev": "521c0ad",
+      "bytes": 26378599,
+      "rev": "8b00015",
       "files": [
         {
           "path": "guts/bar.qml",
@@ -234,6 +242,10 @@
           "bytes": 23566
         },
         {
+          "path": "guts/vellum.qml",
+          "bytes": 4533
+        },
+        {
           "path": "guts/wallpaper.mp4",
           "bytes": 26240425
         }
@@ -253,8 +265,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/lonely-train.jpg",
-      "bytes": 29018685,
-      "rev": "521c0ad",
+      "bytes": 29022538,
+      "rev": "8b00015",
       "files": [
         {
           "path": "lonely-train/bar.qml",
@@ -313,6 +325,10 @@
           "bytes": 21645
         },
         {
+          "path": "lonely-train/vellum.qml",
+          "bytes": 3853
+        },
+        {
           "path": "lonely-train/wallpaper.mp4",
           "bytes": 28892364
         }
@@ -332,8 +348,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/moon.jpg",
-      "bytes": 44068553,
-      "rev": "521c0ad",
+      "bytes": 44072530,
+      "rev": "8b00015",
       "files": [
         {
           "path": "moon/LYRICS-NOTES.md",
@@ -400,6 +416,10 @@
           "bytes": 24326
         },
         {
+          "path": "moon/vellum.qml",
+          "bytes": 3977
+        },
+        {
           "path": "moon/wallpaper.jpg",
           "bytes": 7788389
         },
@@ -425,8 +445,8 @@
       "video": true,
       "variants": 3,
       "thumb": ".catalog/thumbs/nature.jpg",
-      "bytes": 42451516,
-      "rev": "521c0ad",
+      "bytes": 42454806,
+      "rev": "8b00015",
       "files": [
         {
           "path": "nature/bar.qml",
@@ -485,6 +505,10 @@
           "bytes": 23498
         },
         {
+          "path": "nature/vellum.qml",
+          "bytes": 3290
+        },
+        {
           "path": "nature/wallpaper.mp4",
           "bytes": 15209786
         },
@@ -512,8 +536,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sailing.jpg",
-      "bytes": 21550752,
-      "rev": "521c0ad",
+      "bytes": 21552092,
+      "rev": "8b00015",
       "files": [
         {
           "path": "sailing/bar.qml",
@@ -572,6 +596,10 @@
           "bytes": 20635
         },
         {
+          "path": "sailing/vellum.qml",
+          "bytes": 1340
+        },
+        {
           "path": "sailing/wallpaper.mp4",
           "bytes": 21441542
         }
@@ -591,8 +619,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26727679,
-      "rev": "521c0ad",
+      "bytes": 26731074,
+      "rev": "8b00015",
       "files": [
         {
           "path": "shiro/bar.qml",
@@ -643,6 +671,10 @@
           "bytes": 21923
         },
         {
+          "path": "shiro/vellum.qml",
+          "bytes": 3395
+        },
+        {
           "path": "shiro/wallpaper.jpg",
           "bytes": 931683
         },
@@ -674,8 +706,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stars.jpg",
-      "bytes": 23327555,
-      "rev": "521c0ad",
+      "bytes": 23332625,
+      "rev": "8b00015",
       "files": [
         {
           "path": "stars/bar.qml",
@@ -734,6 +766,10 @@
           "bytes": 22206
         },
         {
+          "path": "stars/vellum.qml",
+          "bytes": 5070
+        },
+        {
           "path": "stars/wallpaper.mp4",
           "bytes": 23188921
         }
@@ -753,8 +789,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/vinland.jpg",
-      "bytes": 3246355,
-      "rev": "521c0ad",
+      "bytes": 3250524,
+      "rev": "8b00015",
       "files": [
         {
           "path": "vinland/aurora.frag",
@@ -811,6 +847,10 @@
         {
           "path": "vinland/sysinfo.qml",
           "bytes": 9826
+        },
+        {
+          "path": "vinland/vellum.qml",
+          "bytes": 4169
         },
         {
           "path": "vinland/wallpaper.mp4",
