@@ -2,7 +2,8 @@ import QtQuick
 
 // stars: the night sky over the vending machine — a scatter of stars twinkling
 // in the upper panes and the machine's amber shelf-light warming the bottom-left
-// corner. Stars only breathe while the window is awake.
+// corner. Stars only breathe while the music plays, and every new song
+// lets one fall.
 Item {
     id: chrome
 
@@ -27,7 +28,8 @@ Item {
     readonly property string glyphRecent: "☾"
     readonly property string glyphNowPlaying: "✦"
 
-    // ── a shooting star crosses the sky every so often while music plays ──
+    // ── a shooting star falls on every track change, and crosses the sky
+    // every so often besides while music plays ──
     readonly property Component overlay: Component {
         Item {
             id: ov
@@ -47,9 +49,10 @@ Item {
                     GradientStop { position: 1.0; color: Qt.alpha(chrome.pal.text, 0.8) }
                 }
                 SequentialAnimation {
+                    id: shoot
                     running: chrome.playing && chrome.awake && ov.visible
                     loops: Animation.Infinite
-                    PauseAnimation { duration: 21000 }
+                    // star first, so a track-change restart lets one fall at once
                     ScriptAction {
                         script: {
                             streak.baseX = ov.width * (0.1 + Math.random() * 0.5)
@@ -65,6 +68,13 @@ Item {
                             NumberAnimation { target: streak; property: "opacity"; to: 0; duration: 400 }
                         }
                     }
+                    PauseAnimation { duration: 21000 }
+                }
+                Connections {
+                    target: chrome.host
+                    enabled: chrome.host !== null
+                    // guard mirrors the running gate — restart() must never wake a gated-off loop
+                    function onNpTrackIdChanged() { if (chrome.host.npTrackId && chrome.playing && chrome.awake) shoot.restart() }
                 }
             }
         }
@@ -105,7 +115,7 @@ Item {
                     opacity: 0.25
                     SequentialAnimation on opacity {
                         loops: Animation.Infinite
-                        running: chrome.awake && bd.visible
+                        running: chrome.playing && chrome.awake && bd.visible
                         NumberAnimation { to: 0.75; duration: tw; easing.type: Easing.InOutSine }
                         NumberAnimation { to: 0.18; duration: tw * 1.3; easing.type: Easing.InOutSine }
                     }

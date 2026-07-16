@@ -1,8 +1,9 @@
 import QtQuick
 import QtQuick.Particles
 
-// avalon: buttercup petals drift down the glass while frostify has your eye,
-// over a faint moss scrim rising from the bottom — the meadow behind the panes.
+// avalon: buttercup petals drift down the glass while the music blooms and
+// frostify has your eye, over a faint moss scrim rising from the bottom — the
+// meadow behind the panes. Every new song draws the excalibur glint at once.
 Item {
     id: chrome
 
@@ -28,7 +29,8 @@ Item {
     readonly property bool playing: host && host.np
                                     && host.np.active === true && host.np.isPlaying === true
 
-    // ── excalibur glint: a narrow gold sheen sweeps the glass now and then ──
+    // ── excalibur glint: a narrow gold sheen sweeps the glass on every track
+    // change, and now and then besides while the music plays ──
     readonly property Component overlay: Component {
         Item {
             id: ov
@@ -50,13 +52,20 @@ Item {
                     id: glint
                     running: chrome.playing && chrome.awake && ov.visible
                     loops: Animation.Infinite
-                    PauseAnimation { duration: 16000 }
+                    // sweep first, so a track-change restart draws the blade at once
                     NumberAnimation {
                         target: sheen; property: "x"
                         from: -sheen.width; to: ov.width + sheen.width
                         duration: 1400
                         easing.type: Easing.InOutSine
                     }
+                    PauseAnimation { duration: 16000 }
+                }
+                Connections {
+                    target: chrome.host
+                    enabled: chrome.host !== null
+                    // guard mirrors the running gate — restart() must never wake a gated-off loop
+                    function onNpTrackIdChanged() { if (chrome.host.npTrackId && chrome.playing && chrome.awake) glint.restart() }
                 }
             }
         }
@@ -92,7 +101,7 @@ Item {
             ParticleSystem {
                 id: sys
                 running: true
-                paused: !chrome.awake || !bd.visible
+                paused: !chrome.playing || !chrome.awake || !bd.visible
             }
             Emitter {
                 system: sys

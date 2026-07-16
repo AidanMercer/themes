@@ -1,8 +1,8 @@
 import QtQuick
 
 // lonely-train: the late carriage — sodium lamplight pooling in the top-right
-// corner, dusk blue settling at the floor, and every so often the lights of a
-// passing station sweep across the window while the music rides.
+// corner, dusk blue settling at the floor. Every new song pulls into a station:
+// its lights sweep the window at once, then again every so often as the music rides.
 Item {
     id: chrome
 
@@ -67,7 +67,7 @@ Item {
                 }
             }
 
-            // the passing station lights
+            // the passing station lights — every new song pulls into one
             Rectangle {
                 id: beam
                 width: 170
@@ -86,13 +86,20 @@ Item {
                     id: sweep
                     running: chrome.playing && chrome.awake && bd.visible
                     loops: Animation.Infinite
-                    PauseAnimation { duration: 11000 }
+                    // lights first, so a track-change restart sweeps straight away
                     NumberAnimation {
                         target: beam; property: "x"
                         from: -beam.width; to: bd.width + beam.width
                         duration: 3000
                         easing.type: Easing.InOutSine
                     }
+                    PauseAnimation { duration: 11000 }
+                }
+                Connections {
+                    target: chrome.host
+                    enabled: chrome.host !== null
+                    // guard mirrors the running gate — restart() must never wake a gated-off loop
+                    function onNpTrackIdChanged() { if (chrome.host.npTrackId && chrome.playing && chrome.awake) sweep.restart() }
                 }
             }
         }

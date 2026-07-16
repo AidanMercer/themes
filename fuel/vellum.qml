@@ -2,7 +2,9 @@ import QtQuick
 
 // fuel: the canopy at night behind the page. The stripe burns steady while
 // you're working — the tired tube only starts flickering, and the frozen mist
-// only creeps over the ground, once you sit back and read.
+// only creeps over the ground, once you sit back and read. Each page that
+// composes re-strikes the tube: a cold one-shot ignition stutter, then the
+// steady burn.
 Item {
     id: chrome
 
@@ -79,6 +81,48 @@ Item {
                     NumberAnimation { target: canopy; property: "opacity"; to: 1.0; duration: 90 }
                     NumberAnimation { target: canopy; property: "opacity"; to: 0.7; duration: 50 }
                     NumberAnimation { target: canopy; property: "opacity"; to: 1.0; duration: 140 }
+                }
+                // re-strike — the page comes up and the tube arcs cold: a hard
+                // fluorescent stutter over the stripe, then it hands back to
+                // the steady orange burn
+                Item {
+                    id: strike
+                    anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+                    height: 12
+                    opacity: 0
+                    Rectangle {
+                        anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+                        anchors.leftMargin: 10; anchors.rightMargin: 10
+                        height: 12
+                        gradient: Gradient {
+                            GradientStop { position: 0.0; color: "transparent" }
+                            GradientStop { position: 1.0; color: Qt.alpha(chrome.pal.cyan, 0.28) }
+                        }
+                    }
+                    Rectangle {
+                        anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+                        anchors.leftMargin: 10; anchors.rightMargin: 10
+                        height: 2.5
+                        radius: 1
+                        color: Qt.alpha(chrome.pal.cyan, 0.90)
+                    }
+                }
+                SequentialAnimation {
+                    id: restrike
+                    PropertyAction { target: strike; property: "opacity"; value: 1 }
+                    PauseAnimation { duration: 45 }
+                    PropertyAction { target: strike; property: "opacity"; value: 0 }
+                    PauseAnimation { duration: 70 }
+                    PropertyAction { target: strike; property: "opacity"; value: 0.85 }
+                    PauseAnimation { duration: 55 }
+                    PropertyAction { target: strike; property: "opacity"; value: 0 }
+                    PauseAnimation { duration: 110 }
+                    PropertyAction { target: strike; property: "opacity"; value: 1 }
+                    NumberAnimation { target: strike; property: "opacity"; to: 0; duration: 340; easing.type: Easing.OutQuad }
+                }
+                Connections {
+                    target: chrome
+                    function onPageChanged() { if (chrome.stirring) restrike.restart() }
                 }
             }
         }

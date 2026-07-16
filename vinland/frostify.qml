@@ -3,7 +3,7 @@ import QtQuick.Particles
 
 // vinland: the night sea behind the panes — aurora curtains breathe across the
 // top while snow falls through them, frost gathers at the sill, and the north
-// star glints in the corner. The status bar speaks like a ship's log.
+// star glints for every new song. The status bar speaks like a ship's log.
 Item {
     id: chrome
 
@@ -57,7 +57,7 @@ Item {
             ParticleSystem {
                 id: sys
                 running: true
-                paused: !chrome.awake || !bd.visible
+                paused: !chrome.playing || !chrome.awake || !bd.visible
             }
             Emitter {
                 system: sys
@@ -102,13 +102,20 @@ Item {
                     ctx.beginPath(); ctx.arc(c, c, 1.6, 0, Math.PI * 2); ctx.fill()
                 }
                 Component.onCompleted: requestPaint()
-                // a quiet glint every so often while the music plays
+                // a quiet glint for every new song, and every so often while the music sails
                 SequentialAnimation {
+                    id: glint
                     running: chrome.playing && chrome.awake
                     loops: Animation.Infinite
-                    PauseAnimation { duration: 14000 }
                     NumberAnimation { target: star; property: "scale"; to: 1.25; duration: 500; easing.type: Easing.OutQuad }
                     NumberAnimation { target: star; property: "scale"; to: 1.0; duration: 900; easing.type: Easing.InOutQuad }
+                    PauseAnimation { duration: 14000 }
+                }
+                Connections {
+                    target: chrome.host
+                    enabled: chrome.host !== null
+                    // guard mirrors the running gate — restart() must never wake a gated-off loop
+                    function onNpTrackIdChanged() { if (chrome.host.npTrackId && chrome.playing && chrome.awake) glint.restart() }
                 }
             }
         }
