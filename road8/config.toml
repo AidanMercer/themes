@@ -1,0 +1,25 @@
+# road8 — before the road. an 8-bit night: the car pulled over on the hill
+# road above the city, engine ticking, one star out, a thousand amber windows
+# below. palette sampled from the frames: sky #242b35, city glow #f2ba5e,
+# taillights #e2432c, plate yellow #d9b465, asphalt #1b1c20.
+bar_position = "top"
+
+accent      = "#f2ba5e"   # city amber — every lit window down there
+accent2     = "#a9bdd9"   # starlight slate — the cold half of the night
+accent3     = "#e2432c"   # taillight red — danger / power
+accent_warn = "#d98a3c"   # sodium orange — the streetlamp band
+accent_dim  = "#3c4353"   # asphalt slate — traces, dividers, dark pixels
+text  = "#e9e4d6"   # warm haze white
+glass = "#10131a"   # asphalt-night panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0e1118"
+fg        = "#e2ddd0"
+hue_green = "#8fb377"   # dashboard phosphor green
+hue_blue  = "#7d9ac4"   # night-sky blue
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "parked above the city — an 8-bit night before the road"
