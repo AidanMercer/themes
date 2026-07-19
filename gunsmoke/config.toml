@@ -1,0 +1,25 @@
+# gunsmoke — the bounty ledger of a dead gunslinger. Ash-grey western fog:
+# color is withheld; the one oxblood accent is spent only on danger/active/
+# kill moments. Palette sampled from the frames: fog #919ba0, wall #4f5355,
+# iron #2f393e, night #050a0d, bone #d9d3c5, oxblood #9e2b25.
+bar_position = "top"
+
+accent      = "#d9d3c5"   # bone — paper, primer, the stamp
+accent2     = "#8e9aa1"   # gunmetal — fog, steel, the cold readouts
+accent3     = "#9e2b25"   # oxblood — spent ONLY on danger/active/kill
+accent_warn = "#a08a5f"   # tarnished brass — powder-burn warnings
+accent_dim  = "#565e63"   # ash — rules, dividers, spent chambers
+text  = "#dcd7cb"   # bone ink
+glass = "#10161a"   # gun-iron panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0c1114"
+fg        = "#d6d1c5"
+hue_green = "#7e8f85"   # sage-ash green
+hue_blue  = "#8e9aa1"   # gunmetal blue
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "fog, powder, iron and paper — the bounty ledger of a dead gunslinger"

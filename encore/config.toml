@@ -1,0 +1,27 @@
+# encore — the encore, from the diva's side of the stage.
+# the desktop is the stage rig: light desk bar, cue clock, piano-roll lyrics,
+# a glowstick sea for a visualizer. everything quantized to the bar.
+
+bar_position = "top"
+bubbles = false
+cyber = false
+font_mono = "Noto Sans Mono"
+
+# ── palette, sampled from the wallpaper ─────────────────────────────────────
+accent      = "#56c8d8"   # the diva — Miku teal (hair light / eye teal)
+accent2     = "#4aa4e4"   # nail-lacquer mid-blue (her nails)
+accent3     = "#e0338c"   # the crowd — magenta rig-light glint
+accent_warn = "#f6dfd2"   # follow-spot warm white (skin light)
+accent_dim  = "#3c5878"   # steel-blue hair shadow — resting lamps, dividers
+
+text  = "#e4f0f6"
+glass = "#070a12"         # stage black
+
+# terminal / launcher / lock palettes (theme-colors.sh)
+bg        = "#05070e"
+fg        = "#dceaf4"
+hue_green = "#4ecfb0"
+hue_blue  = "#4aa4e4"
+
+# marketplace one-liner
+tagline = "the encore, from the diva's side of the stage — piano-roll lyrics and a glowstick sea"

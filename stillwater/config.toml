@@ -1,0 +1,26 @@
+# stillwater — the mirror at the end of the day. a lone figure standing on
+# perfectly still water under an enormous blue-to-rose twilight; a thin line
+# of distant lights splits the frame in half. palette sampled from the frames:
+# sky #1f5c9a, dusk rose #ad6b98, deep water #0f4d86, shore dark #052036,
+# distant lights warm white.
+bar_position = "bottom"
+
+accent      = "#f2e8d4"   # distant-light warm white — every lamp on the shore
+accent2     = "#7fb2e8"   # twilight blue — the sky and its double
+accent3     = "#c87da8"   # dusk rose — the horizon band / danger
+accent_warn = "#d9b48a"   # lantern halo — the warm ring around a light
+accent_dim  = "#46608c"   # twilight slate — hairlines, empty lamps, traces
+text  = "#dfe9f6"   # pale evening white
+glass = "#0c2136"   # deep-water panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0a1c30"
+fg        = "#d9e6f4"
+hue_green = "#7cc4ad"   # sea-glass teal
+hue_blue  = "#6fa3dc"   # open-water blue
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "the mirror at the end of the day — everything doubled in still water"

@@ -1,0 +1,25 @@
+# pines — "STANDING WATCH". A fire-watch lookout above the treeline on a
+# rainy night: the desktop is the ranger's glass cab — instruments, map
+# table, weather log, and the mountain outside. Palette sampled from the
+# frames: moonlit sky #5186a6, fog bank #21536d, mist #132f3b, pine #031016.
+bar_position = "top"
+
+accent      = "#e2a55c"   # kerosene amber — the one living light in the cab
+accent2     = "#a9c6d8"   # moon-silver fog blue — instruments, ink, moonlight
+accent3     = "#d96b4f"   # ember red — the one thing a lookout fears
+accent_warn = "#c9a161"   # weathered brass — fittings, cautions
+accent_dim  = "#2f4c60"   # graphite slate — rules, ticks, aging ink
+text  = "#dbe7ee"   # fog white
+glass = "#0b1b27"   # cab-glass slate
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#081420"
+fg        = "#d3e0e9"
+hue_green = "#7ca98f"   # lichen on the north face
+hue_blue  = "#6f9dbf"   # rain-light blue
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "standing watch — a fire lookout's glass cab above the fog"

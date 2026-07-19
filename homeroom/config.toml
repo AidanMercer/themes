@@ -1,0 +1,25 @@
+# homeroom — morning homeroom before anyone else arrives.
+# palette sampled from the still: sky #b8dbfc, lockers #86b0ea, chalkboard
+# slate #4d68a2/#2c3c63, stripe pink (#9d68b9 blue-washed, lifted #d873b4),
+# halo cyan #8fd0f4, sunlight #f2d79b, chalk #f4f7fd.
+bar_position = "top"
+
+accent      = "#8fd0f4"   # halo cyan — the one supernatural color
+accent2     = "#a9bdf0"   # locker periwinkle — the room's own blue
+accent3     = "#d873b4"   # locker-stripe pink — alerts / danger
+accent_warn = "#f2d79b"   # morning sunlight gold — warnings
+accent_dim  = "#5e6f9b"   # slate periwinkle — traces, dividers
+text  = "#f4f7fd"   # chalk white
+glass = "#1b2742"   # chalkboard slate panel tint
+
+# terminal = the chalkboard; theme-colors.sh feeds kitty/fuzzel/hyprlock
+bg        = "#18223a"
+fg        = "#e8eefb"
+hue_green = "#8fc7a8"   # chalk green (the good-grades chalk)
+hue_blue  = "#7fa8e8"   # morning blue
+
+font_mono = "Noto Sans Mono"
+cyber = false
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "morning homeroom before anyone else arrives"

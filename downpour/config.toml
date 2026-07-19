@@ -1,0 +1,25 @@
+# downpour — the rain-side of the glass. blue-hour storm interior: Reze at a
+# rain-drenched window, the desktop is the windowpane between the room and the
+# storm. palette sampled from the still: lit pane streak #77a2cb, her cold-lit
+# skin #538fb6, window frame #213a63, night behind the pane #081222.
+bar_position = "top"
+
+accent      = "#7fb0d6"   # wet-glass cyan — light caught in the pane
+accent2     = "#5b93b8"   # her cold-lit skin — the secondary light
+accent3     = "#c98f7e"   # the one warmth — the unsaid thing (alert/urgency)
+accent_warn = "#c2a178"   # candle-dim warm — warnings, low battery
+accent_dim  = "#2e4a6e"   # window-frame slate — traces, dividers
+text  = "#d4e3f0"   # pale glass light
+glass = "#0a1424"   # the night pane
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#081222"
+fg        = "#cfdeed"
+hue_green = "#7fae9e"   # storm-sea teal
+hue_blue  = "#6f9cc6"   # rain blue
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "the last quiet hour before a storm confession — every widget lives on the glass"

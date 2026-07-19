@@ -1,0 +1,25 @@
+# thicket — the watcher in the underbrush. a painterly dark-anime close-up:
+# pale eyes through deep-teal foliage, ember light on cloth, dappled canopy.
+# palette sampled from the frames: canopy #1b1917, teal leaf #22413b, ember
+# cloth #df7d69, iris highlight #e0cbe5, leaf grey #565858.
+bar_position = "top"
+
+accent      = "#e0785a"   # ember — the light on her skin and cloth
+accent2     = "#c6d0e2"   # pale iris — the eyes in the leaves
+accent3     = "#cf4b33"   # deep ember-red — danger / the eyes flash
+accent_warn = "#d8985c"   # dapple amber — light through the canopy
+accent_dim  = "#465148"   # leaf grey-green — traces, dividers, shadow
+text  = "#e9e0d2"   # warm pale — lit skin tone
+glass = "#0b100e"   # teal-black foliage panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#0a0f0d"
+fg        = "#e4dbcd"
+hue_green = "#5d8272"   # teal leaf, brightened
+hue_blue  = "#8ba3c2"   # iris blue
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "the watcher in the underbrush — every widget glimpsed through leaves"

@@ -1,0 +1,24 @@
+# bog — slow noon. a folktale pond: two friends fishing off a leaf-sail raft,
+# tall sunlit grass, murky water. palette sampled from the frames: canopy
+# light #b4ad62, grass blade #525028, hedgehog fur #8a6324, deep water #13130e.
+bar_position = "top"
+
+accent      = "#c9ba62"   # sunlit-grass amber — the noon light on the blades
+accent2     = "#8ea24e"   # moss green — lily pads, the frog
+accent3     = "#b85c33"   # bait rust — the bobber's red band / danger
+accent_warn = "#d29a41"   # hedgehog amber — warm warning
+accent_dim  = "#4d4a2e"   # dry reed — traces, dividers, sunken things
+text  = "#e6dfb8"   # warm straw
+glass = "#12140b"   # murky water panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#111207"
+fg        = "#e2dcb5"
+hue_green = "#8ea24e"   # moss
+hue_blue  = "#7d9c85"   # dusk-water teal
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "a folktale pond at slow noon — everything floats"

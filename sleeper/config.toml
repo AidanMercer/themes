@@ -1,0 +1,25 @@
+# sleeper — THE OVERNIGHT BERTH. a night sleeper compartment: bunk, tea in a
+# podstakannik, and the rainy green city sliding past the window under a
+# crescent moon. palette sampled from the still: moon #b5c08f, lit buildings
+# #2b3327, lamp reflection #382d1e, table wood #2b2521, tea #5a2b1e.
+bar_position = "bottom"
+
+accent      = "#a9c491"   # murky city green — the window's light
+accent2     = "#d9d5a3"   # moon pale-yellow — the crescent over the towers
+accent3     = "#c25b49"   # conductor's stamp red — danger / VOID
+accent_warn = "#d29a5b"   # tea amber — the glass, the reading lamp
+accent_dim  = "#4a4f42"   # wood-shadow green — traces, dividers
+text  = "#e8e2d2"   # linen
+glass = "#141712"   # compartment-dark panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#101309"
+fg        = "#e4decd"
+hue_green = "#a9c491"   # city green
+hue_blue  = "#7f9d8f"   # murky teal — the river under the bridge
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "the overnight berth — tea, linen, and a green city sliding past"
