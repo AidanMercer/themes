@@ -19,7 +19,6 @@ Item {
     readonly property color fresh: pal.magenta
     readonly property color paper: pal.glass
     readonly property string serif: "Noto Serif Display"
-    readonly property string mono: pal.fontMono
     readonly property string icon: "Symbols Nerd Font"
     function inkA(a) { return Qt.rgba(ink.r, ink.g, ink.b, a) }
 

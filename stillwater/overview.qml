@@ -25,6 +25,9 @@ Item {
     function skyA(a)   { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
 
     // ── scalars: soft water glass ──
+    // scrim + thumb wells are fixed deep-water tones a shade darker than
+    // pal.glass — deliberately below any palette accent so the wallpaper's
+    // own dusk reads through; retinting config.toml shouldn't lift the night
     readonly property color scrimColor: "#08182c"
     readonly property real scrimOpacity: 0.72
     readonly property bool shadowOn: false                  // the reflection replaces it

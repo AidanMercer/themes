@@ -10,7 +10,7 @@ import Quickshell.Io
 // whisper answers the clock's "bound for home".
 // Hover-reveal: lights up when the bar's guard panel is hovered or the
 // Super+. pin flips (the shared flag-file contract). One bash poll every 3s
-// while shown (pure builtins), a slow warm tick while hidden.
+// while shown (pure builtins); a hidden board polls nothing at all.
 Item {
     id: root
     anchors.fill: parent

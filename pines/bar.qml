@@ -36,7 +36,6 @@ Item {
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
     readonly property string serif: "Noto Serif Display"
-    readonly property string icon: "Symbols Nerd Font"
     function lampA(a)   { return Qt.rgba(lamp.r, lamp.g, lamp.b, a) }
     function silverA(a) { return Qt.rgba(fogSilver.r, fogSilver.g, fogSilver.b, a) }
     function inkA(a)    { return Qt.rgba(ink.r, ink.g, ink.b, a) }

@@ -20,14 +20,11 @@ Item {
     property bool occluded: false
 
     readonly property color bone: pal.neon
-    readonly property color steel: pal.cyan
-    readonly property color blood: pal.magenta
     readonly property color ash: pal.dim
     readonly property color ink: pal.text
     readonly property string serif: "Noto Serif"
     readonly property string mono: pal.fontMono
     function boneA(a)  { return Qt.rgba(bone.r, bone.g, bone.b, a) }
-    function steelA(a) { return Qt.rgba(steel.r, steel.g, steel.b, a) }
     function ashA(a)   { return Qt.rgba(ash.r, ash.g, ash.b, a) }
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
 

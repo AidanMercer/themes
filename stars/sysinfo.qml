@@ -498,6 +498,7 @@ Item {
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.online ? root.connName : "OFFLINE"
+                        textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 10
                         color: root.online ? root.inkA(0.8) : root.alert

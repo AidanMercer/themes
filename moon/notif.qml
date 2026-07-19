@@ -39,7 +39,9 @@ Item {
                 width: 6; height: 6
                 color: deck.live
                 SequentialAnimation on opacity {
-                    running: true
+                    // the shell keeps this backdrop loaded while the center is
+                    // closed (the window just hides) — only blink when it shows
+                    running: tick.Window.visible
                     loops: Animation.Infinite
                     NumberAnimation { from: 1; to: 0.25; duration: 900 }
                     NumberAnimation { from: 0.25; to: 1; duration: 900 }

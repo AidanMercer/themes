@@ -139,6 +139,7 @@ Item {
                                 { band: "high", col: chrome.pal.text }
                             ]
                             delegate: Column {
+                                id: tower
                                 required property var modelData
                                 readonly property int lit: Math.min(5, Math.ceil((chrome.audio[modelData.band] || 0) * 5))
                                 spacing: 1
@@ -149,7 +150,7 @@ Item {
                                         required property int index
                                         width: 5; height: 2
                                         // fills bottom-up in whole blocks, no glide
-                                        color: (4 - index) < parent.lit ? modelData.col : chrome.slateA(0.5)
+                                        color: (4 - index) < tower.lit ? tower.modelData.col : chrome.slateA(0.5)
                                     }
                                 }
                             }

@@ -20,14 +20,11 @@ Item {
     required property var engine
     readonly property color paneLight: pal.neon
     readonly property color skinLight: pal.cyan
-    readonly property color warmth: pal.magenta
-    readonly property color slate: pal.dim
     readonly property color ink: pal.text
     readonly property string serif: "Noto Serif"
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function paneA(a)  { return Qt.rgba(paneLight.r, paneLight.g, paneLight.b, a) }
     function skinA(a)  { return Qt.rgba(skinLight.r, skinLight.g, skinLight.b, a) }
-    function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
 
     // ---- pane geometry ------------------------------------------------------
     readonly property real lyricSize: Math.round(34 * pal.uiScale)

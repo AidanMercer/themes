@@ -39,7 +39,6 @@ Item {
     readonly property color ink: pal.text
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
-    readonly property string icon: "Symbols Nerd Font"
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
@@ -252,7 +251,6 @@ Item {
 
             readonly property bool driving: Math.abs(tx - (wsCluster.activeSlot * wsCluster.slotW + wsCluster.slotW / 2 - width / 2)) > 1.5
             property int facing: 1
-            onTxChanged: {}   // direction is set where the target moves, below
 
             transform: Scale {
                 origin.x: car.width / 2

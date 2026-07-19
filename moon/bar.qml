@@ -9,9 +9,10 @@ import Quickshell.Services.Mpris
 //
 // Loaded by the quickshell bar wrapper while this wallpaper is showing, in place
 // of the default bar. Self-contained (lives outside the repo's module tree), so
-// it talks straight to the public Quickshell services and rebuilds the two
-// left cluster the default bar shows, restyled as a cyberdeck readout:
-//   • left — workspace tabs: app icon per occupied workspace, click to switch
+// it talks straight to the public Quickshell services and rebuilds the default
+// bar's clusters, restyled as a cyberdeck readout:
+//   • center — workspace tabs: app icon per occupied workspace, click to switch
+//   • far left — mpris now-playing chip with a progress underline
 // System info isn't here — it's a separate bottom-right widget (moon/sysinfo.qml).
 // Chamfered dark panels with neon edges, a full-width HUD underline, no glitch.
 Item {
@@ -28,7 +29,7 @@ Item {
     readonly property color magenta: pal.magenta
     readonly property color amber:   pal.amber
     readonly property color dim:     pal.dim
-    readonly property string mono:   "Noto Sans Mono"
+    readonly property string mono:   pal.fontMono
     readonly property string icon:   "Symbols Nerd Font"
 
     readonly property var monitor: barScreen ? Hyprland.monitorFor(barScreen) : Hyprland.focusedMonitor
@@ -58,7 +59,7 @@ Item {
         ctx.stroke()
     }
 
-    // ── left: workspace tabs ────────────────────────────────────────────────
+    // ── center: workspace tabs ──────────────────────────────────────────────
     Item {
         id: leftPanel
         height: 30

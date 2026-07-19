@@ -84,6 +84,7 @@ Item {
             x: root.width * ((seed * 7.13) % 1)
 
             NumberAnimation on y {
+                running: root.p > 0.2
                 loops: Animation.Infinite
                 from: -20 - fleck.seed * root.height * 0.3
                 to: root.height + 20

@@ -24,6 +24,9 @@ Item {
     // injected by the bar wrapper after load (Loader.onLoaded)
     property var barScreen: null
 
+    // loader pushes true while the session is locked — parks the pollers
+    property bool occluded: false
+
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color amber: pal.neon
@@ -324,7 +327,7 @@ Item {
                 font.pixelSize: 10
                 opacity: media.playing ? 1 : 0.35
                 SequentialAnimation on scale {
-                    running: media.playing
+                    running: media.playing && !root.occluded
                     loops: Animation.Infinite
                     NumberAnimation { to: 1.25; duration: 900; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 1.0; duration: 900; easing.type: Easing.InOutSine }
@@ -351,7 +354,7 @@ Item {
         property real progress: 0
         Timer {
             interval: 1000; repeat: true
-            running: media.playing
+            running: media.playing && !root.occluded
             triggeredOnStart: true
             onTriggered: {
                 const p = media.player
@@ -396,7 +399,7 @@ Item {
     property bool hasBattery: false
 
     Timer {
-        interval: 10000; running: true; repeat: true; triggeredOnStart: true
+        interval: 10000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { netProc.running = true; batProc.running = true }
     }
     Process {
@@ -638,7 +641,7 @@ Item {
             NumberAnimation { target: tail; property: "rotation"; to: 12; duration: 700; easing.type: Easing.OutBounce }
         }
         Timer {
-            running: root.visible
+            running: root.visible && !root.occluded
             repeat: true
             interval: 34000 + Math.floor(Math.random() * 30000)
             onTriggered: { tailFlick.restart(); interval = 34000 + Math.floor(Math.random() * 30000) }

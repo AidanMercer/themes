@@ -76,12 +76,15 @@ Item {
             color: Qt.alpha(root.pal.cyan, 0.9)
             opacity: 0
             SequentialAnimation on opacity {
+                id: glintFade
                 running: !root.occluded
                 NumberAnimation { to: 0.4; duration: 2200; easing.type: Easing.InOutSine }
                 NumberAnimation { to: 0.08; duration: 2400; easing.type: Easing.InOutSine }
                 NumberAnimation { to: 0.3; duration: 2200; easing.type: Easing.InOutSine }
                 NumberAnimation { to: 0; duration: 2600; easing.type: Easing.InOutSine }
             }
+            // pooled delegate — one-shot ends at 0; re-arm per attach
+            ItemParticle.onAttached: glintFade.restart()
         }
     }
 }

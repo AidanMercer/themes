@@ -24,7 +24,6 @@ Item {
     readonly property color slate: pal.dim
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
-    readonly property string icon: "Symbols Nerd Font"
     function chalkA(a) { return Qt.rgba(chalk.r, chalk.g, chalk.b, a) }
     function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }

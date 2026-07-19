@@ -14,10 +14,12 @@ Item {
 
     // injected by the loader (setSource initial property)
     required property var pal
+    // kept live by the loader: true while locked or covered by a fullscreen
+    // window — parks the uptime poll and the minute train
+    property bool occluded: false
     readonly property color amber: pal.neon
     readonly property color dusk:  pal.cyan
     readonly property color tail:  pal.magenta
-    readonly property color dim:   pal.dim
     readonly property color ink:   pal.text
     readonly property color glass: pal.glass
     readonly property real ui: pal.uiScale
@@ -35,7 +37,7 @@ Item {
     // uptime → the REEL counter, re-read once a minute
     property string reelText: "000:00"
     Timer {
-        interval: 60000; running: true; repeat: true; triggeredOnStart: true
+        interval: 60000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: upProc.running = true
     }
     Process {
@@ -61,7 +63,7 @@ Item {
         target: clock
         function onDateChanged() {
             const m = clock.date.getMinutes()
-            if (root._lastMin >= 0 && m !== root._lastMin && root.bootT >= 1)
+            if (root._lastMin >= 0 && m !== root._lastMin && root.bootT >= 1 && !root.occluded)
                 trainRun.restart()
             root._lastMin = m
         }

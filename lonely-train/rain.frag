@@ -1,6 +1,8 @@
 #version 440
-// lonely-train/frostify: rain on the carriage window — two depths of thin
-// diagonal streaks falling while the music rides. Premultiplied overlay.
+// lonely-train: rain on the carriage window — two depths of thin diagonal
+// streaks, shared by every app-chrome slot (frostify/mica/vellum/beryl/
+// pulse/cobalt). `time` advances only while the host's gate is open, so a
+// frozen clock is a dry window. Premultiplied overlay.
 layout(location = 0) in vec2 qt_TexCoord0;
 layout(location = 0) out vec4 fragColor;
 layout(std140, binding = 0) uniform buf {

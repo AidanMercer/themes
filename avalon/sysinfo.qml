@@ -10,7 +10,8 @@ import Quickshell.Io
 // survives the bright parts of the video (the theme's legibility trick).
 // Hover-reveal: the tablet gets hung up when the bar's vitals are hovered or
 // the Super+. pin flips (the shared flag-file contract), swaying as it
-// settles. One bash poll every 3s while shown, a slow warm tick while hidden.
+// settles. Polls only while shown (triggeredOnStart refreshes on reveal) —
+// a hidden ledger costs zero forks.
 Item {
     id: root
     anchors.fill: parent
@@ -314,9 +315,14 @@ Item {
 
             // radial moss scrim so the ledger reads over bright video
             Canvas {
+                id: tabletScrim
                 anchors.centerIn: parent
                 width: parent.width * 1.7
                 height: parent.height * 1.5
+                Connections {
+                    target: root.pal
+                    function onGlassChanged() { tabletScrim.requestPaint() }
+                }
                 onPaint: {
                     const ctx = getContext("2d")
                     ctx.reset()

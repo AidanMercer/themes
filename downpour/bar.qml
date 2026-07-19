@@ -30,12 +30,10 @@ Item {
     readonly property color paneLight: pal.neon
     readonly property color skinLight: pal.cyan
     readonly property color warmth: pal.magenta
-    readonly property color warn: pal.amber
     readonly property color slate: pal.dim
     readonly property color ink: pal.text
     readonly property color glass: pal.glass
     readonly property string serif: "Noto Serif"
-    readonly property string mono: pal.fontMono
     readonly property string icon: "Symbols Nerd Font"
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function paneA(a)  { return Qt.rgba(paneLight.r, paneLight.g, paneLight.b, a) }

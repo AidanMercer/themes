@@ -554,9 +554,10 @@ Item {
                     anchors.leftMargin: 12
                     anchors.rightMargin: 12
                     cells: 14
-                    // a fuel gauge reads what's LEFT in the tank
+                    // a fuel gauge reads what's LEFT in the tank; the fuel
+                    // itself stays amber until the tank runs dry
                     value: root.ramPercent < 0 ? 0 : 100 - root.ramPercent
-                    tone2: root.ramPercent >= 90 ? root.red : root.ramPercent >= 70 ? root.amber : root.amber
+                    tone2: root.ramPercent >= 90 ? root.red : root.amber
                 }
                 Text {
                     anchors.right: parent.right
@@ -628,6 +629,7 @@ Item {
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.online ? root.connName : "LINE DOWN"
+                        textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 9
                         color: root.online ? root.iceA(0.8) : root.red

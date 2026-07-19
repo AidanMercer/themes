@@ -5,9 +5,9 @@ import QtQuick.Particles
 // point. Every dozen seconds or so ONE leaf is flicked loose somewhere and
 // darts down a short arc, spinning once, gone before it reaches the ground:
 // stillness, then the dart, then stillness. And rarely — a couple of times a
-// song, a few times an hour — a pair of pale eyes opens in the dark near a
-// screen edge, watches for a couple of seconds, and blinks shut. No drift
-// loops, no confetti. Click-through scenery.
+// song — a pair of pale eyes opens in the dark near a screen edge, watches
+// for a couple of seconds, and blinks shut. No drift loops, no confetti.
+// Click-through scenery.
 Item {
     id: root
     anchors.fill: parent

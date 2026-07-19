@@ -31,7 +31,6 @@ Item {
     property bool occluded: false
 
     readonly property color bone: pal.neon
-    readonly property color steel: pal.cyan
     readonly property color blood: pal.magenta
     readonly property color brass: pal.amber
     readonly property color ash: pal.dim
@@ -40,7 +39,6 @@ Item {
     readonly property string serif: "Noto Serif"
     readonly property string mono: pal.fontMono
     function boneA(a)  { return Qt.rgba(bone.r, bone.g, bone.b, a) }
-    function steelA(a) { return Qt.rgba(steel.r, steel.g, steel.b, a) }
     function ashA(a)   { return Qt.rgba(ash.r, ash.g, ash.b, a) }
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function glassA(a) { return Qt.rgba(glass.r, glass.g, glass.b, a) }
@@ -211,7 +209,9 @@ Item {
                 }
                 Connections {
                     target: gate
-                    function onActiveSlotChanged() {
+                    // watch the ws id, not the slot: a cross-page switch can
+                    // land on the same slot index and must still strike
+                    function onActiveWsIdChanged() {
                         if (gate.activeSlot === slot.index && root.bootT > 0.9 && !root.occluded) {
                             chFlashAnim.restart()
                             chSmoke.fire()
@@ -244,7 +244,7 @@ Item {
             }
             Connections {
                 target: gate
-                function onActiveSlotChanged() { if (!root.occluded) strike.restart() }
+                function onActiveWsIdChanged() { if (!root.occluded) strike.restart() }
             }
         }
     }

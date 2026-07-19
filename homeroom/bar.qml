@@ -174,7 +174,7 @@ Item {
                     // two-stage: the latch clicks, then the door swings
                     Behavior on swing {
                         SequentialAnimation {
-                            SequentialAnimation {   // the click, only on the way open
+                            SequentialAnimation {   // the latch click, both ways — metal never glides silently
                                 NumberAnimation { target: door; property: "jolt"; to: 1.6; duration: 55 }
                                 NumberAnimation { target: door; property: "jolt"; to: 0; duration: 55 }
                             }
@@ -250,7 +250,7 @@ Item {
         }
         readonly property bool active: player !== null
         readonly property bool playing: active && player.playbackState === MprisPlaybackState.Playing
-        readonly property string trackKey: active ? (player.trackTitle || "") + " " + (player.trackArtist || "") : ""
+        readonly property string trackKey: active ? (player.trackTitle || "") + "\n" + (player.trackArtist || "") : ""
         onTrackKeyChanged: if (active && root.bootT === 1) pinSettle.restart()
 
         visible: active

@@ -273,7 +273,8 @@ Item {
 
             // switch: blink shut, cross in the dark, open in the new gap
             property real targetX: Math.round(wsCluster.activeSlot * wsCluster.slotW + wsCluster.slotW / 2 - width / 2)
-            onTargetXChanged: hop.restart()
+            // stop any idle blink first — both animations drive scaleY
+            onTargetXChanged: { blink.stop(); hop.restart() }
             SequentialAnimation {
                 id: hop
                 NumberAnimation { target: eyes; property: "scaleY"; to: 0.08; duration: 80; easing.type: Easing.InQuad }
@@ -532,7 +533,8 @@ Item {
             }
         }
 
-        // signal: a stem with four leaflets, lit by connection strength
+        // signal: a stem with four leaflets, lit while the connection is up
+        // (wired lights the whole stem; wireless leaves the top leaflet dark)
         LeafPanel {
             anchors.verticalCenter: parent.verticalCenter
             width: 32; height: 24
@@ -547,7 +549,7 @@ Item {
                         required property int index
                         readonly property int lit: root.online ? (root.connType === "eth" ? 4 : 3) : 0
                         x: index % 2 === 0 ? 1 : 9
-                        y: 10 - Math.floor(index / 1) * 3
+                        y: 10 - index * 3
                         width: 6; height: 3; radius: 1.5
                         rotation: index % 2 === 0 ? -28 : 28
                         color: index < lit ? root.emberA(0.9) : root.leafA(0.6)

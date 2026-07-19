@@ -278,6 +278,9 @@ Item {
                     Timer {
                         interval: 800; repeat: true
                         running: root.p > 0.9 && root.host.pwLength === 0 && !root.host.unlocking
+                        // start each attract cycle lit — the blink may have
+                        // parked on the dark phase last time it stopped
+                        onRunningChanged: if (running) prompt.tick = true
                         onTriggered: prompt.tick = !prompt.tick
                     }
                 }

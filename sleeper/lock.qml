@@ -241,10 +241,12 @@ Item {
                         running: root.p > 0.9 && root.host.pwLength === 0
                                  && !root.host.unlocking && !root.host.failed
                         loops: Animation.Infinite
+                        // typing stops the breath — steady the lamp so the next
+                        // prompt never sits half-faded
+                        onRunningChanged: if (!running) prompt.opacity = 1
                         NumberAnimation { to: 0.25; duration: 1600; easing.type: Easing.InOutSine }
                         NumberAnimation { to: 1.0; duration: 1600; easing.type: Easing.InOutSine }
                     }
-                    onVisibleChanged: opacity = 1
                 }
             }
         }

@@ -19,6 +19,9 @@ Item {
     property bool occluded: false
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
+    // pause/lock kills cava mid-frame — drop the stale levels so the ink
+    // dries out and the smooth timer can settle instead of repainting forever
+    onFeedOnChanged: if (!feedOn) levels = []
     readonly property color ink:   pal.text
     readonly property color blood: pal.neon
     readonly property color fresh: pal.magenta

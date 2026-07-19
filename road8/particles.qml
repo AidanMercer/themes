@@ -81,9 +81,14 @@ Item {
         delegate: Item {
             width: 9 * root.s; height: 2 * root.s
             opacity: 0
+            // ItemParticle pools delegates — a reused car comes back with its
+            // one-shot fade already spent. Re-arm it on attach; re-assigning
+            // the binding (not `= true`) keeps the occlusion gate alive.
+            ItemParticle.onAttached: { pass.stop(); pass.running = Qt.binding(() => !root.occluded) }
             Rectangle { x: 0; width: 3 * root.s; height: 2 * root.s; color: root.pal.magenta }
             Rectangle { x: 5 * root.s; width: 3 * root.s; height: 2 * root.s; color: root.pal.magenta }
             SequentialAnimation on opacity {
+                id: pass
                 running: !root.occluded
                 NumberAnimation { to: 0.75; duration: 2400 }
                 PauseAnimation { duration: 10500 }
@@ -97,9 +102,12 @@ Item {
         delegate: Item {
             width: 9 * root.s; height: 2 * root.s
             opacity: 0
+            // same re-arm as the tailcar above
+            ItemParticle.onAttached: { pass2.stop(); pass2.running = Qt.binding(() => !root.occluded) }
             Rectangle { x: 0; width: 3 * root.s; height: 2 * root.s; color: Qt.alpha(root.pal.text, 0.9) }
             Rectangle { x: 5 * root.s; width: 3 * root.s; height: 2 * root.s; color: Qt.alpha(root.pal.text, 0.9) }
             SequentialAnimation on opacity {
+                id: pass2
                 running: !root.occluded
                 NumberAnimation { to: 0.6; duration: 2400 }
                 PauseAnimation { duration: 10500 }

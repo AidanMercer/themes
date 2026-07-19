@@ -21,6 +21,8 @@ Item {
 
     // injected by the bar wrapper after load (Loader.onLoaded)
     property var barScreen: null
+    // pushed by the loader: true while the session is locked — parks the polls
+    property bool occluded: false
 
     // injected by the loader (setSource initial property)
     required property var pal
@@ -98,9 +100,10 @@ Item {
             Component.onCompleted: requestPaint()
             Connections {
                 target: root.pal
-                function onNeonChanged() { plateCv.requestPaint() }
-                function onCyanChanged() { plateCv.requestPaint() }
-                function onDimChanged()  { plateCv.requestPaint() }
+                function onNeonChanged()  { plateCv.requestPaint() }
+                function onCyanChanged()  { plateCv.requestPaint() }
+                function onAmberChanged() { plateCv.requestPaint() }
+                function onDimChanged()   { plateCv.requestPaint() }
             }
             onPaint: {
                 const ctx = getContext("2d")
@@ -215,7 +218,7 @@ Item {
         }
         Timer {
             interval: 1000; repeat: true
-            running: media.playing && root.visible
+            running: media.playing && root.visible && !root.occluded
             triggeredOnStart: true
             onTriggered: media.updateProgress()
         }
@@ -456,7 +459,7 @@ Item {
         property real rxRate: 0
         property real prevRx: -1
         Timer {
-            interval: 3000; running: root.visible; repeat: true; triggeredOnStart: true
+            interval: 3000; running: root.visible && !root.occluded; repeat: true; triggeredOnStart: true
             onTriggered: devProc.running = true
         }
         Process {
@@ -485,7 +488,7 @@ Item {
         property bool online: false
         property string connType: ""
         Timer {
-            interval: 15000; running: root.visible; repeat: true; triggeredOnStart: true
+            interval: 15000; running: root.visible && !root.occluded; repeat: true; triggeredOnStart: true
             onTriggered: netProc.running = true
         }
         Process {
@@ -507,7 +510,7 @@ Item {
         property int batteryPercent: -1
         property bool batteryCharging: false
         Timer {
-            interval: 30000; running: root.visible; repeat: true; triggeredOnStart: true
+            interval: 30000; running: root.visible && !root.occluded; repeat: true; triggeredOnStart: true
             onTriggered: batProc.running = true
         }
         Process {

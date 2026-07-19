@@ -33,7 +33,7 @@ Item {
     readonly property int cardBorderWidth: 2
     readonly property int cardBorderWidthHot: 3
     readonly property int cardBorderWidthCenter: 2
-    readonly property int cardRadius: 2                     // notif.qml: no soft corners on this road
+    readonly property int cardRadius: 2                     // no soft corners on this road
     readonly property color cardHighlight: "transparent"
     readonly property color thumbBg: "#07080c"
     readonly property int thumbRadius: 0
@@ -68,7 +68,7 @@ Item {
                         running: chrome.overview.open
                         loops: Animation.Infinite
                         PropertyAction { value: 0.9 }
-                        PauseAnimation { duration: 900 + (parent ? 0 : 0) + ((index * 137) % 1400) }
+                        PauseAnimation { duration: 900 + ((index * 137) % 1400) }
                         PropertyAction { value: 0.25 }
                         PauseAnimation { duration: 350 + ((index * 89) % 500) }
                     }

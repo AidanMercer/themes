@@ -27,7 +27,7 @@ Item {
     readonly property color magenta: pal.magenta
     readonly property color amber:   pal.amber
     readonly property color dim:     pal.dim
-    readonly property string mono:   "Noto Sans Mono"
+    readonly property string mono:   pal.fontMono
     readonly property string icon:   "Symbols Nerd Font"
 
     // pushed live by the loader: true while the session is locked → stop polling
@@ -577,6 +577,7 @@ Item {
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.online ? root.connName : "OFFLINE"
+                        textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 10
                         color: root.online ? root.cyan : root.magenta
@@ -592,7 +593,7 @@ Item {
                 }
             }
 
-            // uptime moved down here to make room for the net rates
+            // uptime + sign-off, below the net row
             Item {
                 width: parent.width
                 height: 12

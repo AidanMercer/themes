@@ -88,7 +88,10 @@ Item {
             const d = root.display, l = root.levels, p = root.peaks
             let loud = 0, settled = true
             for (let i = 0; i < root.bins; i++) {
-                let t = l[i] || 0
+                // feedOn guard: when the feed is cut (pause/lock) `levels`
+                // freezes at its last frame — go dark instead of chasing
+                // stale loudness, which would keep this tick alive forever
+                let t = root.feedOn ? (l[i] || 0) : 0
                 if (t < 0.04) t = 0
                 d[i] = d[i] + (t - d[i]) * 0.42
                 if (d[i] < 0.005) d[i] = 0
@@ -100,7 +103,7 @@ Item {
             }
 
             const now = Date.now()
-            const audioActive = loud > 0.05
+            const audioActive = root.feedOn && loud > 0.05
             if (audioActive) root.lastFrameMs = now
 
             const nowHumming = audioActive || !settled

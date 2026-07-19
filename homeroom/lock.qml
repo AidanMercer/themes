@@ -26,7 +26,6 @@ Item {
     readonly property color chalk: pal.text
     readonly property color halo: pal.neon
     readonly property color pink: pal.magenta
-    readonly property color sun: pal.amber
     readonly property color slate: pal.dim
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
@@ -34,7 +33,6 @@ Item {
     readonly property real p: host.progress
     function chalkA(a) { return Qt.rgba(chalk.r, chalk.g, chalk.b, a) }
     function haloA(a)  { return Qt.rgba(halo.r, halo.g, halo.b, a) }
-    function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
     function glassA(a) { return Qt.rgba(glass.r, glass.g, glass.b, a) }
 
@@ -322,7 +320,9 @@ Item {
             ctx.lineWidth = 2.6; ctx.stroke()
             ctx.restore()
         }
-        // draw in once the board has landed
+        // draw in once the board has landed (sweep/flareT are reset after the
+        // unlock flare — the instance survives lock cycles, so a stale sweep=1
+        // or flareT=1 would leave the next lock without its halo)
         readonly property bool landed: root.p > 0.85
         onLandedChanged: if (landed && sweep < 1) ringIn.restart()
         NumberAnimation { id: ringIn; target: bigHalo; property: "sweep"; from: 0; to: 1; duration: 700; easing.type: Easing.InOutQuad }
@@ -333,8 +333,12 @@ Item {
             NumberAnimation { to: 0.72; duration: 2600; easing.type: Easing.InOutSine }
             NumberAnimation { to: 1.0; duration: 2600; easing.type: Easing.InOutSine }
         }
-        // unlock: the flare
-        NumberAnimation { id: flare; target: bigHalo; property: "flareT"; from: 0; to: 1; duration: 650; easing.type: Easing.OutQuad }
+        // unlock: the flare — then rearm for the next lock
+        NumberAnimation {
+            id: flare; target: bigHalo; property: "flareT"
+            from: 0; to: 1; duration: 650; easing.type: Easing.OutQuad
+            onStopped: { bigHalo.sweep = 0; bigHalo.flareT = 0 }
+        }
     }
 
     // whose room this is

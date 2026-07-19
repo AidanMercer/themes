@@ -23,16 +23,15 @@ Item {
     property var barScreen: null
     // injected by the loader (setSource initial property)
     required property var pal
+    // pushed by the loader: true while the session is locked — parks the polls
+    property bool occluded: false
 
     readonly property color ink:   pal.text
     readonly property color blood: pal.neon
     readonly property color fresh: pal.magenta
-    readonly property color dried: pal.amber
-    readonly property color halft: pal.dim
     readonly property color paper: pal.glass
     readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
-    readonly property string mono: pal.fontMono
     readonly property string iconFont: "Symbols Nerd Font"
     function paperA(a) { return Qt.rgba(paper.r, paper.g, paper.b, a) }
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
@@ -518,7 +517,7 @@ Item {
     property real mediaProgress: 0
     Timer {
         interval: 1000; repeat: true
-        running: root.mediaPlaying
+        running: root.mediaPlaying && !root.occluded
         triggeredOnStart: true
         onTriggered: {
             const p = root.player
@@ -555,7 +554,7 @@ Item {
         stdout: StdioCollector { onStreamFinished: root.parseStatus(text) }
     }
     Timer {
-        interval: 8000; repeat: true; running: true; triggeredOnStart: true
+        interval: 8000; repeat: true; running: !root.occluded; triggeredOnStart: true
         onTriggered: statusProc.running = true
     }
 }

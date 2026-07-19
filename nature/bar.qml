@@ -36,7 +36,6 @@ Item {
     readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
     readonly property string sans:  "Noto Sans"
-    readonly property string mono:  pal.fontMono
     readonly property string icon:  "Symbols Nerd Font"
     function creamA(a) { return Qt.rgba(cream.r, cream.g, cream.b, a) }
     function goldA(a)  { return Qt.rgba(gold.r, gold.g, gold.b, a) }

@@ -75,11 +75,14 @@ Item {
             Rectangle { x: 3 * root.s; y: 3 * root.s; width: 1.6 * root.s; height: 1.6 * root.s; radius: root.s; color: Qt.alpha(root.pal.text, 0.6) }
             Rectangle { x: 1 * root.s; y: 5 * root.s; width: 1.4 * root.s; height: 1.4 * root.s; radius: root.s; color: Qt.alpha(root.pal.text, 0.5) }
             SequentialAnimation on opacity {
+                id: fallFade
                 running: !root.occluded
                 NumberAnimation { to: 0.5; duration: 700 }
                 PauseAnimation { duration: 3000 }
                 NumberAnimation { to: 0; duration: 1400 }
             }
+            // pooled delegate — one-shot ends at 0; re-arm per attach
+            ItemParticle.onAttached: fallFade.restart()
         }
     }
 }

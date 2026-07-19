@@ -55,7 +55,7 @@ Item {
     }
     Connections {
         target: clock
-        function onDateChanged() { if (root.lit >= 1) streakAnim.restart() }
+        function onDateChanged() { if (root.lit >= 1 && !root.occluded) streakAnim.restart() }
     }
 
     // ── the ensemble, upper-right sky ───────────────────────────────────────

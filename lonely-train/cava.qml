@@ -41,7 +41,7 @@ Item {
     property real progress: 0.4
     Timer {
         interval: 1000; repeat: true
-        running: root.playing
+        running: root.feedOn
         triggeredOnStart: true
         onTriggered: {
             const p = root.player

@@ -17,12 +17,13 @@ Item {
     property var barScreen: null
     // injected by the loader (setSource initial property)
     required property var pal
+    // pushed by the loader: true while the session is locked — parks the polls
+    property bool occluded: false
 
     readonly property color ivory: pal.text
     readonly property color leaf:  pal.neon
     readonly property color gold:  pal.cyan
     readonly property color rose:  pal.magenta
-    readonly property color dim:   pal.dim
     readonly property color moss:  pal.glass
     readonly property string serif: "Noto Serif Display"
     readonly property string sans:  "Noto Sans"
@@ -223,7 +224,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         color: root.mediaPlaying ? root.gold : root.ivoryA(0.35)
                         SequentialAnimation on opacity {
-                            running: root.mediaPlaying
+                            running: root.mediaPlaying && !root.occluded
                             loops: Animation.Infinite
                             NumberAnimation { to: 0.35; duration: 1400; easing.type: Easing.InOutSine }
                             NumberAnimation { to: 1.0; duration: 1400; easing.type: Easing.InOutSine }
@@ -347,7 +348,7 @@ Item {
             radius: 2
             height: Math.max(2, parent.height * Math.min(1, parent.value))
             color: parent.value > 0.9 ? root.rose
-                 : parent.value > 0.75 ? root.amber
+                 : parent.value > 0.75 ? pal.amber
                  : parent.tint
             Behavior on height { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
             Behavior on color { ColorAnimation { duration: 300 } }
@@ -381,7 +382,7 @@ Item {
     property real mediaProgress: 0
     Timer {
         interval: 1000; repeat: true
-        running: root.mediaPlaying
+        running: root.mediaPlaying && !root.occluded
         triggeredOnStart: true
         onTriggered: {
             const p = root.player
@@ -436,7 +437,7 @@ Item {
         stdout: StdioCollector { onStreamFinished: root.parseStats(text) }
     }
     Timer {
-        interval: 3000; repeat: true; running: true; triggeredOnStart: true
+        interval: 3000; repeat: true; running: !root.occluded; triggeredOnStart: true
         onTriggered: statProc.running = true
     }
 

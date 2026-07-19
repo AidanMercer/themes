@@ -122,7 +122,10 @@ Item {
             root.energy = root.energy + (loud - root.energy) * 0.2
 
             const now = Date.now()
-            const audioActive = loud > 0.06
+            // feedOn guard: when the feed is cut (lock/pause) `levels` freezes
+            // at its last frame — without it, stale loudness would keep this
+            // tick (and lastFrameMs) alive forever behind the lock screen
+            const audioActive = root.feedOn && loud > 0.06
 
             // launch meteors on rising edges, rationed so peaks burst and
             // quiet passages only sparkle now and then

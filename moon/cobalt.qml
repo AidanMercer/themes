@@ -82,6 +82,13 @@ Item {
             property real burst: 0
             fragmentShader: Qt.resolvedUrl("scanline.frag.qsb")
             visible: burst > 0.01   // transient by design — no resident crawl over text
+            // the storm slices key off floor(time*24) — advance time only while
+            // the storm shows, so they actually tear instead of freezing in place
+            NumberAnimation on time {
+                from: 0; to: 3600; duration: 3600000
+                loops: Animation.Infinite
+                running: chrome.awake && crt.visible
+            }
             NumberAnimation {
                 id: burstAnim
                 target: crt; property: "burst"

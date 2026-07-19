@@ -5,7 +5,9 @@ import Quickshell
 // empty left sky, their feet exactly on the wallpaper's real horizon line
 // (y ≈ 0.527), and below the line the mirror answers: an inverted, dimmed,
 // faintly broken reflection rendered by the theme's mirror shader. At rest
-// the water is dead calm — the reflection is a static image costing nothing.
+// the water is dead calm — stir sits at 0 so the shader adds no motion of
+// its own, and only the colon's slow breath crosses the mirror (occluded
+// stops even that, so a locked desktop repaints nothing).
 // When the minute turns, one ripple ring blooms on the line under the colon
 // and the reflection stirs for a few seconds, then stills again. Boot-in is
 // the house law: the digits rise out of the seam, reflection growing in
@@ -140,7 +142,7 @@ Item {
             property real strength: 0.5 * root.bootT
             property color water: Qt.rgba(0.06, 0.19, 0.34, 1)
         }
-        // the water only moves while stirred; at stir 0 nothing repaints
+        // the shader clock only runs while stirred; at stir 0 the wobble is frozen
         NumberAnimation {
             target: mirror; property: "time"
             from: 0; to: 120; duration: 120000

@@ -536,6 +536,7 @@ Item {
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.online ? root.connName : "severed"
+                        textFormat: Text.PlainText   // SSID is external data
                         font.family: root.serif
                         font.italic: true
                         font.pixelSize: Math.round(11 * root.ui)

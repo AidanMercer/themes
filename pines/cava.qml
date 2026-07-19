@@ -20,6 +20,10 @@ Item {
     property bool occluded: false
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
+    // when the feed gates off mid-song the last frame would sit in `levels`
+    // forever, holding the mix above the sleep threshold — flush it so the
+    // pen settles and the tick timer can stop
+    onFeedOnChanged: if (!feedOn) levels = []
 
     readonly property color lamp: pal.neon
     readonly property color fogSilver: pal.cyan
@@ -75,7 +79,7 @@ Item {
             if (parts[i] === "") continue
             out.push(Math.min(1, parseInt(parts[i]) / 1000))
         }
-        if (out.length) {
+        if (out.length === root.bins) {   // one full frame — must match cava.conf `bars`
             root.levels = out
             root.lastFrameMs = Date.now()
             if (!tick.running) tick.start()
@@ -214,10 +218,12 @@ Item {
                 ctx.lineWidth = 1.8
                 ctx.stroke()
 
-                // gust marks on the top rule
+                // gust marks on the top rule — every other sample, with the
+                // parity riding the drum so each mark stays glued to its ink
+                // as the paper scrolls (a fixed parity would strobe at ~15Hz)
                 ctx.fillStyle = String(root.colA(root.ember, 0.85))
                 const g = root.gustBuf
-                for (let i = 0; i < root.trace; i += 2)
+                for (let i = root.drumStep % 2; i < root.trace; i += 2)
                     if (g[i]) ctx.fillRect(i * step - 1, h * 0.12, 2, 5)
 
                 // the pen arm: pivot at the drum's right cheek, nib on the trace

@@ -107,6 +107,9 @@ Item {
             property real burst: 0
             property real ember: 0
             fragmentShader: Qt.resolvedUrl("fog.frag.qsb")
+            // the shader's ambient banks don't scale with burst — dissolve the
+            // whole layer over the breath's tail so nothing snaps off
+            opacity: Math.min(1, burst / 0.15)
             visible: burst > 0.01   // transient by design
             NumberAnimation {
                 id: breathAnim

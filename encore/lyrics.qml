@@ -46,13 +46,19 @@ Item {
     readonly property real rollY: Math.round(root.height * 0.70) - rollH
 
     // ── timing map: the line's span, its beat count, each token's slot ──────
+    // Geometry rides engine.tokenSpans, never raw token t/d: on line-level
+    // sources every token's t is 0 or the line timestamp, which would pile the
+    // whole bar at x=0. tokenSpans carries real onsets when the source has
+    // them and the engine's syllable estimate otherwise.
     readonly property var tokens: engine.tokens
+    readonly property var spans: engine.tokenSpans
     readonly property real lineT0: {
-        if (!tokens.length) return 0
-        let t0 = -1
-        for (let i = 0; i < tokens.length; i++)
-            if (tokens[i].t !== undefined && tokens[i].t >= 0) { t0 = tokens[i].t; break }
-        return t0 < 0 ? 0 : t0
+        const sp = spans
+        if (!sp.length) return 0
+        let t0 = Infinity
+        for (let i = 0; i < sp.length; i++)
+            if (sp[i].start < t0) t0 = sp[i].start
+        return t0 === Infinity ? 0 : t0
     }
     readonly property real lineT1: Math.max(engine.lineDoneMs, lineT0 + 800)
     readonly property real span: lineT1 - lineT0
@@ -73,13 +79,15 @@ Item {
     // steps of ±1..2 (a seeded contour, not noise); adlibs float on top lanes.
     readonly property var layout: {
         const out = []
+        const sp = spans
         const n = tokens.length
         if (n === 0 || span <= 0) return out
         let lane = 3 + Math.floor(hash((engine.activeIndex + 1) * 2654435761) * 3)   // start mid-roll
         for (let i = 0; i < n; i++) {
             const tk = tokens[i]
-            const t = (tk.t !== undefined && tk.t >= 0) ? tk.t : (lineT0 + span * i / n)
-            const d = (tk.d !== undefined && tk.d > 0) ? tk.d : span / (n + 1)
+            const s = i < sp.length ? sp[i] : null    // spans can lag a frame on line change
+            const t = s ? s.start : (lineT0 + span * i / n)
+            const d = s ? Math.max(0, s.end - s.start) : span / (n + 1)
             const x = Math.max(0, Math.min(1, (t - lineT0) / span)) * rollW
             const w = Math.max(14 * ui, Math.min(1, d / span) * rollW - 3 * ui)
             if (tk.bg) {

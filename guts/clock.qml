@@ -15,9 +15,7 @@ Item {
     required property var pal
     readonly property color ink:   pal.text
     readonly property color blood: pal.neon
-    readonly property color fresh: pal.magenta
     readonly property color paper: pal.glass
-    readonly property color halft: pal.dim
     readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
     readonly property string sans: "Noto Sans"

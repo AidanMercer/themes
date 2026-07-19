@@ -14,14 +14,13 @@ Item {
     required property var pal   // snapshot palette (bone/gunmetal/oxblood/…)
     property var host: null     // vellum window — active, readingMode, pdfMode
 
-    // the reading gate — verbatim from the docs
+    // the reading gate: nothing moves behind a text column being typed into
     readonly property bool awake: host ? host.active === true : false
     readonly property bool page: host ? (host.readingMode === true || host.pdfMode === true) : false
     readonly property bool stirring: awake && page   // the only thing that may animate
 
     function boneA(a)  { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
     function steelA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
-    function ashA(a)   { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
 
     // chassis: paper corners, bone hairline
     readonly property color cardBorder: Qt.alpha(pal.neon, 0.26)

@@ -18,7 +18,6 @@ Item {
     required property var engine
     readonly property color gold:  pal.neon
     readonly property color leaf:  pal.cyan
-    readonly property color rose:  pal.magenta
     readonly property color cream: pal.text
     readonly property color pine:  pal.glass
     readonly property real ui: pal.uiScale
@@ -37,7 +36,6 @@ Item {
         engine.activeIndex >= 0 && engine.estMs > engine.lineDoneMs + lineHoldMs
 
     // falling-petal ghost of the previous line
-    property string prevLineText: ""
     Connections {
         target: root.engine
         function onActiveIndexChanged() {

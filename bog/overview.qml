@@ -20,6 +20,8 @@ Item {
     function reedA(a) { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
 
     // ── scalars: soft pond glass, nothing sharp ──
+    // scrim/thumb are the pond's deepest water — deliberately darker than
+    // pal.glass and not retinted, like the painted murk they sit against
     readonly property color scrimColor: "#0b0d06"
     readonly property real scrimOpacity: 0.72
     readonly property color cardBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.93)

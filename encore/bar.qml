@@ -399,8 +399,7 @@ Item {
         DeskPanel {
             anchors.verticalCenter: parent.verticalCenter
             width: 34; height: 24
-            strip: root.online ? 0.35 : 0
-            stripCol: root.online ? root.teal : root.crowd
+            strip: root.online ? 0.35 : 0   // offline: the strip goes dark, the crowd dot takes over
             Row {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: -1

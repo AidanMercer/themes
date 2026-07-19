@@ -61,9 +61,10 @@ Item {
         id: plaque
         x: Math.round(root.width * 0.755)
         y: Math.round(root.height * 0.335) + root.heave * 1.6
-        width: Math.round(300 * pal.uiScale)
-        height: col.implicitHeight + Math.round(44 * pal.uiScale)
-        scale: pal.uiScale
+        // laid out in unscaled units; the whole plaque shrinks via scale below
+        width: 300
+        height: col.implicitHeight + 44
+        scale: root.pal.uiScale
         transformOrigin: Item.Top
         rotation: root.rock * 0.5
 
@@ -109,7 +110,7 @@ Item {
         Column {
             id: col
             anchors.horizontalCenter: parent.horizontalCenter
-            y: Math.round(20 * 1)
+            y: 20
             spacing: 10
 
             // header: crescent moon + the service name

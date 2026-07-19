@@ -17,7 +17,6 @@ Item {
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color bone: pal.neon
-    readonly property color steel: pal.cyan
     readonly property color blood: pal.magenta
     readonly property color brass: pal.amber
     readonly property color ash: pal.dim

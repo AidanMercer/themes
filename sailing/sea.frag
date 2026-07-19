@@ -1,13 +1,13 @@
 #version 440
-// sailing/frostify: the dusk sea — a blush of horizon light, rolling wave
-// contours and deep water gathering at the bottom of the window. Replaces the
-// old Canvas swell. Premultiplied overlay.
+// sailing: the dusk sea — a blush of horizon light, rolling wave contours and
+// deep water gathering at the bottom of the window. Shared by all six app
+// chrome slots (frostify/mica/vellum/beryl/pulse/cobalt). Premultiplied overlay.
 layout(location = 0) in vec2 qt_TexCoord0;
 layout(location = 0) out vec4 fragColor;
 layout(std140, binding = 0) uniform buf {
     mat4 qt_Matrix;
     float qt_Opacity;
-    float time;    // seconds while music plays, becalmed otherwise
+    float time;    // seconds while the slot's gate lets the sea roll; becalmed otherwise
 } ubuf;
 
 void main() {

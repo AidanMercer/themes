@@ -20,6 +20,8 @@ Item {
 
     // injected by the bar wrapper after load
     property var barScreen: null
+    // pushed by the loader: true while the session is locked — parks the polls
+    property bool occluded: false
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color buoy:  pal.neon
@@ -319,7 +321,7 @@ Item {
     property bool online: false
     property string connName: ""
     Timer {
-        interval: 10000; running: true; repeat: true; triggeredOnStart: true
+        interval: 10000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: netProc.running = true
     }
     Process {

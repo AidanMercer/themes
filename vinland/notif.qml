@@ -30,10 +30,15 @@ Item {
 
             // carved rune row along the top edge, under the header text
             Canvas {
+                id: runeRow
                 anchors { top: parent.top; left: parent.left; right: parent.right; margins: 7 }
                 height: 10
                 opacity: 0.5
                 onWidthChanged: requestPaint()
+                Connections {
+                    target: root.pal
+                    function onNeonChanged() { runeRow.requestPaint() }
+                }
                 onPaint: {
                     const ctx = getContext("2d")
                     ctx.reset()

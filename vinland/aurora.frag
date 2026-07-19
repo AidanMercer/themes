@@ -1,13 +1,13 @@
 #version 440
-// vinland/frostify: aurora curtains across the top of the window — three slow
-// ribbons breathing between aurora green and starlit ice, falling off into a
-// faint downward glow. Premultiplied overlay, no source texture.
+// vinland: aurora curtains across the top of a surface — three slow ribbons
+// breathing between aurora green and starlit ice, falling off into a faint
+// downward glow. Premultiplied overlay, no source texture.
 layout(location = 0) in vec2 qt_TexCoord0;
 layout(location = 0) out vec4 fragColor;
 layout(std140, binding = 0) uniform buf {
     mat4 qt_Matrix;
     float qt_Opacity;
-    float time;    // seconds while music plays, frozen otherwise
+    float time;    // seconds while the host surface stirs, frozen otherwise
 } ubuf;
 
 void main() {

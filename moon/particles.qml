@@ -59,7 +59,9 @@ Item {
             width: (26 + Math.random() * 50) * root.s
             height: 1.5 * root.s
             color: Qt.alpha(Math.random() < 0.5 ? root.pal.cyan : root.pal.magenta, 0.5)
-            NumberAnimation on opacity { from: 1; to: 0; duration: 400 }
+            // pooled delegate — one-shot ends at 0; re-arm per attach
+            NumberAnimation on opacity { id: tickFade; from: 1; to: 0; duration: 400 }
+            ItemParticle.onAttached: tickFade.restart()
         }
     }
 }

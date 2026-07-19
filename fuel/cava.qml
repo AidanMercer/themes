@@ -317,7 +317,10 @@ Item {
             Component.onCompleted: requestPaint()
             Connections {
                 target: root.pal
-                function onNeonChanged() { dots.requestPaint() }
+                function onNeonChanged()    { dots.requestPaint() }
+                function onAmberChanged()   { dots.requestPaint() }
+                function onMagentaChanged() { dots.requestPaint() }
+                function onTextChanged()    { dots.requestPaint() }
             }
             onPaint: {
                 const ctx = getContext("2d")

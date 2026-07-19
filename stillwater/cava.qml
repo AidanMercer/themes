@@ -20,6 +20,9 @@ Item {
     property bool occluded: false
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
+    // parking the feed mid-song leaves the last frame in `levels`; clear it so
+    // the tick can decay to settled and stop instead of chasing stale audio
+    onFeedOnChanged: if (!feedOn) levels = []
 
     readonly property color lamp: pal.neon
     readonly property color sky: pal.cyan

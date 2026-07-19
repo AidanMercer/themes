@@ -72,8 +72,6 @@ Item {
     // ── backdrop: aurora sky, sewn course lines, compass rose, far snow ──
     readonly property Component backdrop: Component {
         Item {
-            id: bd
-
             // the aurora, breathing across the top of the sky
             ShaderEffect {
                 anchors.fill: parent
@@ -318,7 +316,9 @@ Item {
                 y: Math.round(44 * chrome.ui)
                 text: {
                     const n = chrome.overview.windows.length
-                    return n === 1 ? "one sail on the water"
+                    // the shell's emptyText already covers a bare horizon
+                    return n === 0 ? ""
+                         : n === 1 ? "one sail on the water"
                                    : n + " sails on the water"
                 }
                 font.family: chrome.serif
@@ -357,8 +357,8 @@ Item {
         }
     }
 
-    // ── per-tile, behind the card: frost breath — a soft pool of ice light
-    // that gathers behind the picked sail ──
+    // ── per-tile, behind the card: frost breath — a ring of ice light
+    // that gathers around the picked sail ──
     readonly property Component tileUnderlay: Component {
         Item {
             id: ur
@@ -429,7 +429,7 @@ Item {
                     ctx.quadraticCurveTo(c, c, c - R, c)
                     ctx.quadraticCurveTo(c, c, c, c - R)
                     ctx.closePath()
-                    ctx.fillStyle = Qt.rgba(chrome.gold.r, chrome.gold.g, chrome.gold.b, 0.95)
+                    ctx.fillStyle = chrome.goldA(0.95)
                     ctx.fill()
                 }
                 SequentialAnimation {

@@ -40,8 +40,11 @@ Item {
 
     // ---- geometry -----------------------------------------------------------
     readonly property real lyricSize: Math.round(34 * pal.uiScale)
-    readonly property real charW: lyricSize * 0.55       // serif estimate
+    readonly property real charW: lyricSize * 0.55       // nominal em — gaps only
     readonly property real rowH: lyricSize * 1.7
+    // real advance widths, so wide words can't overlap their neighbours
+    FontMetrics { id: fmMain; font.family: root.serif; font.pixelSize: root.lyricSize }
+    FontMetrics { id: fmBg; font.family: root.serif; font.pixelSize: root.lyricSize * 0.6; font.italic: true }
     readonly property real boxW: Math.round(root.width * 0.54)
     readonly property real boxX: Math.round((root.width - boxW) / 2)
     readonly property real boxY: Math.round(root.height * 0.62)
@@ -55,8 +58,9 @@ Item {
         let cur = [], curW = 0
         for (let i = 0; i < n; i++) {
             const f = toks[i].bg ? 0.6 : 1.0
-            const chars = toks[i].text.length + (toks[i].bg ? 2 : 0)
-            const wPx = Math.max(1, chars) * charW * f
+            const word = toks[i].bg ? "(" + toks[i].text + ")" : toks[i].text
+            const wPx = Math.max(1, toks[i].bg ? fmBg.advanceWidth(word)
+                                              : fmMain.advanceWidth(word))
             if (curW > 0 && curW + gap + wPx > boxW) {
                 rows.push({ words: cur, w: curW })
                 cur = []; curW = 0
@@ -194,7 +198,6 @@ Item {
                     property real t: 0    // 0 = covering, 1 = darted aside
                     visible: t < 1
                     opacity: Math.max(0, 1 - t * 1.6)
-                    x: 0
                     transform: [
                         Translate { x: -cover.t * cover.width * 0.5; y: -cover.t * cover.height * 0.35 },
                         Rotation { angle: -cover.t * 34; origin.x: 0; origin.y: cover.height / 2 }

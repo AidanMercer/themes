@@ -20,6 +20,8 @@ Item {
     function sunA(a)   { return Qt.rgba(pal.amber.r, pal.amber.g, pal.amber.b, a) }
 
     // ── scalars: photos on slate ──
+    // deliberate constant: the chalkboard slate a step deeper than pal.glass,
+    // so the white photo mats pop against the board
     readonly property color scrimColor: "#141d33"
     readonly property real scrimOpacity: 0.72
     readonly property bool shadowOn: false                  // the mat carries its own
@@ -32,7 +34,7 @@ Item {
     readonly property int cardBorderWidthCenter: 2
     readonly property int cardRadius: 3
     readonly property color cardHighlight: "transparent"
-    readonly property color thumbBg: "#101828"
+    readonly property color thumbBg: "#101828"   // deliberate: darkroom slate behind the photo prints
     readonly property int thumbRadius: 2
     readonly property color titleColor: chalkA(0.6)
     readonly property color titleHotColor: pal.text

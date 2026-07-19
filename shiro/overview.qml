@@ -128,7 +128,8 @@ Item {
         }
     }
 
-    // ── per-tile mark: a tiny ink touten above the focused tile, nothing more ──
+    // ── per-tile mark: a tiny ink touten above the focused tile, nothing more
+    // (a serif comma stands in for the touten — no CJK face installed) ──
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
@@ -139,7 +140,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.top
                 anchors.bottomMargin: Math.round(2 * chrome.ui)
-                text: "、"
+                text: ","
                 textFormat: Text.PlainText
                 font.family: chrome.serif
                 font.pixelSize: Math.round(15 * chrome.ui)

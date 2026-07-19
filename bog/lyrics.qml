@@ -21,12 +21,10 @@ Item {
     required property var engine
     readonly property color sun: pal.neon
     readonly property color moss: pal.cyan
-    readonly property color rust: pal.magenta
     readonly property color reed: pal.dim
     readonly property color straw: pal.text
     readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
-    readonly property string mono: pal.fontMono
     function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function strawA(a) { return Qt.rgba(straw.r, straw.g, straw.b, a) }
     function reedA(a)  { return Qt.rgba(reed.r, reed.g, reed.b, a) }
@@ -208,13 +206,15 @@ Item {
 
                     // the reflection: the word upside down beneath its waterline
                     Text {
+                        id: refl
                         y: body.height + 1
                         text: wd.word
                         textFormat: Text.PlainText
                         color: wd.bg ? root.moss : root.strawA(0.97)
                         font: ghost.font
                         opacity: 0.13 * wd.fill
-                        transform: Scale { origin.y: 0; yScale: -1 }
+                        // flip in place so the ghost hangs below the waterline
+                        transform: Scale { origin.y: refl.height / 2; yScale: -1 }
                     }
                 }
 

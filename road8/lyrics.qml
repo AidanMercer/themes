@@ -27,7 +27,6 @@ Item {
     readonly property color ink: pal.text
     readonly property string mono: pal.fontMono
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
-    function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
 
     // ---- sign geometry ------------------------------------------------------

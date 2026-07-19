@@ -21,7 +21,6 @@ Item {
 
     readonly property color chalk: pal.text
     readonly property color halo: pal.neon
-    readonly property color slate: pal.dim
     readonly property string mono: pal.fontMono
     function chalkA(a) { return Qt.rgba(chalk.r, chalk.g, chalk.b, a) }
     function haloA(a)  { return Qt.rgba(halo.r, halo.g, halo.b, a) }
@@ -34,7 +33,6 @@ Item {
         id: cd
         property string target: " "
         property string ch: " "
-        property string oldCh: " "
         property real cell: 84          // glyph box height
         property real reveal: 1         // 0..1 write progress
         property real eraseT: 0         // 0..1 smudge progress
@@ -55,11 +53,14 @@ Item {
             NumberAnimation { target: cd; property: "reveal"; from: 0; to: 1; duration: 520; easing.type: Easing.InOutSine }
         }
         onTargetChanged: {
-            if (ch === " ") {           // boot: nothing to erase, just write
+            if (root.occluded) {        // nobody's watching: just be correct
+                rewrite.stop(); bootWrite.stop()
+                ch = target; eraseT = 0; reveal = 1
+                requestPaint()
+            } else if (ch === " ") {    // boot: nothing to erase, just write
                 ch = target
                 bootWrite.restart()
             } else {
-                oldCh = ch
                 rewrite.restart()
             }
         }

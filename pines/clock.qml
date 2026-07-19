@@ -22,7 +22,6 @@ Item {
 
     readonly property color lamp: pal.neon
     readonly property color fogSilver: pal.cyan
-    readonly property color ember: pal.magenta
     readonly property color slate: pal.dim
     readonly property color ink: pal.text
     readonly property string mono: pal.fontMono

@@ -48,7 +48,10 @@ Item {
                     ctx.reset()
                     if (width <= 0 || height <= 0) return
                     const w = width, h = height
-                    ctx.fillStyle = "rgba(9,13,15,0.95)"
+                    // gun-iron paper: pal.glass pulled down toward the night
+                    ctx.fillStyle = String(Qt.rgba(chrome.pal.glass.r * 0.6,
+                                                   chrome.pal.glass.g * 0.6,
+                                                   chrome.pal.glass.b * 0.6, 0.95))
                     ctx.fillRect(0, 0, w, h)
                     // double ledger rule frame
                     ctx.strokeStyle = String(chrome.boneA(0.55))

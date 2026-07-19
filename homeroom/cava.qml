@@ -19,10 +19,12 @@ Item {
     property bool occluded: false
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
+    // feed cut mid-frame (lock/pause) freezes levels non-zero and the tick
+    // would chase them forever — drain so it settles and stops
+    onFeedOnChanged: if (!feedOn) levels = []
 
     readonly property color chalk: pal.text
     readonly property color pink: pal.magenta
-    readonly property color slate: pal.dim
     function chalkA(a) { return Qt.rgba(chalk.r, chalk.g, chalk.b, a) }
 
     readonly property int bins: 44

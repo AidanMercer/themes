@@ -20,11 +20,13 @@ Item {
     property bool occluded: false
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
+    // feed cut mid-frame (lock/pause) freezes levels non-zero and the tick
+    // would chase them forever — drain so it settles and stops
+    onFeedOnChanged: if (!feedOn) levels = []
 
     readonly property color sun: pal.neon
     readonly property color moss: pal.cyan
     readonly property color straw: pal.text
-    readonly property color reed: pal.dim
     function sunA(a)  { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function mossA(a) { return Qt.rgba(moss.r, moss.g, moss.b, a) }
     function colA(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }

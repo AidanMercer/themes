@@ -27,7 +27,6 @@ Item {
     readonly property color ink: pal.text
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
-    readonly property string icon: "Symbols Nerd Font"
     function lampA(a)  { return Qt.rgba(lamp.r, lamp.g, lamp.b, a) }
     function skyA(a)   { return Qt.rgba(sky.r, sky.g, sky.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
@@ -296,7 +295,6 @@ Item {
                         required property int index
                         readonly property bool lit: row.value >= 0 && index < Math.round(row.value / 100 * 14)
                         width: 5; height: 2
-                        x: (index % 2 === 0) ? 0 : 1
                         color: lit ? Qt.rgba(row.tone.r, row.tone.g, row.tone.b, 0.22) : "transparent"
                     }
                 }

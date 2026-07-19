@@ -20,7 +20,6 @@ Item {
     readonly property color pine:  pal.glass
     readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
-    readonly property string sans:  "Noto Sans"
     function creamA(a) { return Qt.rgba(cream.r, cream.g, cream.b, a) }
     function goldA(a)  { return Qt.rgba(gold.r, gold.g, gold.b, a) }
     function pineA(a)  { return Qt.rgba(pine.r, pine.g, pine.b, a) }
@@ -41,7 +40,8 @@ Item {
         target: clock
         function onDateChanged() {
             const m = clock.date.getMinutes()
-            if (root.lastMinute >= 0 && m !== root.lastMinute) petalBurst.restart()
+            // skip the flourish while covered — no point animating petals nobody sees
+            if (root.lastMinute >= 0 && m !== root.lastMinute && !root.occluded) petalBurst.restart()
             root.lastMinute = m
         }
     }

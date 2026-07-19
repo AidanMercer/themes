@@ -22,9 +22,12 @@ Item {
     function steelA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
     function ashA(a)   { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
     function px(v) { return Math.round(v * pal.uiScale) }
+    // wall tones: pal.glass pulled down toward the night, so config.toml
+    // retints the boards along with everything else
+    function wall(k) { return Qt.rgba(pal.glass.r * k, pal.glass.g * k, pal.glass.b * k, 1) }
 
     // ── scalars: paper frames on a dark wall ──
-    readonly property color scrimColor: "#07090b"
+    readonly property color scrimColor: wall(0.42)
     readonly property real scrimOpacity: 0.7
     readonly property bool shadowOn: false                  // hard slab drawn below
     readonly property color cardBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.95)
@@ -36,7 +39,7 @@ Item {
     readonly property int cardBorderWidthCenter: 1
     readonly property int cardRadius: 2                     // paper corners
     readonly property color cardHighlight: "transparent"
-    readonly property color thumbBg: "#0a0d0f"
+    readonly property color thumbBg: wall(0.6)
     readonly property int thumbRadius: 0
     readonly property color titleColor: steelA(0.8)
     readonly property color titleHotColor: pal.neon
@@ -126,7 +129,7 @@ Item {
             Rectangle {
                 x: chrome.px(4); y: chrome.px(4)
                 width: parent.width; height: parent.height
-                color: "#040608"
+                color: chrome.wall(0.27)
                 opacity: 0.85
             }
             // the nail head above the poster
@@ -192,7 +195,7 @@ Item {
                 y: -chrome.px(9)
                 width: claimed.implicitWidth + chrome.px(12)
                 height: chrome.px(16)
-                color: "#0a0d0f"
+                color: chrome.wall(0.6)
                 border.color: chrome.boneA(0.6)
                 border.width: 1
                 Text {

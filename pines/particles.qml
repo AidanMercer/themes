@@ -45,35 +45,42 @@ Item {
         velocity: AngleDirection { angle: 90; magnitude: 26; magnitudeVariation: 14 }
     }
 
+    // NOTE: ItemParticle's default fade owns each delegate ROOT's opacity
+    // (it rewrites it every frame) — so any breathing lives on an inner
+    // item, where the two opacities compose instead of fighting.
     ItemParticle {
         system: sys
         groups: ["fog"]
-        delegate: Rectangle {
+        delegate: Item {
             width: (260 + Math.random() * 220) * root.s
             height: (46 + Math.random() * 40) * root.s
-            radius: height / 2
-            gradient: Gradient {
-                orientation: Gradient.Vertical
-                GradientStop { position: 0.0; color: Qt.alpha(root.pal.cyan, 0.0) }
-                GradientStop { position: 0.5; color: Qt.alpha(root.pal.cyan, 0.05) }
-                GradientStop { position: 1.0; color: Qt.alpha(root.pal.cyan, 0.0) }
-            }
-            opacity: 0
-            // the bank breathes: swells up, holds, thins — never a hard edge
-            SequentialAnimation on opacity {
-                loops: Animation.Infinite
-                running: !root.occluded
-                NumberAnimation { to: 0.55 + Math.random() * 0.35; duration: 9000 + Math.random() * 5000; easing.type: Easing.InOutSine }
-                NumberAnimation { to: 0.22; duration: 9000 + Math.random() * 5000; easing.type: Easing.InOutSine }
+            Rectangle {
+                anchors.fill: parent
+                radius: height / 2
+                gradient: Gradient {
+                    orientation: Gradient.Vertical
+                    GradientStop { position: 0.0; color: Qt.alpha(root.pal.cyan, 0.0) }
+                    GradientStop { position: 0.5; color: Qt.alpha(root.pal.cyan, 0.05) }
+                    GradientStop { position: 1.0; color: Qt.alpha(root.pal.cyan, 0.0) }
+                }
+                opacity: 0.22
+                // the bank breathes: swells up, holds, thins — never a hard edge
+                SequentialAnimation on opacity {
+                    loops: Animation.Infinite
+                    running: !root.occluded
+                    NumberAnimation { to: 0.55 + Math.random() * 0.35; duration: 9000 + Math.random() * 5000; easing.type: Easing.InOutSine }
+                    NumberAnimation { to: 0.22; duration: 9000 + Math.random() * 5000; easing.type: Easing.InOutSine }
+                }
             }
         }
     }
     ItemParticle {
         system: sys
         groups: ["bead"]
+        // the gather/slip/thin envelope is the particle fade itself:
+        // ~1s in, held, ~1s out across the 5.2s life
         delegate: Item {
             width: 4 * root.s; height: 18 * root.s
-            opacity: 0
             Rectangle {   // the trailing thread
                 x: 1.2 * root.s; y: -10 * root.s
                 width: 1.2 * root.s; height: 12 * root.s
@@ -82,12 +89,6 @@ Item {
             Rectangle {   // the bead
                 width: 3.4 * root.s; height: 5 * root.s; radius: 1.7 * root.s
                 color: Qt.alpha(root.pal.text, 0.55)
-            }
-            SequentialAnimation on opacity {
-                running: !root.occluded
-                NumberAnimation { to: 0.8; duration: 700; easing.type: Easing.OutQuad }
-                PauseAnimation { duration: 2600 }
-                NumberAnimation { to: 0; duration: 1700; easing.type: Easing.InQuad }
             }
         }
     }

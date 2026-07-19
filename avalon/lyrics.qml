@@ -188,7 +188,9 @@ Item {
         color: root.eng.lyricsLoaded ? root.gold : root.leaf
         opacity: 0.35 + 0.65 * root.breath
         SequentialAnimation on scale {
-            running: visible
+            // && playing: a paused player with a failed fetch would otherwise
+            // leave this ticking forever (breath already gates the same way)
+            running: visible && root.eng.playing
             loops: Animation.Infinite
             NumberAnimation { to: 1.25; duration: 1000; easing.type: Easing.InOutSine }
             NumberAnimation { to: 1.0; duration: 1000; easing.type: Easing.InOutSine }

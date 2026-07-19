@@ -18,6 +18,8 @@ Item {
     function px(v) { return Math.round(v * pal.uiScale) }
 
     // ── scalars: dark screens in a dark hall, capsule corners ──
+    // #05070e / #04060c are the wallpaper's hall dark (config.toml bg),
+    // deliberately fixed — the scrim must stay stage-black under any retint
     readonly property color scrimColor: "#05070e"
     readonly property real scrimOpacity: 0.72
     readonly property bool shadowOn: false                  // the light pool below replaces it
@@ -57,7 +59,6 @@ Item {
                 Component.onCompleted: requestPaint()
                 Connections {
                     target: chrome.overview
-                    ignoreUnknownSignals: true
                     function onSelectedChanged() { spotCone.requestPaint() }
                     function onTilesChanged() { spotCone.requestPaint() }
                     function onRevealChanged() { spotCone.requestPaint() }

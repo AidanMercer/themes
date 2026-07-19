@@ -20,17 +20,13 @@ Item {
     property bool occluded: false
 
     readonly property color sun: pal.neon        // sunlit-grass amber
-    readonly property color moss: pal.cyan
     readonly property color rust: pal.magenta    // the bobber's bait-red band
     readonly property color straw: pal.text
-    readonly property color reed: pal.dim
     readonly property color murk: pal.glass
     readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
-    readonly property string mono: pal.fontMono
     function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function strawA(a) { return Qt.rgba(straw.r, straw.g, straw.b, a) }
-    function reedA(a)  { return Qt.rgba(reed.r, reed.g, reed.b, a) }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
     readonly property string hhmm: Qt.formatDateTime(clock.date, "HH:mm")

@@ -78,7 +78,7 @@ Noto Sans Mono (data), Symbols Nerd Font (status glyphs only).
 
 - **clock** — upper-left on the pane: "the hour, written on fog". Breath
   haze blooms, time wipes in in light serif; on the minute the old minute
-  re-mists and the new one is written; one droplet spent per hour turn.
+  re-mists and the new one is written; one droplet spent per minute turn.
 - **bar (top)** — the upper sash. Workspaces are breath marks (fog dots);
   the active one is a wiped-clear ring; switching spends a droplet from the
   mark's rim. Now-playing written small-italic on the left; net/battery/

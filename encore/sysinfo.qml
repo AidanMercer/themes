@@ -280,7 +280,7 @@ Item {
                 delegate: Rectangle {
                     required property int index
                     readonly property bool lit: row.value >= 0 && index < Math.round(row.value / 10)
-                    // the top two lamps are always warm/magenta caps when lit —
+                    // the top lamps cap warm then magenta when lit —
                     // a real LED ladder's clip lamps
                     readonly property color lampCol: index >= 9 ? root.crowd
                                                    : index >= 7 ? root.spot
@@ -424,17 +424,6 @@ Item {
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
             }
-            ChannelRow {
-                visible: root.hasBattery
-                height: root.hasBattery ? 30 : 0
-                ch: "CH5"; label: "PWR"
-                value: root.batteryPercent
-                tone: root.batteryCharging ? root.lacquer
-                    : root.batteryPercent <= 15 ? root.crowd
-                    : root.batteryPercent <= 30 ? root.spot : root.teal
-                readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
-            }
-
             // FOH is text-only: the desk's link to the house
             Item {
                 width: parent.width
@@ -476,6 +465,17 @@ Item {
                     font.pixelSize: 9
                     color: root.restA(1.0)
                 }
+            }
+
+            ChannelRow {
+                visible: root.hasBattery
+                height: root.hasBattery ? 30 : 0
+                ch: "CH5"; label: "PWR"
+                value: root.batteryPercent
+                tone: root.batteryCharging ? root.lacquer
+                    : root.batteryPercent <= 15 ? root.crowd
+                    : root.batteryPercent <= 30 ? root.spot : root.teal
+                readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
             Rectangle { width: parent.width; height: 1; color: root.restA(0.55) }

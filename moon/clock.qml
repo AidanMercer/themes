@@ -20,7 +20,7 @@ Item {
     readonly property color cyan:    pal.cyan
     readonly property color magenta: pal.magenta
     readonly property color dim:     pal.dim    // burnt-out yellow trace
-    readonly property string mono:   "Noto Sans Mono"
+    readonly property string mono:   pal.fontMono
 
     // pushed live by the loader: true while locked or a fullscreen window covers this monitor
     property bool occluded: false
@@ -40,7 +40,7 @@ Item {
         id: glitchTimer
         interval: 2600
         repeat: true
-        running: true
+        running: !root.occluded
         onTriggered: {
             glitchBurst.restart()
             interval = 1500 + Math.floor(Math.random() * 3600)

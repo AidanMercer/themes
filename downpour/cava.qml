@@ -19,9 +19,11 @@ Item {
     property bool occluded: false
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
+    // feed cut mid-frame (lock/pause) freezes levels non-zero and the tick
+    // would chase them forever — drain so it settles and stops
+    onFeedOnChanged: if (!feedOn) levels = []
 
     readonly property color paneLight: pal.neon
-    readonly property color skinLight: pal.cyan
     readonly property color ink: pal.text
     function paneA(a) { return Qt.rgba(paneLight.r, paneLight.g, paneLight.b, a) }
     function inkA(a)  { return Qt.rgba(ink.r, ink.g, ink.b, a) }
@@ -35,7 +37,7 @@ Item {
 
     property var levels: []       // raw cava bins 0..1
     property var display: []      // smoothed values
-    property var falling: []      // detached drops {x, y, v, a}
+    property var falling: []      // detached drops {i, y, v, a}
     property bool humming: false
 
     property real bootT: 0

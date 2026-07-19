@@ -24,6 +24,8 @@ Item {
     function silverA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
 
     // ── scalars: map sheets on slate ───────────────────────────────────────
+    // #050e16 / #071119: the wallpaper's pine-black tiers, kept darker than
+    // pal.glass on purpose — the table under the sheets, not the cab glass
     readonly property color scrimColor: "#050e16"
     readonly property real scrimOpacity: 0.68
     readonly property bool shadowOn: false
@@ -251,7 +253,7 @@ Item {
                 width: clsText.width + 12
                 height: 14
                 radius: 2
-                color: "#071119"
+                color: "#071119"   // pine-black, same tier tone as thumbBg
                 border.color: ov.hot ? chrome.pal.neon : Qt.rgba(chrome.pal.dim.r, chrome.pal.dim.g, chrome.pal.dim.b, 0.9)
                 border.width: 1
                 Text {

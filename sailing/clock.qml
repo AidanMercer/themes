@@ -49,7 +49,7 @@ Item {
     Behavior on heading { NumberAnimation { duration: 5200; easing.type: Easing.InOutSine } }
     Behavior on knots   { NumberAnimation { duration: 5200; easing.type: Easing.InOutSine } }
     Timer {
-        interval: 9000; running: true; repeat: true
+        interval: 9000; running: !root.occluded; repeat: true
         onTriggered: {
             root.heading = 214 + (Math.random() - 0.5) * 9
             root.knots = 12.4 + (Math.random() - 0.5) * 1.4
@@ -84,7 +84,9 @@ Item {
         transformOrigin: Item.TopLeft
 
         // a patch of deeper dusk behind the entry so pale text reads over the
-        // bright sky — painted once, like the canopy's shadow reaching out
+        // bright sky — painted once, like the canopy's shadow reaching out.
+        // deliberately a wallpaper-matched constant (the sky's own dark), not
+        // pal-bound: a config retint must not wash the shadow off the sky
         Canvas {
             id: wash
             anchors.centerIn: col
@@ -108,7 +110,7 @@ Item {
 
         Column {
             id: col
-            spacing: Math.round(6)
+            spacing: 6
 
             // vessel name, typing out — a small deck lamp keeps it company
             Row {

@@ -17,7 +17,6 @@ Item {
                                     && host.np.active === true && host.np.isPlaying === true
 
     readonly property color paneLight: pal.neon
-    readonly property color skinLight: pal.cyan
     function paneA(a) { return Qt.rgba(paneLight.r, paneLight.g, paneLight.b, a) }
     function inkA(a)  { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
     function rnd(n) {

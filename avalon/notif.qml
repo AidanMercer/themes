@@ -93,7 +93,7 @@ Item {
                     for (let y = 14; y <= h; y += 4)
                         ctx.lineTo(8 + Math.sin(y * 0.045) * 1.6, y)
                     ctx.stroke()
-                    // five-petal head (no ellipse() in qml canvas — scaled arcs)
+                    // five-petal head (rotated ellipses — scaled arcs, canvas ellipse() can't tilt)
                     ctx.fillStyle = Qt.rgba(tint.r, tint.g, tint.b, 0.85)
                     for (let i = 0; i < 5; i++) {
                         const a = -Math.PI / 2 + i * Math.PI * 2 / 5

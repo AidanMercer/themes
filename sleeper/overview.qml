@@ -24,6 +24,8 @@ Item {
     function woodA(a)  { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
 
     // ── scalars: wood frames, warm lamps ──
+    // the near-black greens below are the wallpaper's corridor dark, kept
+    // darker than pal.glass on purpose so the compartments glow against them
     readonly property color scrimColor: "#0b0d08"
     readonly property real scrimOpacity: 0.72
     readonly property color cardBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)

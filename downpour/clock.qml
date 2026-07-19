@@ -19,17 +19,10 @@ Item {
     property bool occluded: false
 
     readonly property color paneLight: pal.neon     // wet-glass cyan
-    readonly property color skinLight: pal.cyan     // her cold-lit skin
-    readonly property color warmth: pal.magenta     // the unsaid thing
-    readonly property color slate: pal.dim
     readonly property color ink: pal.text
-    readonly property color glass: pal.glass
     readonly property string serif: "Noto Serif"
-    readonly property string mono: pal.fontMono
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function paneA(a)  { return Qt.rgba(paneLight.r, paneLight.g, paneLight.b, a) }
-    function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
-    function glassA(a) { return Qt.rgba(glass.r, glass.g, glass.b, a) }
 
     // deterministic hash — the same condensation on every mount
     function rnd(n) {

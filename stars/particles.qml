@@ -71,7 +71,10 @@ Item {
                 GradientStop { position: 0; color: "transparent" }
                 GradientStop { position: 1; color: Qt.alpha(root.pal.text, 0.85) }
             }
-            NumberAnimation on opacity { from: 1; to: 0; duration: 1050 }
+            // ItemParticle pools delegates — a one-shot fade ends at 0 and a
+            // recycled streak would stay invisible; re-arm on each attach
+            NumberAnimation on opacity { id: streakFade; from: 1; to: 0; duration: 1050 }
+            ItemParticle.onAttached: streakFade.restart()
         }
     }
 }

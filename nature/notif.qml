@@ -67,6 +67,7 @@ Item {
                 Connections {
                     target: root.pal
                     function onNeonChanged() { pressDaisy.requestPaint() }
+                    function onTextChanged() { pressDaisy.requestPaint() }   // the cream heart
                 }
                 onPaint: {
                     const ctx = getContext("2d")
@@ -167,6 +168,10 @@ Item {
                 Connections {
                     target: chassis
                     function onTintChanged() { daisy.requestPaint() }
+                }
+                Connections {
+                    target: root.pal
+                    function onTextChanged() { daisy.requestPaint() }   // the cream heart
                 }
                 onPaint: {
                     const ctx = getContext("2d")

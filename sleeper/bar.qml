@@ -41,7 +41,6 @@ Item {
     readonly property color linen: pal.text
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
-    readonly property string icon: "Symbols Nerd Font"
     function linenA(a) { return Qt.rgba(linen.r, linen.g, linen.b, a) }
     function teaA(a)   { return Qt.rgba(tea.r, tea.g, tea.b, a) }
     function woodA(a)  { return Qt.rgba(wood.r, wood.g, wood.b, a) }
@@ -157,10 +156,11 @@ Item {
                 SequentialAnimation on opacity {
                     running: media.playing && !root.occluded
                     loops: Animation.Infinite
+                    // settle the lamp when the music stops, wherever the breath was
+                    onRunningChanged: if (!running) pip.opacity = 1
                     NumberAnimation { to: 0.4; duration: 1100; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 1.0; duration: 1100; easing.type: Easing.InOutSine }
                 }
-                onVisibleChanged: opacity = 1
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter

@@ -113,11 +113,14 @@ Item {
                 NumberAnimation { to: -22; duration: 1900; easing.type: Easing.InOutSine }
             }
             SequentialAnimation on opacity {
+                id: driftFade
                 running: !root.occluded
                 NumberAnimation { to: 0.5; duration: 1600; easing.type: Easing.InOutSine }
                 PauseAnimation { duration: 10800 }
                 NumberAnimation { to: 0; duration: 2400; easing.type: Easing.InOutSine }
             }
+            // pooled delegate — one-shot ends at 0; re-arm per attach
+            ItemParticle.onAttached: driftFade.restart()
         }
     }
 
@@ -141,11 +144,14 @@ Item {
                 NumberAnimation { to: 5 * root.s; duration: 1100; easing.type: Easing.InOutSine }
             }
             SequentialAnimation on opacity {
+                id: skimFade
                 running: !root.occluded
                 NumberAnimation { to: 0.55; duration: 2200 }
                 PauseAnimation { duration: 18000 }
                 NumberAnimation { to: 0; duration: 3000 }
             }
+            // pooled delegate — one-shot ends at 0; re-arm per attach
+            ItemParticle.onAttached: skimFade.restart()
         }
     }
 }

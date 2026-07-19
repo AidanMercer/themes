@@ -29,7 +29,6 @@ Item {
     readonly property color ink: pal.text
     readonly property color glass: pal.glass
     readonly property string serif: "Noto Serif"
-    readonly property string mono: pal.fontMono
     readonly property real ui: pal.uiScale
     readonly property real p: host.progress
     function boneA(a)  { return Qt.rgba(bone.r, bone.g, bone.b, a) }

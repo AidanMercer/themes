@@ -20,13 +20,16 @@ Item {
     // injected by the bar wrapper after load (Loader.onLoaded)
     property var barScreen: null
 
+    // pushed by the loader: true while the session is locked — parks the
+    // net/battery polls and the reel spin
+    property bool occluded: false
+
     // injected by the loader (setSource initial property)
     required property var pal
     readonly property color amber: pal.neon
     readonly property color dusk:  pal.cyan
     readonly property color tail:  pal.magenta
     readonly property color warn:  pal.amber
-    readonly property color dim:   pal.dim
     readonly property color ink:   pal.text
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
@@ -78,7 +81,7 @@ Item {
     property bool hasBattery: false
 
     Timer {
-        interval: 10000; running: true; repeat: true; triggeredOnStart: true
+        interval: 10000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { netProc.running = true; batProc.running = true }
     }
     Process {
@@ -181,12 +184,12 @@ Item {
             }
             Timer {
                 interval: 1000; repeat: true
-                running: media.playing
+                running: media.playing && !root.occluded
                 triggeredOnStart: true
                 onTriggered: media.updateProgress()
             }
             NumberAnimation on reelSpin {
-                running: media.playing
+                running: media.playing && !root.occluded
                 loops: Animation.Infinite
                 from: 0; to: 360; duration: 2600
             }
@@ -430,8 +433,10 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             // hovering the guard's panel lights the arrivals board
-            // (sysinfo.qml watches the shared hover flag file)
+            // (sysinfo.qml watches the shared hover flag file); dormant while
+            // the sysinfo slot is toggled off in Settings
             HoverHandler {
+                enabled: root.pal.sysinfoOn !== false
                 onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
             }
 

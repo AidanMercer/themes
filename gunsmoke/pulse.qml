@@ -17,10 +17,8 @@ Item {
     readonly property bool awake: host ? host.active === true : false
     readonly property real load: host && host.load !== undefined ? host.load : 0
 
-    readonly property string serif: "Noto Serif"
     function boneA(a)  { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
     function steelA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
-    function ashA(a)   { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
     function bloodA(a) { return Qt.rgba(pal.magenta.r, pal.magenta.g, pal.magenta.b, a) }
 
     // chassis: paper corners, bone hairline

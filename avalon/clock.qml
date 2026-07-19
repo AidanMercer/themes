@@ -196,7 +196,7 @@ Item {
             ctx.reset()
             const c = size, pr = size * 0.62
             ctx.fillStyle = root.ivoryA(0.92)
-            // qml canvas has no ellipse(): unit arc under a scale transform
+            // qt canvas ellipse() can't rotate: unit arc under a scale transform
             for (let i = 0; i < 5; i++) {
                 const a = -Math.PI / 2 + i * Math.PI * 2 / 5
                 ctx.save()

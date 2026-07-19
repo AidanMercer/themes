@@ -3,7 +3,7 @@ import QtQuick
 // downpour: reading against the glass. While a page is up the pane behind
 // the text keeps its condensation — a sparse bead field breathing at the
 // window's pace — and the moment you start typing everything holds still
-// (the reading gate: stirring = awake && page, verbatim from the docs).
+// (the reading gate: only stirring = awake && page may animate).
 // When a page composes, a fingertip gleam wipes once across the fog —
 // downpour's page turn — and is gone. Backdrop only; the glyphs stay crisp.
 Item {
@@ -17,7 +17,6 @@ Item {
     readonly property bool stirring: awake && page   // the only thing that may animate
 
     readonly property color paneLight: pal.neon
-    function paneA(a) { return Qt.rgba(paneLight.r, paneLight.g, paneLight.b, a) }
     function inkA(a)  { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
 
     // chassis: a soft breath-mark frame

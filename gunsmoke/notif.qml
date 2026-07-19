@@ -15,7 +15,6 @@ Item {
     readonly property string serif: "Noto Serif"
     function boneA(a) { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
     function ashA(a)  { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
-    function inkA(a)  { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
 
     property color cardBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.94)
     property color cardBorder: ashA(0.6)

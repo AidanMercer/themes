@@ -17,7 +17,6 @@ Item {
     required property var audio    // AudioBus: bass/mid/high, silent, ready
 
     readonly property string mono: pal.fontMono
-    readonly property string icon: "Symbols Nerd Font"
     function inkA(a)   { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
     function lampA(a)  { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
     function skyA(a)   { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }

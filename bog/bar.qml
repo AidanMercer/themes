@@ -35,10 +35,7 @@ Item {
     readonly property color reed: pal.dim
     readonly property color straw: pal.text
     readonly property color murk: pal.glass
-    readonly property real ui: pal.uiScale
     readonly property string serif: "Noto Serif Display"
-    readonly property string mono: pal.fontMono
-    readonly property string icon: "Symbols Nerd Font"
     function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function mossA(a)  { return Qt.rgba(moss.r, moss.g, moss.b, a) }
     function reedA(a)  { return Qt.rgba(reed.r, reed.g, reed.b, a) }
@@ -402,7 +399,7 @@ Item {
         x: 14
         width: leafRow.width + 30
         height: 26
-        y: Math.round(root.waterY - height * 0.62) + bobY - root.bootRise + 8 * (1 - root.surfaceT)
+        y: Math.round(root.waterY - height * 0.62) + bobY + root.bootRise
         opacity: root.surfaceT
         property real bobY: 0
         SequentialAnimation on bobY {
@@ -724,13 +721,15 @@ Item {
                 font.letterSpacing: 1
             }
             Text {
+                id: ttGhost
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: root.waterY + 1 - parent.bobY * 0.5
                 text: tt.text
                 color: root.strawA(0.92)
                 font: tt.font
                 opacity: 0.16
-                transform: Scale { origin.y: 0; yScale: -1 }
+                // flip in place so the ghost hangs below the waterline
+                transform: Scale { origin.y: ttGhost.height / 2; yScale: -1 }
             }
         }
 

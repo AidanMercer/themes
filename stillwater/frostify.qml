@@ -88,6 +88,7 @@ Item {
                 id: shore
                 anchors.fill: parent
                 onWidthChanged: requestPaint()
+                onHeightChanged: requestPaint()   // wl rides height
                 Component.onCompleted: requestPaint()
                 onPaint: {
                     const ctx = getContext("2d")

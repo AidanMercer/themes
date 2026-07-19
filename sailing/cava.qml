@@ -20,7 +20,6 @@ Item {
     readonly property color dusk:  pal.cyan
     readonly property color slate: pal.dim
     readonly property color pale:  pal.text
-    readonly property real ui: pal.uiScale
     function paleA(a)  { return Qt.rgba(pale.r, pale.g, pale.b, a) }
     function duskA(a)  { return Qt.rgba(dusk.r, dusk.g, dusk.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }

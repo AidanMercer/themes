@@ -16,6 +16,8 @@ Item {
 
     // injected by the loader (setSource initial property)
     required property var pal
+    // pushed by the loader: true while locked or covered by a fullscreen window
+    property bool occluded: false
     readonly property color neon:  pal.neon
     readonly property color ice:   pal.cyan
     readonly property color red:   pal.magenta
@@ -121,7 +123,7 @@ Item {
     property int flickNonce: 0
     Timer {
         interval: 25000 + Math.floor(Math.random() * 30000)
-        running: root.visible
+        running: root.visible && !root.occluded
         repeat: true
         onTriggered: {
             root.flickIdx = Math.floor(Math.random() * 4)

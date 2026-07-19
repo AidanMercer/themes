@@ -276,6 +276,7 @@ Item {
         }
         // its double, sunken and dim
         Text {
+            id: titleGhost
             anchors.left: title.left
             y: root.wl + 3
             width: title.width
@@ -286,7 +287,9 @@ Item {
             font.family: root.mono
             font.pixelSize: 10
             opacity: 0.28
-            transform: Scale { yScale: -0.85; origin.y: 0 }
+            // mid-height origin keeps the flipped glyphs inside the band
+            // below the waterline (origin 0 would paint them above it)
+            transform: Scale { yScale: -0.85; origin.y: titleGhost.height / 2 }
         }
 
         // the crossing: a hairline on the waterline, one light at progress
@@ -497,6 +500,7 @@ Item {
                 font.letterSpacing: 2
             }
             Text {
+                id: timeGhost
                 anchors.left: timeText.left
                 y: root.wl + 3
                 text: timeText.text
@@ -505,7 +509,8 @@ Item {
                 font.pixelSize: 12
                 font.letterSpacing: 2
                 opacity: 0.3
-                transform: Scale { yScale: -0.85; origin.y: 0 }
+                // mid-height origin keeps the flipped digits below the line
+                transform: Scale { yScale: -0.85; origin.y: timeGhost.height / 2 }
             }
         }
 

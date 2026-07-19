@@ -30,7 +30,6 @@ Item {
     readonly property real ui: pal.uiScale
     readonly property real p: host.progress
     readonly property string serif: "Noto Serif Display"
-    readonly property string mono: pal.fontMono
     function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function strawA(a) { return Qt.rgba(straw.r, straw.g, straw.b, a) }
     function reedA(a)  { return Qt.rgba(reed.r, reed.g, reed.b, a) }

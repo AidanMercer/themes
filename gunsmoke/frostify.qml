@@ -18,7 +18,6 @@ Item {
 
     function boneA(a)  { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
     function steelA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
-    function ashA(a)   { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
 
     // chassis: paper corners, bone hairline
     readonly property color cardBorder: Qt.alpha(pal.neon, 0.3)

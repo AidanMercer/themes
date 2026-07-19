@@ -344,6 +344,7 @@ Item {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: label
+                textFormat: Text.PlainText   // the breeze line carries the SSID
                 width: Math.min(implicitWidth,
                     parent.parent.width - entryGlyph.width - entryReading.width
                     - Math.round(21 * root.ui))
@@ -487,7 +488,9 @@ Item {
                 color: root.ink
             }
             Text {
-                text: Qt.formatDateTime(new Date(), "MMMM d") + "  ·  the meadow"
+                // touch root.shown so the date re-evaluates on every reveal —
+                // a bare new Date() would freeze at whatever day the shell started
+                text: (root.shown, Qt.formatDateTime(new Date(), "MMMM d")) + "  ·  the meadow"
                 font.family: root.serif
                 font.pixelSize: Math.round(10 * root.ui)
                 font.letterSpacing: 1.5

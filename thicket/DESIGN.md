@@ -75,8 +75,8 @@ quick, precise dart, then still again.
 - **bar** (top) — the hedge line: foliage strip with leaf fringe hanging
   from its lower edge; workspaces are *gaps* in the hedge, eyeshine looks
   out of the active gap; left = "heard in the brush" (now playing), right =
-  watcher's eye (sysinfo hover trigger), signal, battery, small time,
-  ignition (popup).
+  watcher's eye (sysinfo hover trigger), signal, battery, small time, a
+  curled leaf (popup).
 - **sysinfo** — hover/pin reveal, "WHAT IT KNOWS": tally panel, rows
   CPU/MEM/GPU/NET/PWR metered in leaf pips; parts in with a rustle + settle
   sway; polls only while shown.
@@ -100,15 +100,15 @@ quick, precise dart, then still again.
   track change = rustle + the dapple darts to a new branch. Voice: "♪ IT
   SINGS", "… HUSHED", "■ FLOWN".
 - **mica** — foraging: nav = a rustle darts across the top seam; wordmark
-  "⌖ foraging".
+  "❧ foraging".
 - **vellum** — the hide: dapple lies on the page while reading; page
   compose = one light sweep; nothing moves while typing (reading gate
   verbatim).
 - **beryl** — tracking: hedge fringe on the tab band, nav = rustle along
-  the seam; wordmark "⌖ on the scent". Chrome bands only.
+  the seam; wordmark "❧ on the scent". Chrome bands only.
 - **pulse** — the brush tenses: corner leaves lean/ember with host.load
   (binding, no loop); sort = light rustle; kill = ember flash, the brush
-  goes still. wordmark "⌖ heartbeat".
+  goes still. wordmark "❧ heartbeat".
 - **cobalt** — restrained: faint corner sprays under the glass, one quiet
   rustle line on nav. wordmark "thicket".
 
