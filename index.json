@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "1215ff1",
+  "commit": "5409dd4",
   "themes": [
     {
       "name": "avalon",
@@ -16,12 +16,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21488626,
-      "rev": "9ae8258",
+      "bytes": 21489175,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "avalon/bar.qml",
-          "bytes": 20706
+          "bytes": 20824
         },
         {
           "path": "avalon/beryl.qml",
@@ -45,7 +45,7 @@
         },
         {
           "path": "avalon/clock.qml",
-          "bytes": 8481
+          "bytes": 8486
         },
         {
           "path": "avalon/cobalt.qml",
@@ -65,7 +65,7 @@
         },
         {
           "path": "avalon/lyrics.qml",
-          "bytes": 9667
+          "bytes": 9844
         },
         {
           "path": "avalon/mica.qml",
@@ -73,7 +73,7 @@
         },
         {
           "path": "avalon/notif.qml",
-          "bytes": 5069
+          "bytes": 5088
         },
         {
           "path": "avalon/overview.qml",
@@ -93,7 +93,7 @@
         },
         {
           "path": "avalon/sysinfo.qml",
-          "bytes": 23126
+          "bytes": 23356
         },
         {
           "path": "avalon/vellum.qml",
@@ -119,8 +119,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/bog.jpg",
-      "bytes": 90095655,
-      "rev": "026b283",
+      "bytes": 90095998,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "bog/DESIGN.md",
@@ -128,7 +128,7 @@
         },
         {
           "path": "bog/bar.qml",
-          "bytes": 34086
+          "bytes": 34031
         },
         {
           "path": "bog/beryl.qml",
@@ -140,11 +140,11 @@
         },
         {
           "path": "bog/cava.qml",
-          "bytes": 10189
+          "bytes": 10335
         },
         {
           "path": "bog/clock.qml",
-          "bytes": 13790
+          "bytes": 13588
         },
         {
           "path": "bog/cobalt.qml",
@@ -160,11 +160,11 @@
         },
         {
           "path": "bog/lock.qml",
-          "bytes": 15620
+          "bytes": 15572
         },
         {
           "path": "bog/lyrics.qml",
-          "bytes": 12710
+          "bytes": 12743
         },
         {
           "path": "bog/mica.qml",
@@ -176,11 +176,11 @@
         },
         {
           "path": "bog/overview.qml",
-          "bytes": 10564
+          "bytes": 10715
         },
         {
           "path": "bog/particles.qml",
-          "bytes": 5812
+          "bytes": 6130
         },
         {
           "path": "bog/popup.qml",
@@ -226,16 +226,16 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/downpour.jpg",
-      "bytes": 31129364,
-      "rev": "026b283",
+      "bytes": 31128544,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "downpour/DESIGN.md",
-          "bytes": 5912
+          "bytes": 5914
         },
         {
           "path": "downpour/bar.qml",
-          "bytes": 21685
+          "bytes": 21593
         },
         {
           "path": "downpour/beryl.qml",
@@ -247,11 +247,11 @@
         },
         {
           "path": "downpour/cava.qml",
-          "bytes": 8082
+          "bytes": 8222
         },
         {
           "path": "downpour/clock.qml",
-          "bytes": 11744
+          "bytes": 11319
         },
         {
           "path": "downpour/cobalt.qml",
@@ -271,15 +271,15 @@
         },
         {
           "path": "downpour/frostify.qml",
-          "bytes": 6488
+          "bytes": 6440
         },
         {
           "path": "downpour/lock.qml",
-          "bytes": 14489
+          "bytes": 14393
         },
         {
           "path": "downpour/lyrics.qml",
-          "bytes": 9751
+          "bytes": 9588
         },
         {
           "path": "downpour/mica.qml",
@@ -299,7 +299,7 @@
         },
         {
           "path": "downpour/popup.qml",
-          "bytes": 12834
+          "bytes": 12786
         },
         {
           "path": "downpour/pulse.qml",
@@ -311,7 +311,7 @@
         },
         {
           "path": "downpour/vellum.qml",
-          "bytes": 3963
+          "bytes": 3873
         },
         {
           "path": "downpour/wallpaper.mp4",
@@ -333,8 +333,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/encore.jpg",
-      "bytes": 40641954,
-      "rev": "026b283",
+      "bytes": 40642653,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "encore/DESIGN.md",
@@ -342,7 +342,7 @@
         },
         {
           "path": "encore/bar.qml",
-          "bytes": 20165
+          "bytes": 20166
         },
         {
           "path": "encore/beryl.qml",
@@ -354,7 +354,7 @@
         },
         {
           "path": "encore/cava.qml",
-          "bytes": 8690
+          "bytes": 8878
         },
         {
           "path": "encore/clock.qml",
@@ -378,7 +378,7 @@
         },
         {
           "path": "encore/lyrics.qml",
-          "bytes": 13495
+          "bytes": 13911
         },
         {
           "path": "encore/mica.qml",
@@ -390,7 +390,7 @@
         },
         {
           "path": "encore/overview.qml",
-          "bytes": 9565
+          "bytes": 9670
         },
         {
           "path": "encore/particles.qml",
@@ -406,7 +406,7 @@
         },
         {
           "path": "encore/sysinfo.qml",
-          "bytes": 20262
+          "bytes": 20251
         },
         {
           "path": "encore/vellum.qml",
@@ -432,12 +432,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/fuel.jpg",
-      "bytes": 16634798,
-      "rev": "9ae8258",
+      "bytes": 16635488,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "fuel/bar.qml",
-          "bytes": 27986
+          "bytes": 28246
         },
         {
           "path": "fuel/beryl.qml",
@@ -449,11 +449,11 @@
         },
         {
           "path": "fuel/cava.qml",
-          "bytes": 14275
+          "bytes": 14482
         },
         {
           "path": "fuel/clock.qml",
-          "bytes": 14699
+          "bytes": 14832
         },
         {
           "path": "fuel/cobalt.qml",
@@ -509,7 +509,7 @@
         },
         {
           "path": "fuel/sysinfo.qml",
-          "bytes": 27161
+          "bytes": 27251
         },
         {
           "path": "fuel/vellum.qml",
@@ -535,8 +535,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/gunsmoke.jpg",
-      "bytes": 19003520,
-      "rev": "026b283",
+      "bytes": 19003569,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "gunsmoke/DESIGN.md",
@@ -544,7 +544,7 @@
         },
         {
           "path": "gunsmoke/bar.qml",
-          "bytes": 23050
+          "bytes": 23085
         },
         {
           "path": "gunsmoke/beryl.qml",
@@ -556,11 +556,11 @@
         },
         {
           "path": "gunsmoke/cava.qml",
-          "bytes": 7696
+          "bytes": 7884
         },
         {
           "path": "gunsmoke/clock.qml",
-          "bytes": 10238
+          "bytes": 10075
         },
         {
           "path": "gunsmoke/cobalt.qml",
@@ -572,11 +572,11 @@
         },
         {
           "path": "gunsmoke/frostify.qml",
-          "bytes": 6111
+          "bytes": 6033
         },
         {
           "path": "gunsmoke/lock.qml",
-          "bytes": 13796
+          "bytes": 13748
         },
         {
           "path": "gunsmoke/lyrics.qml",
@@ -584,15 +584,15 @@
         },
         {
           "path": "gunsmoke/mica.qml",
-          "bytes": 7062
+          "bytes": 6984
         },
         {
           "path": "gunsmoke/notif.qml",
-          "bytes": 7573
+          "bytes": 7493
         },
         {
           "path": "gunsmoke/overview.qml",
-          "bytes": 9647
+          "bytes": 9884
         },
         {
           "path": "gunsmoke/particles.qml",
@@ -600,19 +600,19 @@
         },
         {
           "path": "gunsmoke/popup.qml",
-          "bytes": 10283
+          "bytes": 10542
         },
         {
           "path": "gunsmoke/pulse.qml",
-          "bytes": 8413
+          "bytes": 8286
         },
         {
           "path": "gunsmoke/sysinfo.qml",
-          "bytes": 19419
+          "bytes": 19375
         },
         {
           "path": "gunsmoke/vellum.qml",
-          "bytes": 4769
+          "bytes": 4717
         },
         {
           "path": "gunsmoke/wallpaper.mp4",
@@ -634,12 +634,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26413038,
-      "rev": "1215ff1",
+      "bytes": 26413187,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "guts/bar.qml",
-          "bytes": 26366
+          "bytes": 26374
         },
         {
           "path": "guts/beryl.qml",
@@ -651,11 +651,11 @@
         },
         {
           "path": "guts/cava.qml",
-          "bytes": 10402
+          "bytes": 10603
         },
         {
           "path": "guts/clock.qml",
-          "bytes": 15150
+          "bytes": 15060
         },
         {
           "path": "guts/cobalt.qml",
@@ -703,7 +703,7 @@
         },
         {
           "path": "guts/popup.qml",
-          "bytes": 12895
+          "bytes": 12847
         },
         {
           "path": "guts/pulse.qml",
@@ -711,7 +711,7 @@
         },
         {
           "path": "guts/sysinfo.qml",
-          "bytes": 23476
+          "bytes": 23554
         },
         {
           "path": "guts/vellum.qml",
@@ -737,8 +737,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/homeroom.jpg",
-      "bytes": 16868910,
-      "rev": "026b283",
+      "bytes": 16869682,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "homeroom/DESIGN.md",
@@ -746,7 +746,7 @@
         },
         {
           "path": "homeroom/bar.qml",
-          "bytes": 24088
+          "bytes": 24116
         },
         {
           "path": "homeroom/beryl.qml",
@@ -758,7 +758,7 @@
         },
         {
           "path": "homeroom/cava.qml",
-          "bytes": 6597
+          "bytes": 6742
         },
         {
           "path": "homeroom/chalk.js",
@@ -766,7 +766,7 @@
         },
         {
           "path": "homeroom/clock.qml",
-          "bytes": 9443
+          "bytes": 9548
         },
         {
           "path": "homeroom/cobalt.qml",
@@ -782,7 +782,7 @@
         },
         {
           "path": "homeroom/lock.qml",
-          "bytes": 16043
+          "bytes": 16246
         },
         {
           "path": "homeroom/lyrics.qml",
@@ -798,11 +798,11 @@
         },
         {
           "path": "homeroom/overview.qml",
-          "bytes": 11299
+          "bytes": 11487
         },
         {
           "path": "homeroom/particles.qml",
-          "bytes": 3149
+          "bytes": 3307
         },
         {
           "path": "homeroom/popup.qml",
@@ -814,7 +814,7 @@
         },
         {
           "path": "homeroom/sysinfo.qml",
-          "bytes": 20726
+          "bytes": 20671
         },
         {
           "path": "homeroom/vellum.qml",
@@ -840,12 +840,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/lonely-train.jpg",
-      "bytes": 29053500,
-      "rev": "9ae8258",
+      "bytes": 29054077,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "lonely-train/bar.qml",
-          "bytes": 20630
+          "bytes": 20915
         },
         {
           "path": "lonely-train/beryl.qml",
@@ -857,11 +857,11 @@
         },
         {
           "path": "lonely-train/cava.qml",
-          "bytes": 12778
+          "bytes": 12777
         },
         {
           "path": "lonely-train/clock.qml",
-          "bytes": 12474
+          "bytes": 12631
         },
         {
           "path": "lonely-train/cobalt.qml",
@@ -909,7 +909,7 @@
         },
         {
           "path": "lonely-train/rain.frag",
-          "bytes": 1310
+          "bytes": 1440
         },
         {
           "path": "lonely-train/rain.frag.qsb",
@@ -917,7 +917,7 @@
         },
         {
           "path": "lonely-train/sysinfo.qml",
-          "bytes": 21645
+          "bytes": 21651
         },
         {
           "path": "lonely-train/vellum.qml",
@@ -943,8 +943,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/moon.jpg",
-      "bytes": 44111578,
-      "rev": "9ae8258",
+      "bytes": 44112716,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "moon/LYRICS-NOTES.md",
@@ -952,11 +952,11 @@
         },
         {
           "path": "moon/bar.qml",
-          "bytes": 12969
+          "bytes": 13018
         },
         {
           "path": "moon/beryl.qml",
-          "bytes": 4434
+          "bytes": 4800
         },
         {
           "path": "moon/cava.conf",
@@ -968,11 +968,11 @@
         },
         {
           "path": "moon/clock.qml",
-          "bytes": 13291
+          "bytes": 13297
         },
         {
           "path": "moon/cobalt.qml",
-          "bytes": 4108
+          "bytes": 4474
         },
         {
           "path": "moon/config.toml",
@@ -996,7 +996,7 @@
         },
         {
           "path": "moon/notif.qml",
-          "bytes": 6134
+          "bytes": 6312
         },
         {
           "path": "moon/overview.qml",
@@ -1004,7 +1004,7 @@
         },
         {
           "path": "moon/particles.qml",
-          "bytes": 1906
+          "bytes": 2049
         },
         {
           "path": "moon/popup.qml",
@@ -1028,7 +1028,7 @@
         },
         {
           "path": "moon/sysinfo.qml",
-          "bytes": 24326
+          "bytes": 24356
         },
         {
           "path": "moon/vellum.qml",
@@ -1060,12 +1060,12 @@
       "video": true,
       "variants": 3,
       "thumb": ".catalog/thumbs/nature.jpg",
-      "bytes": 42492624,
-      "rev": "9ae8258",
+      "bytes": 42492991,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "nature/bar.qml",
-          "bytes": 30324
+          "bytes": 30275
         },
         {
           "path": "nature/beryl.qml",
@@ -1081,7 +1081,7 @@
         },
         {
           "path": "nature/clock.qml",
-          "bytes": 13537
+          "bytes": 13596
         },
         {
           "path": "nature/cobalt.qml",
@@ -1105,11 +1105,11 @@
         },
         {
           "path": "nature/lock.qml",
-          "bytes": 10572
+          "bytes": 10528
         },
         {
           "path": "nature/lyrics.qml",
-          "bytes": 13486
+          "bytes": 13402
         },
         {
           "path": "nature/mica.qml",
@@ -1117,11 +1117,11 @@
         },
         {
           "path": "nature/notif.qml",
-          "bytes": 8681
+          "bytes": 8953
         },
         {
           "path": "nature/overview.qml",
-          "bytes": 13560
+          "bytes": 13513
         },
         {
           "path": "nature/particles.qml",
@@ -1137,7 +1137,7 @@
         },
         {
           "path": "nature/sysinfo.qml",
-          "bytes": 23498
+          "bytes": 23758
         },
         {
           "path": "nature/vellum.qml",
@@ -1171,8 +1171,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/pines.jpg",
-      "bytes": 22152221,
-      "rev": "026b283",
+      "bytes": 22153964,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "pines/DESIGN.md",
@@ -1180,11 +1180,11 @@
         },
         {
           "path": "pines/bar.qml",
-          "bytes": 23229
+          "bytes": 23174
         },
         {
           "path": "pines/beryl.qml",
-          "bytes": 4141
+          "bytes": 4341
         },
         {
           "path": "pines/cava.conf",
@@ -1192,15 +1192,15 @@
         },
         {
           "path": "pines/cava.qml",
-          "bytes": 9705
+          "bytes": 10225
         },
         {
           "path": "pines/clock.qml",
-          "bytes": 11054
+          "bytes": 11007
         },
         {
           "path": "pines/cobalt.qml",
-          "bytes": 4363
+          "bytes": 4563
         },
         {
           "path": "pines/config.toml",
@@ -1216,7 +1216,7 @@
         },
         {
           "path": "pines/frostify.qml",
-          "bytes": 5214
+          "bytes": 5414
         },
         {
           "path": "pines/lock.qml",
@@ -1228,7 +1228,7 @@
         },
         {
           "path": "pines/mica.qml",
-          "bytes": 5227
+          "bytes": 5427
         },
         {
           "path": "pines/notif.qml",
@@ -1236,11 +1236,11 @@
         },
         {
           "path": "pines/overview.qml",
-          "bytes": 16254
+          "bytes": 16452
         },
         {
           "path": "pines/particles.qml",
-          "bytes": 3447
+          "bytes": 3574
         },
         {
           "path": "pines/popup.qml",
@@ -1248,7 +1248,7 @@
         },
         {
           "path": "pines/pulse.qml",
-          "bytes": 5018
+          "bytes": 5218
         },
         {
           "path": "pines/sysinfo.qml",
@@ -1278,12 +1278,12 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/road8.jpg",
-      "bytes": 28665082,
-      "rev": "1215ff1",
+      "bytes": 28665810,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "road8/bar.qml",
-          "bytes": 26105
+          "bytes": 25970
         },
         {
           "path": "road8/beryl.qml",
@@ -1295,11 +1295,11 @@
         },
         {
           "path": "road8/cava.qml",
-          "bytes": 6548
+          "bytes": 6811
         },
         {
           "path": "road8/clock.qml",
-          "bytes": 9994
+          "bytes": 9879
         },
         {
           "path": "road8/cobalt.qml",
@@ -1323,11 +1323,11 @@
         },
         {
           "path": "road8/lock.qml",
-          "bytes": 14707
+          "bytes": 14933
         },
         {
           "path": "road8/lyrics.qml",
-          "bytes": 11611
+          "bytes": 11545
         },
         {
           "path": "road8/mica.qml",
@@ -1339,15 +1339,15 @@
         },
         {
           "path": "road8/overview.qml",
-          "bytes": 11484
+          "bytes": 11454
         },
         {
           "path": "road8/particles.qml",
-          "bytes": 3987
+          "bytes": 4525
         },
         {
           "path": "road8/popup.qml",
-          "bytes": 13072
+          "bytes": 13119
         },
         {
           "path": "road8/pulse.qml",
@@ -1385,12 +1385,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sailing.jpg",
-      "bytes": 21592058,
-      "rev": "9ae8258",
+      "bytes": 21592354,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "sailing/bar.qml",
-          "bytes": 20280
+          "bytes": 20406
         },
         {
           "path": "sailing/beryl.qml",
@@ -1402,11 +1402,11 @@
         },
         {
           "path": "sailing/cava.qml",
-          "bytes": 7678
+          "bytes": 7635
         },
         {
           "path": "sailing/clock.qml",
-          "bytes": 8270
+          "bytes": 8423
         },
         {
           "path": "sailing/cobalt.qml",
@@ -1454,7 +1454,7 @@
         },
         {
           "path": "sailing/sea.frag",
-          "bytes": 1543
+          "bytes": 1603
         },
         {
           "path": "sailing/sea.frag.qsb",
@@ -1488,8 +1488,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26755802,
-      "rev": "1215ff1",
+      "bytes": 26755912,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "shiro/bar.qml",
@@ -1525,7 +1525,7 @@
         },
         {
           "path": "shiro/lock.qml",
-          "bytes": 7229
+          "bytes": 7267
         },
         {
           "path": "shiro/lyrics.qml",
@@ -1541,7 +1541,7 @@
         },
         {
           "path": "shiro/overview.qml",
-          "bytes": 7261
+          "bytes": 7333
         },
         {
           "path": "shiro/particles.qml",
@@ -1595,8 +1595,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sleeper.jpg",
-      "bytes": 31201457,
-      "rev": "026b283",
+      "bytes": 31202191,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "sleeper/DESIGN.md",
@@ -1604,7 +1604,7 @@
         },
         {
           "path": "sleeper/bar.qml",
-          "bytes": 24538
+          "bytes": 24590
         },
         {
           "path": "sleeper/beryl.qml",
@@ -1616,11 +1616,11 @@
         },
         {
           "path": "sleeper/cava.qml",
-          "bytes": 12678
+          "bytes": 12866
         },
         {
           "path": "sleeper/clock.qml",
-          "bytes": 11542
+          "bytes": 11559
         },
         {
           "path": "sleeper/cobalt.qml",
@@ -1636,7 +1636,7 @@
         },
         {
           "path": "sleeper/lock.qml",
-          "bytes": 14121
+          "bytes": 14285
         },
         {
           "path": "sleeper/lyrics.qml",
@@ -1652,11 +1652,11 @@
         },
         {
           "path": "sleeper/overview.qml",
-          "bytes": 9567
+          "bytes": 9720
         },
         {
           "path": "sleeper/particles.qml",
-          "bytes": 3087
+          "bytes": 3247
         },
         {
           "path": "sleeper/popup.qml",
@@ -1683,7 +1683,7 @@
     },
     {
       "name": "stars",
-      "tagline": "under the nebula — a quiet night-sky observatory",
+      "tagline": "waiting with stars — a seaside night stop, one warm vending machine",
       "accents": [
         "#f2bb54",
         "#e89aa8",
@@ -1694,12 +1694,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stars.jpg",
-      "bytes": 23366413,
-      "rev": "9ae8258",
+      "bytes": 23367152,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "stars/bar.qml",
-          "bytes": 28798
+          "bytes": 28973
         },
         {
           "path": "stars/beryl.qml",
@@ -1707,15 +1707,15 @@
         },
         {
           "path": "stars/cava.conf",
-          "bytes": 415
+          "bytes": 412
         },
         {
           "path": "stars/cava.qml",
-          "bytes": 10212
+          "bytes": 10462
         },
         {
           "path": "stars/clock.qml",
-          "bytes": 11938
+          "bytes": 11956
         },
         {
           "path": "stars/cobalt.qml",
@@ -1723,7 +1723,7 @@
         },
         {
           "path": "stars/config.toml",
-          "bytes": 1164
+          "bytes": 1183
         },
         {
           "path": "stars/frostify.qml",
@@ -1759,7 +1759,7 @@
         },
         {
           "path": "stars/particles.qml",
-          "bytes": 2518
+          "bytes": 2747
         },
         {
           "path": "stars/popup.qml",
@@ -1771,7 +1771,7 @@
         },
         {
           "path": "stars/sysinfo.qml",
-          "bytes": 22206
+          "bytes": 22257
         },
         {
           "path": "stars/vellum.qml",
@@ -1797,8 +1797,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stillwater.jpg",
-      "bytes": 22888499,
-      "rev": "026b283",
+      "bytes": 22889435,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "stillwater/DESIGN.md",
@@ -1806,7 +1806,7 @@
         },
         {
           "path": "stillwater/bar.qml",
-          "bytes": 22083
+          "bytes": 22402
         },
         {
           "path": "stillwater/beryl.qml",
@@ -1818,11 +1818,11 @@
         },
         {
           "path": "stillwater/cava.qml",
-          "bytes": 7842
+          "bytes": 8045
         },
         {
           "path": "stillwater/clock.qml",
-          "bytes": 7838
+          "bytes": 7978
         },
         {
           "path": "stillwater/cobalt.qml",
@@ -1834,7 +1834,7 @@
         },
         {
           "path": "stillwater/frostify.qml",
-          "bytes": 9216
+          "bytes": 9285
         },
         {
           "path": "stillwater/lock.qml",
@@ -1846,7 +1846,7 @@
         },
         {
           "path": "stillwater/mica.qml",
-          "bytes": 7157
+          "bytes": 7226
         },
         {
           "path": "stillwater/mirror.frag",
@@ -1862,7 +1862,7 @@
         },
         {
           "path": "stillwater/overview.qml",
-          "bytes": 9025
+          "bytes": 9255
         },
         {
           "path": "stillwater/particles.qml",
@@ -1870,7 +1870,7 @@
         },
         {
           "path": "stillwater/popup.qml",
-          "bytes": 12560
+          "bytes": 12505
         },
         {
           "path": "stillwater/pulse.qml",
@@ -1878,11 +1878,11 @@
         },
         {
           "path": "stillwater/sysinfo.qml",
-          "bytes": 20881
+          "bytes": 20773
         },
         {
           "path": "stillwater/vellum.qml",
-          "bytes": 5840
+          "bytes": 5909
         },
         {
           "path": "stillwater/wallpaper.mp4",
@@ -1904,16 +1904,16 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/thicket.jpg",
-      "bytes": 18668949,
-      "rev": "026b283",
+      "bytes": 18669639,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "thicket/DESIGN.md",
-          "bytes": 6665
+          "bytes": 6670
         },
         {
           "path": "thicket/bar.qml",
-          "bytes": 27963
+          "bytes": 28122
         },
         {
           "path": "thicket/beryl.qml",
@@ -1925,7 +1925,7 @@
         },
         {
           "path": "thicket/cava.qml",
-          "bytes": 9541
+          "bytes": 9729
         },
         {
           "path": "thicket/clock.qml",
@@ -1949,7 +1949,7 @@
         },
         {
           "path": "thicket/lyrics.qml",
-          "bytes": 12480
+          "bytes": 12839
         },
         {
           "path": "thicket/mica.qml",
@@ -1965,7 +1965,7 @@
         },
         {
           "path": "thicket/particles.qml",
-          "bytes": 5593
+          "bytes": 5572
         },
         {
           "path": "thicket/popup.qml",
@@ -2003,12 +2003,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/vinland.jpg",
-      "bytes": 3294924,
-      "rev": "1215ff1",
+      "bytes": 3295160,
+      "rev": "5409dd4",
       "files": [
         {
           "path": "vinland/aurora.frag",
-          "bytes": 1516
+          "bytes": 1517
         },
         {
           "path": "vinland/aurora.frag.qsb",
@@ -2060,11 +2060,11 @@
         },
         {
           "path": "vinland/notif.qml",
-          "bytes": 6976
+          "bytes": 7161
         },
         {
           "path": "vinland/overview.qml",
-          "bytes": 21755
+          "bytes": 21805
         },
         {
           "path": "vinland/particles.qml",
