@@ -19,7 +19,7 @@ Item {
     readonly property color cardBorder: Qt.alpha(pal.text, 0.16)
     readonly property int cardBorderWidth: 1
 
-    readonly property string wordmark: "脈 shiro"
+    readonly property string wordmark: "myaku · shiro"
 
     // ── the sheet: fibers below the gauges, warmth at the head ──
     readonly property Component backdrop: Component {

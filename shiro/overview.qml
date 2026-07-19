@@ -48,8 +48,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: inkA(0.5)
-    readonly property string hintText: "choose a window — 選ぶ"
-    readonly property string emptyText: "白 — nothing open"
+    readonly property string hintText: "choose a window — erabu"
+    readonly property string emptyText: "○ — nothing open"
 
     // ── backdrop: one gesture — an enso brushed around the center tile,
     // drawing itself in once per open (the backdrop remounts each open) ──

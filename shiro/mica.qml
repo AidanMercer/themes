@@ -15,7 +15,7 @@ Item {
     readonly property color cardBorder: Qt.alpha(pal.text, 0.16)
     readonly property int cardBorderWidth: 1
 
-    readonly property string wordmark: "白 shiro"
+    readonly property string wordmark: "○ shiro"
 
     readonly property Component backdrop: Component {
         Item {

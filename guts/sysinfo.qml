@@ -263,7 +263,6 @@ Item {
 
     component NoteRow: Item {
         property string label: ""
-        property string kanji: ""
         property string value: ""
         property color toneCol: root.ink
         width: parent ? parent.width : 0
@@ -448,7 +447,7 @@ Item {
 
             // CPU
             NoteRow {
-                label: "cpu"; kanji: "力"
+                label: "cpu"
                 value: root.pct(root.cpuPercent)
                 toneCol: root.tone(root.cpuPercent, 60, 85)
             }
@@ -468,7 +467,7 @@ Item {
             NoteRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? implicitHeight : 0
-                label: "gpu"; kanji: "獣"
+                label: "gpu"
                 value: root.pct(root.gpuPercent) + (root.gpuTemp > 0 ? " · " + root.gpuTemp + "°c" : "")
                 toneCol: root.tone(root.gpuPercent, 60, 85)
             }
@@ -481,7 +480,7 @@ Item {
 
             // MEM
             NoteRow {
-                label: "mem"; kanji: "器"
+                label: "mem"
                 value: root.pct(root.ramPercent)
                 toneCol: root.tone(root.ramPercent, 70, 90)
             }
@@ -501,7 +500,7 @@ Item {
             NoteRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? implicitHeight : 0
-                label: root.batteryCharging ? "pwr +" : "pwr"; kanji: "灯"
+                label: root.batteryCharging ? "pwr +" : "pwr"
                 value: root.pct(root.batteryPercent)
                 toneCol: root.batteryCharging ? root.ink
                     : root.batteryPercent <= 15 ? root.fresh

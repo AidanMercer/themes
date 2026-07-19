@@ -14,7 +14,7 @@ Item {
 
     readonly property bool awake: host ? host.active === true : false
 
-    readonly property string wordmark: "声 shiro"
+    readonly property string wordmark: "koe · shiro"
 
     readonly property Component backdrop: Component {
         Item {

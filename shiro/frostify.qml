@@ -17,11 +17,11 @@ Item {
     readonly property color cardBorder: Qt.alpha(pal.text, 0.16)
     readonly property int cardBorderWidth: 1
 
-    // the page speaks quietly, in single characters
-    readonly property string statusPlaying: "▶ 唄"
-    readonly property string statusPaused: "⏸ 間"
-    readonly property string statusStopped: "■ 静"
-    readonly property string wordmark: "白 shiro"
+    // the page speaks quietly, in single words (romaji — no CJK face installed)
+    readonly property string statusPlaying: "▶ uta"
+    readonly property string statusPaused: "⏸ ma"
+    readonly property string statusStopped: "■ shizuka"
+    readonly property string wordmark: "○ shiro"
     readonly property string glyphPinned: "✿"
     readonly property string glyphLiked: "♡"
     readonly property string glyphRecent: "◷"

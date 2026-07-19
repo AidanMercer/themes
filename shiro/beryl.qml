@@ -19,7 +19,7 @@ Item {
     readonly property color cardBorder: Qt.alpha(pal.text, 0.16)
     readonly property int cardBorderWidth: 1
 
-    readonly property string wordmark: "頁 shiro"
+    readonly property string wordmark: "leaf · shiro"
 
     // ── the sheet, composed for the chrome bands ──
     readonly property Component backdrop: Component {
