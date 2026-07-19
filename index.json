@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "026b283",
+  "commit": "1215ff1",
   "themes": [
     {
       "name": "avalon",
@@ -634,8 +634,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26413128,
-      "rev": "9ae8258",
+      "bytes": 26413038,
+      "rev": "1215ff1",
       "files": [
         {
           "path": "guts/bar.qml",
@@ -711,7 +711,7 @@
         },
         {
           "path": "guts/sysinfo.qml",
-          "bytes": 23566
+          "bytes": 23476
         },
         {
           "path": "guts/vellum.qml",
@@ -1278,8 +1278,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/road8.jpg",
-      "bytes": 28640833,
-      "rev": "804a46a",
+      "bytes": 28665082,
+      "rev": "1215ff1",
       "files": [
         {
           "path": "road8/bar.qml",
@@ -1300,6 +1300,10 @@
         {
           "path": "road8/clock.qml",
           "bytes": 9994
+        },
+        {
+          "path": "road8/cobalt.qml",
+          "bytes": 7008
         },
         {
           "path": "road8/config.toml",
@@ -1344,6 +1348,10 @@
         {
           "path": "road8/popup.qml",
           "bytes": 13072
+        },
+        {
+          "path": "road8/pulse.qml",
+          "bytes": 17241
         },
         {
           "path": "road8/sysinfo.qml",
@@ -1480,8 +1488,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26755758,
-      "rev": "9ae8258",
+      "bytes": 26755802,
+      "rev": "1215ff1",
       "files": [
         {
           "path": "shiro/bar.qml",
@@ -1489,7 +1497,7 @@
         },
         {
           "path": "shiro/beryl.qml",
-          "bytes": 4870
+          "bytes": 4874
         },
         {
           "path": "shiro/cava.conf",
@@ -1505,7 +1513,7 @@
         },
         {
           "path": "shiro/cobalt.qml",
-          "bytes": 4016
+          "bytes": 4019
         },
         {
           "path": "shiro/config.toml",
@@ -1513,7 +1521,7 @@
         },
         {
           "path": "shiro/frostify.qml",
-          "bytes": 3891
+          "bytes": 3924
         },
         {
           "path": "shiro/lock.qml",
@@ -1533,7 +1541,7 @@
         },
         {
           "path": "shiro/overview.qml",
-          "bytes": 7262
+          "bytes": 7261
         },
         {
           "path": "shiro/particles.qml",
@@ -1545,7 +1553,7 @@
         },
         {
           "path": "shiro/pulse.qml",
-          "bytes": 6607
+          "bytes": 6612
         },
         {
           "path": "shiro/sysinfo.qml",
@@ -1995,8 +2003,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/vinland.jpg",
-      "bytes": 3273169,
-      "rev": "9ae8258",
+      "bytes": 3294924,
+      "rev": "1215ff1",
       "files": [
         {
           "path": "vinland/aurora.frag",
@@ -2053,6 +2061,10 @@
         {
           "path": "vinland/notif.qml",
           "bytes": 6976
+        },
+        {
+          "path": "vinland/overview.qml",
+          "bytes": 21755
         },
         {
           "path": "vinland/particles.qml",
