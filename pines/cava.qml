@@ -163,9 +163,9 @@ Item {
             anchors.top: parent.top
             anchors.topMargin: 4
             text: "BAROGRAPH — MIX TRACE"
-            color: root.colA(root.fogSilver, 0.5)
+            color: root.colA(root.fogSilver, 0.75)
             font.family: root.serif
-            font.pixelSize: 9
+            font.pixelSize: 10
             font.letterSpacing: 3
         }
 

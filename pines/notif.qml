@@ -55,9 +55,9 @@ Item {
                 text: (logbook.shuttered ? "LAMP SHUTTERED · " : "")
                     + "ENTRIES " + String(logbook.panel ? logbook.panel.count : 0).padStart(2, "0")
                 font.family: root.pal.fontMono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.letterSpacing: 2
-                color: logbook.shuttered ? root.pal.magenta : root.silverA(0.6)
+                color: logbook.shuttered ? root.pal.magenta : root.silverA(0.8)
             }
 
             // corner ticks, lamp-warm

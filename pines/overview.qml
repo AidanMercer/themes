@@ -184,9 +184,9 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "SIGHTINGS " + String(chrome.overview.windows.length).padStart(2, "0")
                     font.family: chrome.mono
-                    font.pixelSize: Math.round(9 * chrome.ui)
+                    font.pixelSize: Math.round(10 * chrome.ui)
                     font.letterSpacing: 2
-                    color: chrome.silverA(0.75)
+                    color: chrome.silverA(0.85)
                 }
             }
 
@@ -197,9 +197,9 @@ Item {
                 y: Math.round(34 * chrome.ui)
                 text: "▵ PINES-9 · TREELINE +200 M"
                 font.family: chrome.mono
-                font.pixelSize: Math.round(9 * chrome.ui)
+                font.pixelSize: Math.round(10 * chrome.ui)
                 font.letterSpacing: 2
-                color: chrome.silverA(0.55)
+                color: chrome.silverA(0.7)
                 opacity: chrome.overview.reveal
             }
 
@@ -230,9 +230,9 @@ Item {
                 Text {
                     text: "▵ STANDING WATCH"
                     font.family: chrome.mono
-                    font.pixelSize: Math.round(8 * chrome.ui)
+                    font.pixelSize: Math.round(9 * chrome.ui)
                     font.letterSpacing: 2
-                    color: chrome.pal.dim
+                    color: chrome.silverA(0.6)
                 }
             }
         }
@@ -262,9 +262,9 @@ Item {
                     text: ((ov.tile && ov.tile.win.cls) ? ov.tile.win.cls : "unknown").toUpperCase()
                     textFormat: Text.PlainText
                     font.family: chrome.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                     font.letterSpacing: 1
-                    color: ov.hot ? chrome.pal.neon : chrome.silverA(0.7)
+                    color: ov.hot ? chrome.pal.neon : chrome.silverA(0.85)
                     elide: Text.ElideRight
                     width: Math.min(implicitWidth, (ov.tile ? ov.tile.width : 100) - 36)
                 }
@@ -278,7 +278,7 @@ Item {
                 anchors.bottomMargin: 6
                 text: "FIX"
                 font.family: chrome.mono
-                font.pixelSize: 9
+                font.pixelSize: 10
                 font.letterSpacing: 4
                 color: chrome.silverA(0.85)
             }

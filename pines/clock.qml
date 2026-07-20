@@ -130,12 +130,13 @@ Item {
         // a pool of darkness behind the log so it reads over bright cloud
         Rectangle {
             anchors.centerIn: col
-            width: col.implicitWidth * 1.7
-            height: col.implicitHeight * 1.5
+            width: col.implicitWidth * 1.8
+            height: col.implicitHeight * 1.6
             radius: height / 2
             gradient: Gradient {
                 orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: Qt.rgba(0.01, 0.04, 0.07, 0.34) }
+                GradientStop { position: 0.0; color: Qt.rgba(0.01, 0.04, 0.07, 0.58) }
+                GradientStop { position: 0.6; color: Qt.rgba(0.01, 0.04, 0.07, 0.30) }
                 GradientStop { position: 1.0; color: Qt.rgba(0.01, 0.04, 0.07, 0.0) }
             }
         }
@@ -171,7 +172,7 @@ Item {
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "PINES-9 LOOKOUT"
-                    color: root.inkA(0.62)
+                    color: root.inkA(0.88)
                     font.family: root.serif
                     font.pixelSize: 13
                     font.letterSpacing: 7
@@ -223,21 +224,21 @@ Item {
                 spacing: 14
                 Text {
                     text: "NIGHT WATCH"
-                    color: root.lampA(0.75)
+                    color: root.lampA(0.95)
                     font.family: root.mono
                     font.pixelSize: 11
                     font.letterSpacing: 4
                 }
                 Text {
                     text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
-                    color: root.inkA(0.7)
+                    color: root.inkA(0.88)
                     font.family: root.mono
                     font.pixelSize: 11
                     font.letterSpacing: 4
                 }
                 Text {
                     text: "ELEV 2130 M"
-                    color: root.silverA(0.45)
+                    color: root.silverA(0.7)
                     font.family: root.mono
                     font.pixelSize: 11
                     font.letterSpacing: 4

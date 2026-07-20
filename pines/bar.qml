@@ -73,8 +73,24 @@ Item {
         }
     }
 
+    // shelf typography: station small-caps label + section hairline
+    component ShelfLabel: Text {
+        anchors.verticalCenter: parent.verticalCenter
+        color: root.silverA(0.85)
+        font.family: root.serif
+        font.pixelSize: 11
+        font.letterSpacing: 2
+    }
+    component ShelfDivider: Rectangle {
+        anchors.verticalCenter: parent.verticalCenter
+        width: 1; height: 18
+        color: root.slateA(0.7)
+    }
+
     // ── the glass of the sill ───────────────────────────────────────────────
-    Rectangle { anchors.fill: parent; color: root.glassA(0.60) }
+    // near-solid: the wallpaper's brightest sky sits right behind the bar, so
+    // the sill has to be its own dark surface for anything on it to read
+    Rectangle { anchors.fill: parent; color: root.glassA(0.88) }
     Rectangle {   // the sill's front edge, against the desktop
         anchors.bottom: parent.bottom
         width: parent.width; height: 1
@@ -140,19 +156,19 @@ Item {
                 BenchMark {
                     anchors.horizontalCenter: parent.horizontalCenter
                     y: Math.round(slot.height * 0.66) - height + 1
-                    tone: slot.isActive ? root.lampA(0.95)
-                        : slot.isOccupied ? root.silverA(0.75)
-                        : root.slateA(0.9)
+                    tone: slot.isActive ? root.lampA(1)
+                        : slot.isOccupied ? root.silverA(0.95)
+                        : root.silverA(0.35)
                 }
                 // the sighting flag: whatever app rides this station
                 IconImage {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    y: 4
-                    width: slot.isActive ? 15 : 13
+                    y: 3
+                    width: slot.isActive ? 19 : 17
                     height: width
                     visible: slot.isOccupied
                     source: slot.isOccupied ? wsCluster.iconForWindows(slot.windowsHere) : ""
-                    opacity: slot.isActive ? 1 : 0.5
+                    opacity: slot.isActive ? 1 : 0.85
                 }
 
                 MouseArea {
@@ -236,16 +252,16 @@ Item {
         visible: active
         x: 14
         anchors.verticalCenter: parent.verticalCenter
-        width: radioRow.width + 22
-        height: Math.min(parent.height - 6, 30)
+        width: radioRow.width + 24
+        height: Math.min(parent.height - 6, 34)
         opacity: root.bootT
 
         Rectangle {   // the set's plate: cold glass, hairline edge
             anchors.fill: parent
             radius: 3
-            color: root.glassA(0.7)
+            color: root.glassA(0.75)
             border.width: 1
-            border.color: root.slateA(0.8)
+            border.color: root.slateA(0.9)
         }
 
         Row {
@@ -257,9 +273,9 @@ Item {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "W/T"
-                color: root.lampA(0.9)
+                color: root.lampA(1)
                 font.family: root.serif
-                font.pixelSize: 10
+                font.pixelSize: 12
                 font.letterSpacing: 2
             }
             // the valve pip: breathes while receiving — a warm tube, not an LED
@@ -278,7 +294,7 @@ Item {
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                width: Math.min(implicitWidth, 230)
+                width: Math.min(implicitWidth, 260)
                 elide: Text.ElideRight
                 text: {
                     if (!media.active) return ""
@@ -287,9 +303,9 @@ Item {
                     return a ? t + " · " + a : t
                 }
                 textFormat: Text.PlainText
-                color: root.inkA(0.85)
+                color: root.inkA(0.95)
                 font.family: root.mono
-                font.pixelSize: 10
+                font.pixelSize: 12
             }
         }
 
@@ -395,176 +411,168 @@ Item {
     }
     FileView { id: sysFlag; path: root.sysFlagPath; atomicWrites: false; printErrors: false }
 
-    Row {
-        id: rightRow
-        spacing: 9
+    // ── the instrument shelf: ONE plate, sections split by hairlines, every
+    // reading labeled in station small-caps. Five separate mystery boxes was
+    // instrument-shaped noise; a shelf you can read at a glance is the fiction.
+    Item {
+        id: shelf
         anchors.right: parent.right
         anchors.rightMargin: 14
-        height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
+        width: shelfRow.width + 26
+        height: 32
         opacity: root.bootT
 
-        // the instrument shelf trigger: a tiny barograph drum. Hover pulls
-        // the readout down. Gone while the readout is toggled off in settings.
-        Item {
-            visible: root.pal.sysinfoOn !== false
-            anchors.verticalCenter: parent.verticalCenter
-            width: 34; height: 24
-            Rectangle {
-                anchors.fill: parent
-                radius: 3
-                color: root.glassA(0.7)
-                border.width: 1
-                border.color: instMa.containsMouse ? root.lampA(0.85) : root.slateA(0.8)
-            }
-            // drum paper + a little ink trace
-            Canvas {
-                id: miniDrum
-                anchors.centerIn: parent
-                width: 20; height: 11
-                property bool hot: instMa.containsMouse
-                onHotChanged: requestPaint()
-                onPaint: {
-                    const ctx = getContext("2d")
-                    ctx.reset()
-                    ctx.strokeStyle = String(root.slateA(0.9))
-                    ctx.lineWidth = 1
-                    ctx.strokeRect(0.5, 0.5, width - 1, height - 1)
-                    ctx.beginPath()
-                    ctx.moveTo(2, 7)
-                    ctx.bezierCurveTo(6, 3, 9, 9, 12, 5)
-                    ctx.bezierCurveTo(14, 3, 16, 7, 18, 4)
-                    ctx.strokeStyle = String(hot ? root.lampA(0.95) : root.silverA(0.8))
-                    ctx.stroke()
-                }
-            }
-            MouseArea {
-                id: instMa
-                anchors.fill: parent
-                hoverEnabled: true
-                onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
-            }
+        Rectangle {
+            anchors.fill: parent
+            radius: 3
+            color: root.glassA(0.75)
+            border.width: 1
+            border.color: root.slateA(0.9)
         }
 
-        // W/T signal: a silver pip while the set hears the valley; ember when dead
-        Item {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 30; height: 24
-            Rectangle {
-                anchors.fill: parent
-                radius: 3
-                color: root.glassA(0.7)
-                border.width: 1
-                border.color: root.slateA(0.8)
-            }
+        Row {
+            id: shelfRow
+            anchors.centerIn: parent
+            spacing: 11
+
+            // the barograph drum — hover condenses the instrument readout down.
+            // Gone while the readout is toggled off in settings.
             Row {
-                anchors.centerIn: parent
-                spacing: 4
+                id: instSection
+                visible: root.pal.sysinfoOn !== false
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 6
+                ShelfLabel { text: "INST"; color: instMa.containsMouse ? root.lampA(1) : root.silverA(0.85) }
+                Canvas {
+                    id: miniDrum
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 26; height: 14
+                    property bool hot: instMa.containsMouse
+                    onHotChanged: requestPaint()
+                    onPaint: {
+                        const ctx = getContext("2d")
+                        ctx.reset()
+                        ctx.strokeStyle = String(root.slateA(1))
+                        ctx.lineWidth = 1
+                        ctx.strokeRect(0.5, 0.5, width - 1, height - 1)
+                        ctx.beginPath()
+                        ctx.moveTo(3, 9)
+                        ctx.bezierCurveTo(8, 4, 12, 11, 16, 6)
+                        ctx.bezierCurveTo(19, 3, 21, 9, 23, 5)
+                        ctx.strokeStyle = String(hot ? root.lampA(1) : root.silverA(0.95))
+                        ctx.lineWidth = 1.2
+                        ctx.stroke()
+                    }
+                }
+            }
+            ShelfDivider { visible: root.pal.sysinfoOn !== false }
+
+            // W/T signal: pip + plain word — silver while the set hears the
+            // valley, ember when the wire is dead
+            Row {
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 6
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 5; height: 5; radius: 2.5
-                    color: root.online ? root.silverA(0.95) : root.ember
+                    width: 6; height: 6; radius: 3
+                    color: root.online ? root.silverA(1) : root.ember
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: root.online ? (root.connType === "eth" ? "L" : "W") : "×"
-                    color: root.online ? root.inkA(0.6) : root.ember
+                    text: root.online ? (root.connType === "eth" ? "LINE" : "AIR") : "NO SIG"
+                    color: root.online ? root.inkA(0.9) : root.ember
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 11
+                    font.letterSpacing: 1
                 }
             }
-        }
+            ShelfDivider { visible: root.hasBattery }
 
-        // LAMP OIL: the battery as a vial with an oil level
-        Item {
-            visible: root.hasBattery
-            anchors.verticalCenter: parent.verticalCenter
-            width: 42; height: 24
-            Rectangle {
-                anchors.fill: parent
-                radius: 3
-                color: root.glassA(0.7)
-                border.width: 1
-                border.color: root.slateA(0.8)
-            }
-            Item {
-                anchors.centerIn: parent
-                width: 26; height: 10
-                Rectangle {   // the vial
-                    anchors.fill: parent
-                    radius: 2
-                    color: "transparent"
-                    border.width: 1
-                    border.color: root.slateA(1)
+            // LAMP OIL: the battery as a labeled vial with a readable level
+            Row {
+                visible: root.hasBattery
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 6
+                ShelfLabel { text: "OIL" }
+                Item {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 26; height: 11
+                    Rectangle {   // the vial
+                        anchors.fill: parent
+                        radius: 2
+                        color: "transparent"
+                        border.width: 1
+                        border.color: root.slateA(1)
+                    }
+                    Rectangle {   // the oil
+                        x: 2; y: 2
+                        width: Math.max(0, (parent.width - 4) * Math.max(0, root.batteryPercent) / 100)
+                        height: parent.height - 4
+                        radius: 1
+                        color: root.batteryCharging ? root.fogSilver
+                             : root.batteryPercent <= 15 ? root.ember
+                             : root.batteryPercent <= 30 ? root.brass
+                             : root.lampA(0.95)
+                    }
                 }
-                Rectangle {   // the oil
-                    x: 2; y: 2
-                    width: Math.max(0, (parent.width - 4) * Math.max(0, root.batteryPercent) / 100)
-                    height: parent.height - 4
-                    radius: 1
-                    color: root.batteryCharging ? root.fogSilver
-                         : root.batteryPercent <= 15 ? root.ember
-                         : root.batteryPercent <= 30 ? root.brass
-                         : root.lampA(0.9)
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: (root.batteryPercent >= 0 ? root.batteryPercent : "–")
+                        + (root.batteryCharging ? "+" : "")
+                    color: root.batteryPercent <= 15 && !root.batteryCharging
+                        ? root.ember : root.inkA(0.9)
+                    font.family: root.mono
+                    font.pixelSize: 11
                 }
             }
-        }
+            ShelfDivider {}
 
-        // the time, thin serif — the shelf chronometer
-        Item {
-            anchors.verticalCenter: parent.verticalCenter
-            width: timeText.implicitWidth + 18
-            height: 24
-            Rectangle {
-                anchors.fill: parent
-                radius: 3
-                color: root.glassA(0.7)
-                border.width: 1
-                border.color: root.slateA(0.8)
-            }
+            // the shelf chronometer
             Text {
-                id: timeText
-                anchors.centerIn: parent
+                anchors.verticalCenter: parent.verticalCenter
                 text: Qt.formatDateTime(clock.date, "HH:mm")
-                color: root.inkA(0.92)
+                color: root.inkA(1)
                 font.family: root.serif
-                font.pixelSize: 14
+                font.pixelSize: 17
                 font.letterSpacing: 2
             }
-        }
+            ShelfDivider {}
 
-        // the lamp — opens the field desk
-        Item {
-            anchors.verticalCenter: parent.verticalCenter
-            width: 26; height: 24
-            Rectangle {
-                anchors.fill: parent
-                radius: 3
-                color: root.glassA(0.7)
-                border.width: 1
-                border.color: deskMa.containsMouse ? root.lampA(0.9) : root.slateA(0.8)
-            }
-            // a little lantern: flame dot in a wire frame
+            // the lamp — opens the field desk
             Item {
-                anchors.centerIn: parent
-                width: 10; height: 12
-                readonly property color wire: deskMa.containsMouse ? root.lampA(0.95) : root.inkA(0.55)
-                Rectangle { x: 2; y: 0; width: 6; height: 1.4; color: parent.wire }
-                Rectangle { x: 0; y: 2; width: 1.4; height: 8; color: parent.wire }
-                Rectangle { x: 8.6; y: 2; width: 1.4; height: 8; color: parent.wire }
-                Rectangle { x: 2; y: 10.6; width: 6; height: 1.4; color: parent.wire }
+                anchors.verticalCenter: parent.verticalCenter
+                width: 14; height: 16
+                readonly property color wire: deskMa.containsMouse ? root.lampA(1) : root.inkA(0.75)
+                Rectangle { x: 3; y: 0; width: 8; height: 1.5; color: parent.wire }
+                Rectangle { x: 1; y: 2.5; width: 1.5; height: 10.5; color: parent.wire }
+                Rectangle { x: 11.5; y: 2.5; width: 1.5; height: 10.5; color: parent.wire }
+                Rectangle { x: 3; y: 14; width: 8; height: 1.5; color: parent.wire }
                 Rectangle {
-                    x: 3.4; y: 4.4; width: 3.2; height: 3.2; radius: 1.6
+                    x: 5; y: 6; width: 4; height: 4; radius: 2
                     color: root.lamp
-                    opacity: deskMa.containsMouse ? 1 : 0.7
+                    opacity: deskMa.containsMouse ? 1 : 0.85
                 }
             }
-            MouseArea {
-                id: deskMa
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-                onClicked: Quickshell.execDetached(["qs", "ipc", "call", "controlPopup", "toggle"])
-            }
+        }
+
+        // hover zones sit over the finished shelf so the labels stay simple
+        MouseArea {
+            id: instMa
+            visible: root.pal.sysinfoOn !== false
+            x: 0
+            width: instSection.visible ? shelfRow.x + instSection.x + instSection.width + 6 : 0
+            height: parent.height
+            hoverEnabled: true
+            onContainsMouseChanged: sysFlag.setText(containsMouse ? "1" : "0")
+        }
+        MouseArea {
+            id: deskMa
+            anchors.right: parent.right
+            width: 40; height: parent.height
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "controlPopup", "toggle"])
         }
     }
 }

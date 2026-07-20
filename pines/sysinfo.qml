@@ -257,9 +257,9 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: row.label
             font.family: root.serif
-            font.pixelSize: 11
+            font.pixelSize: 12
             font.letterSpacing: 3
-            color: root.inkA(0.8)
+            color: root.inkA(0.92)
         }
 
         // the gauge: a half-arc scale and a needle that overshoots and damps
@@ -330,8 +330,8 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: row.readout
             font.family: root.mono
-            font.pixelSize: 10
-            color: row.value >= 0 ? row.tone : root.slateA(1.0)
+            font.pixelSize: 11
+            color: row.value >= 0 ? row.tone : root.silverA(0.7)
         }
     }
 
@@ -422,9 +422,9 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "PINES-9"
                     font.family: root.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                     font.letterSpacing: 2
-                    color: root.slateA(1.0)
+                    color: root.silverA(0.7)
                 }
             }
 
@@ -463,9 +463,9 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "LAMP OIL"
                     font.family: root.serif
-                    font.pixelSize: 11
+                    font.pixelSize: 12
                     font.letterSpacing: 3
-                    color: root.inkA(0.8)
+                    color: root.inkA(0.92)
                 }
                 Item {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -496,9 +496,9 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: (root.batteryCharging ? "FILLING " : "") + root.batteryPercent + "%"
                     font.family: root.mono
-                    font.pixelSize: 10
+                    font.pixelSize: 11
                     color: root.batteryCharging ? root.fogSilver
-                         : root.batteryPercent <= 15 ? root.emberCol : root.inkA(0.75)
+                         : root.batteryPercent <= 15 ? root.emberCol : root.inkA(0.9)
                 }
             }
 
@@ -514,9 +514,9 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "W/T LINK"
                         font.family: root.serif
-                        font.pixelSize: 11
+                        font.pixelSize: 12
                         font.letterSpacing: 3
-                        color: root.inkA(0.8)
+                        color: root.inkA(0.92)
                     }
                     Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
@@ -527,9 +527,11 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.online ? root.connName : "NO CARRIER"
                         textFormat: Text.PlainText
+                        width: Math.min(implicitWidth, 92)
+                        elide: Text.ElideRight
                         font.family: root.mono
-                        font.pixelSize: 10
-                        color: root.online ? root.inkA(0.75) : root.emberCol
+                        font.pixelSize: 11
+                        color: root.online ? root.inkA(0.9) : root.emberCol
                     }
                 }
                 Text {
@@ -537,8 +539,8 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 9
-                    color: root.slateA(1.0)
+                    font.pixelSize: 10
+                    color: root.silverA(0.7)
                 }
             }
 
@@ -553,18 +555,18 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "ON WATCH " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     font.letterSpacing: 1
-                    color: root.inkA(0.6)
+                    color: root.inkA(0.8)
                 }
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     text: "▵ STANDING WATCH"
                     font.family: root.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 9
                     font.letterSpacing: 2
-                    color: root.lampA(0.5)
+                    color: root.lampA(0.7)
                 }
             }
         }

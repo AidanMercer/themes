@@ -159,7 +159,7 @@ Item {
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
-                color: root.inkA(0.55)
+                color: root.inkA(0.8)
                 font.family: root.mono
                 font.pixelSize: Math.round(11 * root.ui)
                 font.letterSpacing: 5
@@ -300,7 +300,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(30 * root.ui)
         text: "▵ PINES-9 LOOKOUT · ELEV 2130 M"
-        color: root.inkA(0.35)
+        color: root.inkA(0.6)
         font.family: root.mono
         font.pixelSize: Math.round(10 * root.ui)
         font.letterSpacing: 5

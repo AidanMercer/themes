@@ -183,17 +183,17 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "PINES-9"
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         font.letterSpacing: 2
-                        color: chrome.silverA(0.7)
+                        color: chrome.silverA(0.8)
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: "ON WATCH " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         font.letterSpacing: 1
-                        color: chrome.pal.dim
+                        color: chrome.silverA(0.7)
                     }
                 }
             }
@@ -238,7 +238,7 @@ Item {
                             : "W/T · " + (chrome.popup.connName || "CARRIER UP")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.silverA(0.85)
                     }
                 }
@@ -248,9 +248,9 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "▵ STANDING WATCH"
                     font.family: chrome.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 9
                     font.letterSpacing: 2
-                    color: chrome.lampA(0.55)
+                    color: chrome.lampA(0.7)
                 }
             }
         }
