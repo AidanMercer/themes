@@ -9,6 +9,9 @@ cd "$(dirname "$0")"
 
 REPO="AidanMercer/themes"
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+# editor's picks — gold border + pinned to the top of the store. lives here, not
+# in config.toml, so flipping a pick doesn't bump the theme's rev (no fake updates)
+BEST="road8 moon nature bog"
 THUMBS=".catalog/thumbs"
 mkdir -p "$THUMBS"
 
@@ -75,22 +78,24 @@ for d in */; do
   # into .mkt-version; the marketplace shows "update" when they stop matching
   rev=$(git log -1 --format=%h -- "$name/" || true)
 
+  best=false; case " $BEST " in *" $name "*) best=true ;; esac
+
   theme_objs+=("$(jq -n \
     --arg name "$name" --arg tagline "$(getstr tagline "$cfg")" \
     --argjson accents "$accents" \
     --argjson cyber "$(getbool cyber "$cfg")" --argjson light "$(getbool light "$cfg")" \
     --argjson video "$video" --argjson variants "${#walls[@]}" \
     --arg thumb "$THUMBS/$name.jpg" --argjson bytes "$total" \
-    --arg rev "$rev" \
+    --arg rev "$rev" --argjson best "$best" \
     --argjson files "$files_json" --argjson oversizedOmitted "$over_json" \
     '{name:$name,tagline:$tagline,accents:$accents,cyber:$cyber,light:$light,
-      video:$video,variants:$variants,thumb:$thumb,bytes:$bytes,rev:$rev,
+      video:$video,variants:$variants,thumb:$thumb,bytes:$bytes,rev:$rev,best:$best,
       files:$files,oversizedOmitted:$oversizedOmitted}')")
   echo "cataloged $name (${#walls[@]} variant(s), $((total/1048576))MB)" >&2
 done
 
 printf '%s\n' "${theme_objs[@]}" | jq -s \
   --arg repo "$REPO" --arg branch "$BRANCH" --arg commit "$(git rev-parse --short HEAD)" \
-  '{repo:$repo, branch:$branch, commit:$commit, themes:(.|sort_by(.name))}' > index.json
+  '{repo:$repo, branch:$branch, commit:$commit, themes:(.|sort_by([(if .best then 0 else 1 end), .name]))}' > index.json
 
 echo "wrote index.json ($(jq '.themes|length' index.json) themes) + $THUMBS/*.jpg" >&2

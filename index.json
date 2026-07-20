@@ -1,111 +1,8 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "5c0f040",
+  "commit": "79af0e2",
   "themes": [
-    {
-      "name": "avalon",
-      "tagline": "petals and gold — a knight asleep in the meadow",
-      "accents": [
-        "#8fbe58",
-        "#e6d75a",
-        "#c97e52"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21489291,
-      "rev": "37bb037",
-      "files": [
-        {
-          "path": "avalon/bar.qml",
-          "bytes": 20940
-        },
-        {
-          "path": "avalon/beryl.qml",
-          "bytes": 6819
-        },
-        {
-          "path": "avalon/bokeh.frag",
-          "bytes": 1531
-        },
-        {
-          "path": "avalon/bokeh.frag.qsb",
-          "bytes": 3424
-        },
-        {
-          "path": "avalon/cava.conf",
-          "bytes": 395
-        },
-        {
-          "path": "avalon/cava.qml",
-          "bytes": 8758
-        },
-        {
-          "path": "avalon/clock.qml",
-          "bytes": 8486
-        },
-        {
-          "path": "avalon/cobalt.qml",
-          "bytes": 5352
-        },
-        {
-          "path": "avalon/config.toml",
-          "bytes": 893
-        },
-        {
-          "path": "avalon/frostify.qml",
-          "bytes": 5202
-        },
-        {
-          "path": "avalon/lock.qml",
-          "bytes": 9139
-        },
-        {
-          "path": "avalon/lyrics.qml",
-          "bytes": 9844
-        },
-        {
-          "path": "avalon/mica.qml",
-          "bytes": 4213
-        },
-        {
-          "path": "avalon/notif.qml",
-          "bytes": 5088
-        },
-        {
-          "path": "avalon/overview.qml",
-          "bytes": 12989
-        },
-        {
-          "path": "avalon/particles.qml",
-          "bytes": 2284
-        },
-        {
-          "path": "avalon/popup.qml",
-          "bytes": 7870
-        },
-        {
-          "path": "avalon/pulse.qml",
-          "bytes": 8278
-        },
-        {
-          "path": "avalon/sysinfo.qml",
-          "bytes": 23356
-        },
-        {
-          "path": "avalon/vellum.qml",
-          "bytes": 4568
-        },
-        {
-          "path": "avalon/wallpaper.mp4",
-          "bytes": 21339862
-        }
-      ],
-      "oversizedOmitted": []
-    },
     {
       "name": "bog",
       "tagline": "a folktale pond at slow noon — everything floats",
@@ -121,6 +18,7 @@
       "thumb": ".catalog/thumbs/bog.jpg",
       "bytes": 90095998,
       "rev": "5409dd4",
+      "best": true,
       "files": [
         {
           "path": "bog/DESIGN.md",
@@ -214,723 +112,6 @@
       "oversizedOmitted": []
     },
     {
-      "name": "downpour",
-      "tagline": "the last quiet hour before a storm confession — every widget lives on the glass",
-      "accents": [
-        "#7fb0d6",
-        "#5b93b8",
-        "#c98f7e"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/downpour.jpg",
-      "bytes": 31128544,
-      "rev": "5409dd4",
-      "files": [
-        {
-          "path": "downpour/DESIGN.md",
-          "bytes": 5914
-        },
-        {
-          "path": "downpour/bar.qml",
-          "bytes": 21593
-        },
-        {
-          "path": "downpour/beryl.qml",
-          "bytes": 6247
-        },
-        {
-          "path": "downpour/cava.conf",
-          "bytes": 391
-        },
-        {
-          "path": "downpour/cava.qml",
-          "bytes": 8222
-        },
-        {
-          "path": "downpour/clock.qml",
-          "bytes": 11319
-        },
-        {
-          "path": "downpour/cobalt.qml",
-          "bytes": 4006
-        },
-        {
-          "path": "downpour/config.toml",
-          "bytes": 1197
-        },
-        {
-          "path": "downpour/fog.frag",
-          "bytes": 2220
-        },
-        {
-          "path": "downpour/fog.frag.qsb",
-          "bytes": 3831
-        },
-        {
-          "path": "downpour/frostify.qml",
-          "bytes": 6440
-        },
-        {
-          "path": "downpour/lock.qml",
-          "bytes": 14393
-        },
-        {
-          "path": "downpour/lyrics.qml",
-          "bytes": 9588
-        },
-        {
-          "path": "downpour/mica.qml",
-          "bytes": 4598
-        },
-        {
-          "path": "downpour/notif.qml",
-          "bytes": 6194
-        },
-        {
-          "path": "downpour/overview.qml",
-          "bytes": 7664
-        },
-        {
-          "path": "downpour/particles.qml",
-          "bytes": 3808
-        },
-        {
-          "path": "downpour/popup.qml",
-          "bytes": 12786
-        },
-        {
-          "path": "downpour/pulse.qml",
-          "bytes": 6424
-        },
-        {
-          "path": "downpour/sysinfo.qml",
-          "bytes": 24320
-        },
-        {
-          "path": "downpour/vellum.qml",
-          "bytes": 3873
-        },
-        {
-          "path": "downpour/wallpaper.mp4",
-          "bytes": 30963516
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
-      "name": "encore",
-      "tagline": "the encore, from the diva's side of the stage — piano-roll lyrics and a glowstick sea",
-      "accents": [
-        "#56c8d8",
-        "#4aa4e4",
-        "#e0338c"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/encore.jpg",
-      "bytes": 40642653,
-      "rev": "5409dd4",
-      "files": [
-        {
-          "path": "encore/DESIGN.md",
-          "bytes": 7250
-        },
-        {
-          "path": "encore/bar.qml",
-          "bytes": 20166
-        },
-        {
-          "path": "encore/beryl.qml",
-          "bytes": 5069
-        },
-        {
-          "path": "encore/cava.conf",
-          "bytes": 391
-        },
-        {
-          "path": "encore/cava.qml",
-          "bytes": 8878
-        },
-        {
-          "path": "encore/clock.qml",
-          "bytes": 7930
-        },
-        {
-          "path": "encore/cobalt.qml",
-          "bytes": 4395
-        },
-        {
-          "path": "encore/config.toml",
-          "bytes": 1121
-        },
-        {
-          "path": "encore/frostify.qml",
-          "bytes": 7311
-        },
-        {
-          "path": "encore/lock.qml",
-          "bytes": 11599
-        },
-        {
-          "path": "encore/lyrics.qml",
-          "bytes": 13911
-        },
-        {
-          "path": "encore/mica.qml",
-          "bytes": 6561
-        },
-        {
-          "path": "encore/notif.qml",
-          "bytes": 6052
-        },
-        {
-          "path": "encore/overview.qml",
-          "bytes": 9670
-        },
-        {
-          "path": "encore/particles.qml",
-          "bytes": 4723
-        },
-        {
-          "path": "encore/popup.qml",
-          "bytes": 9792
-        },
-        {
-          "path": "encore/pulse.qml",
-          "bytes": 6662
-        },
-        {
-          "path": "encore/sysinfo.qml",
-          "bytes": 20251
-        },
-        {
-          "path": "encore/vellum.qml",
-          "bytes": 6602
-        },
-        {
-          "path": "encore/wallpaper.mp4",
-          "bytes": 40484319
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
-      "name": "fuel",
-      "tagline": "neon fuel — a roadside sign humming at dusk",
-      "accents": [
-        "#ff5a1e",
-        "#9ed4e6",
-        "#e0372a"
-      ],
-      "cyber": true,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/fuel.jpg",
-      "bytes": 16635488,
-      "rev": "5409dd4",
-      "files": [
-        {
-          "path": "fuel/bar.qml",
-          "bytes": 28246
-        },
-        {
-          "path": "fuel/beryl.qml",
-          "bytes": 8250
-        },
-        {
-          "path": "fuel/cava.conf",
-          "bytes": 409
-        },
-        {
-          "path": "fuel/cava.qml",
-          "bytes": 14482
-        },
-        {
-          "path": "fuel/clock.qml",
-          "bytes": 14832
-        },
-        {
-          "path": "fuel/cobalt.qml",
-          "bytes": 4344
-        },
-        {
-          "path": "fuel/config.toml",
-          "bytes": 1198
-        },
-        {
-          "path": "fuel/frostify.qml",
-          "bytes": 6604
-        },
-        {
-          "path": "fuel/lock.qml",
-          "bytes": 22414
-        },
-        {
-          "path": "fuel/lyrics.qml",
-          "bytes": 13136
-        },
-        {
-          "path": "fuel/mica.qml",
-          "bytes": 6082
-        },
-        {
-          "path": "fuel/mist.frag",
-          "bytes": 1170
-        },
-        {
-          "path": "fuel/mist.frag.qsb",
-          "bytes": 2698
-        },
-        {
-          "path": "fuel/notif.qml",
-          "bytes": 7932
-        },
-        {
-          "path": "fuel/overview.qml",
-          "bytes": 12633
-        },
-        {
-          "path": "fuel/particles.qml",
-          "bytes": 1620
-        },
-        {
-          "path": "fuel/popup.qml",
-          "bytes": 13575
-        },
-        {
-          "path": "fuel/pulse.qml",
-          "bytes": 10432
-        },
-        {
-          "path": "fuel/sysinfo.qml",
-          "bytes": 27251
-        },
-        {
-          "path": "fuel/vellum.qml",
-          "bytes": 6329
-        },
-        {
-          "path": "fuel/wallpaper.mp4",
-          "bytes": 16431851
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
-      "name": "gunsmoke",
-      "tagline": "fog, powder, iron and paper — the bounty ledger of a dead gunslinger",
-      "accents": [
-        "#d9d3c5",
-        "#8e9aa1",
-        "#9e2b25"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/gunsmoke.jpg",
-      "bytes": 19003862,
-      "rev": "37bb037",
-      "files": [
-        {
-          "path": "gunsmoke/DESIGN.md",
-          "bytes": 3973
-        },
-        {
-          "path": "gunsmoke/bar.qml",
-          "bytes": 23085
-        },
-        {
-          "path": "gunsmoke/beryl.qml",
-          "bytes": 4772
-        },
-        {
-          "path": "gunsmoke/cava.conf",
-          "bytes": 399
-        },
-        {
-          "path": "gunsmoke/cava.qml",
-          "bytes": 8177
-        },
-        {
-          "path": "gunsmoke/clock.qml",
-          "bytes": 10075
-        },
-        {
-          "path": "gunsmoke/cobalt.qml",
-          "bytes": 3584
-        },
-        {
-          "path": "gunsmoke/config.toml",
-          "bytes": 1155
-        },
-        {
-          "path": "gunsmoke/frostify.qml",
-          "bytes": 6033
-        },
-        {
-          "path": "gunsmoke/lock.qml",
-          "bytes": 13748
-        },
-        {
-          "path": "gunsmoke/lyrics.qml",
-          "bytes": 9687
-        },
-        {
-          "path": "gunsmoke/mica.qml",
-          "bytes": 6984
-        },
-        {
-          "path": "gunsmoke/notif.qml",
-          "bytes": 7493
-        },
-        {
-          "path": "gunsmoke/overview.qml",
-          "bytes": 9884
-        },
-        {
-          "path": "gunsmoke/particles.qml",
-          "bytes": 3022
-        },
-        {
-          "path": "gunsmoke/popup.qml",
-          "bytes": 10542
-        },
-        {
-          "path": "gunsmoke/pulse.qml",
-          "bytes": 8286
-        },
-        {
-          "path": "gunsmoke/sysinfo.qml",
-          "bytes": 19375
-        },
-        {
-          "path": "gunsmoke/vellum.qml",
-          "bytes": 4717
-        },
-        {
-          "path": "gunsmoke/wallpaper.mp4",
-          "bytes": 18848871
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
-      "name": "guts",
-      "tagline": "the black swordsman — crimson and cold iron",
-      "accents": [
-        "#9e1414",
-        "#26242b",
-        "#c22318"
-      ],
-      "cyber": false,
-      "light": true,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26413187,
-      "rev": "5409dd4",
-      "files": [
-        {
-          "path": "guts/bar.qml",
-          "bytes": 26374
-        },
-        {
-          "path": "guts/beryl.qml",
-          "bytes": 6544
-        },
-        {
-          "path": "guts/cava.conf",
-          "bytes": 409
-        },
-        {
-          "path": "guts/cava.qml",
-          "bytes": 10603
-        },
-        {
-          "path": "guts/clock.qml",
-          "bytes": 15060
-        },
-        {
-          "path": "guts/cobalt.qml",
-          "bytes": 4979
-        },
-        {
-          "path": "guts/config.toml",
-          "bytes": 1281
-        },
-        {
-          "path": "guts/frostify.qml",
-          "bytes": 4615
-        },
-        {
-          "path": "guts/lock.qml",
-          "bytes": 11324
-        },
-        {
-          "path": "guts/lyrics.qml",
-          "bytes": 10176
-        },
-        {
-          "path": "guts/mica.qml",
-          "bytes": 4343
-        },
-        {
-          "path": "guts/notif.qml",
-          "bytes": 9743
-        },
-        {
-          "path": "guts/overview.qml",
-          "bytes": 11116
-        },
-        {
-          "path": "guts/paper.frag",
-          "bytes": 1069
-        },
-        {
-          "path": "guts/paper.frag.qsb",
-          "bytes": 2302
-        },
-        {
-          "path": "guts/particles.qml",
-          "bytes": 1714
-        },
-        {
-          "path": "guts/popup.qml",
-          "bytes": 12847
-        },
-        {
-          "path": "guts/pulse.qml",
-          "bytes": 10176
-        },
-        {
-          "path": "guts/sysinfo.qml",
-          "bytes": 23554
-        },
-        {
-          "path": "guts/vellum.qml",
-          "bytes": 4533
-        },
-        {
-          "path": "guts/wallpaper.mp4",
-          "bytes": 26240425
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
-      "name": "homeroom",
-      "tagline": "morning homeroom before anyone else arrives",
-      "accents": [
-        "#8fd0f4",
-        "#a9bdf0",
-        "#d873b4"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/homeroom.jpg",
-      "bytes": 16869682,
-      "rev": "5409dd4",
-      "files": [
-        {
-          "path": "homeroom/DESIGN.md",
-          "bytes": 7361
-        },
-        {
-          "path": "homeroom/bar.qml",
-          "bytes": 24116
-        },
-        {
-          "path": "homeroom/beryl.qml",
-          "bytes": 5765
-        },
-        {
-          "path": "homeroom/cava.conf",
-          "bytes": 397
-        },
-        {
-          "path": "homeroom/cava.qml",
-          "bytes": 6742
-        },
-        {
-          "path": "homeroom/chalk.js",
-          "bytes": 7473
-        },
-        {
-          "path": "homeroom/clock.qml",
-          "bytes": 9548
-        },
-        {
-          "path": "homeroom/cobalt.qml",
-          "bytes": 4369
-        },
-        {
-          "path": "homeroom/config.toml",
-          "bytes": 1079
-        },
-        {
-          "path": "homeroom/frostify.qml",
-          "bytes": 8590
-        },
-        {
-          "path": "homeroom/lock.qml",
-          "bytes": 16246
-        },
-        {
-          "path": "homeroom/lyrics.qml",
-          "bytes": 12675
-        },
-        {
-          "path": "homeroom/mica.qml",
-          "bytes": 9889
-        },
-        {
-          "path": "homeroom/notif.qml",
-          "bytes": 8327
-        },
-        {
-          "path": "homeroom/overview.qml",
-          "bytes": 11487
-        },
-        {
-          "path": "homeroom/particles.qml",
-          "bytes": 3307
-        },
-        {
-          "path": "homeroom/popup.qml",
-          "bytes": 13642
-        },
-        {
-          "path": "homeroom/pulse.qml",
-          "bytes": 9551
-        },
-        {
-          "path": "homeroom/sysinfo.qml",
-          "bytes": 20671
-        },
-        {
-          "path": "homeroom/vellum.qml",
-          "bytes": 8441
-        },
-        {
-          "path": "homeroom/wallpaper.mp4",
-          "bytes": 16680006
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
-      "name": "lonely-train",
-      "tagline": "a lonely train, and rain on the glass",
-      "accents": [
-        "#e8a45c",
-        "#7fa3d8",
-        "#d95f52"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/lonely-train.jpg",
-      "bytes": 29054077,
-      "rev": "5409dd4",
-      "files": [
-        {
-          "path": "lonely-train/bar.qml",
-          "bytes": 20915
-        },
-        {
-          "path": "lonely-train/beryl.qml",
-          "bytes": 6234
-        },
-        {
-          "path": "lonely-train/cava.conf",
-          "bytes": 410
-        },
-        {
-          "path": "lonely-train/cava.qml",
-          "bytes": 12777
-        },
-        {
-          "path": "lonely-train/clock.qml",
-          "bytes": 12631
-        },
-        {
-          "path": "lonely-train/cobalt.qml",
-          "bytes": 4024
-        },
-        {
-          "path": "lonely-train/config.toml",
-          "bytes": 931
-        },
-        {
-          "path": "lonely-train/frostify.qml",
-          "bytes": 4410
-        },
-        {
-          "path": "lonely-train/lock.qml",
-          "bytes": 16737
-        },
-        {
-          "path": "lonely-train/lyrics.qml",
-          "bytes": 9193
-        },
-        {
-          "path": "lonely-train/mica.qml",
-          "bytes": 3732
-        },
-        {
-          "path": "lonely-train/notif.qml",
-          "bytes": 7157
-        },
-        {
-          "path": "lonely-train/overview.qml",
-          "bytes": 9845
-        },
-        {
-          "path": "lonely-train/particles.qml",
-          "bytes": 2444
-        },
-        {
-          "path": "lonely-train/popup.qml",
-          "bytes": 12681
-        },
-        {
-          "path": "lonely-train/pulse.qml",
-          "bytes": 7905
-        },
-        {
-          "path": "lonely-train/rain.frag",
-          "bytes": 1440
-        },
-        {
-          "path": "lonely-train/rain.frag.qsb",
-          "bytes": 2743
-        },
-        {
-          "path": "lonely-train/sysinfo.qml",
-          "bytes": 21651
-        },
-        {
-          "path": "lonely-train/vellum.qml",
-          "bytes": 3853
-        },
-        {
-          "path": "lonely-train/wallpaper.mp4",
-          "bytes": 28892364
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
       "name": "moon",
       "tagline": "night city neon — edgerunners chrome and CRT glow",
       "accents": [
@@ -945,6 +126,7 @@
       "thumb": ".catalog/thumbs/moon.jpg",
       "bytes": 44112852,
       "rev": "37bb037",
+      "best": true,
       "files": [
         {
           "path": "moon/LYRICS-NOTES.md",
@@ -1062,6 +244,7 @@
       "thumb": ".catalog/thumbs/nature.jpg",
       "bytes": 42492991,
       "rev": "5409dd4",
+      "best": true,
       "files": [
         {
           "path": "nature/bar.qml",
@@ -1159,113 +342,6 @@
       "oversizedOmitted": []
     },
     {
-      "name": "pines",
-      "tagline": "standing watch — a fire lookout's glass cab above the fog",
-      "accents": [
-        "#e2a55c",
-        "#a9c6d8",
-        "#d96b4f"
-      ],
-      "cyber": false,
-      "light": false,
-      "video": true,
-      "variants": 1,
-      "thumb": ".catalog/thumbs/pines.jpg",
-      "bytes": 22155153,
-      "rev": "5c0f040",
-      "files": [
-        {
-          "path": "pines/DESIGN.md",
-          "bytes": 4218
-        },
-        {
-          "path": "pines/bar.qml",
-          "bytes": 24146
-        },
-        {
-          "path": "pines/beryl.qml",
-          "bytes": 4341
-        },
-        {
-          "path": "pines/cava.conf",
-          "bytes": 394
-        },
-        {
-          "path": "pines/cava.qml",
-          "bytes": 10227
-        },
-        {
-          "path": "pines/clock.qml",
-          "bytes": 11094
-        },
-        {
-          "path": "pines/cobalt.qml",
-          "bytes": 4563
-        },
-        {
-          "path": "pines/config.toml",
-          "bytes": 1188
-        },
-        {
-          "path": "pines/fog.frag",
-          "bytes": 2281
-        },
-        {
-          "path": "pines/fog.frag.qsb",
-          "bytes": 4044
-        },
-        {
-          "path": "pines/frostify.qml",
-          "bytes": 5414
-        },
-        {
-          "path": "pines/lock.qml",
-          "bytes": 13986
-        },
-        {
-          "path": "pines/lyrics.qml",
-          "bytes": 12724
-        },
-        {
-          "path": "pines/mica.qml",
-          "bytes": 5427
-        },
-        {
-          "path": "pines/notif.qml",
-          "bytes": 6692
-        },
-        {
-          "path": "pines/overview.qml",
-          "bytes": 16461
-        },
-        {
-          "path": "pines/particles.qml",
-          "bytes": 3574
-        },
-        {
-          "path": "pines/popup.qml",
-          "bytes": 11032
-        },
-        {
-          "path": "pines/pulse.qml",
-          "bytes": 5218
-        },
-        {
-          "path": "pines/sysinfo.qml",
-          "bytes": 23363
-        },
-        {
-          "path": "pines/vellum.qml",
-          "bytes": 4881
-        },
-        {
-          "path": "pines/wallpaper.mp4",
-          "bytes": 21979885
-        }
-      ],
-      "oversizedOmitted": []
-    },
-    {
       "name": "road8",
       "tagline": "parked above the city — an 8-bit night before the road",
       "accents": [
@@ -1280,6 +356,7 @@
       "thumb": ".catalog/thumbs/road8.jpg",
       "bytes": 28666081,
       "rev": "5409dd4",
+      "best": true,
       "files": [
         {
           "path": "road8/bar.qml",
@@ -1373,6 +450,942 @@
       "oversizedOmitted": []
     },
     {
+      "name": "avalon",
+      "tagline": "petals and gold — a knight asleep in the meadow",
+      "accents": [
+        "#8fbe58",
+        "#e6d75a",
+        "#c97e52"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/avalon.jpg",
+      "bytes": 21489291,
+      "rev": "37bb037",
+      "best": false,
+      "files": [
+        {
+          "path": "avalon/bar.qml",
+          "bytes": 20940
+        },
+        {
+          "path": "avalon/beryl.qml",
+          "bytes": 6819
+        },
+        {
+          "path": "avalon/bokeh.frag",
+          "bytes": 1531
+        },
+        {
+          "path": "avalon/bokeh.frag.qsb",
+          "bytes": 3424
+        },
+        {
+          "path": "avalon/cava.conf",
+          "bytes": 395
+        },
+        {
+          "path": "avalon/cava.qml",
+          "bytes": 8758
+        },
+        {
+          "path": "avalon/clock.qml",
+          "bytes": 8486
+        },
+        {
+          "path": "avalon/cobalt.qml",
+          "bytes": 5352
+        },
+        {
+          "path": "avalon/config.toml",
+          "bytes": 893
+        },
+        {
+          "path": "avalon/frostify.qml",
+          "bytes": 5202
+        },
+        {
+          "path": "avalon/lock.qml",
+          "bytes": 9139
+        },
+        {
+          "path": "avalon/lyrics.qml",
+          "bytes": 9844
+        },
+        {
+          "path": "avalon/mica.qml",
+          "bytes": 4213
+        },
+        {
+          "path": "avalon/notif.qml",
+          "bytes": 5088
+        },
+        {
+          "path": "avalon/overview.qml",
+          "bytes": 12989
+        },
+        {
+          "path": "avalon/particles.qml",
+          "bytes": 2284
+        },
+        {
+          "path": "avalon/popup.qml",
+          "bytes": 7870
+        },
+        {
+          "path": "avalon/pulse.qml",
+          "bytes": 8278
+        },
+        {
+          "path": "avalon/sysinfo.qml",
+          "bytes": 23356
+        },
+        {
+          "path": "avalon/vellum.qml",
+          "bytes": 4568
+        },
+        {
+          "path": "avalon/wallpaper.mp4",
+          "bytes": 21339862
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "downpour",
+      "tagline": "the last quiet hour before a storm confession — every widget lives on the glass",
+      "accents": [
+        "#7fb0d6",
+        "#5b93b8",
+        "#c98f7e"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/downpour.jpg",
+      "bytes": 31128544,
+      "rev": "5409dd4",
+      "best": false,
+      "files": [
+        {
+          "path": "downpour/DESIGN.md",
+          "bytes": 5914
+        },
+        {
+          "path": "downpour/bar.qml",
+          "bytes": 21593
+        },
+        {
+          "path": "downpour/beryl.qml",
+          "bytes": 6247
+        },
+        {
+          "path": "downpour/cava.conf",
+          "bytes": 391
+        },
+        {
+          "path": "downpour/cava.qml",
+          "bytes": 8222
+        },
+        {
+          "path": "downpour/clock.qml",
+          "bytes": 11319
+        },
+        {
+          "path": "downpour/cobalt.qml",
+          "bytes": 4006
+        },
+        {
+          "path": "downpour/config.toml",
+          "bytes": 1197
+        },
+        {
+          "path": "downpour/fog.frag",
+          "bytes": 2220
+        },
+        {
+          "path": "downpour/fog.frag.qsb",
+          "bytes": 3831
+        },
+        {
+          "path": "downpour/frostify.qml",
+          "bytes": 6440
+        },
+        {
+          "path": "downpour/lock.qml",
+          "bytes": 14393
+        },
+        {
+          "path": "downpour/lyrics.qml",
+          "bytes": 9588
+        },
+        {
+          "path": "downpour/mica.qml",
+          "bytes": 4598
+        },
+        {
+          "path": "downpour/notif.qml",
+          "bytes": 6194
+        },
+        {
+          "path": "downpour/overview.qml",
+          "bytes": 7664
+        },
+        {
+          "path": "downpour/particles.qml",
+          "bytes": 3808
+        },
+        {
+          "path": "downpour/popup.qml",
+          "bytes": 12786
+        },
+        {
+          "path": "downpour/pulse.qml",
+          "bytes": 6424
+        },
+        {
+          "path": "downpour/sysinfo.qml",
+          "bytes": 24320
+        },
+        {
+          "path": "downpour/vellum.qml",
+          "bytes": 3873
+        },
+        {
+          "path": "downpour/wallpaper.mp4",
+          "bytes": 30963516
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "encore",
+      "tagline": "the encore, from the diva's side of the stage — piano-roll lyrics and a glowstick sea",
+      "accents": [
+        "#56c8d8",
+        "#4aa4e4",
+        "#e0338c"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/encore.jpg",
+      "bytes": 40642653,
+      "rev": "5409dd4",
+      "best": false,
+      "files": [
+        {
+          "path": "encore/DESIGN.md",
+          "bytes": 7250
+        },
+        {
+          "path": "encore/bar.qml",
+          "bytes": 20166
+        },
+        {
+          "path": "encore/beryl.qml",
+          "bytes": 5069
+        },
+        {
+          "path": "encore/cava.conf",
+          "bytes": 391
+        },
+        {
+          "path": "encore/cava.qml",
+          "bytes": 8878
+        },
+        {
+          "path": "encore/clock.qml",
+          "bytes": 7930
+        },
+        {
+          "path": "encore/cobalt.qml",
+          "bytes": 4395
+        },
+        {
+          "path": "encore/config.toml",
+          "bytes": 1121
+        },
+        {
+          "path": "encore/frostify.qml",
+          "bytes": 7311
+        },
+        {
+          "path": "encore/lock.qml",
+          "bytes": 11599
+        },
+        {
+          "path": "encore/lyrics.qml",
+          "bytes": 13911
+        },
+        {
+          "path": "encore/mica.qml",
+          "bytes": 6561
+        },
+        {
+          "path": "encore/notif.qml",
+          "bytes": 6052
+        },
+        {
+          "path": "encore/overview.qml",
+          "bytes": 9670
+        },
+        {
+          "path": "encore/particles.qml",
+          "bytes": 4723
+        },
+        {
+          "path": "encore/popup.qml",
+          "bytes": 9792
+        },
+        {
+          "path": "encore/pulse.qml",
+          "bytes": 6662
+        },
+        {
+          "path": "encore/sysinfo.qml",
+          "bytes": 20251
+        },
+        {
+          "path": "encore/vellum.qml",
+          "bytes": 6602
+        },
+        {
+          "path": "encore/wallpaper.mp4",
+          "bytes": 40484319
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "fuel",
+      "tagline": "neon fuel — a roadside sign humming at dusk",
+      "accents": [
+        "#ff5a1e",
+        "#9ed4e6",
+        "#e0372a"
+      ],
+      "cyber": true,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/fuel.jpg",
+      "bytes": 16635488,
+      "rev": "5409dd4",
+      "best": false,
+      "files": [
+        {
+          "path": "fuel/bar.qml",
+          "bytes": 28246
+        },
+        {
+          "path": "fuel/beryl.qml",
+          "bytes": 8250
+        },
+        {
+          "path": "fuel/cava.conf",
+          "bytes": 409
+        },
+        {
+          "path": "fuel/cava.qml",
+          "bytes": 14482
+        },
+        {
+          "path": "fuel/clock.qml",
+          "bytes": 14832
+        },
+        {
+          "path": "fuel/cobalt.qml",
+          "bytes": 4344
+        },
+        {
+          "path": "fuel/config.toml",
+          "bytes": 1198
+        },
+        {
+          "path": "fuel/frostify.qml",
+          "bytes": 6604
+        },
+        {
+          "path": "fuel/lock.qml",
+          "bytes": 22414
+        },
+        {
+          "path": "fuel/lyrics.qml",
+          "bytes": 13136
+        },
+        {
+          "path": "fuel/mica.qml",
+          "bytes": 6082
+        },
+        {
+          "path": "fuel/mist.frag",
+          "bytes": 1170
+        },
+        {
+          "path": "fuel/mist.frag.qsb",
+          "bytes": 2698
+        },
+        {
+          "path": "fuel/notif.qml",
+          "bytes": 7932
+        },
+        {
+          "path": "fuel/overview.qml",
+          "bytes": 12633
+        },
+        {
+          "path": "fuel/particles.qml",
+          "bytes": 1620
+        },
+        {
+          "path": "fuel/popup.qml",
+          "bytes": 13575
+        },
+        {
+          "path": "fuel/pulse.qml",
+          "bytes": 10432
+        },
+        {
+          "path": "fuel/sysinfo.qml",
+          "bytes": 27251
+        },
+        {
+          "path": "fuel/vellum.qml",
+          "bytes": 6329
+        },
+        {
+          "path": "fuel/wallpaper.mp4",
+          "bytes": 16431851
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "gunsmoke",
+      "tagline": "fog, powder, iron and paper — the bounty ledger of a dead gunslinger",
+      "accents": [
+        "#d9d3c5",
+        "#8e9aa1",
+        "#9e2b25"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/gunsmoke.jpg",
+      "bytes": 19003862,
+      "rev": "37bb037",
+      "best": false,
+      "files": [
+        {
+          "path": "gunsmoke/DESIGN.md",
+          "bytes": 3973
+        },
+        {
+          "path": "gunsmoke/bar.qml",
+          "bytes": 23085
+        },
+        {
+          "path": "gunsmoke/beryl.qml",
+          "bytes": 4772
+        },
+        {
+          "path": "gunsmoke/cava.conf",
+          "bytes": 399
+        },
+        {
+          "path": "gunsmoke/cava.qml",
+          "bytes": 8177
+        },
+        {
+          "path": "gunsmoke/clock.qml",
+          "bytes": 10075
+        },
+        {
+          "path": "gunsmoke/cobalt.qml",
+          "bytes": 3584
+        },
+        {
+          "path": "gunsmoke/config.toml",
+          "bytes": 1155
+        },
+        {
+          "path": "gunsmoke/frostify.qml",
+          "bytes": 6033
+        },
+        {
+          "path": "gunsmoke/lock.qml",
+          "bytes": 13748
+        },
+        {
+          "path": "gunsmoke/lyrics.qml",
+          "bytes": 9687
+        },
+        {
+          "path": "gunsmoke/mica.qml",
+          "bytes": 6984
+        },
+        {
+          "path": "gunsmoke/notif.qml",
+          "bytes": 7493
+        },
+        {
+          "path": "gunsmoke/overview.qml",
+          "bytes": 9884
+        },
+        {
+          "path": "gunsmoke/particles.qml",
+          "bytes": 3022
+        },
+        {
+          "path": "gunsmoke/popup.qml",
+          "bytes": 10542
+        },
+        {
+          "path": "gunsmoke/pulse.qml",
+          "bytes": 8286
+        },
+        {
+          "path": "gunsmoke/sysinfo.qml",
+          "bytes": 19375
+        },
+        {
+          "path": "gunsmoke/vellum.qml",
+          "bytes": 4717
+        },
+        {
+          "path": "gunsmoke/wallpaper.mp4",
+          "bytes": 18848871
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "guts",
+      "tagline": "the black swordsman — crimson and cold iron",
+      "accents": [
+        "#9e1414",
+        "#26242b",
+        "#c22318"
+      ],
+      "cyber": false,
+      "light": true,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/guts.jpg",
+      "bytes": 26413187,
+      "rev": "5409dd4",
+      "best": false,
+      "files": [
+        {
+          "path": "guts/bar.qml",
+          "bytes": 26374
+        },
+        {
+          "path": "guts/beryl.qml",
+          "bytes": 6544
+        },
+        {
+          "path": "guts/cava.conf",
+          "bytes": 409
+        },
+        {
+          "path": "guts/cava.qml",
+          "bytes": 10603
+        },
+        {
+          "path": "guts/clock.qml",
+          "bytes": 15060
+        },
+        {
+          "path": "guts/cobalt.qml",
+          "bytes": 4979
+        },
+        {
+          "path": "guts/config.toml",
+          "bytes": 1281
+        },
+        {
+          "path": "guts/frostify.qml",
+          "bytes": 4615
+        },
+        {
+          "path": "guts/lock.qml",
+          "bytes": 11324
+        },
+        {
+          "path": "guts/lyrics.qml",
+          "bytes": 10176
+        },
+        {
+          "path": "guts/mica.qml",
+          "bytes": 4343
+        },
+        {
+          "path": "guts/notif.qml",
+          "bytes": 9743
+        },
+        {
+          "path": "guts/overview.qml",
+          "bytes": 11116
+        },
+        {
+          "path": "guts/paper.frag",
+          "bytes": 1069
+        },
+        {
+          "path": "guts/paper.frag.qsb",
+          "bytes": 2302
+        },
+        {
+          "path": "guts/particles.qml",
+          "bytes": 1714
+        },
+        {
+          "path": "guts/popup.qml",
+          "bytes": 12847
+        },
+        {
+          "path": "guts/pulse.qml",
+          "bytes": 10176
+        },
+        {
+          "path": "guts/sysinfo.qml",
+          "bytes": 23554
+        },
+        {
+          "path": "guts/vellum.qml",
+          "bytes": 4533
+        },
+        {
+          "path": "guts/wallpaper.mp4",
+          "bytes": 26240425
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "homeroom",
+      "tagline": "morning homeroom before anyone else arrives",
+      "accents": [
+        "#8fd0f4",
+        "#a9bdf0",
+        "#d873b4"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/homeroom.jpg",
+      "bytes": 16869682,
+      "rev": "5409dd4",
+      "best": false,
+      "files": [
+        {
+          "path": "homeroom/DESIGN.md",
+          "bytes": 7361
+        },
+        {
+          "path": "homeroom/bar.qml",
+          "bytes": 24116
+        },
+        {
+          "path": "homeroom/beryl.qml",
+          "bytes": 5765
+        },
+        {
+          "path": "homeroom/cava.conf",
+          "bytes": 397
+        },
+        {
+          "path": "homeroom/cava.qml",
+          "bytes": 6742
+        },
+        {
+          "path": "homeroom/chalk.js",
+          "bytes": 7473
+        },
+        {
+          "path": "homeroom/clock.qml",
+          "bytes": 9548
+        },
+        {
+          "path": "homeroom/cobalt.qml",
+          "bytes": 4369
+        },
+        {
+          "path": "homeroom/config.toml",
+          "bytes": 1079
+        },
+        {
+          "path": "homeroom/frostify.qml",
+          "bytes": 8590
+        },
+        {
+          "path": "homeroom/lock.qml",
+          "bytes": 16246
+        },
+        {
+          "path": "homeroom/lyrics.qml",
+          "bytes": 12675
+        },
+        {
+          "path": "homeroom/mica.qml",
+          "bytes": 9889
+        },
+        {
+          "path": "homeroom/notif.qml",
+          "bytes": 8327
+        },
+        {
+          "path": "homeroom/overview.qml",
+          "bytes": 11487
+        },
+        {
+          "path": "homeroom/particles.qml",
+          "bytes": 3307
+        },
+        {
+          "path": "homeroom/popup.qml",
+          "bytes": 13642
+        },
+        {
+          "path": "homeroom/pulse.qml",
+          "bytes": 9551
+        },
+        {
+          "path": "homeroom/sysinfo.qml",
+          "bytes": 20671
+        },
+        {
+          "path": "homeroom/vellum.qml",
+          "bytes": 8441
+        },
+        {
+          "path": "homeroom/wallpaper.mp4",
+          "bytes": 16680006
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "lonely-train",
+      "tagline": "a lonely train, and rain on the glass",
+      "accents": [
+        "#e8a45c",
+        "#7fa3d8",
+        "#d95f52"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/lonely-train.jpg",
+      "bytes": 29054077,
+      "rev": "5409dd4",
+      "best": false,
+      "files": [
+        {
+          "path": "lonely-train/bar.qml",
+          "bytes": 20915
+        },
+        {
+          "path": "lonely-train/beryl.qml",
+          "bytes": 6234
+        },
+        {
+          "path": "lonely-train/cava.conf",
+          "bytes": 410
+        },
+        {
+          "path": "lonely-train/cava.qml",
+          "bytes": 12777
+        },
+        {
+          "path": "lonely-train/clock.qml",
+          "bytes": 12631
+        },
+        {
+          "path": "lonely-train/cobalt.qml",
+          "bytes": 4024
+        },
+        {
+          "path": "lonely-train/config.toml",
+          "bytes": 931
+        },
+        {
+          "path": "lonely-train/frostify.qml",
+          "bytes": 4410
+        },
+        {
+          "path": "lonely-train/lock.qml",
+          "bytes": 16737
+        },
+        {
+          "path": "lonely-train/lyrics.qml",
+          "bytes": 9193
+        },
+        {
+          "path": "lonely-train/mica.qml",
+          "bytes": 3732
+        },
+        {
+          "path": "lonely-train/notif.qml",
+          "bytes": 7157
+        },
+        {
+          "path": "lonely-train/overview.qml",
+          "bytes": 9845
+        },
+        {
+          "path": "lonely-train/particles.qml",
+          "bytes": 2444
+        },
+        {
+          "path": "lonely-train/popup.qml",
+          "bytes": 12681
+        },
+        {
+          "path": "lonely-train/pulse.qml",
+          "bytes": 7905
+        },
+        {
+          "path": "lonely-train/rain.frag",
+          "bytes": 1440
+        },
+        {
+          "path": "lonely-train/rain.frag.qsb",
+          "bytes": 2743
+        },
+        {
+          "path": "lonely-train/sysinfo.qml",
+          "bytes": 21651
+        },
+        {
+          "path": "lonely-train/vellum.qml",
+          "bytes": 3853
+        },
+        {
+          "path": "lonely-train/wallpaper.mp4",
+          "bytes": 28892364
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "pines",
+      "tagline": "standing watch — a fire lookout's glass cab above the fog",
+      "accents": [
+        "#e2a55c",
+        "#a9c6d8",
+        "#d96b4f"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/pines.jpg",
+      "bytes": 22155153,
+      "rev": "5c0f040",
+      "best": false,
+      "files": [
+        {
+          "path": "pines/DESIGN.md",
+          "bytes": 4218
+        },
+        {
+          "path": "pines/bar.qml",
+          "bytes": 24146
+        },
+        {
+          "path": "pines/beryl.qml",
+          "bytes": 4341
+        },
+        {
+          "path": "pines/cava.conf",
+          "bytes": 394
+        },
+        {
+          "path": "pines/cava.qml",
+          "bytes": 10227
+        },
+        {
+          "path": "pines/clock.qml",
+          "bytes": 11094
+        },
+        {
+          "path": "pines/cobalt.qml",
+          "bytes": 4563
+        },
+        {
+          "path": "pines/config.toml",
+          "bytes": 1188
+        },
+        {
+          "path": "pines/fog.frag",
+          "bytes": 2281
+        },
+        {
+          "path": "pines/fog.frag.qsb",
+          "bytes": 4044
+        },
+        {
+          "path": "pines/frostify.qml",
+          "bytes": 5414
+        },
+        {
+          "path": "pines/lock.qml",
+          "bytes": 13986
+        },
+        {
+          "path": "pines/lyrics.qml",
+          "bytes": 12724
+        },
+        {
+          "path": "pines/mica.qml",
+          "bytes": 5427
+        },
+        {
+          "path": "pines/notif.qml",
+          "bytes": 6692
+        },
+        {
+          "path": "pines/overview.qml",
+          "bytes": 16461
+        },
+        {
+          "path": "pines/particles.qml",
+          "bytes": 3574
+        },
+        {
+          "path": "pines/popup.qml",
+          "bytes": 11032
+        },
+        {
+          "path": "pines/pulse.qml",
+          "bytes": 5218
+        },
+        {
+          "path": "pines/sysinfo.qml",
+          "bytes": 23363
+        },
+        {
+          "path": "pines/vellum.qml",
+          "bytes": 4881
+        },
+        {
+          "path": "pines/wallpaper.mp4",
+          "bytes": 21979885
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
       "name": "sailing",
       "tagline": "open water — salt, rope, and the deck's slow roll",
       "accents": [
@@ -1387,6 +1400,7 @@
       "thumb": ".catalog/thumbs/sailing.jpg",
       "bytes": 21592487,
       "rev": "37bb037",
+      "best": false,
       "files": [
         {
           "path": "sailing/bar.qml",
@@ -1490,6 +1504,7 @@
       "thumb": ".catalog/thumbs/shiro.jpg",
       "bytes": 26755970,
       "rev": "37bb037",
+      "best": false,
       "files": [
         {
           "path": "shiro/bar.qml",
@@ -1597,6 +1612,7 @@
       "thumb": ".catalog/thumbs/sleeper.jpg",
       "bytes": 31202191,
       "rev": "5409dd4",
+      "best": false,
       "files": [
         {
           "path": "sleeper/DESIGN.md",
@@ -1696,6 +1712,7 @@
       "thumb": ".catalog/thumbs/stars.jpg",
       "bytes": 23367152,
       "rev": "5409dd4",
+      "best": false,
       "files": [
         {
           "path": "stars/bar.qml",
@@ -1799,6 +1816,7 @@
       "thumb": ".catalog/thumbs/stillwater.jpg",
       "bytes": 22889435,
       "rev": "5409dd4",
+      "best": false,
       "files": [
         {
           "path": "stillwater/DESIGN.md",
@@ -1906,6 +1924,7 @@
       "thumb": ".catalog/thumbs/thicket.jpg",
       "bytes": 18669639,
       "rev": "5409dd4",
+      "best": false,
       "files": [
         {
           "path": "thicket/DESIGN.md",
@@ -2005,6 +2024,7 @@
       "thumb": ".catalog/thumbs/vinland.jpg",
       "bytes": 3295160,
       "rev": "5409dd4",
+      "best": false,
       "files": [
         {
           "path": "vinland/aurora.frag",
