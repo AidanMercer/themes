@@ -30,6 +30,8 @@ Item {
     function steelA(a) { return Qt.rgba(steel.r, steel.g, steel.b, a) }
     function colA(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }
 
+    readonly property real ui: pal.uiScale
+
     readonly property int bins: 24
 
     property var levels: []       // raw cava bins 0..1
@@ -132,8 +134,11 @@ Item {
     Canvas {
         id: fog
         width: root.width
-        height: Math.round(root.height * 0.30)
+        // the bank always spans the screen — ui scale takes it out of its depth,
+        // never off the edges
+        height: Math.round(root.height * 0.30 * root.ui)
         anchors.bottom: parent.bottom
+        onHeightChanged: requestPaint()
 
         opacity: root.bootT * (root.humming ? 1 : 0)
         visible: opacity > 0.01
@@ -152,8 +157,8 @@ Item {
                 const v = d[i]
                 if (v <= 0.01) continue
                 const cx = (i + 0.5) * colW
-                const cy = h + 30
-                const r = 60 + v * h * 1.25
+                const cy = h + 30 * root.ui
+                const r = 60 * root.ui + v * h * 1.25
                 const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r)
                 const hot = v > 0.85
                 g.addColorStop(0, String(root.boneA(0.05 + v * 0.16)))
@@ -174,7 +179,7 @@ Item {
             if (root.flash > 0.02) {
                 const fx = root.flashX * w
                 const fy = h * 0.72
-                const fr = 90 + root.flash * 260
+                const fr = (90 + root.flash * 260) * root.ui
                 const g = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr)
                 g.addColorStop(0, String(root.boneA(0.34 * root.flash)))
                 g.addColorStop(0.35, String(root.boneA(0.12 * root.flash)))
@@ -183,11 +188,12 @@ Item {
                 ctx.fillRect(fx - fr, fy - fr, fr * 2, fr * 2)
                 // only the hottest shot bleeds — the withheld accent, spent
                 if (root.flash > 0.9) {
-                    const g2 = ctx.createRadialGradient(fx, fy, 0, fx, fy, 40)
+                    const cr = 40 * root.ui
+                    const g2 = ctx.createRadialGradient(fx, fy, 0, fx, fy, cr)
                     g2.addColorStop(0, String(root.colA(root.blood, 0.30)))
                     g2.addColorStop(1, String(root.colA(root.blood, 0)))
                     ctx.fillStyle = g2
-                    ctx.fillRect(fx - 40, fy - 40, 80, 80)
+                    ctx.fillRect(fx - cr, fy - cr, cr * 2, cr * 2)
                 }
             }
         }

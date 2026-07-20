@@ -275,6 +275,7 @@ Item {
                 spacing: 5
                 anchors.verticalCenter: parent.verticalCenter
                 HoverHandler {
+                    enabled: root.pal.sysinfoOn !== false
                     onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
                 }
                 Meter { value: root.cpuPct }
@@ -291,6 +292,7 @@ Item {
                 spacing: 5
                 anchors.verticalCenter: parent.verticalCenter
                 HoverHandler {
+                    enabled: root.pal.sysinfoOn !== false
                     onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
                 }
                 Meter { value: root.memPct; tint: root.gold }

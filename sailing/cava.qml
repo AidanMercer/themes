@@ -114,6 +114,9 @@ Item {
         y: root.bandY
         width: root.bandW
         height: root.bandH
+        // scales off the left margin so the swell keeps its waterline
+        scale: pal.uiScale
+        transformOrigin: Item.Left
         opacity: root.bootT
         renderStrategy: Canvas.Threaded
 

@@ -281,6 +281,7 @@ Item {
                 // hovering the micro-meters raises the margin-notes slip
                 // (sysinfo.qml watches the shared hover flag file)
                 HoverHandler {
+                    enabled: root.pal.sysinfoOn !== false
                     onHoveredChanged: sysFlag.setText(hovered ? "1" : "0")
                 }
 

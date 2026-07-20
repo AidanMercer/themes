@@ -24,6 +24,8 @@ Item {
 
     // injected by the loader (setSource initial property)
     required property var pal
+    // injected by the loader — true while the session is locked, so pollers park
+    property bool occluded: false
     readonly property color neon:    pal.neon
     readonly property color cyan:    pal.cyan
     readonly property color magenta: pal.magenta
@@ -245,7 +247,7 @@ Item {
         }
         Timer {
             interval: 1000; repeat: true
-            running: media.playing
+            running: media.playing && !root.occluded
             triggeredOnStart: true
             onTriggered: media.updateProgress()
         }
