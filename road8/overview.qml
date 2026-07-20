@@ -10,8 +10,9 @@ import QtQuick
 // is frame-flips (Timers + PauseAnimations, zero easing curves), same as the
 // popup's CHECK lamp and ▸▸▸ ticker.
 //
-// visual-only by contract: no input handlers; every loop gates on
-// overview.open (the shell tears the layers down ~300ms after close).
+// visual-only by contract: no input handlers; every loop gates on `up`
+// (open OR closing — the shell tears the layers down ~300ms after close, and
+// the flips have to keep going for that tail or they snap).
 Item {
     id: chrome
 
@@ -21,6 +22,10 @@ Item {
 
     readonly property string mono: pal.fontMono
     function px(v) { return Math.round(v * pal.uiScale) }   // pixel art hates fractions
+
+    // the flips have to keep running through the close, not just while open —
+    // stopping a value-source mid-blink snaps its opacity and reads as a flicker
+    readonly property bool up: overview.open || overview.closing
 
     // ── scalars: pixel-square frames, no gloss, no soft shadow ──
     readonly property color scrimColor: "#05060a"
@@ -65,7 +70,7 @@ Item {
                     height: width
                     color: index % 4 === 0 ? chrome.pal.neon : chrome.pal.cyan
                     SequentialAnimation on opacity {
-                        running: chrome.overview.open
+                        running: chrome.up
                         loops: Animation.Infinite
                         PropertyAction { value: 0.9 }
                         PauseAnimation { duration: 900 + ((index * 137) % 1400) }
@@ -135,7 +140,7 @@ Item {
                 Timer {
                     interval: 90
                     repeat: true
-                    running: chrome.overview.open
+                    running: chrome.up
                     onTriggered: {
                         car.x -= chrome.px(3)
                         if (car.x < -car.width) car.x = bd.width + car.width
@@ -201,7 +206,7 @@ Item {
                 font.pixelSize: chrome.px(14)
                 color: chrome.pal.neon
                 SequentialAnimation on opacity {
-                    running: ov.hot && chrome.overview.open
+                    running: ov.hot && chrome.up
                     loops: Animation.Infinite
                     PropertyAction { value: 1 }
                     PauseAnimation { duration: 420 }

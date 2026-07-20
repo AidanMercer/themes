@@ -1,0 +1,25 @@
+# sakura — hanami, the held afternoon. Warm blossom pink and hazy sky
+# sampled from the video, laid over dusk-plum glass so everything stays
+# readable against all that bright petal light.
+bar_position = "top"
+
+accent      = "#ef8ba1"   # sunlit blossom pink
+accent2     = "#a8bde0"   # the hazy sky between branches
+accent3     = "#d9536f"   # deep rose — danger / power
+accent_warn = "#eec39a"   # warm peach where the sun leaks through
+accent_dim  = "#5d4a56"   # mauve twig traces, dividers
+
+text  = "#f7edef"   # petal cream
+glass = "#251a22"   # dusk-plum panel tint
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#1d141b"
+fg        = "#efdfe4"
+hue_green = "#9cb87f"   # new leaf
+hue_blue  = "#8ba6cf"   # spring sky
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "hanami — the afternoon the petals held still"
