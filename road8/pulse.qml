@@ -3,12 +3,10 @@ import QtQuick
 // road8: under the hood. The monitor is the engine bay of the parked car —
 // the same 8-bit city burns along the bottom of the window, but here it IS
 // the machine: as host.load climbs the grid takes the strain and more amber
-// windows burn, in hard eighths, whole windows at a time. A dash strip idles
-// top-left — hazard pixel ticking faster as the revs rise, REV and FUEL
-// meters in hard 12-block bars, a pixel-font percent that rerolls — and on
-// every re-sort a car passes on the hill road. Killing a process stalls the
-// engine: the whole display judders in 8px jolts and the city browns out,
-// then relights row by row. Everything snaps; nothing glides.
+// windows burn, in hard eighths, whole windows at a time. On every re-sort
+// a car passes on the hill road. Killing a process stalls the engine: the
+// whole display judders in 8px jolts and the city browns out, then relights
+// row by row. Everything snaps; nothing glides.
 Item {
     id: chrome
 
@@ -17,19 +15,14 @@ Item {
 
     readonly property bool awake: host ? host.active === true : false
     readonly property real load: host && host.load !== undefined ? host.load : 0
-    readonly property real fuel: host && host.memLoad !== undefined ? host.memLoad : 0
 
     // the fiction's physics: state moves in whole units — the city takes load
-    // in eighths, the meters in twelfths, the readout in whole percent
+    // in eighths, whole windows at a time
     readonly property int loadStep: Math.round(load * 8)
-    readonly property int revBlocks: Math.round(load * 12)
-    readonly property int fuelBlocks: Math.round(fuel * 12)
-    readonly property int revPct: Math.round(load * 100)
 
     readonly property color amber: pal.neon
     readonly property color starlight: pal.cyan
     readonly property color tail: pal.magenta
-    readonly property color sodium: pal.amber
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
     function starA(a)  { return Qt.rgba(starlight.r, starlight.g, starlight.b, a) }
 
@@ -39,41 +32,6 @@ Item {
         let x = Math.imul((n + 331) ^ 0x9e3779b9, 0x85ebca6b)
         x ^= x >>> 13; x = Math.imul(x, 0xc2b2ae35); x ^= x >>> 16
         return (x >>> 0) / 4294967296
-    }
-
-    // the house pixel font (digits only), for the rev readout
-    readonly property var pixmap: ({
-        "0": ["01110","10001","10011","10101","11001","10001","01110"],
-        "1": ["00100","01100","00100","00100","00100","00100","01110"],
-        "2": ["01110","10001","00001","00010","00100","01000","11111"],
-        "3": ["11111","00010","00100","00010","00001","10001","01110"],
-        "4": ["00010","00110","01010","10010","11111","00010","00010"],
-        "5": ["11111","10000","11110","00001","00001","10001","01110"],
-        "6": ["00110","01000","10000","11110","10001","10001","01110"],
-        "7": ["11111","00001","00010","00100","01000","01000","01000"],
-        "8": ["01110","10001","10001","01110","10001","10001","01110"],
-        "9": ["01110","10001","10001","01111","00001","00010","01100"],
-        " ": ["00000","00000","00000","00000","00000","00000","00000"]
-    })
-    component PixelGlyph: Canvas {
-        property string ch: "0"
-        property real cell: 2
-        property color face: chrome.amber
-        readonly property var m: chrome.pixmap[ch] || chrome.pixmap[" "]
-        width: (m[0].length + 0.4) * cell
-        height: (m.length + 0.4) * cell
-        onChChanged: requestPaint()
-        onFaceChanged: requestPaint()
-        onPaint: {
-            const ctx = getContext("2d")
-            ctx.reset()
-            const c = cell, gap = Math.max(0.5, c * 0.16)
-            ctx.fillStyle = String(face)
-            for (let r = 0; r < m.length; r++)
-                for (let k = 0; k < m[r].length; k++)
-                    if (m[r].charAt(k) === "1")
-                        ctx.fillRect(k * c, r * c, c - gap, c - gap)
-        }
     }
 
     // chassis: near-square corners, a thin band of city light for an edge —
@@ -90,7 +48,6 @@ Item {
 
             readonly property int g: 8          // the pixel grid
             readonly property int band: 64      // skyline height
-            property bool danger: false         // a kill is going through
 
             // everything rides in the cab so the stall can judder the whole
             // display in hard 8px jolts (no anchors — the x must move)
@@ -220,95 +177,6 @@ Item {
                     }
                 }
 
-                // ── the dash strip, top-left: the engine idling in miniature ──
-                Row {
-                    x: 14
-                    y: 10
-                    spacing: 8
-                    opacity: 0.7
-
-                    // hazard pixel — ticks faster as the revs rise; a kill
-                    // turns it taillight red and hammering
-                    Rectangle {
-                        id: hazard
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 4; height: 4
-                        color: bd.danger ? chrome.tail : chrome.sodium
-                        property bool tick: true
-                        opacity: tick ? 0.9 : 0.18
-                        Timer {
-                            interval: bd.danger ? 150 : Math.max(500, 1400 - chrome.loadStep * 110)
-                            repeat: true
-                            running: chrome.awake && bd.visible
-                            onTriggered: hazard.tick = !hazard.tick
-                        }
-                    }
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "REV"
-                        color: Qt.alpha(chrome.pal.text, 0.5)
-                        font.family: chrome.pal.fontMono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                    }
-                    // the rev meter: 12 hard blocks, the top two in the redline
-                    Row {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 2
-                        Repeater {
-                            model: 12
-                            Rectangle {
-                                required property int index
-                                readonly property bool lit: index < chrome.revBlocks
-                                width: 5; height: 8
-                                color: lit ? (index >= 10 ? chrome.tail : chrome.amber) : "transparent"
-                                border.width: 1
-                                border.color: lit ? "transparent" : Qt.alpha(chrome.pal.dim, 0.6)
-                            }
-                        }
-                    }
-                    // the readout, in the house pixel font — rerolls per percent
-                    Row {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 2
-                        Repeater {
-                            model: 3
-                            PixelGlyph {
-                                required property int index
-                                ch: String(chrome.revPct).padStart(3, " ").charAt(index)
-                                cell: 2
-                                face: bd.danger ? chrome.tail : chrome.amber
-                            }
-                        }
-                    }
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "FUEL"
-                        color: Qt.alpha(chrome.pal.text, 0.5)
-                        font.family: chrome.pal.fontMono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                    }
-                    // the fuel meter: memory as what's left in the tank
-                    Row {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 2
-                        Repeater {
-                            model: 12
-                            Rectangle {
-                                required property int index
-                                readonly property bool lit: index < chrome.fuelBlocks
-                                width: 5; height: 8
-                                color: lit ? chrome.sodium : "transparent"
-                                border.width: 1
-                                border.color: lit ? "transparent" : Qt.alpha(chrome.pal.dim, 0.6)
-                            }
-                        }
-                    }
-                }
-
                 // ── a car passes on every re-sort: taillights + one exhaust
                 // ember, x snapped to the 8px grid, then gone ──
                 Item {
@@ -334,14 +202,13 @@ Item {
             // city's power, then the grid relights course by course ──
             SequentialAnimation {
                 id: stall
-                ScriptAction { script: { bd.danger = true; cover.t = 0 } }
+                ScriptAction { script: cover.t = 0 }
                 PropertyAction { target: cab; property: "x"; value: -8 }
                 PauseAnimation { duration: 50 }
                 PropertyAction { target: cab; property: "x"; value: 8 }
                 PauseAnimation { duration: 50 }
                 PropertyAction { target: cab; property: "x"; value: 0 }
                 NumberAnimation { target: cover; property: "t"; from: 0; to: 1; duration: 900 }
-                ScriptAction { script: bd.danger = false }
             }
 
             Connections {
