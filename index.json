@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "5409dd4",
+  "commit": "5c0f040",
   "themes": [
     {
       "name": "avalon",
@@ -16,12 +16,12 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21489175,
-      "rev": "5409dd4",
+      "bytes": 21489291,
+      "rev": "37bb037",
       "files": [
         {
           "path": "avalon/bar.qml",
-          "bytes": 20824
+          "bytes": 20940
         },
         {
           "path": "avalon/beryl.qml",
@@ -535,8 +535,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/gunsmoke.jpg",
-      "bytes": 19003569,
-      "rev": "5409dd4",
+      "bytes": 19003862,
+      "rev": "37bb037",
       "files": [
         {
           "path": "gunsmoke/DESIGN.md",
@@ -556,7 +556,7 @@
         },
         {
           "path": "gunsmoke/cava.qml",
-          "bytes": 7884
+          "bytes": 8177
         },
         {
           "path": "gunsmoke/clock.qml",
@@ -943,8 +943,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/moon.jpg",
-      "bytes": 44112716,
-      "rev": "5409dd4",
+      "bytes": 44112852,
+      "rev": "37bb037",
       "files": [
         {
           "path": "moon/LYRICS-NOTES.md",
@@ -952,7 +952,7 @@
         },
         {
           "path": "moon/bar.qml",
-          "bytes": 13018
+          "bytes": 13154
         },
         {
           "path": "moon/beryl.qml",
@@ -1171,8 +1171,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/pines.jpg",
-      "bytes": 22153964,
-      "rev": "5409dd4",
+      "bytes": 22155153,
+      "rev": "5c0f040",
       "files": [
         {
           "path": "pines/DESIGN.md",
@@ -1180,7 +1180,7 @@
         },
         {
           "path": "pines/bar.qml",
-          "bytes": 23174
+          "bytes": 24146
         },
         {
           "path": "pines/beryl.qml",
@@ -1192,11 +1192,11 @@
         },
         {
           "path": "pines/cava.qml",
-          "bytes": 10225
+          "bytes": 10227
         },
         {
           "path": "pines/clock.qml",
-          "bytes": 11007
+          "bytes": 11094
         },
         {
           "path": "pines/cobalt.qml",
@@ -1220,7 +1220,7 @@
         },
         {
           "path": "pines/lock.qml",
-          "bytes": 13988
+          "bytes": 13986
         },
         {
           "path": "pines/lyrics.qml",
@@ -1232,11 +1232,11 @@
         },
         {
           "path": "pines/notif.qml",
-          "bytes": 6691
+          "bytes": 6692
         },
         {
           "path": "pines/overview.qml",
-          "bytes": 16452
+          "bytes": 16461
         },
         {
           "path": "pines/particles.qml",
@@ -1244,7 +1244,7 @@
         },
         {
           "path": "pines/popup.qml",
-          "bytes": 11025
+          "bytes": 11032
         },
         {
           "path": "pines/pulse.qml",
@@ -1252,7 +1252,7 @@
         },
         {
           "path": "pines/sysinfo.qml",
-          "bytes": 23250
+          "bytes": 23363
         },
         {
           "path": "pines/vellum.qml",
@@ -1278,7 +1278,7 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/road8.jpg",
-      "bytes": 28665810,
+      "bytes": 28666081,
       "rev": "5409dd4",
       "files": [
         {
@@ -1339,7 +1339,7 @@
         },
         {
           "path": "road8/overview.qml",
-          "bytes": 11454
+          "bytes": 11725
         },
         {
           "path": "road8/particles.qml",
@@ -1385,8 +1385,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sailing.jpg",
-      "bytes": 21592354,
-      "rev": "5409dd4",
+      "bytes": 21592487,
+      "rev": "37bb037",
       "files": [
         {
           "path": "sailing/bar.qml",
@@ -1402,7 +1402,7 @@
         },
         {
           "path": "sailing/cava.qml",
-          "bytes": 7635
+          "bytes": 7768
         },
         {
           "path": "sailing/clock.qml",
@@ -1488,12 +1488,12 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26755912,
-      "rev": "5409dd4",
+      "bytes": 26755970,
+      "rev": "37bb037",
       "files": [
         {
           "path": "shiro/bar.qml",
-          "bytes": 20644
+          "bytes": 20702
         },
         {
           "path": "shiro/beryl.qml",
