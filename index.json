@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "79af0e2",
+  "commit": "4dc9633",
   "themes": [
     {
       "name": "bog",
@@ -354,8 +354,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/road8.jpg",
-      "bytes": 28666081,
-      "rev": "5409dd4",
+      "bytes": 28659580,
+      "rev": "4dc9633",
       "best": true,
       "files": [
         {
@@ -428,7 +428,7 @@
         },
         {
           "path": "road8/pulse.qml",
-          "bytes": 17241
+          "bytes": 10740
         },
         {
           "path": "road8/sysinfo.qml",
@@ -1485,6 +1485,106 @@
         {
           "path": "sailing/wallpaper.mp4",
           "bytes": 21441542
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
+      "name": "sakura",
+      "tagline": "hanami — the afternoon the petals held still",
+      "accents": [
+        "#ef8ba1",
+        "#a8bde0",
+        "#d9536f"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/sakura.jpg",
+      "bytes": 6204722,
+      "rev": "4dc9633",
+      "best": false,
+      "files": [
+        {
+          "path": "sakura/DESIGN.md",
+          "bytes": 2499
+        },
+        {
+          "path": "sakura/bar.qml",
+          "bytes": 23734
+        },
+        {
+          "path": "sakura/beryl.qml",
+          "bytes": 3834
+        },
+        {
+          "path": "sakura/cava.conf",
+          "bytes": 407
+        },
+        {
+          "path": "sakura/cava.qml",
+          "bytes": 11009
+        },
+        {
+          "path": "sakura/clock.qml",
+          "bytes": 9067
+        },
+        {
+          "path": "sakura/cobalt.qml",
+          "bytes": 3231
+        },
+        {
+          "path": "sakura/config.toml",
+          "bytes": 971
+        },
+        {
+          "path": "sakura/frostify.qml",
+          "bytes": 4594
+        },
+        {
+          "path": "sakura/lock.qml",
+          "bytes": 11412
+        },
+        {
+          "path": "sakura/lyrics.qml",
+          "bytes": 8854
+        },
+        {
+          "path": "sakura/mica.qml",
+          "bytes": 3489
+        },
+        {
+          "path": "sakura/notif.qml",
+          "bytes": 5958
+        },
+        {
+          "path": "sakura/overview.qml",
+          "bytes": 7623
+        },
+        {
+          "path": "sakura/particles.qml",
+          "bytes": 5852
+        },
+        {
+          "path": "sakura/popup.qml",
+          "bytes": 9452
+        },
+        {
+          "path": "sakura/pulse.qml",
+          "bytes": 4571
+        },
+        {
+          "path": "sakura/sysinfo.qml",
+          "bytes": 22584
+        },
+        {
+          "path": "sakura/vellum.qml",
+          "bytes": 4380
+        },
+        {
+          "path": "sakura/wallpaper.mp4",
+          "bytes": 6061201
         }
       ],
       "oversizedOmitted": []
