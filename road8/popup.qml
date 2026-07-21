@@ -4,8 +4,8 @@ import QtQuick
 // these pieces around its shared tabs: backdrop (a pixel-cut dialog face —
 // night glass, amber frame, headlight glow leaking down from the top, a
 // tiny 8-bit car parked in the bottom corner), header (CHECK lamp blinking
-// in hard steps + the theme's name + a three-tower block equalizer riding
-// the music in whole-window jumps + trip time), footer (NET + the send-off),
+// in hard steps + a three-tower block equalizer riding the music in
+// whole-window jumps + uptime), footer (net + the chevron ticker),
 // overlay (faint CRT scanlines down the glass). Item root that renders
 // nothing itself; no MouseAreas, clicks pass through.
 Item {
@@ -90,7 +90,7 @@ Item {
         }
     }
 
-    // ── header: CHECK lamp + name + block EQ + trip time ────────────────────
+    // ── header: CHECK lamp + block EQ + uptime ──────────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -116,16 +116,6 @@ Item {
                             onTriggered: lamp.tick = !lamp.tick
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "BEFORE THE ROAD"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 4
-                        color: chrome.pal.neon
-                    }
-
                     // three towers of window-blocks, lighting floor by floor
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -158,26 +148,13 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "PARKED · 8BIT2"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.pal.cyan
-                        opacity: 0.75
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "TRIP " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.slateA(1.0)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    color: chrome.slateA(1.0)
                 }
             }
 
@@ -200,7 +177,7 @@ Item {
         }
     }
 
-    // ── footer: net + the send-off ──────────────────────────────────────────
+    // ── footer: net + the chevron ticker ────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -248,31 +225,19 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
+                    id: chevrons
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "SEE YOU ON THE ROAD"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.amberA(0.6)
-                    }
-                    Text {
-                        id: chevrons
-                        anchors.verticalCenter: parent.verticalCenter
-                        property int step: 0
-                        text: step === 0 ? "▸  " : step === 1 ? "▸▸ " : "▸▸▸"
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.pal.neon
-                        Timer {
-                            interval: 500; repeat: true
-                            running: chrome.popup.open
-                            onTriggered: chevrons.step = (chevrons.step + 1) % 3
-                        }
+                    property int step: 0
+                    text: step === 0 ? "▸  " : step === 1 ? "▸▸ " : "▸▸▸"
+                    font.family: chrome.mono
+                    font.pixelSize: 9
+                    color: chrome.pal.neon
+                    Timer {
+                        interval: 500; repeat: true
+                        running: chrome.popup.open
+                        onTriggered: chevrons.step = (chevrons.step + 1) % 3
                     }
                 }
             }

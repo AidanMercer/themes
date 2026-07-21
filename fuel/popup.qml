@@ -5,8 +5,8 @@ import QtQuick
 // The shell's ControlPopup loads this next to the wallpaper and mounts the
 // pieces around its shared tabs: backdrop (a chamfered pump placard whose top
 // edge carries the bent canopy neon stripe, pump band in the top-right cut),
-// header (pilot lamp + FUEL // STATION CTRL + live flow pips + uptime),
-// footer (LINE status + pump-band divider + sign-off), overlay (a slow,
+// header (pilot lamp + FUEL wordmark + live flow pips + uptime),
+// footer (net status + pump-band divider + blinker), overlay (a slow,
 // rare sweep of the 3-stripe band down the glass). Item root because the
 // Loader refuses non-visual elements; it renders nothing itself.
 Item {
@@ -99,7 +99,7 @@ Item {
         }
     }
 
-    // ── header: pilot lamp + FUEL + flow pips, // STATION CTRL + uptime ──
+    // ── header: pilot lamp + FUEL + flow pips, uptime on the right ──
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -168,27 +168,15 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "// STATION CTRL"
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 2
-                        color: chrome.pal.cyan
-                        opacity: 0.7
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "UP " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 1
-                        color: chrome.pal.dim
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
+                    color: chrome.pal.cyan
+                    opacity: 0.7
                 }
             }
 
@@ -201,7 +189,7 @@ Item {
         }
     }
 
-    // ── footer: LINE status + pump band + sign-off ──
+    // ── footer: net status + pump band + blinker ──
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -233,41 +221,28 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "LINE DOWN"
-                            : "LINE · " + (chrome.popup.connName || "ONLINE")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.pal.cyan
                     }
                 }
 
-                Row {
+                Rectangle {
                     anchors.right: parent.right
                     anchors.rightMargin: 16
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "// MIDNIGHT FUEL STOP"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.pal.neon
-                        opacity: 0.55
-                    }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 7; height: 11
-                        color: chrome.pal.amber
-                        SequentialAnimation on opacity {
-                            running: chrome.popup.open
-                            loops: Animation.Infinite
-                            NumberAnimation { to: 0; duration: 0 }
-                            PauseAnimation { duration: 440 }
-                            NumberAnimation { to: 1; duration: 0 }
-                            PauseAnimation { duration: 440 }
-                        }
+                    width: 7; height: 11
+                    color: chrome.pal.amber
+                    SequentialAnimation on opacity {
+                        running: chrome.popup.open
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 0; duration: 0 }
+                        PauseAnimation { duration: 440 }
+                        NumberAnimation { to: 1; duration: 0 }
+                        PauseAnimation { duration: 440 }
                     }
                 }
             }

@@ -33,7 +33,6 @@ Item {
     function neonA(a) { return Qt.rgba(neon.r, neon.g, neon.b, a) }
     function iceA(a)  { return Qt.rgba(ice.r, ice.g, ice.b, a) }
     function redA(a)  { return Qt.rgba(red.r, red.g, red.b, a) }
-    function inkA(a)  { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     readonly property color glassTube: Qt.rgba(0.42, 0.46, 0.50, 1)
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
@@ -401,26 +400,15 @@ Item {
             font.pixelSize: Math.round(11 * root.ui)
             font.letterSpacing: 4
         }
-        Row {
+        // the mini pump band, signing off the card
+        Column {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: Math.round(12 * root.ui)
-            spacing: 8
-            Column {
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Rectangle { width: 14; height: 2; color: root.amber; opacity: 0.8 }
-                Rectangle { width: 14; height: 2; color: root.neon; opacity: 0.9 }
-                Rectangle { width: 14; height: 2; color: root.red; opacity: 0.7 }
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "PUMPS LOCKED · 24 HR"
-                color: root.inkA(0.5)
-                font.family: root.mono
-                font.pixelSize: Math.round(8 * root.ui)
-                font.letterSpacing: 3
-            }
+            spacing: 1
+            Rectangle { width: 14; height: 2; color: root.amber; opacity: 0.8 }
+            Rectangle { width: 14; height: 2; color: root.neon; opacity: 0.9 }
+            Rectangle { width: 14; height: 2; color: root.red; opacity: 0.7 }
         }
     }
 
@@ -494,9 +482,9 @@ Item {
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: root.host.failed ? "CODE REJECTED — SEE ATTENDANT"
+            text: root.host.failed ? "WRONG CODE"
                 : root.host.busy ? "AUTHORIZING…"
-                : root.host.pwLength === 0 ? "ENTER ATTENDANT CODE" : ""
+                : root.host.pwLength === 0 ? "ENTER CODE" : ""
             color: root.host.failed ? root.red : root.iceA(0.75)
             font.family: root.mono
             font.pixelSize: Math.round(11 * root.ui)

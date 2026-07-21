@@ -51,8 +51,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: irisA(0.7)
-    readonly property string hintText: "choose your path through the brush"
-    readonly property string emptyText: "nothing stirs"
+    readonly property string hintText: "enter to focus · esc to close"
+    readonly property string emptyText: "nothing open"
 
     // ── backdrop: the rim of the clearing ──
     readonly property Component backdrop: Component {
@@ -127,14 +127,14 @@ Item {
                 }
             }
 
-            // the ground truth, top-left, whispered
+            // window count, top-left
             Text {
                 x: chrome.px(30); y: chrome.px(28)
-                text: String(chrome.overview.windows.length) + " things in the open"
+                text: String(chrome.overview.windows.length) + " windows"
                 font.family: chrome.serif
                 font.italic: true
                 font.pixelSize: chrome.px(13)
-                color: chrome.irisA(0.65)
+                color: chrome.irisA(0.7)
             }
         }
     }

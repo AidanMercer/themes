@@ -43,8 +43,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: linenA(0.55)
-    readonly property string hintText: "CHOOSE A COMPARTMENT · ⏎ SETTLE IN · ESC STAY PUT"
-    readonly property string emptyText: "THE CAR IS EMPTY TONIGHT"
+    readonly property string hintText: "⏎ select · esc close"
+    readonly property string emptyText: "nothing open"
 
     // ── backdrop: the corridor floor + a passing lamp ──
     readonly property Component backdrop: Component {
@@ -81,7 +81,7 @@ Item {
                 color: chrome.woodA(0.5)
             }
 
-            // the car tag, top-left, in the plaque's dialect
+            // the window count, top-left, in the plaque's dialect
             Row {
                 x: Math.round(30 * chrome.pal.uiScale)
                 y: Math.round(38 * chrome.pal.uiScale)
@@ -92,7 +92,7 @@ Item {
                     color: chrome.pal.cyan
                 }
                 Text {
-                    text: "CAR 7 · " + String(chrome.overview.windows.length).padStart(2, "0") + " ABOARD"
+                    text: String(chrome.overview.windows.length) + " windows"
                     font.family: chrome.mono
                     font.pixelSize: Math.round(10 * chrome.pal.uiScale)
                     font.letterSpacing: 3
@@ -195,9 +195,9 @@ Item {
                 Text {
                     id: moonT
                     anchors.centerIn: parent
-                    text: "☾ YOURS"
+                    text: "☾"
                     font.family: chrome.mono
-                    font.pixelSize: Math.round(8 * chrome.pal.uiScale)
+                    font.pixelSize: Math.round(10 * chrome.pal.uiScale)
                     color: chrome.pal.cyan
                 }
             }

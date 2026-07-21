@@ -2,15 +2,14 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// stillwater: SOUNDINGS. Hover the sounding lead in the bar (or pin with
-// Super+.) and a small survey card surfaces out of the bar's waterline,
+// stillwater: system card. Hover the sounding lead in the bar (or pin with
+// Super+.) and a small card surfaces out of the bar's waterline,
 // bottom-right — rising like something buoyant and settling with a slow
 // float-tilt, the way a light craft takes the water. Each measure of the
-// machine is a strand of lamps on a line: CURRENT is the CPU, DEPTH memory,
-// GLOW the GPU, RESERVE the battery, FAR SHORE the network — lamps light
-// warm-white, run lantern-halo when pressed, dusk-rose when critical, and
-// every strand is doubled beneath itself as a dim broken streak, per the
-// house law. The card itself stands on its own waterline at its foot.
+// machine is a strand of lamps on a line (cpu / mem / gpu / battery / net) —
+// lamps light warm-white, run lantern-halo when pressed, dusk-rose when
+// critical, and every strand is doubled beneath itself as a dim broken
+// streak, per the house law. The card stands on its own waterline at its foot.
 // Sections with no source never light. Reads /proc + nmcli itself; polls
 // only while revealed; click-through scenery.
 Item {
@@ -246,7 +245,7 @@ Item {
     // ── a strand of lamps: the house meter ──────────────────────────────────
     component Strand: Item {
         id: row
-        property string label: "CURRENT"
+        property string label: ""
         property int value: -1        // 0..100, -1 leaves the strand dark
         property color tone: root.lamp
         property string readout: ""
@@ -305,7 +304,7 @@ Item {
             y: 2
             text: row.readout
             font.family: root.mono
-            font.pixelSize: 10
+            font.pixelSize: 11
             color: row.value >= 0 ? row.tone : root.slateA(1.0)
         }
     }
@@ -372,7 +371,7 @@ Item {
             anchors.topMargin: 16
             spacing: 5
 
-            // header: a lamp on the line + the survey's name
+            // header: a lamp on the line + a plain title
             Item {
                 width: parent.width
                 height: 20
@@ -394,7 +393,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "SOUNDINGS"
+                        text: "SYSTEM"
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 12
@@ -402,28 +401,19 @@ Item {
                         color: root.lamp
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "STILL WATER"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 3
-                    color: root.slateA(1.0)
-                }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.skyA(0.18) }
 
             Strand {
-                label: "CURRENT"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             Strand {
-                label: "DEPTH"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -432,7 +422,7 @@ Item {
             Strand {
                 visible: root.hasGpu
                 height: root.hasGpu ? 30 : 0
-                label: "GLOW"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -440,7 +430,7 @@ Item {
             Strand {
                 visible: root.hasBattery
                 height: root.hasBattery ? 30 : 0
-                label: "RESERVE"
+                label: "battery"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.sky
                     : root.batteryPercent <= 15 ? root.rose
@@ -448,7 +438,7 @@ Item {
                 readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
-            // FAR SHORE is text-only: connection left, rates right
+            // net is text-only: connection left, rates right
             Item {
                 width: parent.width
                 height: 22
@@ -458,7 +448,7 @@ Item {
                     spacing: 8
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "FAR SHORE"
+                        text: "net"
                         font.family: root.mono
                         font.pixelSize: 10
                         font.letterSpacing: 3
@@ -472,7 +462,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "dark"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 10
@@ -484,7 +474,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.slateA(1.0)
                 }
             }
@@ -510,10 +500,10 @@ Item {
                 Text {
                     anchors.right: parent.right
                     y: 1
-                    text: "the evening, " + root.uptimeText + " in"
+                    text: "up " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 9
-                    color: root.inkA(0.45)
+                    font.pixelSize: 10
+                    color: root.inkA(0.7)
                 }
             }
         }

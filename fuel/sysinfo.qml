@@ -6,9 +6,8 @@ import Quickshell.Io
 // the forecourt. A chamfered service card with the canopy's bent neon stripe
 // on top; every level meter is a run of 45°-slanted stripe cells (the pump
 // band tilted on its side) and the big numbers are seven-segment tubes.
-//   OCTANE  — CPU % (+ temp, load)          TURBO — GPU (nvidia only)
-//   TANK    — MEM as a fuel gauge, E → F    RESERVE — battery (laptops)
-//   FLOW    — net rates, L/min style        footer — uptime, self-serve sign
+//   cpu % (+ temp, load) · gpu (nvidia only) · mem as a fuel gauge E → F
+//   battery (laptops) · net rates · footer — uptime
 // Self-contained: /proc + nmcli + nvidia-smi polled here, hidden when absent.
 Item {
     id: root
@@ -68,7 +67,7 @@ Item {
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 800; easing.type: Easing.OutCubic }
 
-    // hover reveal — the bar's DIAG label writes "1"/"0" to this flag file
+    // hover reveal — the bar's sys label writes "1"/"0" to this flag file
     // while hovered; the placard stays off the forecourt until then
     property bool hoverShown: false
     property bool pinShown: false
@@ -365,8 +364,8 @@ Item {
                 anchors.bottom: parent.bottom
                 text: strow.unit
                 font.family: root.mono
-                font.pixelSize: 8
-                color: root.inkA(0.55)
+                font.pixelSize: 10
+                color: root.inkA(0.7)
             }
         }
     }
@@ -447,7 +446,7 @@ Item {
             anchors.topMargin: 17
             spacing: 8
 
-            // header: PUMP Nº 02 · DIAGNOSTIC + slow-breathing pilot lamp
+            // header: plain title + slow-breathing pilot lamp
             Item {
                 width: parent.width
                 height: 16
@@ -468,22 +467,13 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "PUMP Nº 02"
+                        text: "SYSTEM"
                         font.family: root.mono
                         font.weight: Font.Black
                         font.pixelSize: 11
                         font.letterSpacing: 3
                         color: root.ink
                     }
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "DIAGNOSTIC"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.iceA(0.6)
                 }
             }
 
@@ -498,22 +488,22 @@ Item {
 
             Item { width: 1; height: 2 }
 
-            // OCTANE — CPU
-            StatRow { label: "OCTANE"; value: root.cpuPercent; tone2: root.tone(root.cpuPercent, 60, 85) }
+            // cpu
+            StatRow { label: "cpu"; value: root.cpuPercent; tone2: root.tone(root.cpuPercent, 60, 85) }
             SlantMeter { width: parent.width; value: root.cpuPercent < 0 ? 0 : root.cpuPercent; tone2: root.tone(root.cpuPercent, 60, 85) }
             Text {
                 anchors.right: parent.right
-                text: (root.cpuTemp > 0 ? root.cpuTemp + "°C · " : "") + "LOAD " + root.load1.toFixed(2)
+                text: (root.cpuTemp > 0 ? root.cpuTemp + "°C · " : "") + "load " + root.load1.toFixed(2)
                 font.family: root.mono
-                font.pixelSize: 8
-                color: root.inkA(0.4)
+                font.pixelSize: 10
+                color: root.inkA(0.7)
             }
 
-            // TURBO — GPU (nvidia only)
+            // gpu (nvidia only)
             StatRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 18 : 0
-                label: "TURBO"; value: root.gpuPercent; tone2: root.tone(root.gpuPercent, 60, 85)
+                label: "gpu"; value: root.gpuPercent; tone2: root.tone(root.gpuPercent, 60, 85)
             }
             SlantMeter {
                 visible: root.hasGpu
@@ -528,12 +518,12 @@ Item {
                 anchors.right: parent.right
                 text: root.gpuVramUsed.toFixed(1) + " / " + root.gpuVramTotal.toFixed(1) + " GB · " + root.gpuTemp + "°C"
                 font.family: root.mono
-                font.pixelSize: 8
-                color: root.inkA(0.4)
+                font.pixelSize: 10
+                color: root.inkA(0.7)
             }
 
-            // TANK — memory as a fuel gauge, E → F
-            StatRow { label: "TANK"; value: root.ramPercent; tone2: root.tone(root.ramPercent, 70, 90) }
+            // mem — as a fuel gauge, E → F
+            StatRow { label: "mem"; value: root.ramPercent; tone2: root.tone(root.ramPercent, 70, 90) }
             Item {
                 width: parent.width
                 height: 20
@@ -543,7 +533,7 @@ Item {
                     text: "E"
                     font.family: root.mono
                     font.weight: Font.Bold
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.red
                     opacity: 0.8
                 }
@@ -565,24 +555,24 @@ Item {
                     text: "F"
                     font.family: root.mono
                     font.weight: Font.Bold
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.neon
                     opacity: 0.8
                 }
             }
             Text {
                 anchors.right: parent.right
-                text: root.ramUsedGb.toFixed(1) + " / " + root.ramTotalGb.toFixed(1) + " GB BURNED"
+                text: root.ramUsedGb.toFixed(1) + " / " + root.ramTotalGb.toFixed(1) + " GB"
                 font.family: root.mono
-                font.pixelSize: 8
-                color: root.inkA(0.4)
+                font.pixelSize: 10
+                color: root.inkA(0.7)
             }
 
-            // RESERVE — battery (laptops only)
+            // battery (laptops only)
             StatRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 18 : 0
-                label: "RESERVE"; value: root.batteryPercent
+                label: "battery"; value: root.batteryPercent
                 tone2: root.batteryCharging ? root.ice
                     : root.batteryPercent <= 15 ? root.red
                     : root.batteryPercent <= 30 ? root.amber : root.neon
@@ -600,7 +590,7 @@ Item {
             Item { width: 1; height: 2 }
             Rectangle { width: parent.width; height: 1; color: root.dim; opacity: 0.5 }
 
-            // FLOW — net
+            // net
             Item {
                 width: parent.width
                 height: 16
@@ -610,7 +600,7 @@ Item {
                     spacing: 6
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "FLOW"
+                        text: "net"
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 10
@@ -628,10 +618,10 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "LINE DOWN"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         font.family: root.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: root.online ? root.iceA(0.8) : root.red
                     }
                 }
@@ -640,7 +630,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓ " + root.fmtRate(root.rxRate) + "  ↑ " + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                     color: root.amber
                     opacity: 0.9
                 }
@@ -653,20 +643,10 @@ Item {
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "UP " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 8
-                    color: root.inkA(0.4)
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "// MIDNIGHT FUEL STOP"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.neon
-                    opacity: 0.5
+                    font.pixelSize: 10
+                    color: root.inkA(0.7)
                 }
             }
         }

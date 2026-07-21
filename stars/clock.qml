@@ -173,30 +173,12 @@ Item {
                 anchors.centerIn: parent
                 spacing: 6
 
-                // header strip: what the sign is selling
-                Row {
+                // a lone star over the digits
+                Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "✦"
-                        color: root.coral
-                        font.pixelSize: 10
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "COLD DRINKS · 24H"
-                        color: root.inkA(0.62)
-                        font.family: root.mono
-                        font.pixelSize: 11
-                        font.letterSpacing: 5
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "✦"
-                        color: root.coral
-                        font.pixelSize: 10
-                    }
+                    text: "✦"
+                    color: root.coral
+                    font.pixelSize: 10
                 }
 
                 // the time — warm tube digits with a soft double glow

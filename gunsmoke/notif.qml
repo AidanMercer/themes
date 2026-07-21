@@ -6,8 +6,8 @@ import QtQuick
 // (the shell's accent — critical bleeds oxblood, and the seal is the only
 // place a slip ever shows it), and a TORN bottom edge cut by Canvas — the
 // slip was ripped off the roll. Hover and the seal presses darker.
-// The Super+I drawer is the DISPATCHES ledger: unread counted in gate-tally
-// strokes, and under do-not-disturb the wire goes silent.
+// The Super+I drawer: unread counted in gate-tally strokes, and a cut-line
+// mark while do-not-disturb is on.
 Item {
     id: root
     required property var pal
@@ -27,7 +27,7 @@ Item {
     property color panelBorder: ashA(0.75)
     property int panelBorderWidth: 1
     property int panelRadius: 3
-    property string panelTitle: "Dispatches"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: ledger
@@ -39,7 +39,7 @@ Item {
             Rectangle { x: 12; y: 6; width: parent.width - 24; height: 1; color: root.boneA(quiet ? 0.15 : 0.35) }
             Rectangle { x: 12; y: 9; width: parent.width - 24; height: 1; color: root.boneA(quiet ? 0.06 : 0.13) }
 
-            // the tally: dispatches on file, counted in gate strokes
+            // the tally: notifications on file, counted in gate strokes
             Canvas {
                 id: tally
                 anchors.right: parent.right
@@ -80,7 +80,7 @@ Item {
                 Component.onCompleted: requestPaint()
             }
 
-            // do-not-disturb: the wire is cut
+            // do-not-disturb: a cut line + a plain word
             Row {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 14; bottomMargin: 8 }
                 spacing: 8
@@ -94,11 +94,11 @@ Item {
                     Rectangle { width: 10; height: 1.5; color: root.ashA(1); anchors.verticalCenter: parent.verticalCenter }
                 }
                 Text {
-                    text: "WIRE SILENT"
+                    text: "DO NOT DISTURB"
                     font.family: root.serif
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                     font.weight: Font.Bold
-                    font.letterSpacing: 3
+                    font.letterSpacing: 2
                     color: root.ashA(1)
                 }
             }

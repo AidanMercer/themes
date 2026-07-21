@@ -48,8 +48,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: serif
     readonly property color hintColor: warmInk(0.2, 0.6)
-    readonly property string hintText: "— next stop: your window —   ↵ alight   esc stay aboard"
-    readonly property string emptyText: "no other passengers"
+    readonly property string hintText: "↵ select   esc close"
+    readonly property string emptyText: "no other windows"
 
     // ── backdrop: rain on the glass + a station lamp drifting past ──
     readonly property Component backdrop: Component {
@@ -195,13 +195,13 @@ Item {
                     GradientStop { position: 1.0; color: chrome.amberA(ov.hot ? 0.16 : 0.09) }
                 }
             }
-            // quiet marker over the carriage you're already riding
+            // quiet marker over the window you're already on
             Text {
                 visible: ov.ctr
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.top
                 anchors.bottomMargin: Math.round(7 * chrome.ui)
-                text: "· this carriage ·"
+                text: "· current window ·"
                 font.family: chrome.serif
                 font.italic: true
                 font.pixelSize: Math.round(11 * chrome.ui)

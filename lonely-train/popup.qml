@@ -3,9 +3,9 @@ import QtQuick
 // lonely-train: cassette-case chrome for the Super+M control popup.
 // The shell mounts these pieces around its shared tabs: backdrop (the
 // cassette label — corner screws, amber label band, route line along the
-// bottom), header (REC pip + LONELY TRAIN + live EQ // SIDE A + REEL
-// uptime), footer (NET + a serif sign-off with a red tape pip), overlay
-// (a whisper of film grain). Invisible Item root; renders nothing itself.
+// bottom), header (REC pip + roundel + live EQ // uptime), footer (net
+// status), overlay (a whisper of film grain). Invisible Item root;
+// renders nothing itself.
 Item {
     id: chrome
 
@@ -15,7 +15,6 @@ Item {
     required property var audio    // AudioBus: bass/mid/high, silent, ready
 
     readonly property string mono: pal.fontMono
-    readonly property string serif: "Noto Serif Display"
     readonly property string icon: "Symbols Nerd Font"
     function inkA(a)   { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
     function amberA(a) { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
@@ -91,7 +90,7 @@ Item {
         }
     }
 
-    // ── header: REC pip + LONELY TRAIN + EQ // SIDE A + REEL uptime ──
+    // ── header: REC pip + roundel + EQ // uptime ──
     readonly property Component header: Component {
         Column {
             spacing: 14
@@ -122,23 +121,13 @@ Item {
                         color: "transparent"
                         border.width: 1.6
                         border.color: chrome.pal.neon
-                        Text {
+                        // wordless roundel: the route line through the station ring
+                        Rectangle {
                             anchors.centerIn: parent
-                            text: "LT"
+                            width: 8; height: 1.5
+                            radius: 1
                             color: chrome.pal.neon
-                            font.family: chrome.mono
-                            font.pixelSize: 6
-                            font.weight: Font.Black
                         }
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "LONELY TRAIN"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 12
-                        font.letterSpacing: 4
-                        color: chrome.pal.neon
                     }
 
                     // live EQ off the shell's cava — still and dim when quiet
@@ -167,27 +156,13 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "SIDE A · CTRL"
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 2
-                        color: chrome.duskA(0.75)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "REEL " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 1
-                        color: chrome.inkA(0.4)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    color: chrome.inkA(0.7)
                 }
             }
 
@@ -199,7 +174,7 @@ Item {
         }
     }
 
-    // ── footer: NET (left) + serif sign-off with tape pip (right) ──
+    // ── footer: net status ──
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -233,35 +208,8 @@ Item {
                             : (chrome.popup.connName || "ONLINE")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.duskA(0.9)
-                    }
-                }
-
-                Row {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 7
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "last train home"
-                        font.family: chrome.serif
                         font.pixelSize: 10
-                        font.italic: true
-                        font.letterSpacing: 2
-                        color: chrome.inkA(0.4)
-                    }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 5; height: 5; radius: 2.5
-                        color: chrome.pal.magenta
-                        SequentialAnimation on opacity {
-                            running: chrome.popup.open
-                            loops: Animation.Infinite
-                            NumberAnimation { to: 0.25; duration: 900 }
-                            NumberAnimation { to: 0.9; duration: 900 }
-                        }
+                        color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.duskA(0.9)
                     }
                 }
             }

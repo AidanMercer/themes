@@ -4,13 +4,12 @@ import Quickshell
 
 // encore: bare lock (the bareLock marker tells LockStage we own the chrome).
 // Locking is the house going half-dark between songs: the video keeps
-// playing sharp — she's still on stage — while the hall dims and the STAGE
-// DOOR panel irises up center (law 2: lit, not faded). The time is the call
-// time, the passcode is a row of PASS lamps that light teal one keystroke at
-// a time (whole lamps — law 1), a wrong pass flashes the whole row crowd
-// magenta and knocks the door in hard steps, and the moment the pass lands
-// the sign flips to ENCORE! and a spotlight iris opens across the whole
-// screen to let you back out front.
+// playing sharp — she's still on stage — while the hall dims and the door
+// panel irises up center (law 2: lit, not faded). The passcode is a row of
+// lamps that light teal one keystroke at a time (whole lamps — law 1), a
+// wrong pass flashes the whole row crowd magenta and knocks the door in
+// hard steps, and the moment the pass lands the wordmark takes the spot and
+// a spotlight iris opens across the whole screen to let you back out front.
 Item {
     id: root
     anchors.fill: parent
@@ -122,10 +121,10 @@ Item {
             y: Math.round(30 * root.ui)
             spacing: Math.round(16 * root.ui)
 
-            // the sign over the door
+            // the wordmark over the door — takes the spot when the pass lands
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "✳ ENCORE! ✳" : "STAGE DOOR"
+                text: root.host.unlocking ? "✳ ENCORE ✳" : "ENCORE"
                 color: root.host.unlocking ? root.spot : root.teal
                 font.family: root.mono
                 font.weight: Font.Bold
@@ -133,7 +132,7 @@ Item {
                 font.letterSpacing: 8
             }
 
-            // call time
+            // the time
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: root.hhmm
@@ -145,7 +144,7 @@ Item {
             }
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "ON STAGE · " + Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
+                text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
                 color: root.inkA(0.6)
                 font.family: root.mono
                 font.pixelSize: Math.round(11 * root.ui)
@@ -200,12 +199,12 @@ Item {
                     id: prompt
                     anchors.horizontalCenter: parent.horizontalCenter
                     property bool tick: true
-                    text: root.host.failed ? "NOT ON THE LIST — AGAIN"
-                        : root.host.busy ? "CHECKING THE LIST…"
-                        : root.host.pwLength > 0 ? "ENTER — TAKE THE STAGE"
-                        : "PASS REQUIRED"
-                    color: root.host.failed ? root.crowd : root.inkA(0.55)
-                    // PASS REQUIRED blinks on the count: hard on, hard off
+                    text: root.host.failed ? "WRONG PASSWORD"
+                        : root.host.busy ? "CHECKING…"
+                        : root.host.pwLength > 0 ? "ENTER TO UNLOCK"
+                        : "ENTER PASSWORD"
+                    color: root.host.failed ? root.crowd : root.inkA(0.7)
+                    // the idle prompt blinks on the count: hard on, hard off
                     opacity: (root.host.pwLength === 0 && !root.host.failed && prompt.tick) || root.host.pwLength > 0 || root.host.failed
                              ? 1 : 0.15
                     font.family: root.mono
@@ -238,19 +237,6 @@ Item {
         }
         property int sx: 0
         transform: Translate { x: panel.sx }
-    }
-
-    // whose stage this is
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(30 * root.ui)
-        text: "V// ENCORE · FROM THE DIVA'S SIDE"
-        color: root.inkA(0.35)
-        font.family: root.mono
-        font.pixelSize: Math.round(10 * root.ui)
-        font.letterSpacing: 5
-        opacity: root.p
     }
 
     // ── the unlock: a spotlight iris opens across the whole night ──────────

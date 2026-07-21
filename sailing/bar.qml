@@ -13,7 +13,7 @@ import Quickshell.Services.Mpris
 // are portholes set along the rail — the active one warm-lit in lifebuoy
 // red-orange, occupied ones dim-lit lavender, empty ones dark glass. Left:
 // the radio room (now-playing) with its progress riding the lower rail.
-// Right: radio-mast signal arcs, the log clock, and the anchor (Super+M).
+// Right: radio-mast signal arcs, the clock, and the anchor (Super+M).
 Item {
     id: root
     anchors.fill: parent
@@ -392,38 +392,26 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     width: Math.min(implicitWidth, 130)
                     elide: Text.ElideRight
-                    text: root.online ? root.connName.toUpperCase() : "NO SIGNAL"
+                    text: root.online ? root.connName : "no signal"
                     textFormat: Text.PlainText
-                    color: root.online ? root.duskA(0.75) : root.alarm
+                    color: root.online ? root.duskA(0.8) : root.alarm
                     font.family: root.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 2
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
                 }
             }
         }
 
         Stanchion { anchors.verticalCenter: parent.verticalCenter; anchors.verticalCenterOffset: 1 }
 
-        // the log clock
-        Row {
+        // the clock
+        Text {
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 7
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "LOG"
-                color: root.duskA(0.65)
-                font.family: root.mono
-                font.pixelSize: 9
-                font.letterSpacing: 3
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: Qt.formatDateTime(clock.date, "HH:mm")
-                color: root.pale
-                font.family: root.mono
-                font.pixelSize: 13
-                font.letterSpacing: 2
-            }
+            text: Qt.formatDateTime(clock.date, "HH:mm")
+            color: root.pale
+            font.family: root.mono
+            font.pixelSize: 13
+            font.letterSpacing: 2
         }
 
         Stanchion { anchors.verticalCenter: parent.verticalCenter; anchors.verticalCenterOffset: 1 }

@@ -7,9 +7,9 @@ import Quickshell
 // screen becomes the cabin wall — a darkened, blurred slice of the scene —
 // except one large porthole of sharp glass looking back out at the crossing.
 // Brass rivets ring the porthole and light up one by one as the passcode is
-// typed; a wrong code flares the signal lamp lifebuoy-red. The ship's log
-// (this theme's clock grammar) sits upper-left and reads ALL STOP while
-// moored. Everything rides host.progress so unlock plays it back.
+// typed; a wrong code flares the signal lamp lifebuoy-red. The clock entry
+// (this theme's clock grammar) sits upper-left with the vessel wordmark.
+// Everything rides host.progress so unlock plays it back.
 Item {
     id: root
     anchors.fill: parent
@@ -43,14 +43,6 @@ Item {
     readonly property real pr: Math.min(root.width, root.height) * 0.29
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
-    function watchName(h) {
-        if (h < 4)  return "MIDDLE WATCH"
-        if (h < 8)  return "MORNING WATCH"
-        if (h < 12) return "FORENOON WATCH"
-        if (h < 16) return "AFTERNOON WATCH"
-        if (h < 20) return "DOG WATCH"
-        return "FIRST WATCH"
-    }
 
     // ── the cabin wall: blurred scene, everywhere but the porthole ──────────
     // downscaled live slice of the video → the blur stays cheap at 4K
@@ -293,7 +285,7 @@ Item {
                 color: root.lamp
             }
             Text {
-                text: "M.V. THROUGH SILENCE — FERRY LOG"
+                text: "M.V. THROUGH SILENCE"
                 color: root.duskA(0.9)
                 font.family: root.mono
                 font.pixelSize: Math.round(12 * root.ui)
@@ -327,8 +319,7 @@ Item {
             }
         }
         Text {
-            text: "ALL STOP  ·  " + Qt.formatDateTime(clock.date, "ddd dd MMM").toUpperCase()
-                  + "  ·  " + root.watchName(clock.date.getHours())
+            text: Qt.formatDateTime(clock.date, "ddd dd MMM")
             color: root.duskA(0.8)
             font.family: root.mono
             font.pixelSize: Math.round(13 * root.ui)
@@ -341,28 +332,15 @@ Item {
         x: root.cx - width / 2
         y: root.cy + root.pr + 44
         opacity: root.p
-        text: root.host.failed ? "wrong — the signal lamp flares"
-            : root.host.busy ? "checking the manifest…"
-            : root.host.pwLength > 0 ? root.host.pwLength + " rivets set"
-            : "the crossing is quiet — type your passcode"
-        color: root.host.failed ? root.alarm : root.paleA(0.55)
+        text: root.host.failed ? "wrong password"
+            : root.host.busy ? "checking…"
+            : root.host.pwLength > 0 ? ""
+            : "type your password"
+        color: root.host.failed ? root.alarm : root.paleA(0.7)
         font.family: root.serif
         font.pixelSize: Math.round(15 * root.ui)
         font.italic: true
         font.letterSpacing: 2
         Behavior on opacity { NumberAnimation { duration: 140 } }
-    }
-
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 30
-        opacity: root.p * 0.4
-        text: "· somewhere between two shores ·"
-        color: root.pale
-        font.family: root.serif
-        font.pixelSize: Math.round(12 * root.ui)
-        font.italic: true
-        font.letterSpacing: 3
     }
 }

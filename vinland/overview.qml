@@ -1,12 +1,11 @@
 import QtQuick
 import QtQuick.Particles
 
-// vinland: the Super+Tab exposé as a night voyage chart — the fleet at sea.
-// Every open window is a sail on the water; stitched course lines run from
-// where thorfinn stands (dead center, the flagship) out to each ship's real
-// position, sewn like routes on a sea chart. A compass rose sits low in the
-// corner and its gold needle swings to the bearing of whichever sail the
-// helm picks; that ship's course brightens ice and a gold north star glints
+// vinland: the Super+Tab exposé as a night voyage chart. Every open window
+// is a sail on the water; stitched course lines run from dead center out to
+// each card's real position, sewn like routes on a sea chart. A compass rose
+// sits low in the corner and its gold needle swings to the bearing of the
+// picked card; that card's course brightens ice and a gold north star glints
 // at its masthead. The aurora breathes across the top of the sky, snow
 // drifts through the whole scene, and a cap of snow lies settled on every
 // card — things left out in the cold gather it. The shell keeps layout /
@@ -56,8 +55,8 @@ Item {
     readonly property string titleFont: "Noto Sans"
     readonly property string hintFont: serif
     readonly property color hintColor: iceA(0.55)
-    readonly property string hintText: "steer with the arrows · enter to board · esc turns for home"
-    readonly property string emptyText: "no sails on the horizon"
+    readonly property string hintText: "arrows to move · enter to focus · esc to close"
+    readonly property string emptyText: "no open windows"
 
     // bearing of the picked sail, 0° = due north (screen-up)
     readonly property real bearingDeg: {
@@ -246,80 +245,19 @@ Item {
                     }
                 }
 
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 8
-                    text: "westward"
-                    font.family: chrome.serif
-                    font.pixelSize: Math.round(10 * chrome.ui)
-                    font.italic: true
-                    font.letterSpacing: 3
-                    color: chrome.snowA(0.35)
-                }
             }
 
-            // ── the watch's log, top corners ──
-            Row {
-                x: Math.round(46 * chrome.ui)
-                y: Math.round(40 * chrome.ui)
-                spacing: 10
-                opacity: chrome.overview.reveal
-
-                Canvas {
-                    id: pip
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: Math.round(10 * chrome.ui); height: width
-                    Component.onCompleted: requestPaint()
-                    Connections {
-                        target: chrome.pal
-                        function onCyanChanged() { pip.requestPaint() }
-                    }
-                    onPaint: {
-                        const ctx = getContext("2d")
-                        ctx.reset()
-                        const c = width / 2, R = width / 2
-                        ctx.beginPath()
-                        ctx.moveTo(c, c - R)
-                        ctx.quadraticCurveTo(c, c, c + R, c)
-                        ctx.quadraticCurveTo(c, c, c, c + R)
-                        ctx.quadraticCurveTo(c, c, c - R, c)
-                        ctx.quadraticCurveTo(c, c, c, c - R)
-                        ctx.closePath()
-                        ctx.fillStyle = chrome.goldA(0.95)
-                        ctx.fill()
-                    }
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "the fleet"
-                    font.family: chrome.serif
-                    font.pixelSize: Math.round(15 * chrome.ui)
-                    font.italic: true
-                    font.weight: Font.Medium
-                    font.letterSpacing: 6
-                    color: chrome.snow
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "ᚠᛚᛟᛏᛁ"
-                    font.family: "Noto Sans Runic"
-                    font.pixelSize: Math.round(11 * chrome.ui)
-                    font.letterSpacing: 4
-                    color: chrome.iceA(0.45)
-                }
-            }
-
+            // window count, top right
             Text {
                 anchors.right: parent.right
                 anchors.rightMargin: Math.round(46 * chrome.ui)
                 y: Math.round(44 * chrome.ui)
                 text: {
                     const n = chrome.overview.windows.length
-                    // the shell's emptyText already covers a bare horizon
+                    // the shell's emptyText already covers zero
                     return n === 0 ? ""
-                         : n === 1 ? "one sail on the water"
-                                   : n + " sails on the water"
+                         : n === 1 ? "1 window"
+                                   : n + " windows"
                 }
                 font.family: chrome.serif
                 font.pixelSize: Math.round(11 * chrome.ui)
@@ -379,15 +317,13 @@ Item {
         }
     }
 
-    // ── per-tile, above the card: settled snow on the top edge, the gold
-    // north star glinting at the picked sail's masthead, and the flagship's
-    // quiet "at the helm" tag ──
+    // ── per-tile, above the card: settled snow on the top edge and the gold
+    // north star glinting at the picked sail's masthead ──
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
             property var tile: null
             readonly property bool lit: ov.tile ? ov.tile.hot === true : false
-            readonly property bool ctr: ov.tile ? ov.tile.isCenter === true : false
             readonly property int idx: ov.tile ? ov.tile.index : 0
 
             onLitChanged: if (lit) glint.restart()
@@ -437,30 +373,6 @@ Item {
                     running: false
                     NumberAnimation { target: mast; property: "scale"; from: 0.4; to: 1.3; duration: 160; easing.type: Easing.OutQuad }
                     NumberAnimation { target: mast; property: "scale"; to: 1.0; duration: 260; easing.type: Easing.InOutQuad }
-                }
-            }
-
-            // the flagship — where thorfinn already stands
-            Row {
-                visible: ov.ctr
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.top
-                anchors.bottomMargin: Math.round(8 * chrome.ui)
-                spacing: 6
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 4; height: 4
-                    rotation: 45
-                    color: chrome.goldA(0.85)
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "at the helm"
-                    font.family: chrome.serif
-                    font.pixelSize: Math.round(10 * chrome.ui)
-                    font.italic: true
-                    font.letterSpacing: 3
-                    color: chrome.snowA(0.55)
                 }
             }
         }

@@ -133,7 +133,7 @@ Item {
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "— the black swordsman"
+                text: "guts"
                 color: root.inkA(0.7)
                 font.family: root.serif
                 font.italic: true

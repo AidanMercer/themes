@@ -219,24 +219,6 @@ Item {
             spacing: 2
 
             Row {
-                spacing: 8
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "STILL. THEN GONE."
-                    color: root.inkA(0.5)
-                    font.family: root.mono
-                    font.pixelSize: 10
-                    font.letterSpacing: 6
-                }
-                // the watcher's mark: one small ember glint beside the caption
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 5; height: 3; radius: 1.5
-                    color: root.emberA(0.85)
-                }
-            }
-
-            Row {
                 id: digitRow
                 spacing: 2
                 DartDigit { target: root.hhmm.charAt(0) }

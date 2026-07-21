@@ -56,8 +56,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: creamA(0.72)                  // hint sits on the scrim
-    readonly property string hintText: "leaf through · enter to pick · esc close the journal"
-    readonly property string emptyText: "nothing pressed between these pages"
+    readonly property string hintText: "enter to focus · esc to close"
+    readonly property string emptyText: "no windows open"
 
     // ── backdrop: golden-hour wash + drifting pollen + the journal's header ──
     readonly property Component backdrop: Component {
@@ -92,12 +92,12 @@ Item {
                 }
             }
 
-            // journal header — lowercase, like the page was titled by hand
+            // window count, lowercase, like the page was titled by hand
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
                 y: Math.round(40 * chrome.ui)
-                text: "the field journal — " + chrome.overview.windows.length
-                    + (chrome.overview.windows.length === 1 ? " specimen pressed" : " specimens pressed")
+                text: chrome.overview.windows.length
+                    + (chrome.overview.windows.length === 1 ? " window" : " windows")
                 font.family: chrome.serif
                 font.italic: true
                 font.pixelSize: Math.round(14 * chrome.ui)

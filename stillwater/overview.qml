@@ -47,8 +47,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: skyA(0.7)
-    readonly property string hintText: "the water shows every window · ⏎ to cross"
-    readonly property string emptyText: "nothing on the water tonight"
+    readonly property string hintText: "⏎ to focus · esc to close"
+    readonly property string emptyText: "no windows open"
 
     // ── backdrop: the horizon behind the ring ──
     readonly property Component backdrop: Component {
@@ -123,14 +123,15 @@ Item {
                 }
             }
 
-            // the evening's tally, top-left, in the house dialect
+            // the tally, top-left
             Text {
                 x: px(30); y: px(28)
-                text: "across the water · " + String(chrome.overview.windows.length) + " lit"
+                readonly property int n: chrome.overview.windows.length
+                text: n + (n === 1 ? " window" : " windows")
                 font.family: chrome.mono
                 font.pixelSize: px(10)
                 font.letterSpacing: 3
-                color: chrome.skyA(0.65)
+                color: chrome.skyA(0.7)
             }
         }
     }

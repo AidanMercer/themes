@@ -8,7 +8,8 @@ import QtQuick
 // signature neon stripe bending the top-right corner of whichever card you're
 // about to pull up to — humming softly, the way a gas sign never quite holds
 // steady. Behind the ring: a cold vignette, a low amber horizon with a
-// roadside FUEL sign, and once in a long while a tail-light streak gliding by.
+// roadside stripe-band sign, and once in a long while a tail-light streak
+// gliding by.
 // Visual-only by contract: no input handlers; every loop gates on
 // overview.open (the shell tears the layers down ~300ms after close).
 Item {
@@ -42,8 +43,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: Qt.alpha(pal.cyan, 0.7)
-    readonly property string hintText: "◄ ► ▲ ▼  SELECT GRADE      ↵  TO FUEL      ESC  DRIVE OFF"
-    readonly property string emptyText: "STATION EMPTY · 24 HR"
+    readonly property string hintText: "◄ ► ▲ ▼  select      ↵  focus      esc  close"
+    readonly property string emptyText: "no windows"
 
     // ── backdrop: cold vignette + low amber horizon + roadside sign ──
     readonly property Component backdrop: Component {
@@ -109,28 +110,16 @@ Item {
                 }
             }
 
-            // roadside sign, planted just off the shoulder
+            // roadside sign, planted just off the shoulder — the pump band itself
             Column {
                 id: signCol
                 x: Math.round(bd.width * 0.055)
                 y: bd.horizonY - height - Math.round(12 * chrome.ui)
-                spacing: 3
+                spacing: Math.round(3 * chrome.ui)
                 opacity: chrome.overview.reveal
-                Text {
-                    text: "FUEL"
-                    font.family: chrome.mono
-                    font.weight: Font.Black
-                    font.pixelSize: Math.round(15 * chrome.ui)
-                    font.letterSpacing: 6
-                    color: chrome.pal.neon
-                }
-                Text {
-                    text: "BAYS " + String(chrome.overview.windows.length).padStart(2, "0") + " · 24 HR"
-                    font.family: chrome.mono
-                    font.pixelSize: Math.round(8 * chrome.ui)
-                    font.letterSpacing: 2
-                    color: Qt.alpha(chrome.pal.cyan, 0.65)
-                }
+                Rectangle { width: Math.round(34 * chrome.ui); height: Math.round(3 * chrome.ui); color: chrome.pal.amber }
+                Rectangle { width: Math.round(34 * chrome.ui); height: Math.round(3 * chrome.ui); color: chrome.pal.neon }
+                Rectangle { width: Math.round(34 * chrome.ui); height: Math.round(3 * chrome.ui); color: chrome.pal.magenta }
             }
             // the post it hangs on
             Rectangle {
@@ -175,7 +164,6 @@ Item {
             id: ov
             property var tile: null   // injected by the shell after load
             readonly property bool hot: ov.tile ? ov.tile.hot === true : false
-            readonly property bool ctr: ov.tile ? ov.tile.isCenter === true : false
 
             // price-board bay number riding the top-left edge — dark chip, amber pump digits
             Rectangle {
@@ -189,26 +177,13 @@ Item {
                 Text {
                     id: bayTxt
                     anchors.centerIn: parent
-                    text: "Nº " + String((ov.tile ? ov.tile.index : 0) + 1).padStart(2, "0")
+                    text: String((ov.tile ? ov.tile.index : 0) + 1).padStart(2, "0")
                     font.family: chrome.mono
                     font.weight: Font.Bold
-                    font.pixelSize: Math.round(8 * chrome.ui)
+                    font.pixelSize: Math.round(10 * chrome.ui)
                     font.letterSpacing: 1
                     color: chrome.pal.amber
                 }
-            }
-
-            // the focused window's bay is the one being served
-            Text {
-                visible: ov.ctr
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.top
-                anchors.bottomMargin: Math.round(7 * chrome.ui)
-                text: "· NOW SERVING ·"
-                font.family: chrome.mono
-                font.pixelSize: Math.round(9 * chrome.ui)
-                font.letterSpacing: 3
-                color: Qt.alpha(chrome.pal.cyan, 0.85)
             }
 
             // the signature: canopy neon bending the top-right corner of the

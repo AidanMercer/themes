@@ -11,8 +11,8 @@ import Quickshell
 // serif, and a row of berries for the passcode — every keystroke ripens one
 // ember. Above the panel a pair of pale eyes watches you type, blinking now
 // and then. A wrong code startles them ember-red and the panel darts
-// sideways in two hard steps. The right code closes the eyes gently, the
-// leaves part back out, and the caption flips: it lets you pass.
+// sideways in two hard steps. The right code closes the eyes gently and
+// the leaves part back out.
 Item {
     id: root
     anchors.fill: parent
@@ -38,7 +38,6 @@ Item {
     function inkA(a)    { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function leafA(a)   { return Qt.rgba(leaf.r, leaf.g, leaf.b, a) }
     function glassA(a)  { return Qt.rgba(glass.r, glass.g, glass.b, a) }
-    function dappleA(a) { return Qt.rgba(dapple.r, dapple.g, dapple.b, a) }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
     readonly property string hhmm: Qt.formatDateTime(clock.date, "HH:mm")
@@ -204,17 +203,6 @@ Item {
             y: Math.round(38 * root.ui)
             spacing: Math.round(14 * root.ui)
 
-            // the caption
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "it lets you pass" : "the thicket is closed"
-                color: root.host.unlocking ? root.iris : root.dappleA(0.9)
-                font.family: root.serif
-                font.italic: true
-                font.pixelSize: Math.round(15 * root.ui)
-                font.letterSpacing: 2
-            }
-
             // the time, serif, lit like skin in the gap
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -285,11 +273,11 @@ Item {
                     id: prompt
                     anchors.horizontalCenter: parent.horizontalCenter
                     property bool tick: true
-                    text: root.host.failed ? "IT STARTLES — TRY AGAIN"
-                        : root.host.busy ? "it considers…"
-                        : root.host.pwLength > 0 ? "ENTER — SLIP THROUGH"
-                        : "BE STILL"
-                    color: root.host.failed ? root.emberRed : root.inkA(0.55)
+                    text: root.host.failed ? "wrong — try again"
+                        : root.host.busy ? "checking…"
+                        : root.host.pwLength > 0 ? "press enter"
+                        : "type to unlock"
+                    color: root.host.failed ? root.emberRed : root.inkA(0.7)
                     opacity: (root.host.pwLength === 0 && !root.host.failed && !prompt.tick) ? 0.25 : 1
                     font.family: root.mono
                     font.pixelSize: Math.round(11 * root.ui)
@@ -383,13 +371,13 @@ Item {
         }
     }
 
-    // whose ground this is
+    // the signature
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(34 * root.ui)
-        text: "THICKET · THE WATCHER IN THE UNDERBRUSH"
-        color: root.inkA(0.4)
+        text: "THICKET"
+        color: root.inkA(0.5)
         font.family: root.mono
         font.pixelSize: Math.round(10 * root.ui)
         font.letterSpacing: 5

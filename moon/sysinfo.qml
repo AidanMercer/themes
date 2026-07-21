@@ -401,7 +401,7 @@ Item {
             anchors.topMargin: 13
             spacing: 9
 
-            // header: SYSTEM // NIGHT CITY + blink pip
+            // header: SYSTEM + blink pip
             Item {
                 width: parent.width
                 height: 16
@@ -429,16 +429,6 @@ Item {
                         font.letterSpacing: 4
                         color: root.neon
                     }
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "NIGHT CITY"
-                    font.family: root.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 2
-                    color: root.cyan
-                    opacity: 0.7
                 }
             }
 
@@ -593,27 +583,17 @@ Item {
                 }
             }
 
-            // uptime + sign-off, below the net row
+            // uptime, below the net row
             Item {
                 width: parent.width
                 height: 12
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "UP " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
                     font.pixelSize: 9
                     color: root.dim
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "// NETRUNNER SYS"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.neon
-                    opacity: 0.55
                 }
             }
         }

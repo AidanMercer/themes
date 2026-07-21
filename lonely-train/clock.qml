@@ -3,11 +3,11 @@ import Quickshell
 import Quickshell.Io
 
 // lonely-train: departure-board clock, parked in the left window's dusk.
-// Split-flap digit cells (each with the middle seam) under a LAST TRAIN
-// station header; a route line with five station dots runs beneath, and on
-// the minute a tiny train crosses it while the changed digits flap over.
-// A REEL tape counter (system uptime) hums along the bottom. Also loaded on
-// the lock screen over the blurred wallpaper — dark cells read fine there.
+// Split-flap digit cells (each with the middle seam) under a small line
+// roundel; a route line with five station dots runs beneath, and on the
+// minute a tiny train crosses it while the changed digits flap over. An
+// uptime counter hums along the bottom. Also loaded on the lock screen over
+// the blurred wallpaper — dark cells read fine there.
 Item {
     id: root
     anchors.fill: parent
@@ -24,7 +24,6 @@ Item {
     readonly property color glass: pal.glass
     readonly property real ui: pal.uiScale
     readonly property string mono: pal.fontMono
-    readonly property string serif: "Noto Serif Display"
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
     function duskA(a)  { return Qt.rgba(dusk.r, dusk.g, dusk.b, a) }
@@ -34,8 +33,8 @@ Item {
     readonly property string hh: Qt.formatDateTime(clock.date, "HH")
     readonly property string mm: Qt.formatDateTime(clock.date, "mm")
 
-    // uptime → the REEL counter, re-read once a minute
-    property string reelText: "000:00"
+    // uptime counter, re-read once a minute
+    property string uptimeText: "0:00"
     Timer {
         interval: 60000; running: !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: upProc.running = true
@@ -50,7 +49,7 @@ Item {
         const s = Math.floor(parseFloat(raw.trim().split(/\s+/)[0]) || 0)
         const h = Math.floor(s / 3600)
         const m = Math.floor((s % 3600) / 60)
-        reelText = String(h).padStart(3, "0") + ":" + String(m).padStart(2, "0")
+        uptimeText = h + ":" + String(m).padStart(2, "0")
     }
 
     // boot-in: the board wakes up, cells flap in staggered, the line draws
@@ -148,43 +147,19 @@ Item {
         y: Math.round(root.height * 0.16) + Math.round(14 * (1 - root.bootT))
         spacing: Math.round(14 * root.ui)
 
-        // header: line roundel + LAST TRAIN
-        Row {
-            spacing: Math.round(10 * root.ui)
+        // header: the line roundel, wordless — the route line through the ring
+        Rectangle {
+            width: Math.round(22 * root.ui); height: width
+            radius: width / 2
+            color: "transparent"
+            border.width: 2
+            border.color: root.amber
             opacity: root.bootT
-
             Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: Math.round(22 * root.ui); height: width
-                radius: width / 2
-                color: "transparent"
-                border.width: 2
-                border.color: root.amber
-                Text {
-                    anchors.centerIn: parent
-                    text: "LT"
-                    color: root.amber
-                    font.family: root.mono
-                    font.pixelSize: Math.round(9 * root.ui)
-                    font.weight: Font.Black
-                }
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "LAST TRAIN"
-                color: root.amberA(0.92)
-                font.family: root.mono
-                font.pixelSize: Math.round(13 * root.ui)
-                font.weight: Font.Bold
-                font.letterSpacing: 6
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "· DEPARTURES"
-                color: root.duskA(0.6)
-                font.family: root.mono
-                font.pixelSize: Math.round(10 * root.ui)
-                font.letterSpacing: 3
+                anchors.centerIn: parent
+                width: Math.round(12 * root.ui); height: 2
+                radius: 1
+                color: root.amber
             }
         }
 
@@ -270,40 +245,20 @@ Item {
             }
         }
 
-        // destination row: serif poetry + the date plate
-        Row {
-            spacing: Math.round(12 * root.ui)
+        // the date plate
+        Text {
+            text: Qt.formatDateTime(clock.date, "ddd · MMM dd").toUpperCase()
             opacity: root.bootT
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "bound for home"
-                color: root.inkA(0.62)
-                font.family: root.serif
-                font.pixelSize: Math.round(15 * root.ui)
-                font.italic: true
-                font.letterSpacing: 2
-            }
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: Math.round(5 * root.ui); height: width
-                radius: width / 2
-                color: root.tail
-                opacity: 0.8
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: Qt.formatDateTime(clock.date, "ddd · MMM dd").toUpperCase()
-                color: root.duskA(0.75)
-                font.family: root.mono
-                font.pixelSize: Math.round(11 * root.ui)
-                font.letterSpacing: 4
-            }
+            color: root.duskA(0.75)
+            font.family: root.mono
+            font.pixelSize: Math.round(11 * root.ui)
+            font.letterSpacing: 4
         }
 
-        // the tape counter, quietly spinning since boot
+        // the uptime counter, quietly spinning since boot
         Row {
             spacing: Math.round(7 * root.ui)
-            opacity: 0.75 * root.bootT
+            opacity: root.bootT
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 width: Math.round(6 * root.ui); height: width
@@ -312,11 +267,11 @@ Item {
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "REEL " + root.reelText
-                color: root.inkA(0.45)
+                text: "up " + root.uptimeText
+                color: root.inkA(0.7)
                 font.family: root.mono
                 font.pixelSize: Math.round(10 * root.ui)
-                font.letterSpacing: 3
+                font.letterSpacing: 1
             }
         }
     }

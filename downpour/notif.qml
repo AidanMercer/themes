@@ -27,7 +27,7 @@ Item {
     property color panelBorder: inkA(0.13)
     property int panelBorderWidth: 1
     property int panelRadius: 22
-    property string panelTitle: "while you were away"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             id: pane
@@ -69,7 +69,7 @@ Item {
             Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 16; bottomMargin: 9 }
                 visible: pane.quiet
-                text: "the glass is fogged — nothing gets through"
+                text: "do not disturb"
                 font.family: root.serif
                 font.italic: true
                 font.pixelSize: 10

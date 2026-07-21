@@ -199,13 +199,13 @@ Item {
             }
         }
 
-        // status while a track plays but nothing stands on the water
+        // status while a track plays but no lyrics stand on the water yet
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             y: region.ly - root.lyricSize * 1.1
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "◦ the water is listening"
-                  : !root.engine.lyricsSynced ? "◦ no words tonight — just the water"
+            text: !root.engine.lyricsLoaded ? "◦ looking for lyrics"
+                  : !root.engine.lyricsSynced ? "◦ no synced lyrics"
                   : "◦"
             textFormat: Text.PlainText
             color: root.skyA(0.7)

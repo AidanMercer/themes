@@ -5,10 +5,9 @@ import Quickshell.Io
 // road8: the instrument cluster. Hover the CHECK lamp in the bar (or pin with
 // Super+.) and the dash drops down from behind the road overhead, settling on
 // its suspension — a bob and a pitch, the way a parked car takes your weight.
-// Every subsystem is a gauge with an OBD-style code: P01 RPM is the CPU,
-// P02 FUEL is memory, P03 TURBO the GPU, P04 BATT the battery, P05 RADIO the
-// network. Meters are rows of hard square pixels that fill amber, run sodium
-// orange, then taillight red. The odometer at the foot counts uptime.
+// Every subsystem is a gauge row: cpu, mem, gpu, battery, and the network
+// line. Meters are rows of hard square pixels that fill amber, run sodium
+// orange, then taillight red. The footer counts uptime.
 // Sections with no source (no nvidia-smi, no battery) never light. Reads
 // /proc + nmcli itself; polls only while revealed; click-through scenery.
 Item {
@@ -238,7 +237,7 @@ Item {
         const d = Math.floor(s / 86400); s -= d * 86400
         const h = Math.floor(s / 3600);  s -= h * 3600
         const m = Math.floor(s / 60)
-        uptimeText = d > 0 ? `${d}D ${h}H ${m}M` : h > 0 ? `${h}H ${m}M` : `${m}M`
+        uptimeText = d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`
     }
 
     Process {
@@ -257,11 +256,10 @@ Item {
         online = true
     }
 
-    // ── a gauge row: OBD code, label, pixel meter, readout ──────────────────
+    // ── a gauge row: label, pixel meter, readout ────────────────────────────
     component GaugeRow: Item {
         id: row
-        property string code: "P01"
-        property string label: "RPM"
+        property string label: "cpu"
         property int value: -1        // 0..100, -1 leaves the meter dark
         property color tone: root.amber
         property string readout: ""
@@ -270,16 +268,6 @@ Item {
 
         Text {
             anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: row.code
-            font.family: root.mono
-            font.pixelSize: 9
-            font.weight: Font.Bold
-            color: root.slateA(1.0)
-        }
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 30
             anchors.verticalCenter: parent.verticalCenter
             text: row.label
             font.family: root.mono
@@ -291,7 +279,7 @@ Item {
         // the meter: 12 hard square pixels — quantized, no half-light
         Row {
             anchors.left: parent.left
-            anchors.leftMargin: 82
+            anchors.leftMargin: 52
             anchors.verticalCenter: parent.verticalCenter
             spacing: 2
             Repeater {
@@ -415,7 +403,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "8BIT2 · DASH"
+                        text: "SYSTEM"
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 12
@@ -423,28 +411,19 @@ Item {
                         color: root.amber
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "SELF-TEST"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.slateA(1.0)
-                }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.slateA(0.6) }
 
             GaugeRow {
-                code: "P01"; label: "RPM"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             GaugeRow {
-                code: "P02"; label: "FUEL"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -453,7 +432,7 @@ Item {
             GaugeRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 28 : 0
-                code: "P03"; label: "TURBO"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -461,7 +440,7 @@ Item {
             GaugeRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 28 : 0
-                code: "P04"; label: "BATT"
+                label: "batt"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.starlight
                     : root.batteryPercent <= 15 ? root.alert
@@ -469,7 +448,7 @@ Item {
                 readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
-            // P05 RADIO is text-only: connection left, rates right
+            // the network line is text-only: connection left, rates right
             Item {
                 width: parent.width
                 height: 22
@@ -477,14 +456,6 @@ Item {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 6
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "P05"
-                        font.family: root.mono
-                        font.pixelSize: 9
-                        font.weight: Font.Bold
-                        color: root.slateA(1.0)
-                    }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.online
@@ -515,7 +486,7 @@ Item {
 
             Rectangle { width: parent.width; height: 1; color: root.slateA(0.6) }
 
-            // the odometer: uptime, and whose dash this is
+            // the footer: uptime
             Item {
                 width: parent.width
                 height: 18
@@ -536,21 +507,12 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "ODO " + root.uptimeText
+                        text: "up " + root.uptimeText
                         font.family: root.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         font.letterSpacing: 1
-                        color: root.inkA(0.6)
+                        color: root.inkA(0.7)
                     }
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "▪ BEFORE THE ROAD"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.amberA(0.5)
                 }
             }
         }

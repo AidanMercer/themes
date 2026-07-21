@@ -5,8 +5,8 @@ import QtQuick
 // murk-glass card, a waterline across the top with sun-glints, ripple rings
 // drifting across the face while it's open, the little leaf-sail raft
 // resting in the bottom corner), header (a cork pip dipping on the line +
-// "slow noon" + three reed-stem levels swaying with the music + how long
-// we've been afloat), footer (the dragonfly's report + the send-off).
+// three reed-stem levels swaying with the music + uptime),
+// footer (the connection and its name).
 // Item root that renders nothing itself; no MouseAreas, clicks pass through.
 Item {
     id: chrome
@@ -130,7 +130,7 @@ Item {
         }
     }
 
-    // ── header: cork pip + name + reed levels + afloat time ─────────────────
+    // ── header: cork pip + reed levels + uptime ─────────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -158,15 +158,6 @@ Item {
                             NumberAnimation { to: -0.6; duration: 1700; easing.type: Easing.InOutSine }
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "slow noon"
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.pixelSize: 16
-                        color: chrome.pal.neon
-                    }
-
                     // three reed stems, swaying taller with the music
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -200,16 +191,16 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "afloat " + chrome.popup.uptimeText.replace("up ", "")
+                    text: chrome.popup.uptimeText
                     font.family: chrome.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: chrome.reedA(1.0)
                 }
             }
         }
     }
 
-    // ── footer: the dragonfly's report + the send-off ───────────────────────
+    // ── footer: the connection and its name ─────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 10
@@ -234,23 +225,13 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "the dragonfly has flown off"
-                            : (chrome.popup.connName || "the dragonfly is perched")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "connected")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.strawA(0.7)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "≈ still waters"
-                    font.family: chrome.serif
-                    font.italic: true
-                    font.pixelSize: 11
-                    color: chrome.sunA(0.6)
                 }
             }
         }

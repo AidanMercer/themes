@@ -245,11 +245,11 @@ Item {
             id: prompt
             anchors.horizontalCenter: parent.horizontalCenter
             property bool tick: true
-            text: root.host.failed ? "the water returns it — again"
+            text: root.host.failed ? "wrong — try again"
                 : root.host.busy ? "…"
-                : root.host.unlocking ? "the surface opens"
+                : root.host.unlocking ? "unlocking"
                 : root.host.pwLength > 0 ? "⏎ when ready"
-                : "the mirror is listening"
+                : "type to unlock"
             textFormat: Text.PlainText
             color: root.host.failed ? root.rose : root.skyA(0.85)
             opacity: (root.host.pwLength === 0 && !root.host.failed && !prompt.tick) ? 0.3 : 1
@@ -272,15 +272,15 @@ Item {
         function onUnlockingChanged() { if (root.host.unlocking) stirAnim.restart() }
     }
 
-    // whose evening this is
+    // the theme's signature
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(34 * root.ui)
-        text: "STILL WATER · THE MIRROR AT THE END OF THE DAY"
+        text: "STILL WATER"
         color: root.skyA(0.4)
         font.family: root.mono
-        font.pixelSize: Math.round(9 * root.ui)
+        font.pixelSize: Math.round(10 * root.ui)
         font.letterSpacing: 5
         opacity: root.p * (1 - root.sinkT)
     }

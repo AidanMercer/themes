@@ -42,8 +42,8 @@ Item {
     readonly property string titleFont: sans
     readonly property string hintFont: sans
     readonly property color hintColor: pinkA(0.6)
-    readonly property string hintText: "drift to a window · ⏎ settle there · esc back to the tree"
-    readonly property string emptyText: "just the blossoms"
+    readonly property string hintText: "pick a window · ⏎ focus · esc close"
+    readonly property string emptyText: "no windows"
 
     // ── backdrop: each tile hangs from the canopy on its own cord ───────────
     readonly property Component backdrop: Component {
@@ -82,10 +82,10 @@ Item {
                 }
             }
 
-            // how many windows hang in the tree, in the theme's voice
+            // window count, top-left
             Text {
                 x: 30; y: 26
-                text: "❀ " + chrome.overview.windows.length + " hanging in the tree"
+                text: "❀ " + chrome.overview.windows.length + " windows"
                 font.family: chrome.sans
                 font.pixelSize: 14
                 font.letterSpacing: 1

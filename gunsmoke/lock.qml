@@ -3,16 +3,14 @@ import QtQuick.Effects
 import Quickshell
 
 // gunsmoke: bare lock (the bareLock marker tells LockStage we own the whole
-// chrome). Locking doesn't dim the hunt — it POSTS it. The video keeps
-// rolling sharp behind a wanted poster that blooms out of the fog mid-screen:
-// a slip of iron-dark paper blurring its own slice of the scene, double
-// ledger rules, corner rivets, "№ 1887" in the corner. THE HUNT IS HELD
-// across the top, the time stamped in serif blacks, and the passcode is the
-// CYLINDER — a strip of chambers that load a round per keystroke (each seats
-// with a hammer slam). A wrong code is a MISFIRE: every round flashes
-// oxblood and the poster takes a stepped recoil knock. The right code drops
-// the hammer — one frame of muzzle flash across the whole night, powder
-// smoke curling up as the hunt lets you back in.
+// chrome). The video keeps rolling sharp behind a poster that blooms out of
+// the fog mid-screen: a slip of iron-dark paper blurring its own slice of
+// the scene, double ledger rules, corner rivets. The time stamped in serif
+// blacks, and the passcode is the CYLINDER — a strip of chambers that load
+// a round per keystroke (each seats with a hammer slam). A wrong code:
+// every round flashes oxblood and the poster takes a stepped recoil knock.
+// The right code drops the hammer — one frame of muzzle flash across the
+// whole night, powder smoke curling up as the session reopens.
 Item {
     id: root
     anchors.fill: parent
@@ -92,7 +90,7 @@ Item {
             color: root.glassA(0.55)
         }
 
-        // ledger frame: double rules + corner rivets + the file number
+        // ledger frame: double rules + corner rivets
         Canvas {
             id: frame
             anchors.fill: parent
@@ -122,18 +120,6 @@ Item {
                 }
             }
         }
-        Text {
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.rightMargin: Math.round(20 * root.ui)
-            anchors.topMargin: Math.round(16 * root.ui)
-            text: "№ 1887"
-            color: root.ashA(1)
-            font.family: root.serif
-            font.pixelSize: Math.round(11 * root.ui)
-            font.weight: Font.Bold
-        }
-
         Column {
             anchors.horizontalCenter: parent.horizontalCenter
             y: Math.round(36 * root.ui)
@@ -142,7 +128,7 @@ Item {
             // the notice
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "▸ THE HUNT RESUMES ▸" : "— THE HUNT IS HELD —"
+                text: root.host.unlocking ? "UNLOCKED" : "LOCKED"
                 color: root.host.unlocking ? root.steel : root.boneA(0.9)
                 font.family: root.serif
                 font.pixelSize: Math.round(15 * root.ui)
@@ -165,7 +151,7 @@ Item {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: "ENTRY · " + Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
+                text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
                 color: root.inkA(0.6)
                 font.family: root.serif
                 font.pixelSize: Math.round(12 * root.ui)
@@ -231,10 +217,10 @@ Item {
                     id: prompt
                     anchors.horizontalCenter: parent.horizontalCenter
                     property bool tick: true
-                    text: root.host.failed ? "MISFIRE — STEADY YOUR HAND"
-                        : root.host.busy ? "CHECKING THE LEDGER…"
-                        : root.host.pwLength > 0 ? "⏎ DROP THE HAMMER"
-                        : "LOAD YOUR IRONS"
+                    text: root.host.failed ? "WRONG PASSWORD"
+                        : root.host.busy ? "CHECKING…"
+                        : root.host.pwLength > 0 ? "⏎ UNLOCK"
+                        : "ENTER PASSWORD"
                     color: root.host.failed ? root.blood : root.inkA(0.55)
                     // the empty prompt ticks hard, a hammer being thumbed
                     opacity: (root.host.pwLength === 0 && !root.host.failed && prompt.tick)
@@ -272,12 +258,12 @@ Item {
         transform: Translate { x: panel.sx }
     }
 
-    // whose ledger this is
+    // the theme's one wordmark
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(30 * root.ui)
-        text: "GUNSMOKE · THE BOUNTY LEDGER KEEPS ITSELF"
+        text: "GUNSMOKE"
         color: root.inkA(0.35)
         font.family: root.serif
         font.pixelSize: Math.round(10 * root.ui)

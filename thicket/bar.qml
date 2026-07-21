@@ -12,9 +12,9 @@ import Quickshell.Services.Mpris
 // glints. Switch workspace and the eyes blink shut, reopen in the new gap
 // (one dart, no glide), the new gap's leaves springing wider. Occupied gaps
 // hang their app like something spotted just past the leaves.
-//   left  — "heard in the brush": now playing behind a leaf-bitten panel,
-//           an ember pip flicking in hard steps while sound runs, progress
-//           as a creeping vine with a leaf marking the spot
+//   left  — now playing behind a leaf-bitten panel, an ember pip flicking
+//           in hard steps while sound runs, progress as a creeping vine
+//           with a leaf marking the spot
 //   right — the watcher's eye (hover = sysinfo panel), a stem of signal
 //           leaflets, a berry-cluster battery, the time, and a curled leaf
 //           for the control popup
@@ -314,7 +314,7 @@ Item {
     }
     Component.onCompleted: Hyprland.refreshToplevels()
 
-    // ── left: heard in the brush ────────────────────────────────────────────
+    // ── left: now playing ───────────────────────────────────────────────────
     Item {
         id: media
         readonly property var player: {
@@ -356,15 +356,6 @@ Item {
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: "HEARD"
-                color: root.emberA(0.85)
-                font.family: root.mono
-                font.pixelSize: 8
-                font.weight: Font.Bold
-                font.letterSpacing: 2
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
                 width: Math.min(implicitWidth, 220)
                 elide: Text.ElideRight
                 text: {
@@ -376,7 +367,7 @@ Item {
                 textFormat: Text.PlainText
                 color: root.inkA(0.85)
                 font.family: root.mono
-                font.pixelSize: 10
+                font.pixelSize: 11
             }
         }
 

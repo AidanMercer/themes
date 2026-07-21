@@ -1,279 +1,229 @@
 import QtQuick
 import Quickshell
 
-// pines: the station clock, hung in the moonlit upper-left sky. Thin serif
-// numerals like a hand-lettered log heading, under a "PINES-9 LOOKOUT" small-
-// caps header with the kerosene lamp pip breathing beside it. Nothing fades:
-// when the minute turns, the changed digits dissolve into fog (double ghost
-// copies drifting apart, defocus read) and the new digits CONDENSE back out
-// of it — the house transition. Below, a bearing rule (hairline + degree
-// ticks + the benchmark triangle) underlines the date, and once a minute a
-// bead of condensation runs down the glass beside the time and is gone.
-// Click-through scenery; everything stops while occluded. Also loaded on the
-// lock screen — the dark halo keeps it legible over the blur.
+// sakura: desktop clock, hung in the hazy sky right of the blossom cluster.
+// Airy light-weight time on a soft plum pool, a thin pink hairline underneath
+// with the theme's parametric blossom at its start. The blossom blooms open
+// on boot (law 1); when the minute turns it lets exactly one petal go, which
+// falls along a curved path, turning once, fading (law 2).
 Item {
     id: root
     anchors.fill: parent
 
     // injected by the loader (setSource initial property)
     required property var pal
-    // loader pushes true while locked or a fullscreen window covers the monitor
+    // pushed by the loader: true while locked or covered by a fullscreen window
     property bool occluded: false
 
-    readonly property color lamp: pal.neon
-    readonly property color fogSilver: pal.cyan
-    readonly property color slate: pal.dim
-    readonly property color ink: pal.text
-    readonly property string mono: pal.fontMono
-    readonly property string serif: "Noto Serif Display"
-    function lampA(a)   { return Qt.rgba(lamp.r, lamp.g, lamp.b, a) }
-    function silverA(a) { return Qt.rgba(fogSilver.r, fogSilver.g, fogSilver.b, a) }
-    function inkA(a)    { return Qt.rgba(ink.r, ink.g, ink.b, a) }
-    function slateA(a)  { return Qt.rgba(slate.r, slate.g, slate.b, a) }
+    readonly property color cream: pal.text
+    readonly property color pink:  pal.neon
+    readonly property color sky:   pal.cyan
+    readonly property color plum:  pal.glass
+    readonly property real ui: pal.uiScale
+    readonly property string sans: "Noto Sans"
+    function creamA(a) { return Qt.rgba(cream.r, cream.g, cream.b, a) }
+    function pinkA(a)  { return Qt.rgba(pink.r, pink.g, pink.b, a) }
+    function skyA(a)   { return Qt.rgba(sky.r, sky.g, sky.b, a) }
+    function plumA(a)  { return Qt.rgba(plum.r, plum.g, plum.b, a) }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
-    readonly property string hhmm: Qt.formatDateTime(clock.date, "HH:mm")
 
-    // ── a glyph that condenses out of fog and dissolves back into it ────────
-    // t = 1 condensed (crisp, ghosts gone); t = 0 fog (ghosts apart, faint).
-    // On a target change the old glyph dissolves, swaps at the fog point,
-    // and the new one condenses — precipitation, not a fade.
-    component CondenseGlyph: Item {
-        id: cg
-        property string target: ""
-        property string ch: ""
-        property real px: 96
-        property color face: root.ink
-        property real t: 0
-        width: crisp.implicitWidth
-        height: crisp.implicitHeight
+    // boot-in: the whole clock blooms into place
+    property real bootT: 0
+    NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 1400; easing.type: Easing.OutSine }
 
-        Text {
-            id: crisp
-            text: cg.ch
-            color: cg.face
-            font.family: root.serif
-            font.pixelSize: cg.px
-            font.weight: Font.Light
-            style: Text.Outline
-            styleColor: Qt.rgba(0.01, 0.04, 0.07, 0.55)
-            opacity: cg.t * cg.t
+    // minute flourish: one petal released from the blossom
+    property int _lastMin: -1
+    Connections {
+        target: clock
+        function onDateChanged() {
+            const m = clock.date.getMinutes()
+            if (root._lastMin >= 0 && m !== root._lastMin && root.bootT >= 1 && !root.occluded)
+                petal.fall()
+            root._lastMin = m
         }
-        // the fog ghosts: two soft copies drifting apart as t falls
-        Text {
-            text: cg.ch
-            color: root.silverA(0.4)
-            font.family: root.serif
-            font.pixelSize: cg.px
-            font.weight: Font.Light
-            x: -6 * (1 - cg.t); y: -4 * (1 - cg.t)
-            scale: 1 + 0.10 * (1 - cg.t)
-            opacity: 0.55 * (1 - cg.t) * Math.min(1, cg.t * 4 + 0.35)
-        }
-        Text {
-            text: cg.ch
-            color: root.silverA(0.3)
-            font.family: root.serif
-            font.pixelSize: cg.px
-            font.weight: Font.Light
-            x: 5 * (1 - cg.t); y: 4 * (1 - cg.t)
-            scale: 1 + 0.06 * (1 - cg.t)
-            opacity: 0.45 * (1 - cg.t) * Math.min(1, cg.t * 4 + 0.35)
-        }
-
-        SequentialAnimation {
-            id: recondense
-            NumberAnimation { target: cg; property: "t"; to: 0; duration: 340; easing.type: Easing.InQuad }
-            ScriptAction { script: cg.ch = cg.target }
-            NumberAnimation { target: cg; property: "t"; to: 1; duration: 520; easing.type: Easing.OutCubic }
-        }
-        onTargetChanged: {
-            if (cg.ch === "") { cg.ch = target; condenseIn.restart() }
-            else if (target !== cg.ch) recondense.restart()
-        }
-        NumberAnimation { id: condenseIn; target: cg; property: "t"; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
-        Component.onCompleted: if (ch === "" && target !== "") { ch = target; condenseIn.restart() }
     }
 
-    // the benchmark triangle — the house survey mark
-    component BenchMark: Canvas {
-        id: bm
-        property color tone: root.silverA(0.8)
-        width: 13; height: 11
-        onToneChanged: requestPaint()
-        onPaint: {
-            const ctx = getContext("2d")
-            ctx.reset()
-            ctx.strokeStyle = String(tone)
-            ctx.lineWidth = 1.2
+    // the five-petal blossom with notched tips — the theme's one glyph.
+    // bloom 0 = closed bud, 1 = full open flower.
+    function drawBlossom(ctx, r, bloom, fillCol, coreCol) {
+        if (bloom < 0.1) {
             ctx.beginPath()
-            ctx.moveTo(width / 2, 1)
-            ctx.lineTo(width - 1, height - 1.5)
-            ctx.lineTo(1, height - 1.5)
-            ctx.closePath()
-            ctx.stroke()
-            ctx.fillStyle = String(tone)
-            ctx.fillRect(width / 2 - 1, height * 0.52, 2, 2)
+            ctx.arc(0, 0, Math.max(1, r * 0.30), 0, 2 * Math.PI)
+            ctx.fillStyle = fillCol
+            ctx.fill()
+            return
         }
+        const pr = r * (0.4 + 0.6 * bloom)
+        const w = pr * 0.55 * (0.55 + 0.45 * bloom)
+        for (let i = 0; i < 5; i++) {
+            ctx.save()
+            ctx.rotate(i * Math.PI * 2 / 5)
+            ctx.beginPath()
+            ctx.moveTo(0, 0)
+            ctx.bezierCurveTo(-w, -pr * 0.35, -w * 0.9, -pr * 0.85, -pr * 0.16, -pr * 0.97)
+            ctx.lineTo(0, -pr * 0.85)                       // the notch
+            ctx.lineTo(pr * 0.16, -pr * 0.97)
+            ctx.bezierCurveTo(w * 0.9, -pr * 0.85, w, -pr * 0.35, 0, 0)
+            ctx.closePath()
+            ctx.fillStyle = fillCol
+            ctx.fill()
+            ctx.restore()
+        }
+        ctx.beginPath()
+        ctx.arc(0, 0, Math.max(0.8, r * 0.12), 0, 2 * Math.PI)
+        ctx.fillStyle = coreCol
+        ctx.fill()
     }
 
-    // ── the ensemble, in the moonlit sky ────────────────────────────────────
     Item {
-        id: station
-        x: Math.round(root.width * 0.07)
-        y: Math.round(root.height * 0.09)
-        width: col.implicitWidth
-        height: col.implicitHeight
-        scale: pal.uiScale
-        transformOrigin: Item.TopLeft
+        id: face
+        x: Math.round(root.width * 0.685 - width / 2)
+        y: Math.round(root.height * 0.60 - height / 2)
+        width: Math.round(460 * root.ui)
+        height: Math.round(260 * root.ui)
+        opacity: root.bootT
 
-        // a pool of darkness behind the log so it reads over bright cloud
+        // soft plum pool so the cream reads over the bright sky
         Rectangle {
-            anchors.centerIn: col
-            width: col.implicitWidth * 1.8
-            height: col.implicitHeight * 1.6
+            anchors.centerIn: parent
+            width: parent.width * 1.25
+            height: parent.height * 1.15
             radius: height / 2
-            gradient: Gradient {
-                orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: Qt.rgba(0.01, 0.04, 0.07, 0.58) }
-                GradientStop { position: 0.6; color: Qt.rgba(0.01, 0.04, 0.07, 0.30) }
-                GradientStop { position: 1.0; color: Qt.rgba(0.01, 0.04, 0.07, 0.0) }
+            color: "transparent"
+            Rectangle {
+                anchors.fill: parent
+                radius: parent.radius
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: root.plumA(0.0) }
+                    GradientStop { position: 0.5; color: root.plumA(0.34) }
+                    GradientStop { position: 1.0; color: root.plumA(0.0) }
+                }
             }
         }
 
         Column {
-            id: col
-            spacing: 12
+            anchors.centerIn: parent
+            spacing: Math.round(10 * root.ui)
 
-            // header: lamp pip + station name
-            Row {
-                spacing: 10
-                Rectangle {
-                    id: lampPip
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 7; height: 7; radius: 3.5
-                    color: root.lamp
-                    // the kerosene flame breathes — slow, uneven, only when seen
-                    SequentialAnimation on opacity {
-                        running: !root.occluded && root.visible
-                        loops: Animation.Infinite
-                        NumberAnimation { to: 0.45; duration: 1900; easing.type: Easing.InOutSine }
-                        NumberAnimation { to: 1.0; duration: 1300; easing.type: Easing.InOutSine }
-                        NumberAnimation { to: 0.7; duration: 800; easing.type: Easing.InOutSine }
-                        NumberAnimation { to: 1.0; duration: 1500; easing.type: Easing.InOutSine }
-                    }
-                    Rectangle {   // faint halo
-                        anchors.centerIn: parent
-                        width: 19; height: 19; radius: 9.5
-                        color: root.lampA(0.12)
-                        z: -1
-                    }
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "PINES-9 LOOKOUT"
-                    color: root.inkA(0.88)
-                    font.family: root.serif
-                    font.pixelSize: 13
-                    font.letterSpacing: 7
-                }
+            Text {
+                id: timeText
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: Qt.formatDateTime(clock.date, "HH:mm")
+                color: root.creamA(0.96)
+                font.family: root.sans
+                font.weight: Font.Light
+                font.pixelSize: Math.round(104 * root.ui)
+                font.letterSpacing: 6 * root.ui
+                style: Text.Raised
+                styleColor: root.plumA(0.5)
+                // the time blooms up very slightly as it arrives
+                scale: 0.96 + 0.04 * root.bootT
             }
 
-            // the time — each digit its own weather
-            Row {
-                id: timeRow
-                spacing: 4
-                CondenseGlyph { target: root.hhmm.charAt(0) }
-                CondenseGlyph { target: root.hhmm.charAt(1) }
-                CondenseGlyph {
-                    target: ":"
-                    px: 84
-                    face: root.silverA(0.85)
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-                CondenseGlyph { target: root.hhmm.charAt(3) }
-                CondenseGlyph { target: root.hhmm.charAt(4) }
-            }
-
-            // bearing rule: benchmark, hairline, degree ticks
+            // hairline with the blossom at its start
             Item {
-                width: timeRow.width
-                height: 12
-                BenchMark { x: 0; y: 0 }
-                Rectangle {
-                    x: 20; y: 5
-                    width: parent.width - 20
-                    height: 1
-                    color: root.slateA(0.9)
-                }
-                Repeater {
-                    model: 9
-                    Rectangle {
-                        required property int index
-                        x: 20 + (index + 1) * (timeRow.width - 26) / 10
-                        y: index % 2 === 0 ? 2 : 3.5
-                        width: 1
-                        height: index % 2 === 0 ? 7 : 4
-                        color: root.silverA(index % 2 === 0 ? 0.55 : 0.35)
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: timeText.width
+                height: Math.round(26 * root.ui)
+
+                Canvas {
+                    id: blossom
+                    width: Math.round(26 * root.ui)
+                    height: width
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    property real bloom: root.bootT
+                    onBloomChanged: requestPaint()
+                    onPaint: {
+                        const ctx = getContext("2d")
+                        ctx.reset()
+                        ctx.translate(width / 2, height / 2)
+                        root.drawBlossom(ctx, width * 0.46, bloom,
+                                         String(root.pinkA(0.92)), String(root.creamA(0.9)))
+                    }
+                    Connections {
+                        target: root.pal
+                        function onNeonChanged() { blossom.requestPaint() }
+                        function onTextChanged() { blossom.requestPaint() }
                     }
                 }
+
+                Rectangle {
+                    anchors.left: blossom.right
+                    anchors.leftMargin: Math.round(10 * root.ui)
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 1
+                    color: root.pinkA(0.42)
+                }
             }
 
-            // the log line
             Row {
-                spacing: 14
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: Math.round(10 * root.ui)
                 Text {
-                    text: "NIGHT WATCH"
-                    color: root.lampA(0.95)
-                    font.family: root.mono
-                    font.pixelSize: 11
-                    font.letterSpacing: 4
+                    text: Qt.formatDateTime(clock.date, "dddd").toLowerCase()
+                    color: root.skyA(0.92)
+                    font.family: root.sans
+                    font.pixelSize: Math.round(15 * root.ui)
+                    font.letterSpacing: 4 * root.ui
                 }
                 Text {
-                    text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
-                    color: root.inkA(0.88)
-                    font.family: root.mono
-                    font.pixelSize: 11
-                    font.letterSpacing: 4
+                    text: "·"
+                    color: root.pinkA(0.8)
+                    font.family: root.sans
+                    font.pixelSize: Math.round(15 * root.ui)
                 }
                 Text {
-                    text: "ELEV 2130 M"
-                    color: root.silverA(0.7)
-                    font.family: root.mono
-                    font.pixelSize: 11
-                    font.letterSpacing: 4
+                    text: Qt.formatDateTime(clock.date, "MMMM d").toLowerCase()
+                    color: root.creamA(0.72)
+                    font.family: root.sans
+                    font.pixelSize: Math.round(15 * root.ui)
+                    font.letterSpacing: 4 * root.ui
                 }
             }
         }
 
-        // once a minute: a bead of condensation runs down the glass beside
-        // the time — gathers, slips in two pulls, thins away
-        Item {
-            id: bead
-            property real t: -1
-            visible: t >= 0
-            x: -26
-            y: 34 + 96 * (t < 0 ? 0 : (t < 0.55 ? t * t * 2.4 : 0.72 + (t - 0.55) * 0.62))
-            Rectangle {   // the droplet
-                width: 4; height: 6; radius: 2
-                color: root.silverA(0.85)
+        // the released petal — one per minute, a curved fall with a single turn
+        Canvas {
+            id: petal
+            width: Math.round(14 * root.ui)
+            height: width
+            property real t: 0
+            visible: t > 0 && t < 1
+            function fall() { fallAnim.restart() }
+            // curved drift: right and down, one slow turn, fade at the end
+            readonly property real px: face.width / 2 - timeText.width / 2 + 40 * t * root.ui + 26 * Math.sin(t * 3.1) * root.ui
+            readonly property real py: face.height / 2 + 36 * root.ui + 120 * t * t * root.ui
+            onTChanged: { x = px; y = py; rotation = t * 200; opacity = t < 0.75 ? 0.9 : 0.9 * (1 - (t - 0.75) / 0.25) }
+            NumberAnimation on t {
+                id: fallAnim
+                running: false
+                from: 0.01; to: 1
+                duration: 2600
+                easing.type: Easing.InSine
             }
-            Rectangle {   // its trailing streak
-                x: 1.2; y: -14
-                width: 1.4; height: 14
-                color: root.silverA(0.30)
+            onPaint: {
+                const ctx = getContext("2d")
+                ctx.reset()
+                const w = width, pr = w * 0.48
+                ctx.translate(w / 2, w / 2)
+                ctx.beginPath()
+                ctx.moveTo(0, pr * 0.5)
+                ctx.bezierCurveTo(-pr * 0.8, 0, -pr * 0.6, -pr * 0.8, -pr * 0.14, -pr * 0.9)
+                ctx.lineTo(0, -pr * 0.76)
+                ctx.lineTo(pr * 0.14, -pr * 0.9)
+                ctx.bezierCurveTo(pr * 0.6, -pr * 0.8, pr * 0.8, 0, 0, pr * 0.5)
+                ctx.closePath()
+                ctx.fillStyle = String(root.pinkA(0.9))
+                ctx.fill()
             }
-            opacity: t < 0 ? 0 : (t < 0.1 ? t * 10 : 1 - Math.max(0, t - 0.75) * 4)
-            NumberAnimation {
-                id: beadAnim
-                target: bead; property: "t"
-                from: 0; to: 1; duration: 1500; easing.type: Easing.Linear
-                onStopped: bead.t = -1
+            Component.onCompleted: requestPaint()
+            Connections {
+                target: root.pal
+                function onNeonChanged() { petal.requestPaint() }
             }
-        }
-        Connections {
-            target: clock
-            function onDateChanged() { if (!root.occluded && root.visible) beadAnim.restart() }
         }
     }
 }

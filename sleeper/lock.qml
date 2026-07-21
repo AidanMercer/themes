@@ -3,14 +3,14 @@ import QtQuick.Effects
 import Quickshell
 
 // sleeper: bare lock (the bareLock marker tells LockStage we own the chrome).
-// Locking is LIGHTS OUT in the berth: the reading lamp clicks off, the city
-// keeps sliding past the window sharp and green, and the conductor is at the
-// door — a paper ticket slides up into the middle of the screen for TICKET
-// CHECK. The passcode is the house punch language: every keystroke punches a
-// hole through the ticket (the chad drops), a wrong code slams a red VOID
-// stamp across it and knocks the ticket sideways, and the right code lets a
-// warm lamp sweep the whole compartment as the ticket tucks away and the
-// night lets you back in. Typing/Enter still route through the shell.
+// Locking is lights out in the berth: the reading lamp clicks off, the city
+// keeps sliding past the window sharp and green, and a paper ticket slides
+// up into the middle of the screen. The passcode is the house punch
+// language: every keystroke punches a hole through the ticket (the chad
+// drops), a wrong code slams a red VOID stamp across it and knocks the
+// ticket sideways, and the right code lets a warm lamp sweep the whole
+// compartment as the ticket tucks away and the night lets you back in.
+// Typing/Enter still route through the shell.
 Item {
     id: root
     anchors.fill: parent
@@ -133,23 +133,15 @@ Item {
             y: Math.round(30 * root.ui)
             spacing: Math.round(14 * root.ui)
 
-            // the inspection header
+            // the header: plain state
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "WELCOME ABOARD" : "TICKET CHECK"
+                text: root.host.unlocking ? "UNLOCKED" : "LOCKED"
                 color: root.host.unlocking ? root.moonpale : root.tea
                 font.family: root.mono
                 font.weight: Font.Bold
                 font.pixelSize: Math.round(14 * root.ui)
                 font.letterSpacing: 7
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "НОЧНОЙ ПОЕЗД · CAR 7"
-                color: root.linenA(0.5)
-                font.family: root.mono
-                font.pixelSize: Math.round(9 * root.ui)
-                font.letterSpacing: 4
             }
 
             // the time, tall serif linen — the plaque's face carried onto paper
@@ -228,10 +220,10 @@ Item {
                 Text {
                     id: prompt
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: root.host.failed ? "NOT VALID — ONCE MORE"
-                        : root.host.busy ? "INSPECTING…"
-                        : root.host.pwLength > 0 ? "ENTER TO PUNCH THROUGH"
-                        : "PRESENT TICKET"
+                    text: root.host.failed ? "WRONG CODE — TRY AGAIN"
+                        : root.host.busy ? "CHECKING…"
+                        : root.host.pwLength > 0 ? "PRESS ENTER"
+                        : "ENTER PASSCODE"
                     color: root.host.failed ? root.stamp : root.linenA(0.5)
                     font.family: root.mono
                     font.pixelSize: Math.round(10 * root.ui)
@@ -290,12 +282,12 @@ Item {
         }
     }
 
-    // whose berth this is
+    // the theme's signature
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(28 * root.ui)
-        text: "THE OVERNIGHT BERTH · SLEEPER"
+        text: "SLEEPER"
         color: root.linenA(0.35)
         font.family: root.mono
         font.pixelSize: Math.round(10 * root.ui)

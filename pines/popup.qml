@@ -1,11 +1,11 @@
 import QtQuick
 
-// pines: the FIELD DESK — chrome for the Super+M control menu. The shell
-// keeps its shared tabs; this file dresses them as the lookout's map table:
-// a slate card with faint topographic contour lines inked across it, a
-// hairline frame with lamp-warm corner ticks, a serif heading with the
-// kerosene pip and a live draught gauge riding the audio bus, and the watch
-// logged in the footer. Invisible Item root — the shell mounts the pieces.
+// pines: chrome for the Super+M control menu. The shell keeps its shared
+// tabs; this file dresses them as the lookout's map table: a slate card with
+// faint topographic contour lines inked across it, a hairline frame with
+// lamp-warm corner ticks, the kerosene pip and a live draught gauge riding
+// the audio bus in the head, uptime and net status in plain words.
+// Invisible Item root — the shell mounts the pieces.
 Item {
     id: chrome
 
@@ -116,7 +116,7 @@ Item {
         }
     }
 
-    // ── header: lamp pip + FIELD DESK + draught gauge // station + watch ──
+    // ── header: lamp pip + draught gauge // uptime ─────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -141,15 +141,6 @@ Item {
                             NumberAnimation { to: 1.0; duration: 1500; easing.type: Easing.InOutSine }
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "FIELD DESK"
-                        font.family: chrome.serif
-                        font.pixelSize: 14
-                        font.letterSpacing: 5
-                        color: chrome.pal.neon
-                    }
-
                     // the draught gauge: three hairline needles riding the mix
                     Item {
                         anchors.verticalCenter: parent.verticalCenter
@@ -175,26 +166,14 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "PINES-9"
-                        font.family: chrome.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 2
-                        color: chrome.silverA(0.8)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "ON WATCH " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 1
-                        color: chrome.silverA(0.7)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
+                    color: chrome.silverA(0.7)
                 }
             }
 
@@ -207,7 +186,7 @@ Item {
         }
     }
 
-    // ── footer: W/T status left, the station's sign-off right ──────────────
+    // ── footer: net status ─────────────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -234,23 +213,13 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "W/T · NO CARRIER"
-                            : "W/T · " + (chrome.popup.connName || "CARRIER UP")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
                         font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.silverA(0.85)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "▵ STANDING WATCH"
-                    font.family: chrome.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 2
-                    color: chrome.lampA(0.7)
                 }
             }
         }

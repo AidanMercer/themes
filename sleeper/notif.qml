@@ -23,12 +23,12 @@ Item {
     property bool cardSpine: false  // the wax seal below replaces it
 
     // notification center: what was left at the door overnight — with the
-    // DO NOT DISTURB hanger out while quiet hours hold
+    // do-not-disturb hanger out while quiet hours hold
     property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
     property color panelBorder: teaA(0.4)
     property int panelBorderWidth: 1
     property int panelRadius: 5
-    property string panelTitle: "Under the door"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             id: doorLog
@@ -57,13 +57,13 @@ Item {
                 }
             }
 
-            // the DO NOT DISTURB hanger, out only during quiet hours
+            // the do-not-disturb hanger, out only during quiet hours
             Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.rightMargin: 14
                 anchors.topMargin: 8
-                width: 74; height: 30
+                width: dndText.implicitWidth + 16; height: 30
                 visible: doorLog.quiet
                 rotation: -3
                 Rectangle {   // its string loop
@@ -81,44 +81,23 @@ Item {
                     color: Qt.rgba(root.pal.text.r, root.pal.text.g, root.pal.text.b, 0.10)
                     border.width: 1
                     border.color: root.teaA(0.5)
-                    Column {
+                    Text {
+                        id: dndText
                         anchors.centerIn: parent
-                        spacing: 1
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: "НЕ БЕСПОКОИТЬ"
-                            font.family: root.pal.fontMono
-                            font.pixelSize: 6
-                            font.letterSpacing: 1
-                            color: root.teaA(0.9)
-                        }
-                        Text {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            text: "do not disturb"
-                            font.family: root.pal.fontMono
-                            font.pixelSize: 6
-                            color: root.linenA(0.55)
-                        }
+                        text: "do not disturb"
+                        font.family: root.pal.fontMono
+                        font.pixelSize: 10
+                        color: root.teaA(0.9)
                     }
                 }
             }
 
-            // a small crescent keeping count at the foot
-            Row {
+            // a small crescent at the foot
+            Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 14; bottomMargin: 8 }
-                spacing: 6
-                Text {
-                    text: "☾"
-                    font.pixelSize: 10
-                    color: Qt.alpha(root.pal.cyan, doorLog.quiet ? 0.35 : 0.7)
-                }
-                Text {
-                    text: doorLog.quiet ? "the berth sleeps" : ""
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.woodA(1)
-                }
+                text: "☾"
+                font.pixelSize: 10
+                color: Qt.alpha(root.pal.cyan, doorLog.quiet ? 0.35 : 0.7)
             }
         }
     }

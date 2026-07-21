@@ -27,7 +27,7 @@ Item {
     property color panelBorder: slateA(0.75)
     property int panelBorderWidth: 1
     property int panelRadius: 11
-    property string panelTitle: "The window"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             id: machine

@@ -264,18 +264,6 @@ Item {
             border.width: 1
             border.color: root.linenA(0.28)
         }
-        // ticket header microprint along the top edge
-        Text {
-            anchors.top: parent.top
-            anchors.topMargin: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "· НОЧНОЙ ПОЕЗД · NIGHT SERVICE ·"
-            color: root.linenA(0.30)
-            font.family: root.mono
-            font.pixelSize: 6
-            font.letterSpacing: 2
-        }
-
         Repeater {
             model: ticket.wsCount
             delegate: Item {

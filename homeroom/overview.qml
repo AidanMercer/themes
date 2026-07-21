@@ -4,7 +4,7 @@ import "chalk.js" as Chalk
 // homeroom: class-photo day chrome for the Super+Tab exposé. The room's
 // windows become photos taped to the chalkboard: every tile sits on a white
 // photo mat with a tape tab, the board behind is slate scattered with chalk
-// doodles (the wallpaper's bird, hearts, stars) and the day's attendance
+// doodles (the wallpaper's bird, hearts, stars) and the window count
 // chalked top-left. Point at a photo and a chalk circle sketches itself
 // around it; the photo you came from wears the halo. Visual-only by
 // contract: no input handlers; every loop gates on overview.open.
@@ -41,8 +41,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: chalkA(0.55)
-    readonly property string hintText: "pick a seat · ⏎ sit down · esc slip out"
-    readonly property string emptyText: "empty classroom"
+    readonly property string hintText: "⏎ focus · esc close"
+    readonly property string emptyText: "no windows"
 
     // ── backdrop: the board, doodled ──
     readonly property Component backdrop: Component {
@@ -102,10 +102,10 @@ Item {
                 Component.onCompleted: requestPaint()
             }
 
-            // attendance, chalked top-left
+            // the window count, chalked top-left
             Text {
                 x: chrome.px(30); y: chrome.px(26)
-                text: "attendance · " + String(chrome.overview.windows.length).padStart(2, "0")
+                text: "windows · " + String(chrome.overview.windows.length).padStart(2, "0")
                 font.family: chrome.mono
                 font.pixelSize: chrome.px(11)
                 font.letterSpacing: 3
@@ -203,7 +203,7 @@ Item {
                 }
             }
 
-            // seat number, penciled at the photo's foot
+            // tile number, penciled at the photo's foot
             Text {
                 anchors.right: parent.right
                 anchors.rightMargin: chrome.px(4)
@@ -211,7 +211,7 @@ Item {
                 anchors.topMargin: chrome.px(1)
                 text: "no. " + String((ov.tile ? ov.tile.index : 0) + 1).padStart(2, "0")
                 font.family: chrome.mono
-                font.pixelSize: chrome.px(8)
+                font.pixelSize: chrome.px(10)
                 color: Qt.rgba(chrome.pal.glass.r, chrome.pal.glass.g, chrome.pal.glass.b, 0.75)
             }
         }

@@ -2,11 +2,10 @@ import QtQuick
 
 // stars: the vending machine takes over the Super+Tab exposé. every open
 // window is a product on a lit shelf — navy glass cards with the machine's
-// signature shelf-light glowing under each one, a coin-slot code chip riding
-// every tile (A1 A2 A3 B1…; the focused window already dropped, so its chip
-// reads IN TRAY), and behind it all the quiet night: a few twinkling stars
-// and one coral nebula drifting low in an upper corner. the shell keeps
-// layout / thumbnails / nav; this file only dresses the machine.
+// signature shelf-light glowing under each one, a small star punched near
+// each tile's corner, and behind it all the quiet night: a few twinkling
+// stars and one coral nebula drifting low in an upper corner. the shell
+// keeps layout / thumbnails / nav; this file only dresses the machine.
 //
 // visual-only by contract — no input handlers; every loop gates on
 // overview.open (the shell tears these layers down ~300ms after close).
@@ -16,11 +15,9 @@ Item {
     required property var pal        // neon=amber cyan=coral magenta=signal dim=slate
     required property var overview   // exposé root — open, reveal, selected, tiles…
 
-    readonly property string mono: pal.fontMono
     readonly property real ui: pal.uiScale
     function inkA(a)   { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
     function amberA(a) { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
-    function coralA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
     function slateA(a) { return Qt.rgba(pal.dim.r, pal.dim.g, pal.dim.b, a) }
     function glassA(a) { return Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, a) }
     // canvas gradient stops want css strings, not color values
@@ -53,8 +50,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: amberA(0.6)
-    readonly property string hintText: "insert coin · enter to vend · esc walk away"
-    readonly property string emptyText: "sold out"
+    readonly property string hintText: "pick a window · enter to focus · esc to close"
+    readonly property string emptyText: "nothing open"
 
     // ── backdrop: twinkling stars + one coral nebula, up and out of the way ──
     readonly property Component backdrop: Component {
@@ -154,42 +151,12 @@ Item {
         }
     }
 
-    // ── per-tile: the coin-slot code chip + a punched star ──────────────────
+    // ── per-tile: a punched star near the corner ────────────────────────────
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
             property var tile: null
-            readonly property bool lit: ov.tile ? ov.tile.hot === true : false
             readonly property bool ctr: ov.tile ? ov.tile.isCenter === true : false
-            // ring tiles follow the center in the shell's list, so slot 0 = the
-            // first item on the shelf; the focused window already vended
-            readonly property int slotIdx: ov.tile ? Math.max(0, ov.tile.index - 1) : 0
-            readonly property string code: ctr ? "IN TRAY"
-                : String.fromCharCode(65 + Math.floor(slotIdx / 3) % 26) + (slotIdx % 3 + 1)
-
-            // the chip rides the tile's top-left edge like a slot tag
-            Rectangle {
-                x: Math.round(10 * chrome.ui)
-                y: -Math.round(8 * chrome.ui)
-                width: codeText.implicitWidth + Math.round(12 * chrome.ui)
-                height: Math.round(16 * chrome.ui)
-                radius: 3
-                color: chrome.glassA(0.97)
-                border.width: 1
-                border.color: ov.lit ? chrome.coralA(0.9) : chrome.slateA(0.85)
-                Behavior on border.color { ColorAnimation { duration: 160 } }
-                Text {
-                    id: codeText
-                    anchors.centerIn: parent
-                    text: ov.code
-                    font.family: chrome.mono
-                    font.pixelSize: Math.round(9 * chrome.ui)
-                    font.letterSpacing: 1
-                    // amber digits; flips coral when the slot is picked
-                    color: ov.lit ? chrome.pal.cyan : chrome.pal.neon
-                    Behavior on color { ColorAnimation { duration: 160 } }
-                }
-            }
 
             // the house signature, punched near the corner
             Text {

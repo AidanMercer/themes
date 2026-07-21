@@ -4,9 +4,9 @@ import QtQuick
 // the desk mid-show: a stage-black capsule with one piano-roll lane running
 // down its left edge and a single note block sitting on the lane, tinted by
 // urgency and lighting to full when the card is under the pointer (the
-// follow-spot finds it). The notification center is the SETLIST: same black
-// slab, a lane across its head carrying one note block per pending song,
-// and a TACET block when do-not-disturb has the crowd hushed.
+// follow-spot finds it). The notification center is the same black slab,
+// a lane across its head carrying one note block per pending card, and a
+// magenta dnd block when do-not-disturb has the crowd hushed.
 // The shell keeps the daemon, stacking, text layout and actions.
 Item {
     id: root
@@ -18,20 +18,20 @@ Item {
     property int cardBorderWidth: 1
     property bool cardSpine: false   // the lane below replaces it
 
-    // notification center: the setlist
+    // notification center
     property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
     property color panelBorder: Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, 0.4)
     property int panelBorderWidth: 1
     property int panelRadius: 15
-    property string panelTitle: "SETLIST"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             id: deck
             property var panel: null
             readonly property bool hushed: panel ? panel.dnd === true : false
-            readonly property int songs: panel ? Math.min(8, panel.count || 0) : 0
+            readonly property int pending: panel ? Math.min(8, panel.count || 0) : 0
 
-            // the head lane the pending songs sit on
+            // the head lane the pending cards sit on
             Rectangle {
                 id: headLane
                 anchors { top: parent.top; left: parent.left; right: parent.right; margins: 10 }
@@ -46,14 +46,14 @@ Item {
                 y: headLane.y - 4
                 spacing: 5
                 Repeater {
-                    model: deck.songs
+                    model: deck.pending
                     Rectangle {
                         width: 14; height: 7; radius: 3.5
                         color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.85)
                     }
                 }
             }
-            // hushed: the crowd's TACET block parks at the right of the lane
+            // hushed: the crowd's dnd block parks at the right of the lane
             Rectangle {
                 visible: deck.hushed
                 anchors.right: headLane.right
@@ -65,9 +65,9 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.top: parent.bottom
                     anchors.topMargin: 3
-                    text: "TACET"
+                    text: "dnd"
                     font.family: root.pal.fontMono
-                    font.pixelSize: 7
+                    font.pixelSize: 10
                     font.letterSpacing: 2
                     color: root.pal.magenta
                 }

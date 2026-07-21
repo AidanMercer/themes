@@ -104,38 +104,6 @@ Item {
         opacity: 0
         NumberAnimation on opacity { running: true; to: 1; duration: 400 }
 
-        // header: pinned name-tag voice, settles slightly crooked
-        Item {
-            id: header
-            y: 0
-            rotation: -1.2
-            transformOrigin: Item.TopLeft
-            SequentialAnimation {
-                id: headerPin
-                running: true
-                NumberAnimation { target: header; property: "y"; from: -10; to: 2; duration: 260; easing.type: Easing.OutQuad }
-                NumberAnimation { target: header; property: "y"; from: 2; to: 0; duration: 140; easing.type: Easing.OutQuad }
-            }
-            Row {
-                spacing: 10
-                Rectangle {    // a small ring pip — the halo's understudy
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 11; height: 11; radius: 5.5
-                    color: "transparent"
-                    border.width: 2
-                    border.color: root.haloA(0.85)
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "MORNING HOMEROOM"
-                    color: root.chalkA(0.62)
-                    font.family: root.mono
-                    font.pixelSize: 12
-                    font.letterSpacing: 6
-                }
-            }
-        }
-
         // the time, written in chalk
         Row {
             id: digitRow

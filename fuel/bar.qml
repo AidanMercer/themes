@@ -8,12 +8,12 @@ import Quickshell.Services.Mpris
 // fuel: bottom pump-readout strip. Chamfered station plates float over the
 // wet forecourt, each with the canopy's neon stripe bent 45° over its top
 // corners; the retro 3-stripe pump band grounds the whole screen edge.
-//   left   — FUEL roundel (stripe band, click: control popup) + a "NOW
-//            FUELING" mpris chip with a neon progress hose
-//   center — PUMP BAYS: workspaces as bay numbers; occupied bays lit orange,
-//            the active bay carries a bent-corner neon underline
-//   right  — FLOW (net rate) · LINE (connection) · RESERVE (battery) plate,
-//            and the time as a mini seven-segment price display
+//   left   — stripe-band roundel (click: control popup) + an mpris chip
+//            with a neon progress hose
+//   center — workspaces as bay numbers; occupied bays lit orange, the
+//            active bay carries a bent-corner neon underline
+//   right  — net rate · connection · battery plate, and the time as a
+//            mini seven-segment price display
 // Self-contained: hyprland via Quickshell.Hyprland, /proc + nmcli polled here.
 Item {
     id: root
@@ -149,37 +149,27 @@ Item {
         Rectangle { width: parent.width; height: 1; color: root.red }
     }
 
-    // ── left: FUEL roundel + now-fueling chip ───────────────────────────────
+    // ── left: stripe-band roundel (menu button) + media chip ────────────────
     Plate {
         id: roundel
         height: 32
-        width: roundelRow.width + 24
+        width: roundelGlyph.width + 24
         anchors.left: parent.left
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: 8 * (1 - root.bootT)
         opacity: root.bootT
 
-        Row {
-            id: roundelRow
+        // the pump band itself is the button — the theme's glyph
+        Column {
+            id: roundelGlyph
             anchors.centerIn: parent
-            spacing: 8
-            Column {
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 1
-                Rectangle { width: 16; height: 2; color: root.amber }
-                Rectangle { width: 16; height: 2; color: root.neon }
-                Rectangle { width: 16; height: 2; color: root.red }
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "FUEL"
-                color: roundelMa.containsMouse ? root.ink : root.inkA(0.85)
-                font.family: root.mono
-                font.weight: Font.Black
-                font.pixelSize: 12
-                font.letterSpacing: 4
-            }
+            spacing: 2
+            opacity: roundelMa.containsMouse ? 1.0 : 0.85
+            Behavior on opacity { NumberAnimation { duration: 150 } }
+            Rectangle { width: 18; height: 3; color: root.amber }
+            Rectangle { width: 18; height: 3; color: root.neon }
+            Rectangle { width: 18; height: 3; color: root.red }
         }
         MouseArea {
             id: roundelMa
@@ -234,31 +224,21 @@ Item {
                 font.family: root.icon
                 font.pixelSize: 13
             }
-            Column {
+            Text {
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 0
-                Text {
-                    text: media.playing ? "NOW FUELING" : "PUMP PAUSED"
-                    color: root.iceA(0.65)
-                    font.family: root.mono
-                    font.pixelSize: 7
-                    font.letterSpacing: 2
+                width: Math.min(implicitWidth, 210)
+                elide: Text.ElideRight
+                text: {
+                    if (!media.active) return ""
+                    const t = media.player.trackTitle || "—"
+                    const a = media.player.trackArtist
+                    return a ? t + " · " + a : t
                 }
-                Text {
-                    width: Math.min(implicitWidth, 210)
-                    elide: Text.ElideRight
-                    text: {
-                        if (!media.active) return ""
-                        const t = media.player.trackTitle || "—"
-                        const a = media.player.trackArtist
-                        return a ? t + " · " + a : t
-                    }
-                    textFormat: Text.PlainText
-                    color: root.ice
-                    font.family: root.mono
-                    font.pixelSize: 10
-                    font.letterSpacing: 0.5
-                }
+                textFormat: Text.PlainText
+                color: root.ice
+                font.family: root.mono
+                font.pixelSize: 11
+                font.letterSpacing: 0.5
             }
         }
 
@@ -293,7 +273,7 @@ Item {
         }
     }
 
-    // ── center: PUMP BAYS (workspaces) ──────────────────────────────────────
+    // ── center: workspaces as pump bays ─────────────────────────────────────
     Plate {
         id: bays
         height: 32
@@ -343,15 +323,6 @@ Item {
             id: bayRow
             anchors.centerIn: parent
             spacing: 10
-
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "BAY"
-                color: root.iceA(0.55)
-                font.family: root.mono
-                font.pixelSize: 8
-                font.letterSpacing: 3
-            }
 
             Row {
                 anchors.verticalCenter: parent.verticalCenter
@@ -533,17 +504,16 @@ Item {
             anchors.centerIn: parent
             spacing: 10
 
-            // FLOW: incoming rate, styled as a pump flow readout
+            // incoming net rate
             Row {
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 5
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "FLOW"
-                    color: root.iceA(0.55)
+                    text: "net"
+                    color: root.iceA(0.7)
                     font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
+                    font.pixelSize: 10
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
@@ -551,13 +521,13 @@ Item {
                     color: root.amber
                     font.family: root.mono
                     font.weight: Font.Bold
-                    font.pixelSize: 10
+                    font.pixelSize: 11
                 }
             }
 
             Rectangle { anchors.verticalCenter: parent.verticalCenter; width: 1; height: 14; color: root.dim; opacity: 0.6 }
 
-            // LINE: connection glyph
+            // connection glyph
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: gauges.online
@@ -568,7 +538,7 @@ Item {
                 font.pixelSize: 12
             }
 
-            // RESERVE: battery, laptops only
+            // battery, laptops only
             Row {
                 visible: gauges.hasBattery
                 anchors.verticalCenter: parent.verticalCenter
@@ -598,7 +568,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter; width: 1; height: 14; color: root.dim; opacity: 0.6
             }
 
-            // DIAG: hover to raise the pump diagnostic placard (sysinfo);
+            // hover to raise the sysinfo placard;
             // gone while the readout is toggled off in settings
             Item {
                 visible: root.pal.sysinfoOn !== false
@@ -607,11 +577,10 @@ Item {
                 Text {
                     id: diagLabel
                     anchors.centerIn: parent
-                    text: "DIAG"
-                    color: diagMa.containsMouse ? root.neon : root.iceA(0.55)
+                    text: "sys"
+                    color: diagMa.containsMouse ? root.neon : root.iceA(0.7)
                     font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
+                    font.pixelSize: 10
                     Behavior on color { ColorAnimation { duration: 150 } }
                 }
                 Rectangle {

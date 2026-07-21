@@ -313,7 +313,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(30 * root.ui)
-        text: "8BIT2 · BEFORE THE ROAD"
+        text: "ROAD8"
         color: root.inkA(0.35)
         font.family: root.mono
         font.pixelSize: Math.round(10 * root.ui)

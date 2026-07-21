@@ -2,14 +2,14 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// bog: the depth soundings. Hover the cattail in the bar (or pin with
+// bog: the system readout. Hover the cattail in the bar (or pin with
 // Super+.) and a bark-dark float panel surfaces top-right — rising through
 // its own waterline with a buoyant roll that damps out, the way a leaf
 // settles after a toad steps off it. Every metric is a STRING OF TEN CORK
 // FLOATS on a line: load pulls floats UNDER one by one (a submerged float
 // sinks below the line and dims to moss — something heavy is on that line).
-// CPU is the current, RAM the silt, GPU the deep pool, the battery a firefly
-// jar, the network a dragonfly. Sections with no source never light. Reads
+// Plain lowercase labels; the pond lives in the floats, not the words.
+// Sections with no source never light. Reads
 // /proc + nmcli itself; polls only while revealed; click-through scenery.
 Item {
     id: root
@@ -95,7 +95,7 @@ Item {
         onLoaded: root.pinShown = pinFlag.text().trim() === "1"
     }
 
-    // ── pollers (only while the soundings are actually up) ──────────────────
+    // ── pollers (only while the panel is actually up) ───────────────────────
     Timer {
         interval: 2000; running: root.shown && !root.occluded; repeat: true; triggeredOnStart: true
         onTriggered: { statProc.running = true; memProc.running = true; devProc.running = true }
@@ -246,7 +246,7 @@ Item {
     // ── a sounding line: name, ten floats on a line, readout ────────────────
     component SoundingRow: Item {
         id: row
-        property string label: "the current"
+        property string label: ""
         property int value: -1        // 0..100, -1 leaves the string slack
         property color tone: root.sun
         property string readout: ""
@@ -313,7 +313,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: row.readout
             font.family: root.mono
-            font.pixelSize: 10
+            font.pixelSize: 11
             color: row.value >= 0 ? row.tone : root.reedA(1.0)
         }
     }
@@ -389,7 +389,7 @@ Item {
             anchors.topMargin: 12
             spacing: 5
 
-            // header: a cork pip slowly dipping + the panel's name
+            // header: a cork pip slowly dipping + a plain title
             Item {
                 width: parent.width
                 height: 22
@@ -412,35 +412,26 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "depth soundings"
+                        text: "system"
                         font.family: root.serif
                         font.italic: true
                         font.pixelSize: 15
                         color: root.sun
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "slow noon"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.reedA(1.0)
-                }
             }
 
             Item { width: parent.width; height: 10 }   // room for the waterline
 
             SoundingRow {
-                label: "the current"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             SoundingRow {
-                label: "the silt"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -449,7 +440,7 @@ Item {
             SoundingRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 30 : 0
-                label: "the deep pool"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -457,7 +448,7 @@ Item {
             SoundingRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 30 : 0
-                label: "the firefly jar"
+                label: "battery"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.moss
                     : root.batteryPercent <= 15 ? root.rust
@@ -465,7 +456,7 @@ Item {
                 readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
-            // the dragonfly is text-only: connection left, rates right
+            // the net row is text-only: connection left, rates right
             Item {
                 width: parent.width
                 height: 24
@@ -475,7 +466,7 @@ Item {
                     spacing: 7
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "the dragonfly"
+                        text: "net"
                         font.family: root.serif
                         font.italic: true
                         font.pixelSize: 12
@@ -492,7 +483,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "flown off"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 10
@@ -504,34 +495,25 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.reedA(1.0)
                 }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.reedA(0.4) }
 
-            // the foot: how long we've been afloat
+            // the foot: uptime
             Item {
                 width: parent.width
                 height: 18
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "afloat " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 1
-                    color: root.strawA(0.55)
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "≈ the pond keeps its own time"
-                    font.family: root.serif
-                    font.italic: true
                     font.pixelSize: 10
-                    color: root.sunA(0.5)
+                    font.letterSpacing: 1
+                    color: root.strawA(0.7)
                 }
             }
         }

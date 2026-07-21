@@ -2,10 +2,10 @@ import QtQuick
 
 // sailing: cabin chrome for the Super+M control popup — a varnished cabin
 // panel below decks. Deep navy glass with a brass hairline, porthole-radius
-// corners marked by quarter-circle brass arcs, a ship's nameplate for a
-// header over a railing rule, and a small lifebuoy ring resting in the
-// bottom-right corner. The footer keeps the radio log: shore link left,
-// the deck sign-off right. A whisper of rain slants across the varnish.
+// corners marked by quarter-circle brass arcs, a deck lamp and swell meter
+// over a railing rule, and a small lifebuoy ring resting in the bottom-right
+// corner. The footer keeps the essentials: connection left, uptime right.
+// A whisper of rain slants across the varnish.
 // Renders nothing itself — the shell mounts the Components into its slots.
 Item {
     id: chrome
@@ -90,7 +90,7 @@ Item {
         }
     }
 
-    // ── header: the ship's nameplate over a railing rule ────────────────────
+    // ── header: deck lamp + swell meter over a railing rule ─────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -111,28 +111,6 @@ Item {
                         loops: Animation.Infinite
                         NumberAnimation { to: 0.35; duration: 1400; easing.type: Easing.InOutSine }
                         NumberAnimation { to: 1.0; duration: 1400; easing.type: Easing.InOutSine }
-                    }
-                }
-
-                // nameplate, centered between hairlines
-                Row {
-                    anchors.centerIn: parent
-                    spacing: 12
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 26; height: 1; color: chrome.lampA(0.5)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "M.V. THROUGH SILENCE"
-                        color: chrome.pale
-                        font.family: chrome.serif
-                        font.pixelSize: 13
-                        font.letterSpacing: 6
-                    }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 26; height: 1; color: chrome.lampA(0.5)
                     }
                 }
 
@@ -180,7 +158,7 @@ Item {
         }
     }
 
-    // ── footer: the radio log ───────────────────────────────────────────────
+    // ── footer: connection + uptime ─────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -216,12 +194,12 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "RADIO — NO SIGNAL"
-                            : "RADIO — " + (chrome.popup.connName || "SHORE LINK").toUpperCase()
+                        text: chrome.popup.connType === "none" ? "no signal"
+                            : (chrome.popup.connName || "connected")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 2
+                        font.pixelSize: 10
+                        font.letterSpacing: 1
                         color: chrome.popup.connType === "none" ? chrome.alarm : chrome.duskA(0.8)
                     }
                 }
@@ -229,10 +207,10 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "AT SEA " + chrome.popup.uptimeText.replace("up ", "").toUpperCase() + "  ·  DECK B"
+                    text: chrome.popup.uptimeText
                     font.family: chrome.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 2
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
                     color: chrome.slateA(1)
                 }
             }

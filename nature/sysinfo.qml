@@ -8,11 +8,11 @@ import Quickshell.Io
 // hair like it was set down in the grass. Hand-journal readings in dark pine
 // ink with a soft serif — every gauge is a vine: a curved stem with small
 // leaves that fill in as the value climbs.
-//   sunlight  — CPU load (a little sun that brightens with load)
-//   soil      — MEM used (a water-drop icon, soil moisture)
-//   canopy    — GPU util (hidden without nvidia-smi)
-//   dew       — battery (hidden on desktops)
-//   breeze    — connection + up/down rates
+//   cpu      — load (a little sun glyph that brightens with load)
+//   mem      — used/total (water-drop glyph)
+//   gpu      — util (hidden without nvidia-smi)
+//   battery  — hidden on desktops
+//   net      — connection + up/down rates
 // Reads /proc + nmcli itself; self-contained, click-through scenery.
 Item {
     id: root
@@ -344,7 +344,7 @@ Item {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: label
-                textFormat: Text.PlainText   // the breeze line carries the SSID
+                textFormat: Text.PlainText   // the net line carries the SSID
                 width: Math.min(implicitWidth,
                     parent.parent.width - entryGlyph.width - entryReading.width
                     - Math.round(21 * root.ui))
@@ -478,55 +478,48 @@ Item {
             anchors.topMargin: Math.round(15 * root.ui)
             spacing: Math.round(6 * root.ui)
 
-            // header
-            Text {
-                text: "field notes"
-                font.family: root.serif
-                font.italic: true
-                font.weight: Font.Medium
-                font.pixelSize: Math.round(17 * root.ui)
-                color: root.ink
-            }
+            // header: the page is just date-stamped
             Text {
                 // touch root.shown so the date re-evaluates on every reveal —
                 // a bare new Date() would freeze at whatever day the shell started
-                text: (root.shown, Qt.formatDateTime(new Date(), "MMMM d")) + "  ·  the meadow"
+                text: (root.shown, Qt.formatDateTime(new Date(), "MMMM d"))
                 font.family: root.serif
-                font.pixelSize: Math.round(10 * root.ui)
-                font.letterSpacing: 1.5
+                font.italic: true
                 font.weight: Font.Medium
-                color: root.inkA(0.55)
+                font.pixelSize: Math.round(13 * root.ui)
+                font.letterSpacing: 1.5
+                color: root.inkA(0.75)
             }
             Item { width: 1; height: Math.round(4 * root.ui) }
 
-            // sunlight — CPU
+            // CPU
             EntryLine {
                 glyph: String.fromCodePoint(0xF0599)   // nf-md-weather_sunny
                 glyphTone: root.goldInk
-                label: "sunlight"
+                label: "cpu"
                 reading: root.pct(root.cpuPercent)
                     + (root.cpuTemp > 0 ? "  " + root.cpuTemp + "°" : "")
                 readingTone: root.tone(root.cpuPercent, 60, 85)
             }
             VineMeter { value: root.cpuPercent < 0 ? 0 : root.cpuPercent; fillTone: root.tone(root.cpuPercent, 60, 85) }
 
-            // soil — MEM
+            // MEM
             EntryLine {
                 glyph: String.fromCodePoint(0xF058C)   // nf-md-water
                 glyphTone: root.leafInk
-                label: "soil"
+                label: "mem"
                 reading: root.ramUsedGb.toFixed(1) + " / " + root.ramTotalGb.toFixed(1) + " G"
                 readingTone: root.tone(root.ramPercent, 70, 90)
             }
             VineMeter { value: root.ramPercent < 0 ? 0 : root.ramPercent; fillTone: root.tone(root.ramPercent, 70, 90) }
 
-            // canopy — GPU (nvidia only)
+            // GPU (nvidia only)
             EntryLine {
                 visible: root.hasGpu
                 height: root.hasGpu ? implicitHeight : 0
                 glyph: String.fromCodePoint(0xF0531)   // nf-md-tree
                 glyphTone: root.leafInk
-                label: "canopy"
+                label: "gpu"
                 reading: root.pct(root.gpuPercent)
                 readingTone: root.tone(root.gpuPercent, 60, 85)
             }
@@ -537,14 +530,14 @@ Item {
                 fillTone: root.tone(root.gpuPercent, 60, 85)
             }
 
-            // dew — battery (laptops only)
+            // battery (laptops only)
             EntryLine {
                 visible: root.hasBattery
                 height: root.hasBattery ? implicitHeight : 0
                 glyph: String.fromCodePoint(root.batteryCharging ? 0xF0084 : 0xF058E)  // charging / water-outline
                 glyphTone: root.batteryCharging ? root.goldInk
                     : root.batteryPercent <= 20 ? root.roseInk : root.leafInk
-                label: root.batteryCharging ? "dew, gathering" : "dew"
+                label: root.batteryCharging ? "battery · charging" : "battery"
                 reading: root.pct(root.batteryPercent)
                 readingTone: root.batteryCharging ? root.goldInk
                     : root.batteryPercent <= 20 ? root.roseInk : root.ink
@@ -559,23 +552,23 @@ Item {
 
             Item { width: 1; height: Math.round(2 * root.ui) }
 
-            // breeze — NET
+            // NET
             EntryLine {
                 glyph: String.fromCodePoint(root.online
                     ? (root.connType === "eth" ? 0xF059F : 0xF05A9) : 0xF092F)
                 glyphTone: root.online ? root.leafInk : root.roseInk
-                label: root.online ? "breeze  ·  " + root.connName : "still air"
+                label: root.online ? "net  ·  " + root.connName : "offline"
                 reading: root.online
                     ? "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     : "offline"
                 readingTone: root.online ? root.inkA(0.75) : root.roseInk
             }
 
-            // footer: uptime as a growing season
+            // footer: uptime
             Text {
                 width: parent.width
                 horizontalAlignment: Text.AlignRight
-                text: "— in bloom " + root.uptimeText
+                text: "up " + root.uptimeText
                 font.family: root.serif
                 font.italic: true
                 font.weight: Font.Medium

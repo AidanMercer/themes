@@ -28,7 +28,7 @@ Item {
     property color panelBorder: skyA(0.35)
     property int panelBorderWidth: 1
     property int panelRadius: 12
-    property string panelTitle: "Across the water"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: ledger
@@ -80,9 +80,9 @@ Item {
             Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 16; bottomMargin: 8 }
                 visible: ledger.quiet
-                text: "the far shore is asleep"
+                text: "do not disturb"
                 font.family: root.pal.fontMono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.letterSpacing: 2
                 color: root.slateA(1)
             }
@@ -90,11 +90,11 @@ Item {
             Text {
                 anchors { right: parent.right; bottom: parent.bottom; rightMargin: 16; bottomMargin: 8 }
                 visible: ledger.panel !== null && !ledger.quiet
-                text: (ledger.panel ? ledger.panel.count : 0) + " light" + ((ledger.panel && ledger.panel.count === 1) ? "" : "s")
+                text: (ledger.panel ? ledger.panel.count : 0) + ((ledger.panel && ledger.panel.count === 1) ? " notification" : " notifications")
                 font.family: root.pal.fontMono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.letterSpacing: 2
-                color: root.skyA(0.5)
+                color: root.skyA(0.7)
             }
         }
     }

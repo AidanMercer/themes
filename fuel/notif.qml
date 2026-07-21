@@ -26,7 +26,7 @@ Item {
     property color panelBorder: inkA(0.22)
     property int panelBorderWidth: 1
     property int panelRadius: 4
-    property string panelTitle: "Station log"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: housing
@@ -52,23 +52,11 @@ Item {
             }
 
             // pump badge at the foot
-            Row {
+            Rectangle {
                 anchors { right: parent.right; bottom: parent.bottom; rightMargin: 12; bottomMargin: 9 }
-                spacing: 5
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 4; height: 4; rotation: 45
-                    color: root.pal.neon
-                    opacity: 0.7
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "FUEL · PUMP 07 · ROLL"
-                    color: root.inkA(0.30)
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 7
-                    font.letterSpacing: 2
-                }
+                width: 4; height: 4; rotation: 45
+                color: root.pal.neon
+                opacity: 0.7
             }
         }
     }
@@ -154,27 +142,15 @@ Item {
                 Rectangle { width: parent.width; height: 1.5; color: root.pal.magenta; opacity: 0.40 }
             }
 
-            // station stamp at the foot, like the receipt's thank-you line
-            Row {
+            // station stamp at the foot
+            Rectangle {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.rightMargin: 10
                 anchors.bottomMargin: 8
-                spacing: 5
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 4; height: 4; rotation: 45
-                    color: chassis.tint
-                    opacity: 0.7
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "FUEL · Nº 07"
-                    color: root.inkA(0.28)
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 7
-                    font.letterSpacing: 2
-                }
+                width: 4; height: 4; rotation: 45
+                color: chassis.tint
+                opacity: 0.7
             }
         }
     }

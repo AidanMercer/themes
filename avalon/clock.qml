@@ -76,16 +76,6 @@ Item {
         transformOrigin: Item.BottomRight
 
         Text {
-            anchors.right: parent.right
-            text: "a v a l o n"
-            color: root.goldA(0.85)
-            font.family: "Noto Serif Display"
-            font.pixelSize: 13
-            font.letterSpacing: 9
-            font.italic: true
-        }
-
-        Text {
             id: timeText
             anchors.right: parent.right
             text: Qt.formatDateTime(clock.date, "HH:mm")

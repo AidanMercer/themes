@@ -1,12 +1,12 @@
 import QtQuick
 
-// encore: the CUE SHEET — chrome for the Super+M control menu. The popup is
-// the desk's clipped-up sheet for tonight: a stage-black capsule card with
-// the teal edge-strip foot, a cue lamp ticking the count in the header next
-// to a three-lamp monitor EQ (bass is the crowd's magenta, mid the diva's
-// teal, high the lacquer blue — law 4, side by side, never blended), and
-// the sign-off "V// FROM THE STAGE" with a beat block. Invisible Item root;
-// the shell mounts the Components around its shared tabs.
+// encore: chrome for the Super+M control menu. The popup is the desk's
+// clipped-up sheet for tonight: a stage-black capsule card with the teal
+// edge-strip foot, a cue lamp ticking the count in the header next to a
+// three-lamp monitor EQ (bass is the crowd's magenta, mid the diva's teal,
+// high the lacquer blue — law 4, side by side, never blended), uptime on
+// the right, connection status in the footer. Invisible Item root; the
+// shell mounts the Components around its shared tabs.
 Item {
     id: chrome
 
@@ -59,7 +59,7 @@ Item {
         }
     }
 
-    // ── header: cue lamp + CUE SHEET + monitor EQ, // FOH DESK + uptime ─────
+    // ── header: cue lamp + monitor EQ, uptime on the right ──────────────────
     readonly property Component header: Component {
         Column {
             spacing: 14
@@ -88,16 +88,6 @@ Item {
                         }
                         onVisibleChanged: if (!visible) tick = true
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "CUE SHEET"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 4
-                        color: chrome.pal.neon
-                    }
-
                     // monitor EQ: three lamps off the shell's cava — dances
                     // while anything plays, parks dim at silence (law 3)
                     Item {
@@ -126,28 +116,14 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "// FOH DESK"
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 2
-                        color: chrome.pal.cyan
-                        opacity: 0.7
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "SHOW " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 1
-                        color: chrome.pal.dim
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
+                    color: chrome.pal.dim
                 }
             }
 
@@ -160,7 +136,7 @@ Item {
         }
     }
 
-    // ── footer: FOH link (left) + the sign-off (right) ──────────────────────
+    // ── footer: connection status ───────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 14
@@ -188,43 +164,12 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "FOH LINK DOWN"
-                            : ("FOH · " + (chrome.popup.connName || "LINKED"))
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.pal.cyan
-                    }
-                }
-
-                Row {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "V// FROM THE STAGE"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.pal.neon
-                        opacity: 0.55
-                    }
-                    // the beat block: a hard two-frame blink, like a tally lamp
-                    Rectangle {
-                        id: tally
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 7; height: 11; radius: 2
-                        color: chrome.pal.neon
-                        property bool tick: true
-                        opacity: tick ? 1 : 0.15
-                        Timer {
-                            interval: 500; repeat: true
-                            running: chrome.popup.open
-                            onTriggered: tally.tick = !tally.tick
-                        }
-                        onVisibleChanged: if (!visible) tick = true
                     }
                 }
             }

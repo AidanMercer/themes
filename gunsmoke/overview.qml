@@ -1,12 +1,12 @@
 import QtQuick
 
-// gunsmoke: the Super+Tab exposé is THE WANTED WALL. Every window is a
-// poster nailed up in the fog: a hard paper-slab shadow and a nail head
-// above each frame (tileUnderlay), corner rivets and a file number on the
-// paper (tileOverlay). The poster under your eye takes the wax seal — the
-// one oxblood mark on the wall (active = the accent is spent). The wall
-// itself breathes: two slow fog banks crawl behind the posters while the
-// exposé is up, and the tag in the corner counts the marks posted.
+// gunsmoke: the Super+Tab exposé. Every window is a poster nailed up in the
+// fog: a hard paper-slab shadow and a nail head above each frame
+// (tileUnderlay), corner rivets and a number on the paper (tileOverlay).
+// The poster under your eye takes the wax seal — the one oxblood mark on
+// the wall (active = the accent is spent). The wall itself breathes: two
+// slow fog banks crawl behind the posters while the exposé is up, and the
+// tag in the corner counts the windows.
 //
 // visual-only by contract: no input handlers; every loop gates on
 // overview.open (the shell tears the layers down ~300ms after close).
@@ -46,8 +46,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: steelA(0.75)
-    readonly property string hintText: "PICK YOUR MARK · ⏎ CLAIM · ESC RIDE ON"
-    readonly property string emptyText: "NO MARKS POSTED"
+    readonly property string hintText: "⏎ SELECT · ESC CLOSE"
+    readonly property string emptyText: "NO WINDOWS"
 
     // ── backdrop: the wall — fog banks + the wall tag ──
     readonly property Component backdrop: Component {
@@ -85,28 +85,17 @@ Item {
                 }
             }
 
-            // the wall tag, top-left, in the ledger's stamped hand
-            Column {
+            // the wall tag, top-left: the window count in the ledger's hand
+            Row {
                 x: chrome.px(30); y: chrome.px(26)
-                spacing: 5
+                spacing: 8
+                Rectangle { width: chrome.px(30); height: 1; color: chrome.ashA(1); anchors.verticalCenter: parent.verticalCenter }
                 Text {
-                    text: "THE WANTED WALL"
-                    font.family: chrome.serif
-                    font.pixelSize: chrome.px(13)
-                    font.weight: Font.Black
-                    font.letterSpacing: 6
-                    color: chrome.boneA(0.85)
-                }
-                Row {
-                    spacing: 8
-                    Rectangle { width: chrome.px(30); height: 1; color: chrome.ashA(1); anchors.verticalCenter: parent.verticalCenter }
-                    Text {
-                        text: String(chrome.overview.windows.length).padStart(2, "0") + " MARKS POSTED"
-                        font.family: chrome.mono
-                        font.pixelSize: chrome.px(9)
-                        font.letterSpacing: 3
-                        color: chrome.ashA(1)
-                    }
+                    text: String(chrome.overview.windows.length).padStart(2, "0") + " WINDOWS"
+                    font.family: chrome.mono
+                    font.pixelSize: chrome.px(10)
+                    font.letterSpacing: 3
+                    color: chrome.ashA(1)
                 }
             }
 
@@ -188,7 +177,7 @@ Item {
                 }
             }
 
-            // CLAIMED tag on the poster you rode in on
+            // tag on the poster you rode in on
             Rectangle {
                 visible: ov.ctr
                 x: chrome.px(6)
@@ -201,16 +190,16 @@ Item {
                 Text {
                     id: claimed
                     anchors.centerIn: parent
-                    text: "CLAIMED"
+                    text: "CURRENT"
                     font.family: chrome.serif
-                    font.pixelSize: chrome.px(8)
+                    font.pixelSize: chrome.px(10)
                     font.weight: Font.Black
                     font.letterSpacing: 2
                     color: chrome.boneA(0.9)
                 }
             }
 
-            // the file number, bottom-left in the ledger's data hand
+            // the tile number, bottom-left in the ledger's data hand
             Text {
                 anchors.left: parent.left
                 anchors.leftMargin: chrome.px(8)

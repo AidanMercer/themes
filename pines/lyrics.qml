@@ -246,8 +246,8 @@ Item {
         x: root.boxX
         y: root.boxY
         visible: root.engine.player !== null && root.engine.tokens.length === 0
-        text: !root.engine.lyricsLoaded ? "W/T · TAKING SIGNAL…"
-              : !root.engine.lyricsSynced ? "W/T · NO TRAFFIC"
+        text: !root.engine.lyricsLoaded ? "searching…"
+              : !root.engine.lyricsSynced ? "no synced lyrics"
               : "▵"
         color: root.silverA(0.7)
         style: Text.Outline
@@ -257,14 +257,14 @@ Item {
         font.letterSpacing: 4
     }
 
-    // offset OSD — the log's calibration note
+    // offset OSD — the calibration note
     Text {
         id: offsetOsd
         function flash() { opacity = 1; osdHide.restart() }
         x: root.boxX
         y: root.boxY - root.lyricSize * 1.1
         opacity: 0
-        text: "LOG OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " MS"
+        text: "offset " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
         color: root.lamp
         style: Text.Outline
         styleColor: Qt.rgba(0.01, 0.04, 0.07, 0.6)

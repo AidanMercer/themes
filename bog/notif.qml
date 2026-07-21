@@ -6,9 +6,8 @@ import QtQuick
 // of ripple rings that spreads across the card the moment it arrives (the
 // pond acknowledging the drop). Hover and the float sits up a little. The
 // shell keeps the daemon, stacking, text and actions; this only dresses the
-// card. The notification center is "the pond remembers": a waterline under
-// its header, the raft resting at the foot, and under do-not-disturb the
-// whole pond goes to sleep.
+// card. The notification center gets a waterline under its header, the raft
+// resting at the foot, and under do-not-disturb the whole pond dims.
 Item {
     id: root
     required property var pal
@@ -24,12 +23,12 @@ Item {
     property int cardRadius: 14      // pebble-smooth, nothing sharp in this pond
     property bool cardSpine: false   // the float on the waterline replaces it
 
-    // notification center: the pond remembers
+    // notification center
     property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
     property color panelBorder: mossA(0.45)
     property int panelBorderWidth: 1
     property int panelRadius: 16
-    property string panelTitle: "the pond remembers"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             id: pond
@@ -80,7 +79,7 @@ Item {
             Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 16; bottomMargin: 9 }
                 visible: pond.asleep
-                text: "the pond sleeps"
+                text: "do not disturb"
                 font.family: "Noto Serif Display"
                 font.italic: true
                 font.pixelSize: 10

@@ -2,14 +2,13 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// encore: the PATCH BAY — the rack panel behind the light desk. Hover the
-// DESK lamp on the bar (or pin with Super+.) and the panel drops in on its
-// lighting batten, swings once and hangs plumb (the physical settle). Every
-// subsystem is a channel on the rig: CH1 VOX (CPU), CH2 KEYS (MEM), CH3
-// SYNTH (GPU), CH4 FOH (NET), CH5 PWR — each metered by a ten-lamp LED
-// ladder that fills in whole lamps only (law 1). Hot channels go follow-spot
-// warm, clipping channels go crowd magenta (law 4). Channels with no source
-// stay dark, unpatched. Reads /proc + nmcli itself; click-through scenery.
+// encore: the rack panel behind the light desk. Hover the sys lamp on the
+// bar (or pin with Super+.) and the panel drops in on its lighting batten,
+// swings once and hangs plumb (the physical settle). Every subsystem is a
+// channel on the rig — cpu, mem, gpu, net, bat — each metered by a ten-lamp
+// LED ladder that fills in whole lamps only (law 1). Hot channels go
+// follow-spot warm, clipping channels go crowd magenta (law 4). Channels
+// with no source stay dark. Reads /proc + nmcli itself; click-through.
 Item {
     id: root
     anchors.fill: parent
@@ -57,7 +56,7 @@ Item {
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 500; easing.type: Easing.OutCubic }
 
-    // hover reveal — the bar's DESK lamp writes "1"/"0"; Super+. pins
+    // hover reveal — the bar's sys lamp writes "1"/"0"; Super+. pins
     property bool hoverShown: false
     property bool pinShown: false
     property bool occluded: false   // loader writes true while the session is locked
@@ -219,7 +218,7 @@ Item {
         const d = Math.floor(s / 86400); s -= d * 86400
         const h = Math.floor(s / 3600);  s -= h * 3600
         const m = Math.floor(s / 60)
-        uptimeText = d > 0 ? `${d}D ${h}H ${m}M` : h > 0 ? `${h}H ${m}M` : `${m}M`
+        uptimeText = d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`
     }
 
     Process {
@@ -238,11 +237,10 @@ Item {
         online = true
     }
 
-    // ── a channel row: CH tag, instrument, ten-lamp ladder, readout ─────────
+    // ── a channel row: label, ten-lamp ladder, readout ──────────────────────
     component ChannelRow: Item {
         id: row
-        property string ch: "CH1"
-        property string label: "VOX"
+        property string label: "cpu"
         property int value: -1        // 0..100, -1 = unpatched
         property color tone: root.teal
         property string readout: ""
@@ -251,16 +249,6 @@ Item {
 
         Text {
             anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: row.ch
-            font.family: root.mono
-            font.pixelSize: 9
-            font.weight: Font.Bold
-            color: root.restA(1.0)
-        }
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 30
             anchors.verticalCenter: parent.verticalCenter
             text: row.label
             font.family: root.mono
@@ -272,7 +260,7 @@ Item {
         // the ladder: ten lamps, whole lamps only — an LED meter, not a bar
         Row {
             anchors.left: parent.left
-            anchors.leftMargin: 82
+            anchors.leftMargin: 56
             anchors.verticalCenter: parent.verticalCenter
             spacing: 3
             Repeater {
@@ -358,7 +346,7 @@ Item {
             anchors.topMargin: 14
             spacing: 4
 
-            // header: the rack's name + a cue lamp on the count
+            // header: a plain title + a cue lamp on the count
             Item {
                 width: parent.width
                 height: 18
@@ -381,7 +369,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "PATCH BAY"
+                        text: "system"
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 12
@@ -389,28 +377,19 @@ Item {
                         color: root.teal
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "LINE CHECK"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.restA(1.0)
-                }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.restA(0.55) }
 
             ChannelRow {
-                ch: "CH1"; label: "VOX"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             ChannelRow {
-                ch: "CH2"; label: "KEYS"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -419,12 +398,12 @@ Item {
             ChannelRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 30 : 0
-                ch: "CH3"; label: "SYNTH"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
             }
-            // FOH is text-only: the desk's link to the house
+            // net is text-only: the desk's link to the house
             Item {
                 width: parent.width
                 height: 24
@@ -434,15 +413,7 @@ Item {
                     spacing: 6
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "CH4"
-                        font.family: root.mono
-                        font.pixelSize: 9
-                        font.weight: Font.Bold
-                        color: root.restA(1.0)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "FOH"
+                        text: "net"
                         font.family: root.mono
                         font.pixelSize: 11
                         font.letterSpacing: 2
@@ -450,7 +421,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "LINK DOWN"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 10
@@ -462,7 +433,7 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.restA(1.0)
                 }
             }
@@ -470,7 +441,7 @@ Item {
             ChannelRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 30 : 0
-                ch: "CH5"; label: "PWR"
+                label: "bat"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.lacquer
                     : root.batteryPercent <= 15 ? root.crowd
@@ -480,27 +451,18 @@ Item {
 
             Rectangle { width: parent.width; height: 1; color: root.restA(0.55) }
 
-            // the show timer
+            // uptime
             Item {
                 width: parent.width
                 height: 18
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "SHOW RUNNING " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     font.letterSpacing: 1
-                    color: root.inkA(0.6)
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "V// ENCORE"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.tealA(0.55)
+                    color: root.inkA(0.7)
                 }
             }
         }

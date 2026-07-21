@@ -55,8 +55,8 @@ Item {
         NumberAnimation { target: root; property: "gx"; to: 1.5; duration: 260; easing.type: Easing.OutQuad }
     }
 
-    // boot-in: slide/fade in from the left while the header types out, then one
-    // glitch burst as the "signal locks"
+    // boot-in: slide/fade in from the left, then one glitch burst as the
+    // "signal locks"
     property real bootT: 0
     SequentialAnimation {
         running: true
@@ -148,33 +148,6 @@ Item {
                 anchors.centerIn: parent
                 spacing: 4
 
-                // header: corp tag + live blink
-                Row {
-                    spacing: 8
-                    Rectangle {
-                        width: 9; height: 9; color: root.neon
-                        anchors.verticalCenter: parent.verticalCenter
-                        SequentialAnimation on opacity {
-                            running: !root.occluded; loops: Animation.Infinite
-                            NumberAnimation { to: 0.15; duration: 0 }
-                            PauseAnimation { duration: 620 }
-                            NumberAnimation { to: 1; duration: 0 }
-                            PauseAnimation { duration: 620 }
-                        }
-                    }
-                    Text {
-                        readonly property string full: "NIGHT CITY ▸ NET.RUNNER"
-                        // types out over the first ~2/3 of the boot-in
-                        text: full.substring(0, Math.round(Math.min(1, root.bootT * 1.5) * full.length))
-                        color: root.cyan
-                        font.family: root.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 5
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                }
-
                 // the time — chromatic-aberration stack
                 Item {
                     width: timeText.width
@@ -261,11 +234,11 @@ Item {
                     font.letterSpacing: 7
                 }
 
-                // status footer + cursor
+                // timezone footer + cursor
                 Row {
                     spacing: 7
                     Text {
-                        text: "// NETRUNNER ONLINE"
+                        text: "// " + Qt.formatDateTime(clock.date, "t").toUpperCase()
                         color: root.dim
                         font.family: root.mono
                         font.weight: Font.Bold

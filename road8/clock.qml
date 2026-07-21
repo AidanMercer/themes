@@ -137,7 +137,7 @@ Item {
         Column {
             spacing: 10
 
-            // header: a pixel spark + where we are
+            // header: a lone pixel spark
             Row {
                 spacing: 10
                 PixelGlyph {
@@ -153,14 +153,6 @@ Item {
                         NumberAnimation { to: 0.35; duration: 2600; easing.type: Easing.InOutSine }
                         NumberAnimation { to: 1.0; duration: 2600; easing.type: Easing.InOutSine }
                     }
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "BEFORE THE ROAD"
-                    color: root.inkA(0.55)
-                    font.family: root.mono
-                    font.pixelSize: 11
-                    font.letterSpacing: 6
                 }
             }
 

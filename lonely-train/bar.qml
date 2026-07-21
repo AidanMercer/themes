@@ -7,7 +7,7 @@ import Quickshell.Services.Mpris
 
 // lonely-train: bottom route strip. Station-sign plates (amber band along the
 // top edge, night glass below) carry three clusters:
-//   left   — LT line roundel (click: control popup) + a cassette now-playing
+//   left   — line roundel (click: control popup) + a cassette now-playing
 //            chip whose reels spin while music plays, tape counter progress
 //   center — the route map: ten station dots on a line, a little lit train
 //            slides to whichever station (workspace) you're stopped at
@@ -118,7 +118,7 @@ Item {
         return String.fromCodePoint(0xF0079 + Math.floor(level / 10))
     }
 
-    // ── left: LT roundel + cassette now-playing ─────────────────────────────
+    // ── left: line roundel + cassette now-playing ───────────────────────────
     Row {
         anchors.left: parent.left
         anchors.leftMargin: 14
@@ -140,13 +140,12 @@ Item {
                 border.width: 2
                 border.color: roundelMa.containsMouse ? root.amber : root.amberA(0.75)
                 Behavior on border.color { ColorAnimation { duration: 150 } }
-                Text {
+                // wordless roundel: the route line running through the station ring
+                Rectangle {
                     anchors.centerIn: parent
-                    text: "LT"
+                    width: 10; height: 2
+                    radius: 1
                     color: root.amber
-                    font.family: root.mono
-                    font.pixelSize: 7
-                    font.weight: Font.Black
                 }
             }
             MouseArea {
@@ -495,9 +494,9 @@ Item {
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     text: Qt.formatDateTime(clock.date, "ddd dd").toUpperCase()
-                    color: root.duskA(0.65)
+                    color: root.duskA(0.7)
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     font.letterSpacing: 2
                 }
             }

@@ -1,11 +1,11 @@
 import QtQuick
 
-// encore: the Super+Tab exposé is the MONITOR WALL at the side of the stage —
+// encore: the Super+Tab exposé is a monitor wall at the side of the stage —
 // every window a screen in the dark, and the stage rig above doing what rigs
-// do: the selected screen gets the FOLLOW SPOT (a real light cone drawn from
-// the batten down to the tile's place on the ring), the one you're playing
-// wears the ON AIR tag, and a row of resting glowsticks leans along the foot
-// of the hall. Selection moves as a lighting cue — the cone CUTS to the next
+// do: the selected screen gets the follow spot (a real light cone drawn from
+// the batten down to the tile's place on the ring), the focused one wears an
+// active tag, and a row of resting glowsticks leans along the foot of the
+// hall. Selection moves as a lighting cue — the cone CUTS to the next
 // screen (law 2), it doesn't glide. Visual-only by contract: no input
 // handlers; every loop gates on overview.open.
 Item {
@@ -39,8 +39,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, 0.7)
-    readonly property string hintText: "PICK A SCREEN · ⏎ TAKE THE STAGE · ESC HOUSE LIGHTS"
-    readonly property string emptyText: "EMPTY STAGE"
+    readonly property string hintText: "⏎ focus · esc close"
+    readonly property string emptyText: "no windows"
 
     // ── backdrop: the follow spot + the resting glowstick row ──
     readonly property Component backdrop: Component {
@@ -118,10 +118,10 @@ Item {
                 }
             }
 
-            // the board tag, top-left, in the desk's letterspaced dialect
+            // the window count, top-left, in the desk's letterspaced dialect
             Text {
                 x: chrome.px(28); y: chrome.px(26)
-                text: "MONITOR WALL · " + String(chrome.overview.windows.length).padStart(2, "0") + " SCREENS LIVE"
+                text: chrome.overview.windows.length + " windows"
                 font.family: chrome.mono
                 font.pixelSize: chrome.px(10)
                 font.letterSpacing: 3
@@ -145,7 +145,7 @@ Item {
         }
     }
 
-    // ── per-tile: the cue lamp + ON AIR tag ──
+    // ── per-tile: the cue lamp + active tag ──
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
@@ -171,38 +171,38 @@ Item {
                 onVisibleChanged: if (!visible) tick = true
             }
 
-            // ON AIR on the screen you're playing
+            // the focused window's tag
             Rectangle {
                 visible: ov.ctr
                 x: chrome.px(8)
                 y: -chrome.px(10)
-                width: onair.implicitWidth + chrome.px(12)
-                height: chrome.px(16)
+                width: activeTag.implicitWidth + chrome.px(12)
+                height: chrome.px(18)
                 radius: height / 2
                 color: "#04060c"
                 border.color: chrome.pal.magenta
                 border.width: 1
                 Text {
-                    id: onair
+                    id: activeTag
                     anchors.centerIn: parent
-                    text: "ON AIR"
+                    text: "active"
                     font.family: chrome.mono
-                    font.pixelSize: chrome.px(8)
+                    font.pixelSize: chrome.px(10)
                     font.bold: true
                     font.letterSpacing: 2
                     color: chrome.pal.magenta
                 }
             }
 
-            // song number, bottom-right — its place in the setlist
+            // tile number, bottom-right — its place on the ring
             Text {
                 anchors.right: parent.right
                 anchors.rightMargin: chrome.px(7)
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: chrome.px(4)
-                text: "S" + String((ov.tile ? ov.tile.index : 0) + 1).padStart(2, "0")
+                text: String((ov.tile ? ov.tile.index : 0) + 1)
                 font.family: chrome.mono
-                font.pixelSize: chrome.px(8)
+                font.pixelSize: chrome.px(10)
                 color: ov.hot ? chrome.pal.neon : Qt.rgba(chrome.pal.dim.r, chrome.pal.dim.g, chrome.pal.dim.b, 0.9)
             }
         }

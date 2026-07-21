@@ -47,8 +47,8 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, 0.75)
-    readonly property string hintText: "SELECT WINDOW · ⏎ START · ESC QUIT"
-    readonly property string emptyText: "NO SIGNAL"
+    readonly property string hintText: "⏎ SELECT · ESC CLOSE"
+    readonly property string emptyText: "NO WINDOWS"
 
     // ── backdrop: pixel stars + stepped skyline + one taillight heading out ──
     readonly property Component backdrop: Component {
@@ -148,10 +148,10 @@ Item {
                 }
             }
 
-            // level tag, top-left, in the popup's letterspaced dialect
+            // window count, top-left, in the popup's letterspaced dialect
             Text {
                 x: chrome.px(28); y: chrome.px(26)
-                text: "WORLD 8-0 · " + String(chrome.overview.windows.length).padStart(2, "0") + " UP"
+                text: String(chrome.overview.windows.length).padStart(2, "0") + " WINDOWS"
                 font.family: chrome.mono
                 font.pixelSize: chrome.px(10)
                 font.letterSpacing: 3
@@ -174,13 +174,12 @@ Item {
         }
     }
 
-    // ── per-tile: blinking ▶ cursor, P1 badge, stepped corner pixels ──
+    // ── per-tile: blinking ▶ cursor, stepped corner pixels ──
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
             property var tile: null
             readonly property bool hot: tile ? tile.hot === true : false
-            readonly property bool ctr: tile ? tile.isCenter === true : false
 
             // corner pixels: a single square nicked into each corner fakes the
             // chunky sprite-rounding without touching the shell's card
@@ -212,27 +211,6 @@ Item {
                     PauseAnimation { duration: 420 }
                     PropertyAction { value: 0 }
                     PauseAnimation { duration: 420 }
-                }
-            }
-
-            // P1 badge on the frame you're playing
-            Rectangle {
-                visible: ov.ctr
-                x: chrome.px(6)
-                y: -chrome.px(9)
-                width: p1.implicitWidth + chrome.px(10)
-                height: chrome.px(15)
-                color: "#07080c"
-                border.color: chrome.pal.amber
-                border.width: 1
-                Text {
-                    id: p1
-                    anchors.centerIn: parent
-                    text: "P1"
-                    font.family: chrome.mono
-                    font.pixelSize: chrome.px(9)
-                    font.bold: true
-                    color: chrome.pal.amber
                 }
             }
 

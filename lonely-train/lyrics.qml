@@ -171,8 +171,8 @@ Item {
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
-                text: !root.engine.lyricsLoaded ? "TUNING…"
-                      : !root.engine.lyricsSynced ? "NO ANNOUNCEMENT"
+                text: !root.engine.lyricsLoaded ? "LOADING…"
+                      : !root.engine.lyricsSynced ? "NO SYNCED LYRICS"
                       : "♪"
                 textFormat: Text.PlainText
                 color: root.duskA(0.8)
@@ -191,7 +191,7 @@ Item {
             x: root.boxX
             y: root.boxY - root.lyricSize * 1.3
             opacity: 0
-            text: "SIGNAL OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
+            text: "OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
             color: root.amber
             style: Text.Outline
             styleColor: Qt.rgba(0, 0, 0, 0.6)

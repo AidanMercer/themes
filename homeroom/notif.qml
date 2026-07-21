@@ -109,9 +109,9 @@ Item {
             Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 16; bottomMargin: 7 }
                 visible: board.quiet
-                text: "quiet hours — shh"
+                text: "quiet hours"
                 font.family: root.pal.fontMono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.letterSpacing: 2
                 color: root.chalkA(0.5)
             }

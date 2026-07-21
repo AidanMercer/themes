@@ -100,7 +100,7 @@ Item {
     property color panelBorder: pinkA(0.32)
     property int panelBorderWidth: 1
     property int panelRadius: 14
-    property string panelTitle: "petals drifted in"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             property var panel: null

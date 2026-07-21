@@ -3,7 +3,7 @@ import QtQuick
 // lonely-train: station-placard notification chrome. Night glass with an
 // amber band along the top edge (the station-sign grammar of the bar), a
 // route spine down the left with a station dot lit in the urgency color,
-// and a tiny LT roundel in the corner. The shell keeps the daemon, stack,
+// and a tiny roundel in the corner. The shell keeps the daemon, stack,
 // text and actions; this only dresses the card.
 Item {
     id: root
@@ -24,7 +24,7 @@ Item {
     property color panelBorder: inkA(0.16)
     property int panelBorderWidth: 1
     property int panelRadius: 11
-    property string panelTitle: "Service notices"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: board
@@ -68,13 +68,11 @@ Item {
                 color: "transparent"
                 border.width: 1.2
                 border.color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.5)
-                Text {
+                // wordless roundel: the route line through the station ring
+                Rectangle {
                     anchors.centerIn: parent
-                    text: "LT"
+                    width: 7; height: 1.2
                     color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.6)
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 6
-                    font.weight: Font.Black
                 }
             }
         }
@@ -153,7 +151,7 @@ Item {
                 }
             }
 
-            // tiny LT roundel, bottom-right
+            // tiny roundel, bottom-right — the route line through the ring
             Rectangle {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -162,13 +160,10 @@ Item {
                 color: "transparent"
                 border.width: 1.2
                 border.color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.5)
-                Text {
+                Rectangle {
                     anchors.centerIn: parent
-                    text: "LT"
+                    width: 6; height: 1.2
                     color: Qt.rgba(root.pal.neon.r, root.pal.neon.g, root.pal.neon.b, 0.6)
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 5
-                    font.weight: Font.Black
                 }
             }
         }

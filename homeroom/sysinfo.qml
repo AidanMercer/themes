@@ -3,11 +3,10 @@ import Quickshell
 import Quickshell.Io
 import "chalk.js" as Chalk
 
-// homeroom: the duty board. Hover the thumbtack in the rail (or pin with
+// homeroom: the readout slate. Hover the thumbtack in the rail (or pin with
 // Super+.) and a small slate swings down on its two tape tabs, settling on
-// its pins the way a hung board takes a knock. The day's subjects are the
-// machine's vitals — MATH is the CPU, MEMORY is RAM, ART the GPU, ENERGY
-// the battery, ATTENDANCE the network — and every meter is chalk tally
+// its pins the way a hung board takes a knock. Plain rows for the machine's
+// vitals — cpu, mem, gpu, battery, net — and every meter is chalk tally
 // marks, four strokes and a diagonal gate, one tally-stroke per 10%.
 // Sections with no source (no nvidia-smi, no battery) never appear. Reads
 // /proc + nmcli itself; polls only while revealed; click-through scenery.
@@ -25,7 +24,6 @@ Item {
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
     function chalkA(a) { return Qt.rgba(chalk.r, chalk.g, chalk.b, a) }
-    function sunA(a)   { return Qt.rgba(sun.r, sun.g, sun.b, a) }
     function slateA(a) { return Qt.rgba(slate.r, slate.g, slate.b, a) }
     function glassA(a) { return Qt.rgba(glass.r, glass.g, glass.b, a) }
 
@@ -233,10 +231,10 @@ Item {
         online = true
     }
 
-    // ── a subject row: name, chalk tallies, readout ────────────────────────
+    // ── a vitals row: name, chalk tallies, readout ─────────────────────────
     component SubjectRow: Item {
         id: row
-        property string subject: "MATH"
+        property string subject: "cpu"
         property int value: -1        // 0..100, -1 = not chalked yet
         property color tone: root.chalk
         property string readout: ""
@@ -298,7 +296,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: row.readout
             font.family: root.mono
-            font.pixelSize: 10
+            font.pixelSize: 11
             color: row.value >= 0 ? Qt.rgba(row.tone.r, row.tone.g, row.tone.b, 0.95) : root.slateA(1.0)
         }
     }
@@ -369,7 +367,7 @@ Item {
             anchors.topMargin: 16
             spacing: 3
 
-            // header: today's duty
+            // header
             Item {
                 width: parent.width
                 height: 20
@@ -386,7 +384,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "DUTY BOARD"
+                        text: "system"
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 12
@@ -394,28 +392,19 @@ Item {
                         color: root.chalkA(0.95)
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "1st period"
-                    font.family: root.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 1
-                    color: root.slateA(1)
-                }
             }
 
             Item { width: 1; height: 6 }
 
             SubjectRow {
-                subject: "MATH"
+                subject: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             SubjectRow {
-                subject: "MEMORY"
+                subject: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -424,7 +413,7 @@ Item {
             SubjectRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 30 : 0
-                subject: "ART"
+                subject: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -432,7 +421,7 @@ Item {
             SubjectRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 30 : 0
-                subject: "ENERGY"
+                subject: "battery"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.halo
                     : root.batteryPercent <= 15 ? root.pink
@@ -440,7 +429,7 @@ Item {
                 readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
-            // ATTENDANCE is text-only: who's here, and how fast they talk
+            // net is text-only: the connection name, and how fast it talks
             Item {
                 width: parent.width
                 height: 24
@@ -450,7 +439,7 @@ Item {
                     spacing: 6
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "ATTENDANCE"
+                        text: "net"
                         font.family: root.mono
                         font.pixelSize: 11
                         font.letterSpacing: 2
@@ -458,10 +447,10 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? "present — " + root.connName : "absent"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         font.family: root.mono
-                        font.pixelSize: 10
+                        font.pixelSize: 11
                         color: root.online ? root.chalkA(0.7) : Qt.rgba(root.pink.r, root.pink.g, root.pink.b, 0.95)
                     }
                 }
@@ -470,34 +459,25 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.online ? "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate) : ""
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.slateA(1.0)
                 }
             }
 
             Item { width: 1; height: 4 }
 
-            // the foot: how long the room's been open
+            // the foot: uptime
             Item {
                 width: parent.width
                 height: 16
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "room open " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     font.letterSpacing: 1
-                    color: root.chalkA(0.5)
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "before the bell ☼"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.sunA(0.7)
+                    color: root.chalkA(0.7)
                 }
             }
         }

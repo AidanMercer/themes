@@ -270,8 +270,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 0
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "…sharpening the chalk"
-                  : !root.engine.lyricsSynced ? "nothing on the board for this one"
+            text: !root.engine.lyricsLoaded ? "…loading lyrics"
+                  : !root.engine.lyricsSynced ? "no synced lyrics"
                   : "·"
             textFormat: Text.PlainText
             color: root.chalkA(0.4)

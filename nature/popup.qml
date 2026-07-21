@@ -5,10 +5,10 @@ import QtQuick
 // A warm dark-pine glass card with organic rounded corners and a honey-gold
 // edge. The backdrop grows a twig with leaves down the left inside edge and
 // floats a few soft bokeh discs behind the content; the header carries a
-// blossom, the theme's name and a tiny meadow EQ (three grass blades that
-// sway with the live audio bands); the footer roots the card with the
-// connection and a sign-off. Renders nothing itself — the shell mounts the
-// Components below around its shared tabs.
+// blossom and a tiny meadow EQ (three grass blades that sway with the live
+// audio bands); the footer roots the card with the connection. Renders
+// nothing itself — the shell mounts the Components below around its shared
+// tabs.
 Item {
     id: chrome
 
@@ -113,7 +113,7 @@ Item {
         }
     }
 
-    // ── header: blossom + name + meadow EQ, uptime on the right ────────────
+    // ── header: blossom + meadow EQ, uptime on the right ───────────────────
     readonly property Component header: Component {
         Column {
             spacing: Math.round(12 * chrome.ui)
@@ -160,17 +160,6 @@ Item {
                         }
                     }
 
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "golden hour"
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.weight: Font.Medium
-                        font.pixelSize: Math.round(14 * chrome.ui)
-                        font.letterSpacing: 2
-                        color: chrome.gold
-                    }
-
                     // meadow EQ: three grass blades leaning with the bands
                     Item {
                         anchors.verticalCenter: parent.verticalCenter
@@ -204,7 +193,7 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "in bloom " + chrome.popup.uptimeText.replace("up ", "")
+                    text: chrome.popup.uptimeText
                     font.family: chrome.serif
                     font.italic: true
                     font.weight: Font.Medium
@@ -239,7 +228,7 @@ Item {
         }
     }
 
-    // ── footer: connection roots the card, sign-off on the right ───────────
+    // ── footer: connection roots the card ──────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: Math.round(12 * chrome.ui)
@@ -287,8 +276,8 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "still air"
-                            : (chrome.popup.connName || "on the breeze")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.serif
                         font.italic: true
@@ -296,18 +285,6 @@ Item {
                         font.pixelSize: Math.round(10 * chrome.ui)
                         color: chrome.popup.connType === "none" ? chrome.rose : chrome.creamA(0.7)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "· grown in the meadow ·"
-                    font.family: chrome.serif
-                    font.italic: true
-                    font.weight: Font.Medium
-                    font.pixelSize: Math.round(9 * chrome.ui)
-                    font.letterSpacing: 1.5
-                    color: chrome.goldA(0.55)
                 }
             }
         }

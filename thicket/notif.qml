@@ -1,13 +1,12 @@
 import QtQuick
 
-// thicket: SOMETHING MOVED — notification chrome. Each card is a rustle at
-// the edge of your vision: foliage glass with a leaf silhouette lying over
-// each corner, a single eyeshine glint burning in the urgency color at the
-// head of a stem running down the left rail. Hover and the glint widens —
-// you've met its eye. The shell keeps the daemon, stacking, text and
-// actions; this only dresses the card. The notification center (Super+I) is
-// the watcher's ledger: FIELD SIGHTINGS, with a row of closed eyes across
-// the top that shut tighter under do-not-disturb.
+// thicket: notification chrome. Each card is a rustle at the edge of your
+// vision: foliage glass with a leaf silhouette lying over each corner, a
+// single eyeshine glint burning in the urgency color at the head of a stem
+// running down the left rail. Hover and the glint widens — you've met its
+// eye. The shell keeps the daemon, stacking, text and actions; this only
+// dresses the card. The notification center (Super+I) carries a row of
+// half-lidded eyes across the top that shut under do-not-disturb.
 Item {
     id: root
     required property var pal
@@ -29,12 +28,12 @@ Item {
     property int cardRadius: 9
     property bool cardSpine: false  // the glint-and-stem rail below replaces it
 
-    // notification center: the watcher's ledger
+    // notification center
     property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
     property color panelBorder: leafA(0.7)
     property int panelBorderWidth: 1
     property int panelRadius: 11
-    property string panelTitle: "Field sightings"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: ledger
@@ -100,7 +99,7 @@ Item {
             Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 16; bottomMargin: 8 }
                 visible: ledger.quiet
-                text: "eyes closed"
+                text: "do not disturb"
                 font.family: "Noto Serif Display"
                 font.italic: true
                 font.pixelSize: 10

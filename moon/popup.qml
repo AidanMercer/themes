@@ -4,8 +4,8 @@ import QtQuick
 //
 // The shell's ControlPopup loads this next to the wallpaper and mounts the
 // pieces around its shared tabs: backdrop behind the content (chamfered chassis,
-// corner brackets), header (blink pip + SYSTEM + live EQ // CTRL.DECK + uptime),
-// footer (NET status + NETRUNNER sign-off), overlay on top (CRT scanlines,
+// corner brackets), header (blink pip + SYSTEM + live EQ + uptime),
+// footer (NET status + blink cursor), overlay on top (CRT scanlines,
 // optional scan beam). Self-contained like the other moon widgets. Item root
 // (not QtObject) because Loader refuses non-visual elements; it renders nothing
 // itself — the shell mounts the Components below into its own slots.
@@ -117,7 +117,7 @@ Item {
         }
     }
 
-    // ── header: blink pip + SYSTEM + live EQ, // CTRL.DECK + UP uptime ──
+    // ── header: blink pip + SYSTEM + live EQ, uptime on the right ──
     readonly property Component header: Component {
         Column {
             spacing: 14
@@ -186,28 +186,14 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "// CTRL.DECK"
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 2
-                        color: chrome.pal.cyan
-                        opacity: 0.7
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "UP " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 1
-                        color: chrome.pal.dim
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
+                    color: chrome.pal.dim
                 }
             }
 
@@ -220,7 +206,7 @@ Item {
         }
     }
 
-    // ── footer: NET status (left) + NETRUNNER sign-off (right) ──
+    // ── footer: NET status (left) + blink cursor (right) ──
     readonly property Component footer: Component {
         Column {
             spacing: 14
@@ -255,39 +241,25 @@ Item {
                             : (chrome.popup.connName || "ONLINE")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.pal.cyan
                     }
                 }
 
-                Row {
+                Rectangle {
                     anchors.right: parent.right
                     // clear the bottom-right chamfer + magenta corner tick (~20px in)
                     anchors.rightMargin: 16
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "// NETRUNNER CTRL"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.pal.neon
-                        opacity: 0.55
-                    }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 7; height: 11
-                        color: chrome.pal.neon
-                        SequentialAnimation on opacity {
-                            running: chrome.popup.open
-                            loops: Animation.Infinite
-                            NumberAnimation { to: 0; duration: 0 }
-                            PauseAnimation { duration: 440 }
-                            NumberAnimation { to: 1; duration: 0 }
-                            PauseAnimation { duration: 440 }
-                        }
+                    width: 7; height: 11
+                    color: chrome.pal.neon
+                    SequentialAnimation on opacity {
+                        running: chrome.popup.open
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 0; duration: 0 }
+                        PauseAnimation { duration: 440 }
+                        NumberAnimation { to: 1; duration: 0 }
+                        PauseAnimation { duration: 440 }
                     }
                 }
             }

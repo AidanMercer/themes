@@ -279,8 +279,8 @@ Item {
         x: root.rollX
         y: root.rollY + root.rollH + Math.round(14 * root.ui)
         visible: root.engine.player !== null && root.tokens.length === 0
-        text: !root.engine.lyricsLoaded ? "TUNING…"
-              : !root.engine.lyricsSynced ? "INSTRUMENTAL — NO SCORE"
+        text: !root.engine.lyricsLoaded ? "loading lyrics…"
+              : !root.engine.lyricsSynced ? "no synced lyrics"
               : "♪"
         color: root.tealA(0.7)
         style: Text.Outline
@@ -290,14 +290,14 @@ Item {
         font.letterSpacing: 5
     }
 
-    // ── calibration OSD: the monitor engineer's nudge readout ───────────────
+    // ── calibration OSD: the lyric-offset nudge readout ─────────────────────
     Text {
         id: offsetOsd
         function flash() { opacity = 1; osdHide.restart() }
         x: root.rollX
         y: root.rollY - Math.round(26 * root.ui)
         opacity: 0
-        text: "MONITOR DELAY " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " MS"
+        text: "offset " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
         color: root.spot
         style: Text.Outline
         styleColor: Qt.rgba(0, 0, 0, 0.55)

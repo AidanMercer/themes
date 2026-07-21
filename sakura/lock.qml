@@ -256,9 +256,9 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
             anchors.bottomMargin: Math.round(30 * root.ui)
-            text: root.host.failed ? "the petals scattered — try again"
-                : root.host.pwLength === 0 ? "type, and the blossom opens"
-                : "petals gathering · enter when ready"
+            text: root.host.failed ? "wrong password — try again"
+                : root.host.pwLength === 0 ? "type to unlock"
+                : "enter when ready"
             color: root.host.failed ? root.rose : root.creamA(0.6)
             font.family: root.sans
             font.italic: true

@@ -2,9 +2,8 @@ import QtQuick
 
 // sailing: marconigram notification chrome — each card is a radio-message
 // slip handed up from the wireless room. A slate slip with a dashed telegram
-// frame, a morse spine down the left edge in the urgency color (replacing
-// the default stripe), and a faint circular RECD stamp pressed into the
-// bottom-right corner. The shell keeps the daemon/stack/text; this only
+// frame and a morse spine down the left edge in the urgency color (replacing
+// the default stripe). The shell keeps the daemon/stack/text; this only
 // dresses the card.
 Item {
     id: root
@@ -32,13 +31,12 @@ Item {
     property bool cardSpine: false   // the morse spine below replaces it
 
     // notification center: the wireless room's message spike — cabin-dark
-    // board, dashed telegram frame, a morse call sign under the header and
-    // the RECD stamp pressed at the foot
+    // board, dashed telegram frame, a morse call sign under the header
     property color panelBg: Qt.rgba(glass.r, glass.g, glass.b, 0.96)
     property color panelBorder: paleA(0.22)
     property int panelBorderWidth: 1
     property int panelRadius: 8
-    property string panelTitle: "Radio log"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: cabin
@@ -79,29 +77,6 @@ Item {
                         color: cabin.panel && cabin.panel.dnd ? root.slate : root.buoy
                         opacity: 0.8
                     }
-                }
-            }
-
-            Item {
-                anchors { right: parent.right; bottom: parent.bottom; margins: 10 }
-                width: 34; height: 34
-                rotation: -14
-                opacity: 0.30
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 17
-                    color: "transparent"
-                    border.width: 1.4
-                    border.color: root.dusk
-                }
-                Text {
-                    anchors.centerIn: parent
-                    text: "RECD"
-                    color: root.dusk
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 8
-                    font.letterSpacing: 1
                 }
             }
         }
@@ -151,32 +126,6 @@ Item {
                         color: chassis.tint
                         opacity: 0.9
                     }
-                }
-            }
-
-            // RECD stamp, pressed crooked into the corner
-            Item {
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.margins: 8
-                width: 30; height: 30
-                rotation: -14
-                opacity: 0.32
-
-                Rectangle {
-                    anchors.fill: parent
-                    radius: 15
-                    color: "transparent"
-                    border.width: 1.4
-                    border.color: chassis.tint
-                }
-                Text {
-                    anchors.centerIn: parent
-                    text: "RECD"
-                    color: chassis.tint
-                    font.family: root.pal.fontMono
-                    font.pixelSize: 7
-                    font.letterSpacing: 1
                 }
             }
         }

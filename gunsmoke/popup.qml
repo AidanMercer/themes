@@ -1,12 +1,10 @@
 import QtQuick
 
-// gunsmoke: ledger chrome for the Super+M control popup — THE OUTFITTER's
-// page. The shell mounts the pieces around its shared tabs: backdrop (an
-// iron-dark slip with double ledger rules and corner rivets), header (powder
-// pip + OUTFITTER stamp + a three-lantern fog EQ, № 1887 + time on the
-// trail), footer (the wire's condition + the ledger's sign-off), overlay
-// (faint ledger ruling across the card — paper, not scanlines). Invisible
-// Item root; renders nothing itself.
+// gunsmoke: ledger chrome for the Super+M control popup. The shell mounts
+// the pieces around its shared tabs: backdrop (an iron-dark slip with double
+// ledger rules and corner rivets), header (a three-lantern fog EQ + uptime),
+// footer (the connection's state), overlay (faint ledger ruling across the
+// card — paper, not scanlines). Invisible Item root; renders nothing itself.
 Item {
     id: chrome
 
@@ -72,7 +70,7 @@ Item {
         }
     }
 
-    // ── header: powder pip + OUTFITTER + fog EQ // № 1887 + trail time ──────
+    // ── header: fog EQ + uptime ─────────────────────────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 14
@@ -81,74 +79,33 @@ Item {
                 width: parent.width
                 height: 16
 
+                // three lanterns in the fog — bass/mid/high off the shell's cava
                 Row {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-
-                    // the powder pip: hard tick, hammer law
-                    Rectangle {
-                        id: hpip
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 6; height: 6; radius: 3
-                        property bool tick: true
-                        color: chrome.boneA(tick ? 0.95 : 0.3)
-                        Timer {
-                            interval: 800; repeat: true
-                            running: chrome.popup.open
-                            onTriggered: hpip.tick = !hpip.tick
-                        }
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "THE OUTFITTER"
-                        font.family: chrome.serif
-                        font.weight: Font.Black
-                        font.pixelSize: 13
-                        font.letterSpacing: 5
-                        color: chrome.pal.neon
-                    }
-
-                    // three lanterns in the fog — bass/mid/high off the shell's cava
-                    Row {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 4
-                        opacity: (chrome.audio.ready && !chrome.audio.silent) ? 1 : 0.25
-                        Behavior on opacity { NumberAnimation { duration: 220 } }
-                        Repeater {
-                            model: ["bass", "mid", "high"]
-                            delegate: Rectangle {
-                                required property string modelData
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 6; height: 6; radius: 3
-                                color: chrome.boneA(0.25 + 0.7 * Math.min(1, chrome.audio[modelData] || 0))
-                                Behavior on color { ColorAnimation { duration: 90 } }
-                            }
+                    spacing: 4
+                    opacity: (chrome.audio.ready && !chrome.audio.silent) ? 1 : 0.25
+                    Behavior on opacity { NumberAnimation { duration: 220 } }
+                    Repeater {
+                        model: ["bass", "mid", "high"]
+                        delegate: Rectangle {
+                            required property string modelData
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 6; height: 6; radius: 3
+                            color: chrome.boneA(0.25 + 0.7 * Math.min(1, chrome.audio[modelData] || 0))
+                            Behavior on color { ColorAnimation { duration: 90 } }
                         }
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "№ 1887"
-                        font.family: chrome.serif
-                        font.pixelSize: 10
-                        font.weight: Font.Bold
-                        color: chrome.ashA(1)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "TRAIL " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 1
-                        color: chrome.pal.dim
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
+                    color: chrome.pal.dim
                 }
             }
 
@@ -162,7 +119,7 @@ Item {
         }
     }
 
-    // ── footer: the wire's condition + the sign-off ─────────────────────────
+    // ── footer: the connection's state ──────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 14
@@ -185,25 +142,14 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "WIRE DOWN"
-                            : "WIRE · " + (chrome.popup.connName || "HOLDS")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         font.letterSpacing: 1
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.pal.cyan
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "— THE LEDGER KEEPS ITSELF"
-                    font.family: chrome.serif
-                    font.pixelSize: 9
-                    font.letterSpacing: 2
-                    font.weight: Font.Bold
-                    color: chrome.boneA(0.45)
                 }
             }
         }

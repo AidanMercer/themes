@@ -2,7 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// sakura: the wish plaque. Hovering the bar's vitals (or Super+. pin) hangs a
+// sakura: the vitals plaque. Hovering the bar's vitals (or Super+. pin) hangs a
 // small wooden ema off the branch on two cords, top-right; it swings in and
 // settles plumb (the hanging settle, law 3). Every subsystem is a row whose
 // meter is a shelf of five blossoms — load opens them left to right, bud to
@@ -409,7 +409,7 @@ Item {
                 anchors.topMargin: 14
                 spacing: 4
 
-                // header: the plaque's inscription
+                // header: blossom pip + a plain title
                 Item {
                     width: parent.width
                     height: 20
@@ -435,22 +435,12 @@ Item {
                         }
                         Text {
                             anchors.verticalCenter: parent.verticalCenter
-                            text: "the wish plaque"
+                            text: "system"
                             font.family: root.sans
                             font.pixelSize: 13
                             font.letterSpacing: 2
                             color: root.creamA(0.95)
                         }
-                    }
-                    Text {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "hanami"
-                        font.family: root.sans
-                        font.italic: true
-                        font.pixelSize: 10
-                        font.letterSpacing: 2
-                        color: root.pinkA(0.7)
                     }
                 }
 
@@ -525,27 +515,18 @@ Item {
 
                 Rectangle { width: parent.width; height: 1; color: root.twigA(0.6) }
 
-                // foot: how long the afternoon has been held
+                // foot: uptime
                 Item {
                     width: parent.width
                     height: 18
                     Text {
                         anchors.left: parent.left
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "afternoon held " + root.uptimeText
+                        text: "up " + root.uptimeText
                         font.family: root.mono
                         font.pixelSize: 10
                         font.letterSpacing: 1
                         color: root.creamA(0.7)
-                    }
-                    Text {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "❀ sakura"
-                        font.family: root.sans
-                        font.pixelSize: 10
-                        font.letterSpacing: 2
-                        color: root.pinkA(0.65)
                     }
                 }
             }

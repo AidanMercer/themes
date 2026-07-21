@@ -26,7 +26,7 @@ Item {
     property color panelBorder: "transparent"    // the backdrop rules this frame too
     property int panelBorderWidth: 0
     property int panelRadius: 0
-    property string panelTitle: "Dispatches"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: page
@@ -85,9 +85,9 @@ Item {
             Text {
                 anchors { bottom: parent.bottom; horizontalCenter: parent.horizontalCenter; bottomMargin: 8 }
                 text: "— " + (page.panel ? page.panel.count : 0) + " —"
-                color: root.inkA(0.45)
+                color: root.inkA(0.7)
                 font.family: root.pal.fontMono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.letterSpacing: 2
             }
         }

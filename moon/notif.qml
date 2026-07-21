@@ -19,7 +19,7 @@ Item {
     property color panelBorder: Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, 0.45)
     property int panelBorderWidth: 1
     property int panelRadius: 0
-    property string panelTitle: "COMMS LOG"
+    property string panelTitle: "NOTIFICATIONS"
     property Component panelBackdrop: Component {
         Item {
             id: deck

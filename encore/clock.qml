@@ -85,19 +85,11 @@ Item {
             id: col
             spacing: 12
 
-            // header: cue lamp + the show's name
+            // header: just the cue lamp
             Row {
                 anchors.right: parent.right
                 spacing: 9
 
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "ENCORE · STAGE RIGHT"
-                    color: root.inkA(0.5)
-                    font.family: root.mono
-                    font.pixelSize: 11
-                    font.letterSpacing: 6
-                }
                 // the cue lamp: a hard metronome tick, ~120bpm feel at 500ms.
                 // two-frame blink — lit, dark, lit. never a fade (law 1+2).
                 Rectangle {
@@ -170,10 +162,10 @@ Item {
                 }
             }
 
-            // the tour date, printed like the cue sheet's header line
+            // the date, printed in the desk's letterspaced mono
             Text {
                 anchors.right: parent.right
-                text: "ON STAGE · " + Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
+                text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
                 color: root.inkA(0.62)
                 font.family: root.mono
                 font.pixelSize: 13

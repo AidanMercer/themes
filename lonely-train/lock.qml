@@ -6,9 +6,9 @@ import Quickshell
 // world still passing the windows — while the car doors slide in from both
 // edges with lit amber seams. We draw our own departure board (top-left,
 // same corner as the desktop clock) and the passcode as a route line where
-// every keystroke lights the next station. A station plate bottom-right:
-// NOW STOPPING AT · LOCKED. Everything rides host.progress so unlock plays
-// the doors back open. Typing/Enter still route through the shell.
+// every keystroke lights the next station. A station plate bottom-right
+// reads LOCKED. Everything rides host.progress so unlock plays the doors
+// back open. Typing/Enter still route through the shell.
 Item {
     id: root
     anchors.fill: parent
@@ -131,19 +131,6 @@ Item {
         }
     }
 
-    // out-of-service line, up top where the ceiling lights are
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: Math.round(root.height * 0.065) - 12 * (1 - root.p)
-        opacity: 0.65 * root.p
-        text: "this train is out of service — please wait for the next one"
-        color: root.inkA(0.85)
-        font.family: root.serif
-        font.pixelSize: Math.round(15 * root.ui)
-        font.italic: true
-        font.letterSpacing: 3
-    }
-
     // ── the departure board, same corner as the desktop clock ──────────────
     component Flap: Item {
         id: cell
@@ -215,15 +202,15 @@ Item {
                 color: "transparent"
                 border.width: 2
                 border.color: root.amber
-                Text {
+                // wordless roundel: the route line through the station ring
+                Rectangle {
                     anchors.centerIn: parent
-                    text: "LT"
+                    width: Math.round(11 * root.ui); height: 2
+                    radius: 1
                     color: root.amber
-                    font.family: root.mono
-                    font.pixelSize: Math.round(8 * root.ui)
-                    font.weight: Font.Black
                 }
             }
+            // the theme wordmark — the one deliberate signature
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "LAST TRAIN"
@@ -232,14 +219,6 @@ Item {
                 font.pixelSize: Math.round(12 * root.ui)
                 font.weight: Font.Bold
                 font.letterSpacing: 6
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "· HELD AT PLATFORM"
-                color: root.duskA(0.65)
-                font.family: root.mono
-                font.pixelSize: Math.round(9 * root.ui)
-                font.letterSpacing: 3
             }
         }
 
@@ -337,8 +316,8 @@ Item {
             anchors.topMargin: Math.round(12 * root.ui)
             opacity: root.host.pwLength === 0 ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: 140 } }
-            text: root.host.failed ? "wrong ticket — try again" : "enter passcode to board"
-            color: root.host.failed ? root.tail : root.inkA(0.5)
+            text: root.host.failed ? "wrong password — try again" : "enter passcode"
+            color: root.host.failed ? root.tail : root.inkA(0.7)
             font.family: root.serif
             font.pixelSize: Math.round(13 * root.ui)
             font.italic: true
@@ -368,14 +347,6 @@ Item {
         opacity: root.p
         spacing: Math.round(9 * root.ui)
 
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "NOW STOPPING AT"
-            color: root.duskA(0.75)
-            font.family: root.mono
-            font.pixelSize: Math.round(10 * root.ui)
-            font.letterSpacing: 6
-        }
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "L O C K E D"
@@ -421,16 +392,6 @@ Item {
                     }
                 }
             }
-        }
-
-        Text {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "doors will open on the right side"
-            color: root.inkA(0.42)
-            font.family: root.serif
-            font.pixelSize: Math.round(11 * root.ui)
-            font.italic: true
-            font.letterSpacing: 2
         }
     }
 }

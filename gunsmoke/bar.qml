@@ -11,9 +11,9 @@ import Quickshell.Services.Mpris
 // you emptied this session stay struck (a spent ✕). The firing pin rides
 // above the gate and STRIKES on every switch — one-frame drop, chamber
 // flash, powder smoke curling off the gate (hammer + smoke laws).
-//   left  — the bounty plate: "BOUNTY" stamp, hard-ticking powder pip while
-//           the band plays, the track in the ledger's data hand, and a fuse
-//           line burning across the plate's foot for progress.
+//   left  — the media plate: hard-ticking powder pip while the band plays,
+//           the track in the ledger's data hand, and a fuse line burning
+//           across the plate's foot for progress.
 //   right — the belt: skull trigger for the condition report, the telegraph
 //           pole, the powder flask (battery), the time stamped in serif, and
 //           the sheriff's star for the control popup.
@@ -265,7 +265,7 @@ Item {
     }
     Component.onCompleted: Hyprland.refreshToplevels()
 
-    // ── left: the bounty plate ─────────────────────────────────────────────
+    // ── left: the media plate ──────────────────────────────────────────────
     Item {
         id: media
         readonly property var player: {
@@ -279,27 +279,18 @@ Item {
         visible: active
         x: 12
         y: Math.round((parent.height - height) / 2) + root.bootLift
-        width: bountyRow.width + 24
+        width: mediaRow.width + 24
         height: 28
         opacity: root.bootT
 
         IronPlate { anchors.fill: parent }
 
         Row {
-            id: bountyRow
+            id: mediaRow
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -2
             spacing: 8
 
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "BOUNTY"
-                color: root.boneA(0.85)
-                font.family: root.serif
-                font.pixelSize: 9
-                font.weight: Font.Black
-                font.letterSpacing: 3
-            }
             // the powder pip: hard tick while the band plays (hammer blink)
             Rectangle {
                 id: pip

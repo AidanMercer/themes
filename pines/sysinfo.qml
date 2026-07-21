@@ -2,15 +2,14 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// pines: the instrument shelf. Hover the little barograph in the sill (or
-// pin with Super+.) and the station's readout board condenses down out of
-// the fog at the top right, swaying once on its hook before it settles —
-// hand instruments, not telemetry: WIND is the CPU on a damped needle gauge
-// (needles overshoot and settle, never snap), PRESSURE is memory, GENERATOR
-// the GPU, LAMP OIL the battery vial, W/T LINK the wireless set. The foot of
-// the board logs the watch. Sections with no source (no nvidia-smi, no
-// battery) never appear. Reads /proc + nmcli itself; polls only while
-// revealed; click-through scenery.
+// pines: the instrument board. Hover the vitals in the sill (or pin with
+// Super+.) and the readout board condenses down out of the fog at the top
+// right, swaying once on its hook before it settles — hand instruments, not
+// telemetry: cpu/mem/gpu on damped needle gauges (needles overshoot and
+// settle, never snap), the battery vial, the net row. Plain lowercase
+// labels; the instruments carry the theme. Sections with no source (no
+// nvidia-smi, no battery) never appear. Reads /proc + nmcli itself; polls
+// only while revealed; click-through scenery.
 Item {
     id: root
     anchors.fill: parent
@@ -223,7 +222,7 @@ Item {
         const d = Math.floor(s / 86400); s -= d * 86400
         const h = Math.floor(s / 3600);  s -= h * 3600
         const m = Math.floor(s / 60)
-        uptimeText = d > 0 ? `${d}D ${h}H ${m}M` : h > 0 ? `${h}H ${m}M` : `${m}M`
+        uptimeText = d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`
     }
 
     Process {
@@ -245,7 +244,7 @@ Item {
     // ── an instrument row: serif label, damped needle gauge, mono readout ──
     component GaugeRow: Item {
         id: row
-        property string label: "WIND"
+        property string label: ""
         property int value: -1        // 0..100; -1 leaves the needle at rest
         property color tone: root.lamp
         property string readout: ""
@@ -410,35 +409,26 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "INSTRUMENT SHELF"
+                        text: "system"
                         font.family: root.serif
                         font.pixelSize: 13
                         font.letterSpacing: 4
                         color: root.lampA(0.95)
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "PINES-9"
-                    font.family: root.mono
-                    font.pixelSize: 10
-                    font.letterSpacing: 2
-                    color: root.silverA(0.7)
-                }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.slateA(0.6) }
 
             GaugeRow {
-                label: "WIND"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             GaugeRow {
-                label: "PRESSURE"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -447,13 +437,13 @@ Item {
             GaugeRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 34 : 0
-                label: "GENERATOR"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
             }
 
-            // LAMP OIL — the battery vial (laptops only)
+            // the battery vial (laptops only)
             Item {
                 visible: root.hasBattery
                 width: parent.width
@@ -461,7 +451,7 @@ Item {
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "LAMP OIL"
+                    text: "battery"
                     font.family: root.serif
                     font.pixelSize: 12
                     font.letterSpacing: 3
@@ -494,7 +484,7 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: (root.batteryCharging ? "FILLING " : "") + root.batteryPercent + "%"
+                    text: (root.batteryCharging ? "charging " : "") + root.batteryPercent + "%"
                     font.family: root.mono
                     font.pixelSize: 11
                     color: root.batteryCharging ? root.fogSilver
@@ -502,7 +492,7 @@ Item {
                 }
             }
 
-            // W/T LINK — text only: the set either hears the valley or it doesn't
+            // net — text only: the set either hears the valley or it doesn't
             Item {
                 width: parent.width
                 height: 24
@@ -512,7 +502,7 @@ Item {
                     spacing: 8
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "W/T LINK"
+                        text: "net"
                         font.family: root.serif
                         font.pixelSize: 12
                         font.letterSpacing: 3
@@ -525,7 +515,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "NO CARRIER"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         width: Math.min(implicitWidth, 92)
                         elide: Text.ElideRight
@@ -546,27 +536,18 @@ Item {
 
             Rectangle { width: parent.width; height: 1; color: root.slateA(0.6) }
 
-            // the watch log foot
+            // the uptime foot
             Item {
                 width: parent.width
                 height: 18
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "ON WATCH " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
                     font.pixelSize: 10
                     font.letterSpacing: 1
                     color: root.inkA(0.8)
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "▵ STANDING WATCH"
-                    font.family: root.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 2
-                    color: root.lampA(0.7)
                 }
             }
         }

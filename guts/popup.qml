@@ -2,9 +2,9 @@ import QtQuick
 
 // guts: manga-panel chrome for the Super+M control popup. The card is a
 // sharp paper panel with an imperfect hand-ruled double border, screentone
-// shading in one corner and a red hanko seal in another. Header carries the
-// title caption and a tiny EQ of three slash marks that cut deeper with the
-// music; footer is the connection note and a blood-drop sign-off. Red only
+// shading in one corner and a red hanko seal in another. Header carries a
+// tiny EQ of three slash marks that cut deeper with the music plus uptime;
+// footer is the connection note and a welling blood drop. Red only
 // ever appears on live/active elements — everything else is ink on paper.
 Item {
     id: chrome
@@ -122,16 +122,6 @@ Item {
                         rotation: -32
                         color: chrome.blood
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "THE BLACK SWORDSMAN"
-                        font.family: chrome.serif
-                        font.weight: Font.Bold
-                        font.pixelSize: 12
-                        font.letterSpacing: 4
-                        color: chrome.ink
-                    }
-
                     // EQ as three slash marks — they cut deeper with the music
                     Item {
                         anchors.verticalCenter: parent.verticalCenter
@@ -158,26 +148,14 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "fol. CTRL"
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.pixelSize: 10
-                        color: chrome.inkA(0.5)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "awake " + chrome.popup.uptimeText.replace("up ", "")
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.pixelSize: 10
-                        color: chrome.inkA(0.5)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.serif
+                    font.italic: true
+                    font.pixelSize: 10
+                    color: chrome.inkA(0.7)
                 }
             }
 
@@ -210,7 +188,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "severed"
+                        text: chrome.popup.connType === "none" ? "offline"
                             : (chrome.popup.connName || "connected")
                         textFormat: Text.PlainText
                         font.family: chrome.serif
@@ -220,28 +198,17 @@ Item {
                     }
                 }
 
-                Row {
+                // a drop of blood, slowly welling
+                Rectangle {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 7
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "// the brand of sacrifice"
-                        font.family: chrome.serif
-                        font.pixelSize: 9
-                        color: Qt.rgba(chrome.blood.r, chrome.blood.g, chrome.blood.b, 0.75)
-                    }
-                    // a drop of blood, slowly welling
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 5; height: 7; radius: 2.5
-                        color: chrome.fresh
-                        SequentialAnimation on opacity {
-                            running: chrome.popup.open
-                            loops: Animation.Infinite
-                            NumberAnimation { to: 0.25; duration: 1400; easing.type: Easing.InOutSine }
-                            NumberAnimation { to: 1.0; duration: 1400; easing.type: Easing.InOutSine }
-                        }
+                    width: 5; height: 7; radius: 2.5
+                    color: chrome.fresh
+                    SequentialAnimation on opacity {
+                        running: chrome.popup.open
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 0.25; duration: 1400; easing.type: Easing.InOutSine }
+                        NumberAnimation { to: 1.0; duration: 1400; easing.type: Easing.InOutSine }
                     }
                 }
             }

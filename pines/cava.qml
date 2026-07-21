@@ -31,7 +31,6 @@ Item {
     readonly property color slate: pal.dim
     readonly property color glass: pal.glass
     readonly property string mono: pal.fontMono
-    readonly property string serif: "Noto Serif Display"
     function colA(c, a) { return Qt.rgba(c.r, c.g, c.b, a) }
 
     readonly property int bins: 24
@@ -154,19 +153,6 @@ Item {
             color: root.colA(root.glass, 0.42)
             border.width: 1
             border.color: root.colA(root.slate, 0.7)
-        }
-
-        // the sheet's heading, in the station's hand
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 10
-            anchors.top: parent.top
-            anchors.topMargin: 4
-            text: "BAROGRAPH — MIX TRACE"
-            color: root.colA(root.fogSilver, 0.75)
-            font.family: root.serif
-            font.pixelSize: 10
-            font.letterSpacing: 3
         }
 
         Canvas {

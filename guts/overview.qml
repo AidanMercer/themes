@@ -42,8 +42,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: inkA(0.72)
-    readonly property string hintText: "CHOOSE YOUR BATTLE — ↵ STRIKE   ESC SHEATHE"
-    readonly property string emptyText: "NO FOES"
+    readonly property string hintText: "↵ focus   esc close"
+    readonly property string emptyText: "no windows"
 
     // ── backdrop: speedline ticks along the ring spokes ──
     readonly property Component backdrop: Component {

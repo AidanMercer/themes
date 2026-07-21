@@ -41,8 +41,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: sunA(0.55)
-    readonly property string hintText: "drift to a lily pad · ⏎ climb on · esc float away"
-    readonly property string emptyText: "still water"
+    readonly property string hintText: "⏎ focus · esc close"
+    readonly property string emptyText: "no windows"
 
     // deterministic scatter — the same pond on every mount
     function rnd(n) {
@@ -117,10 +117,13 @@ Item {
                 }
             }
 
-            // how many things are adrift, in the pond's own voice
+            // the window count
             Text {
                 x: 30; y: 26
-                text: "≈ " + chrome.overview.windows.length + " adrift on the pond"
+                text: {
+                    const n = chrome.overview.windows.length
+                    return n + (n === 1 ? " window" : " windows")
+                }
                 font.family: chrome.serif
                 font.italic: true
                 font.pixelSize: 15

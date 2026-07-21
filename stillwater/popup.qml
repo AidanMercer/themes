@@ -4,9 +4,9 @@ import QtQuick
 // pieces around its shared tabs: backdrop (deep-water glass with a dusk-rose
 // glow pooling at the top and the card's own waterline near its foot — five
 // small lamps standing on it, each doubled as a broken streak), header (a
-// breathing lamp + the theme's name + a three-lamp equalizer whose streaks
-// stretch with the music + the evening's age), footer (the far shore's
-// answer + the send-off), overlay (faint sliver lines across the water zone).
+// breathing lamp + a three-lamp equalizer whose streaks stretch with the
+// music + uptime), footer (connection status), overlay (faint sliver lines
+// across the water zone).
 // Item root that renders nothing itself; no MouseAreas, clicks pass through.
 Item {
     id: chrome
@@ -106,7 +106,7 @@ Item {
         }
     }
 
-    // ── header: lamp + name + the three lamps of the music + the evening ────
+    // ── header: lamp + the three lamps of the music + uptime ────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -133,16 +133,6 @@ Item {
                             NumberAnimation { to: 1.0; duration: 2000; easing.type: Easing.InOutSine }
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "STILLWATER"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 5
-                        color: chrome.pal.neon
-                    }
-
                     // three lamps on a tiny waterline; their streaks stretch
                     // with the music, the way light lies longer on stirred water
                     Item {
@@ -186,9 +176,9 @@ Item {
                     spacing: 8
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "the evening, " + chrome.popup.uptimeText.replace("up ", "") + " in"
+                        text: chrome.popup.uptimeText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.slateA(1.0)
                     }
                 }
@@ -209,7 +199,7 @@ Item {
         }
     }
 
-    // ── footer: the far shore + the send-off ────────────────────────────────
+    // ── footer: connection status ───────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -242,23 +232,13 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "the far shore is dark"
-                            : (chrome.popup.connName || "the far shore answers")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.inkA(0.7)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "the water holds the light"
-                    font.family: chrome.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: chrome.lampA(0.55)
                 }
             }
         }

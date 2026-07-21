@@ -2,11 +2,11 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// gunsmoke: the CONDITION REPORT — a paper slip nailed to the post at the
+// gunsmoke: the system readout — a paper slip nailed to the post at the
 // top-right, under the bar's skull. Hidden until called: hovering the skull
 // (or Super+. pinning) reveals it, and the slip swings on its nail — a
 // physical settle, damping to rest. Ledger law throughout: double rules,
-// dotted leaders, letterspaced serif headers, mono data. Each subsystem is
+// dotted leaders, letterspaced serif labels, mono data. Each subsystem is
 // an entry with a row of ten powder marks that fill as load rises — hot
 // entries burn brass, critical ones bleed the withheld oxblood.
 // Reads /proc + nmcli itself; self-contained, click-through scenery.
@@ -217,7 +217,7 @@ Item {
         const d = Math.floor(s / 86400); s -= d * 86400
         const h = Math.floor(s / 3600);  s -= h * 3600
         const m = Math.floor(s / 60)
-        uptimeText = d > 0 ? `${d}D ${h}H ${m}M` : h > 0 ? `${h}H ${m}M` : `${m}M`
+        uptimeText = d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`
     }
 
     Process {
@@ -363,39 +363,15 @@ Item {
                     width: parent.width - 36
                     spacing: 2
 
-                    Item {
-                        width: parent.width
-                        height: 24
-                        Text {
-                            anchors.left: parent.left
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "CONDITION REPORT"
-                            font.family: root.serif
-                            font.pixelSize: 12
-                            font.weight: Font.Black
-                            font.letterSpacing: 5
-                            color: root.boneA(0.9)
-                        }
-                        Text {
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "№ 1887"
-                            font.family: root.serif
-                            font.pixelSize: 10
-                            font.weight: Font.Bold
-                            color: root.ashA(1)
-                        }
-                    }
-
                     EntryRow {
-                        label: "IRON"
+                        label: "CPU"
                         value: root.cpuPercent
                         toneCol: root.tone(root.cpuPercent, 62, 87)
                         readout: (root.cpuPercent >= 0 ? root.cpuPercent + "%" : "—")
                                  + (root.cpuTemp > 0 ? " · " + root.cpuTemp + "°" : "")
                     }
                     EntryRow {
-                        label: "STORES"
+                        label: "MEM"
                         value: root.ramPercent
                         toneCol: root.tone(root.ramPercent, 70, 90)
                         readout: root.ramPercent >= 0
@@ -403,14 +379,14 @@ Item {
                     }
                     EntryRow {
                         visible: root.hasGpu
-                        label: "OPTICS"
+                        label: "GPU"
                         value: root.gpuPercent
                         toneCol: root.tone(root.gpuPercent, 62, 87)
                         readout: (root.gpuPercent >= 0 ? root.gpuPercent + "%" : "—")
                                  + (root.gpuTemp > 0 ? " · " + root.gpuTemp + "°" : "")
                     }
                     EntryRow {
-                        label: "WIRE"
+                        label: "NET"
                         value: -1
                         readout: root.online
                                  ? "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
@@ -418,7 +394,7 @@ Item {
                     }
                     EntryRow {
                         visible: root.hasBattery
-                        label: "POWDER"
+                        label: "BAT"
                         value: root.batteryPercent
                         toneCol: root.batteryPercent <= 15 ? root.blood
                                : root.batteryPercent <= 30 ? root.brass : root.bone
@@ -426,7 +402,7 @@ Item {
                                  ? root.batteryPercent + "%" + (root.batteryCharging ? " ⌁" : "") : "—"
                     }
 
-                    // foot: rule + the wire's name + time on the trail
+                    // foot: rule + the connection's name + uptime
                     Item { width: 1; height: 6 }
                     Rectangle { width: parent.width; height: 1; color: root.boneA(0.25) }
                     Item { width: 1; height: 4 }
@@ -436,19 +412,19 @@ Item {
                         Text {
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                            text: root.online ? (root.connName || "THE WIRE HOLDS") : "WIRE SILENT"
+                            text: root.online ? (root.connName || "online") : "offline"
                             textFormat: Text.PlainText
                             font.family: root.mono
-                            font.pixelSize: 9
+                            font.pixelSize: 10
                             font.letterSpacing: 1
-                            color: root.online ? root.inkA(0.6) : Qt.rgba(root.blood.r, root.blood.g, root.blood.b, 0.85)
+                            color: root.online ? root.inkA(0.7) : Qt.rgba(root.blood.r, root.blood.g, root.blood.b, 0.85)
                         }
                         Text {
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            text: "ON THE TRAIL " + root.uptimeText
+                            text: "up " + root.uptimeText
                             font.family: root.mono
-                            font.pixelSize: 9
+                            font.pixelSize: 10
                             font.letterSpacing: 1
                             color: root.ashA(1)
                         }

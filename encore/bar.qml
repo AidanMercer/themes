@@ -9,16 +9,16 @@ import Quickshell.Services.Mpris
 // console the diva can see from her side. Flat stage-black modules with a
 // teal edge-strip along their feet, capsule shapes only (this rig has no
 // chamfers — moon owns those).
-//   left   — PGM: the program monitor. A beat pip ticking the internal count,
-//            the track title, and the song's progress as a 14-lamp LED
-//            ladder that fills in whole lamps (law 1 — no sliding needles).
+//   left   — media: a beat pip ticking the internal count, the track title,
+//            and the song's progress as a 14-lamp LED ladder that fills in
+//            whole lamps (law 1 — no sliding needles).
 //   center — the CHANNEL STRIP: ten workspaces as ten faders. The active
 //            channel's fader is pushed up and lit; occupied channels sit at
 //            half with their app riding the module; empty channels rest at
 //            the bottom, dark. Faders SNAP between detents — a light cue,
 //            not a glide (law 2).
-//   right  — DESK lamp (hover = the patch bay drops), FOH signal ladder,
-//            battery lamps, the time, and the [CUE] button for the popup.
+//   right  — sys lamp (hover = the rack panel drops), net signal ladder,
+//            battery lamps, the time, and the ✳ button for the popup.
 // Self-contained: hyprland via Quickshell.Hyprland, /proc + nmcli.
 Item {
     id: root
@@ -201,7 +201,7 @@ Item {
     }
     Component.onCompleted: Hyprland.refreshToplevels()
 
-    // ── left: PGM, the program monitor ──────────────────────────────────────
+    // ── left: the media module ──────────────────────────────────────────────
     Item {
         id: media
         readonly property var player: {
@@ -215,7 +215,7 @@ Item {
         visible: active
         x: 12
         y: Math.round((parent.height - height) / 2)
-        width: pgmRow.width + 26
+        width: mediaRow.width + 26
         height: 28
         opacity: root.bootOp
         scale: root.bootScale
@@ -223,20 +223,11 @@ Item {
         DeskPanel { anchors.fill: parent; strip: media.playing ? 0.6 : 0.2 }
 
         Row {
-            id: pgmRow
+            id: mediaRow
             anchors.centerIn: parent
             anchors.verticalCenterOffset: -2
             spacing: 8
 
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "PGM"
-                color: media.playing ? root.teal : root.restA(1)
-                font.family: root.mono
-                font.pixelSize: 9
-                font.weight: Font.Bold
-                font.letterSpacing: 2
-            }
             // the beat pip: the desk's metronome, hard on/off at the count
             Rectangle {
                 id: pip
@@ -370,7 +361,7 @@ Item {
         opacity: root.bootOp
         scale: root.bootScale
 
-        // DESK — the patch-bay lamp; hover to drop the rack panel.
+        // sys — hover to drop the rack panel.
         // gone while the readout is toggled off in settings.
         DeskPanel {
             visible: root.pal.sysinfoOn !== false
@@ -380,12 +371,12 @@ Item {
             Text {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: -1
-                text: "DESK"
-                color: deskMa.containsMouse ? root.teal : root.inkA(0.6)
+                text: "sys"
+                color: deskMa.containsMouse ? root.teal : root.inkA(0.7)
                 font.family: root.mono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.weight: Font.Bold
-                font.letterSpacing: 2
+                font.letterSpacing: 1
             }
             MouseArea {
                 id: deskMa
@@ -395,7 +386,7 @@ Item {
             }
         }
 
-        // FOH signal: four lamp steps, whole lamps only
+        // net signal: four lamp steps, whole lamps only
         DeskPanel {
             anchors.verticalCenter: parent.verticalCenter
             width: 34; height: 24
@@ -473,7 +464,7 @@ Item {
             }
         }
 
-        // CUE — the sheet (control popup)
+        // ✳ — the menu button (control popup), wearing the rig's spark glyph
         DeskPanel {
             anchors.verticalCenter: parent.verticalCenter
             width: 40; height: 24
@@ -482,12 +473,11 @@ Item {
             Text {
                 anchors.centerIn: parent
                 anchors.verticalCenterOffset: -1
-                text: "CUE"
+                text: "✳"
                 color: cueMa.containsMouse ? root.spot : root.inkA(0.7)
                 font.family: root.mono
-                font.pixelSize: 8
+                font.pixelSize: 12
                 font.weight: Font.Bold
-                font.letterSpacing: 2
             }
             MouseArea {
                 id: cueMa

@@ -307,8 +307,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 0
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "✦ reading the sky…"
-                  : !root.engine.lyricsSynced ? "✧ no stars charted for this song"
+            text: !root.engine.lyricsLoaded ? "✦ loading lyrics…"
+                  : !root.engine.lyricsSynced ? "✧ no synced lyrics"
                   : "✦"
             textFormat: Text.PlainText
             color: root.slateA(1)

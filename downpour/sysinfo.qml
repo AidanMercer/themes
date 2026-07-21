@@ -8,8 +8,8 @@ import Quickshell.Io
 // The patch reveals with the wipe's own gesture: contents surface behind a
 // left-to-right clear, the panel settling with the hand's follow-through.
 // Every reading is a water level in a thin vial; condensation gathers as
-// beads along the patch's lower rim. Names are hers: pulse, memory, glow,
-// charge, outside. Sections with no source (no nvidia-smi, no battery)
+// beads along the patch's lower rim. Plain lowercase labels: cpu, memory,
+// gpu, charge, net. Sections with no source (no nvidia-smi, no battery)
 // never appear. Reads /proc + nmcli itself; polls only while revealed;
 // click-through scenery.
 Item {
@@ -251,10 +251,10 @@ Item {
         online = true
     }
 
-    // ── one reading: her word, a vial's water level, the number ─────────────
+    // ── one reading: a plain label, a vial's water level, the number ────────
     component VialRow: Item {
         id: row
-        property string label: "pulse"
+        property string label: ""
         property int value: -1        // 0..100, -1 keeps the vial dry
         property color tone: root.paneLight
         property string readout: ""
@@ -307,7 +307,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             text: row.readout
             font.family: root.mono
-            font.pixelSize: 10
+            font.pixelSize: 11
             color: row.value >= 0 ? Qt.rgba(row.tone.r, row.tone.g, row.tone.b, 0.95) : root.slateA(1.0)
         }
     }
@@ -428,28 +428,19 @@ Item {
                             }
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: "wiped clear"
+                                text: "system"
                                 font.family: root.serif
                                 font.italic: true
                                 font.pixelSize: 14
                                 color: root.inkA(0.85)
                             }
                         }
-                        Text {
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "for a moment"
-                            font.family: root.serif
-                            font.italic: true
-                            font.pixelSize: 10
-                            color: root.slateA(1.0)
-                        }
                     }
 
                     Rectangle { width: parent.width; height: 1; color: root.slateA(0.5) }
 
                     VialRow {
-                        label: "pulse"
+                        label: "cpu"
                         value: root.cpuPercent
                         tone: root.tone(root.cpuPercent, 60, 85)
                         readout: root.cpuPercent < 0 ? "--"
@@ -465,7 +456,7 @@ Item {
                     VialRow {
                         visible: root.hasGpu
                         height: root.hasGpu ? 30 : 0
-                        label: "glow"
+                        label: "gpu"
                         value: root.gpuPercent
                         tone: root.tone(root.gpuPercent, 60, 85)
                         readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -481,7 +472,7 @@ Item {
                         readout: (root.batteryCharging ? "⌁ " : "") + root.batteryPercent + "%"
                     }
 
-                    // outside: the connection, and what's drifting through it
+                    // net: the connection, and what's drifting through it
                     Item {
                         width: parent.width
                         height: 24
@@ -491,7 +482,7 @@ Item {
                             spacing: 7
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: "outside"
+                                text: "net"
                                 font.family: root.serif
                                 font.italic: true
                                 font.pixelSize: 13
@@ -508,10 +499,10 @@ Item {
                             }
                             Text {
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: root.online ? root.connName : "no one out there"
+                                text: root.online ? root.connName : "offline"
                                 textFormat: Text.PlainText
                                 font.family: root.mono
-                                font.pixelSize: 10
+                                font.pixelSize: 11
                                 color: root.online ? root.inkA(0.72)
                                      : Qt.rgba(root.warmth.r, root.warmth.g, root.warmth.b, 0.9)
                             }
@@ -521,7 +512,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                             font.family: root.mono
-                            font.pixelSize: 9
+                            font.pixelSize: 10
                             color: root.slateA(1.0)
                         }
                     }
@@ -535,20 +526,11 @@ Item {
                         Text {
                             anchors.left: parent.left
                             anchors.verticalCenter: parent.verticalCenter
-                            text: "awake " + root.uptimeText
+                            text: "up " + root.uptimeText
                             font.family: root.serif
                             font.italic: true
                             font.pixelSize: 11
                             color: root.inkA(0.55)
-                        }
-                        Text {
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "the last quiet hour"
-                            font.family: root.serif
-                            font.italic: true
-                            font.pixelSize: 10
-                            color: root.paneA(0.55)
                         }
                     }
                 }

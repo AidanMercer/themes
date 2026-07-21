@@ -2,12 +2,11 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// lonely-train: the arrivals board. A station placard bottom-right where each
-// subsystem runs as a service line — a dusk route with five station dots, an
-// amber fill riding to the current load and a status word (ON TIME / BUSY /
-// DELAYED) on the right. The CPU line pulls a consist of tiny lit cars, one
-// per core. Amber band + LT roundel keep the station-sign grammar; the footer
-// whisper answers the clock's "bound for home".
+// lonely-train: the system placard. A station placard bottom-right where each
+// subsystem runs as a service line — a dusk route with five station dots and
+// an amber fill riding to the current load. The CPU line pulls a consist of
+// tiny lit cars, one per core. Amber band + roundel keep the station-sign
+// grammar.
 // Hover-reveal: lights up when the bar's guard panel is hovered or the
 // Super+. pin flips (the shared flag-file contract). One bash poll every 3s
 // while shown (pure builtins); a hidden board polls nothing at all.
@@ -20,11 +19,9 @@ Item {
     readonly property color amber: pal.neon
     readonly property color dusk:  pal.cyan
     readonly property color tail:  pal.magenta
-    readonly property color warn:  pal.amber
     readonly property color ink:   pal.text
     readonly property color glass: pal.glass
     readonly property string mono:  pal.fontMono
-    readonly property string serif: "Noto Serif Display"
     function inkA(a)   { return Qt.rgba(ink.r, ink.g, ink.b, a) }
     function amberA(a) { return Qt.rgba(amber.r, amber.g, amber.b, a) }
     function duskA(a)  { return Qt.rgba(dusk.r, dusk.g, dusk.b, a) }
@@ -44,7 +41,7 @@ Item {
     property bool hasBattery: false
     property bool online: false
     property string connName: ""
-    property string svcText: "000:00"
+    property string uptimeText: "0:00"
     property real rxRate: 0
     property real txRate: 0
 
@@ -53,8 +50,6 @@ Item {
     property var _prevCore: ({})
     property real _prevRx: -1
     property real _prevTx: -1
-
-    readonly property bool anyLate: cpuPct >= 85 || memPct >= 90 || gpuPct >= 90
 
     // reveal contract: the bar's guard panel writes the hover flag, the
     // shell's Super+. writes the pin flag; either lights the board
@@ -157,7 +152,7 @@ Item {
                 const s = Math.floor(parseFloat(rest) || 0)
                 const h = Math.floor(s / 3600)
                 const m = Math.floor((s % 3600) / 60)
-                svcText = String(h).padStart(3, "0") + ":" + String(m).padStart(2, "0")
+                uptimeText = h + ":" + String(m).padStart(2, "0")
             } else if (tag === "B") {
                 const f = rest.trim().split(/\s+/)
                 const c = parseInt(f[0])
@@ -208,20 +203,12 @@ Item {
     function fmtRate(b) {
         return b >= 1048576 ? (b / 1048576).toFixed(1) + "m" : Math.round(b / 1024) + "k"
     }
-    function statusWord(v) {
-        return v < 0 ? "—" : v >= 85 ? "DELAYED" : v >= 60 ? "BUSY" : "ON TIME"
-    }
-    function statusTint(v) {
-        return v >= 85 ? tail : v >= 60 ? warn : duskA(0.85)
-    }
 
-    // ── a service line: label, route meter with stations, value + status ──
+    // ── a service line: label, route meter with stations, value ──────────
     component ServiceRow: Item {
         id: row
         property string label: ""
         property int value: -1
-        property string status: root.statusWord(value)
-        property color statusCol: root.statusTint(value)
         width: parent ? parent.width : 0
         implicitHeight: 30
 
@@ -232,8 +219,8 @@ Item {
             text: label
             color: root.duskA(0.7)
             font.family: root.mono
-            font.pixelSize: 9
-            font.letterSpacing: 3
+            font.pixelSize: 10
+            font.letterSpacing: 1
         }
         // the route: dusk track, amber fill riding to the load, five stations
         Item {
@@ -271,27 +258,16 @@ Item {
                 }
             }
         }
-        Column {
+        Text {
             id: valueCol
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            spacing: 1
-            Text {
-                anchors.right: parent.right
-                text: row.value < 0 ? "—" : row.value + "%"
-                color: root.inkA(0.92)
-                font.family: root.mono
-                font.pixelSize: 12
-                font.weight: Font.DemiBold
-            }
-            Text {
-                anchors.right: parent.right
-                text: row.status
-                color: row.statusCol
-                font.family: root.mono
-                font.pixelSize: 7
-                font.letterSpacing: 2
-            }
+            text: row.value < 0 ? "—" : row.value + "%"
+            color: row.value >= 85 ? root.tail : root.inkA(0.92)
+            font.family: root.mono
+            font.pixelSize: 12
+            font.weight: Font.DemiBold
+            Behavior on color { ColorAnimation { duration: 300 } }
         }
     }
 
@@ -341,7 +317,7 @@ Item {
             anchors.topMargin: 14
             spacing: 9
 
-            // header: roundel + ARRIVALS + service counter
+            // header: roundel + a plain title + uptime
             Item {
                 width: parent.width
                 height: 18
@@ -355,18 +331,17 @@ Item {
                         color: "transparent"
                         border.width: 1.5
                         border.color: root.amber
-                        Text {
+                        // wordless roundel: the route line through the station ring
+                        Rectangle {
                             anchors.centerIn: parent
-                            text: "LT"
+                            width: 8; height: 1.5
+                            radius: 1
                             color: root.amber
-                            font.family: root.mono
-                            font.pixelSize: 6
-                            font.weight: Font.Black
                         }
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "ARRIVALS"
+                        text: "SYSTEM"
                         color: root.amberA(0.92)
                         font.family: root.mono
                         font.pixelSize: 11
@@ -374,30 +349,19 @@ Item {
                         font.letterSpacing: 5
                     }
                 }
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 5
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 4; height: 4; radius: 2
-                        color: root.tail
-                        opacity: 0.8
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "SVC " + root.svcText
-                        color: root.inkA(0.45)
-                        font.family: root.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                    }
+                    text: "up " + root.uptimeText
+                    color: root.inkA(0.7)
+                    font.family: root.mono
+                    font.pixelSize: 10
                 }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.inkA(0.12) }
 
-            ServiceRow { label: "CPU"; value: root.cpuPct }
+            ServiceRow { label: "cpu"; value: root.cpuPct }
 
             // the consist: one lit car per core
             Item {
@@ -429,42 +393,37 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     visible: root.cpuTemp > 0
                     text: root.cpuTemp + "°C"
-                    color: root.inkA(0.4)
+                    color: root.inkA(0.7)
                     font.family: root.mono
-                    font.pixelSize: 7
-                    font.letterSpacing: 1
+                    font.pixelSize: 10
                 }
             }
 
-            ServiceRow { label: "MEM"; value: root.memPct }
+            ServiceRow { label: "mem"; value: root.memPct }
             Text {
                 anchors.right: parent.right
                 text: root.memUsedGb.toFixed(1) + " / " + root.memTotalGb.toFixed(1) + " GB"
-                color: root.inkA(0.4)
+                color: root.inkA(0.7)
                 font.family: root.mono
-                font.pixelSize: 7
-                font.letterSpacing: 1
+                font.pixelSize: 10
             }
 
             ServiceRow {
                 visible: root.gpuPct >= 0
                 height: root.gpuPct >= 0 ? implicitHeight : 0
-                label: "GPU"; value: root.gpuPct
+                label: "gpu"; value: root.gpuPct
             }
 
             ServiceRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? implicitHeight : 0
-                label: "PWR"; value: root.batPct
-                status: root.batCharging ? "BOARDING"
-                    : root.batPct >= 0 && root.batPct < 20 ? "LAST CALL" : "ON TIME"
-                statusCol: root.batCharging ? root.amber
-                    : root.batPct >= 0 && root.batPct < 20 ? root.tail : root.duskA(0.85)
+                label: root.batCharging ? "battery · charging" : "battery"
+                value: root.batPct
             }
 
             Rectangle { width: parent.width; height: 1; color: root.inkA(0.12) }
 
-            // footer: connection + rates, then the whisper
+            // footer: connection + rates
             Item {
                 width: parent.width
                 height: 12
@@ -481,12 +440,12 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName.toUpperCase() : "NO SERVICE"
+                        text: root.online ? root.connName.toUpperCase() : "OFFLINE"
                         textFormat: Text.PlainText
                         color: root.online ? root.duskA(0.85) : root.tail
                         font.family: root.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
+                        font.pixelSize: 10
+                        font.letterSpacing: 1
                         elide: Text.ElideRight
                         width: Math.min(implicitWidth, 130)
                     }
@@ -495,20 +454,10 @@ Item {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
-                    color: root.inkA(0.4)
+                    color: root.inkA(0.7)
                     font.family: root.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                 }
-            }
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: root.anyLate ? "running a little late tonight" : "running on time tonight"
-                color: root.inkA(0.55)
-                font.family: root.serif
-                font.pixelSize: 11
-                font.italic: true
-                font.letterSpacing: 1
             }
         }
     }

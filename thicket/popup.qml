@@ -4,10 +4,9 @@ import QtQuick
 // allowed into. The shell mounts these pieces around its shared tabs:
 // backdrop (deep foliage glass with leaf silhouettes biting every edge and a
 // dapple of warm light pooling from the top), header (the eyeshine pair +
-// THICKET + three leaf-clusters that rustle with the music + how long it has
-// watched), footer (what it hears on the wind + the send-off), overlay (a
-// faint dark vignette pressing in at the corners). Item root that renders
-// nothing itself; no MouseAreas, clicks pass through.
+// three leaf-clusters that rustle with the music + uptime), footer (the
+// connection), overlay (a faint dark vignette pressing in at the corners).
+// Item root that renders nothing itself; no MouseAreas, clicks pass through.
 Item {
     id: chrome
 
@@ -17,7 +16,6 @@ Item {
     required property var audio    // AudioBus: bass/mid/high, silent, ready
 
     readonly property string mono: pal.fontMono
-    readonly property string serif: "Noto Serif Display"
     readonly property string icon: "Symbols Nerd Font"
     function inkA(a)    { return Qt.rgba(pal.text.r, pal.text.g, pal.text.b, a) }
     function emberA(a)  { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
@@ -108,7 +106,7 @@ Item {
         }
     }
 
-    // ── header: the eyes + THICKET + rustle meter + how long it's watched ───
+    // ── header: the eyes + rustle meter + uptime ────────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 10
@@ -149,16 +147,6 @@ Item {
                             onTriggered: hdrBlink.restart()
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "THICKET"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 5
-                        color: chrome.pal.neon
-                    }
-
                     // three leaf-clusters, leaning harder as their band rises
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -194,25 +182,13 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "from cover"
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.pixelSize: 10
-                        color: chrome.irisA(0.75)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "WATCHED " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.leafA(1.0)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    color: chrome.leafA(1.0)
                 }
             }
 
@@ -237,7 +213,7 @@ Item {
         }
     }
 
-    // ── footer: the wind + the send-off ─────────────────────────────────────
+    // ── footer: the connection ──────────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 10
@@ -278,23 +254,13 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "NOTHING ON THE WIND"
-                            : (chrome.popup.connName || "ON THE WIND")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.inkA(0.75)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "move slow — it sees you"
-                    font.family: chrome.serif
-                    font.italic: true
-                    font.pixelSize: 10
-                    color: chrome.emberA(0.7)
                 }
             }
         }

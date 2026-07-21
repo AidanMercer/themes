@@ -29,7 +29,7 @@ Item {
     property color panelBorder: slateA(0.75)
     property int panelBorderWidth: 1
     property int panelRadius: 4
-    property string panelTitle: "Mile markers"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             id: log
@@ -80,9 +80,9 @@ Item {
             Text {
                 anchors { left: parent.left; bottom: parent.bottom; leftMargin: 14; bottomMargin: 7 }
                 visible: log.quiet
-                text: "ENGINE OFF"
+                text: "do not disturb"
                 font.family: root.pal.fontMono
-                font.pixelSize: 8
+                font.pixelSize: 10
                 font.letterSpacing: 2
                 color: root.slateA(1)
             }

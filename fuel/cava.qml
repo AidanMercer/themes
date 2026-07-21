@@ -4,7 +4,7 @@ import Quickshell.Io
 // fuel: pump-flow display, standing low on the snowy forecourt (bottom-left,
 // echoing the striped pumps across the drive). A chamfered pump-face panel —
 // bent neon stripe on top, warm pump-screen glass — carrying:
-//   left  — an analog PRESSURE gauge whose needle rides the overall level
+//   left  — an analog gauge whose needle rides the overall level
 //   right — a dot-matrix EQ: 20 columns of amber pump-display dots with
 //           neon tips and a red peak row, like the readout mid-fill
 // Runs its own cava (cava.conf next door). While the forecourt is silent the
@@ -21,14 +21,11 @@ Item {
     property bool playing: true
     readonly property bool feedOn: playing && !occluded
     readonly property color neon:  pal.neon
-    readonly property color ice:   pal.cyan
     readonly property color red:   pal.magenta
     readonly property color amber: pal.amber
     readonly property color dim:   pal.dim
     readonly property color ink:   pal.text
-    readonly property string mono: pal.fontMono
     function inkA(a) { return Qt.rgba(ink.r, ink.g, ink.b, a) }
-    function iceA(a) { return Qt.rgba(ice.r, ice.g, ice.b, a) }
 
     readonly property int barCount: 20
     property var levels: []
@@ -181,34 +178,14 @@ Item {
             anchors.leftMargin: 18
             anchors.rightMargin: 18
             height: 12
-            Text {
-                anchors.left: parent.left
-                text: "PUMP FLOW"
-                color: root.amber
-                font.family: root.mono
-                font.weight: Font.Bold
-                font.pixelSize: 9
-                font.letterSpacing: 3
-            }
-            Row {
+            // just the pump band, quiet in the corner
+            Column {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 6
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "L/MIN"
-                    color: root.iceA(0.55)
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                }
-                Column {
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 1
-                    Rectangle { width: 14; height: 2; color: root.amber; opacity: 0.8 }
-                    Rectangle { width: 14; height: 2; color: root.neon; opacity: 0.9 }
-                    Rectangle { width: 14; height: 2; color: root.red; opacity: 0.7 }
-                }
+                spacing: 1
+                Rectangle { width: 14; height: 2; color: root.amber; opacity: 0.8 }
+                Rectangle { width: 14; height: 2; color: root.neon; opacity: 0.9 }
+                Rectangle { width: 14; height: 2; color: root.red; opacity: 0.7 }
             }
         }
 
@@ -289,15 +266,6 @@ Item {
                 anchors.centerIn: parent
                 width: 8; height: 8; radius: 4
                 color: root.amber
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                text: "PRESSURE"
-                color: root.iceA(0.5)
-                font.family: root.mono
-                font.pixelSize: 7
-                font.letterSpacing: 2
             }
         }
 

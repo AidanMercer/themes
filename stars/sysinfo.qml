@@ -3,13 +3,12 @@ import Quickshell
 import Quickshell.Io
 
 // stars: the vending machine's service panel, pinned into the dark ground of
-// the bottom-right corner. A diagnostic readout styled like the machine's
-// own front: each subsystem is a product slot — "A1 CPU", "B2 MEM", "C3
-// GPU", "D4 NET", "E5 PWR" — with a shelf of little bottle-lights filling
-// bottom-dim to bright-amber as load rises (overheating slots go coral, then
-// signal red). A coin counter ticks the uptime along the bottom. Sections
-// with no source (no nvidia-smi, no battery) stay dark like empty slots.
-// Reads /proc + nmcli itself; self-contained, click-through scenery.
+// the bottom-right corner. Each subsystem is a row with a shelf of little
+// bottle-lights filling bottom-dim to bright-amber as load rises
+// (overheating rows go coral, then signal red). Uptime ticks along the
+// bottom. Sections with no source (no nvidia-smi, no battery) stay dark
+// like empty slots. Reads /proc + nmcli itself; self-contained,
+// click-through scenery.
 Item {
     id: root
     anchors.fill: parent
@@ -239,7 +238,7 @@ Item {
         const d = Math.floor(s / 86400); s -= d * 86400
         const h = Math.floor(s / 3600);  s -= h * 3600
         const m = Math.floor(s / 60)
-        uptimeText = d > 0 ? `${d}D ${h}H ${m}M` : h > 0 ? `${h}H ${m}M` : `${m}M`
+        uptimeText = d > 0 ? `${d}d ${h}h ${m}m` : h > 0 ? `${h}h ${m}m` : `${m}m`
     }
 
     Process {
@@ -258,31 +257,19 @@ Item {
         online = true
     }
 
-    // ── a product-slot row: code tag, label, bottle-shelf meter, readout ────
+    // ── a shelf row: label, bottle-shelf meter, readout ─────────────────────
     component SlotRow: Item {
         id: row
-        property string code: "A1"
-        property string label: "CPU"
+        property string label: "cpu"
         property int value: -1        // 0..100, -1 hides the shelf fill
         property color tone: root.amber
         property string readout: ""
         width: parent ? parent.width : 0
         height: 30
 
-        Text {   // slot code, like the machine's keypad tags
-            id: codeTag
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: row.code
-            font.family: root.mono
-            font.pixelSize: 10
-            font.weight: Font.Bold
-            color: root.slateA(1.0)
-        }
         Text {
             id: labelText
             anchors.left: parent.left
-            anchors.leftMargin: 26
             anchors.verticalCenter: parent.verticalCenter
             text: row.label
             font.family: root.mono
@@ -294,7 +281,7 @@ Item {
         // the shelf: 10 bottle-lights that fill with the level
         Row {
             anchors.left: parent.left
-            anchors.leftMargin: 70
+            anchors.leftMargin: 44
             anchors.verticalCenter: parent.verticalCenter
             spacing: 3
             Repeater {
@@ -393,7 +380,7 @@ Item {
             anchors.topMargin: 14
             spacing: 4
 
-            // header: the lit vendor sign
+            // header: the lit sign pip + a plain title
             Item {
                 width: parent.width
                 height: 18
@@ -415,7 +402,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "SEASIDE VENDOR"
+                        text: "system"
                         font.family: root.mono
                         font.weight: Font.Bold
                         font.pixelSize: 12
@@ -423,29 +410,19 @@ Item {
                         color: root.amber
                     }
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 14
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "SELF-CHECK"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.slateA(1.0)
-                }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.slateA(0.6) }
 
             SlotRow {
-                code: "A1"; label: "CPU"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             SlotRow {
-                code: "B2"; label: "MEM"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -454,7 +431,7 @@ Item {
             SlotRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 30 : 0
-                code: "C3"; label: "GPU"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -462,7 +439,7 @@ Item {
             SlotRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 30 : 0
-                code: "E5"; label: "PWR"
+                label: "batt"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.coral
                     : root.batteryPercent <= 15 ? root.alert
@@ -470,7 +447,7 @@ Item {
                 readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
-            // NET is text-only: name left, rates right
+            // net is text-only: name left, rates right
             Item {
                 width: parent.width
                 height: 24
@@ -480,11 +457,11 @@ Item {
                     spacing: 6
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "D4"
+                        text: "net"
                         font.family: root.mono
-                        font.pixelSize: 10
-                        font.weight: Font.Bold
-                        color: root.slateA(1.0)
+                        font.pixelSize: 11
+                        font.letterSpacing: 2
+                        color: root.inkA(0.85)
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -516,41 +493,24 @@ Item {
 
             Rectangle { width: parent.width; height: 1; color: root.slateA(0.6) }
 
-            // coin counter: uptime
+            // uptime along the bottom
             Item {
                 width: parent.width
                 height: 18
-                Row {
+                Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 5
-                    Repeater {
-                        model: 3
-                        Rectangle {
-                            required property int index
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 8; height: 8; radius: 4
-                            color: "transparent"
-                            border.width: 1.2
-                            border.color: root.amberA(index === 0 ? 0.9 : index === 1 ? 0.55 : 0.3)
-                        }
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: " UP " + root.uptimeText
-                        font.family: root.mono
-                        font.pixelSize: 9
-                        font.letterSpacing: 1
-                        color: root.inkA(0.6)
-                    }
+                    text: "up " + root.uptimeText
+                    font.family: root.mono
+                    font.pixelSize: 10
+                    font.letterSpacing: 1
+                    color: root.inkA(0.7)
                 }
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "✧ WAITING WITH STARS"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
+                    text: "✧"
+                    font.pixelSize: 9
                     color: root.amberA(0.5)
                 }
             }

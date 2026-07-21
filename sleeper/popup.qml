@@ -1,13 +1,13 @@
 import QtQuick
 
-// sleeper: night-service tray chrome for the Super+M control popup. The shell
-// mounts these pieces around its shared tabs: backdrop (the attendant's tray —
-// compartment glass with a warm rim, a doily of punch-dots along the top, a
-// tiny podstakannik parked in the bottom corner), header (the reading lamp +
-// THE OVERNIGHT BERTH + three little tea glasses as the EQ + distance),
-// footer (the line + SLEEP WELL), overlay (every little while a lamp passes
-// across the tray — light arrives as passing glows here). Item root that
-// renders nothing itself; no MouseAreas, clicks pass through.
+// sleeper: tray chrome for the Super+M control popup. The shell mounts these
+// pieces around its shared tabs: backdrop (the attendant's tray — compartment
+// glass with a warm rim, a doily of punch-dots along the top, a tiny
+// podstakannik parked in the bottom corner), header (the reading lamp +
+// three little tea glasses as the EQ + uptime), footer (net + the crescent),
+// overlay (every little while a lamp passes across the tray — light arrives
+// as passing glows here). Item root that renders nothing itself; no
+// MouseAreas, clicks pass through.
 Item {
     id: chrome
 
@@ -93,7 +93,7 @@ Item {
         }
     }
 
-    // ── header: lamp + name + tea-glass EQ + distance ───────────────────────
+    // ── header: lamp + tea-glass EQ + uptime ────────────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -119,16 +119,6 @@ Item {
                             NumberAnimation { to: 1.0; duration: 1500; easing.type: Easing.InOutSine }
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "THE OVERNIGHT BERTH"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 12
-                        font.letterSpacing: 4
-                        color: chrome.pal.amber
-                    }
-
                     // three little tea glasses, filling with the music
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -166,26 +156,13 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "CAR 7 · NIGHT SERVICE"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.pal.cyan
-                        opacity: 0.7
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "DIST " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.woodA(1.0)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    color: chrome.woodA(1.0)
                 }
             }
 
@@ -208,7 +185,7 @@ Item {
         }
     }
 
-    // ── footer: the line + the send-off ─────────────────────────────────────
+    // ── footer: net + the crescent ──────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -247,34 +224,22 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "OFF THE LINE"
-                            : (chrome.popup.connName || "ON THE LINE")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.linenA(0.75)
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "SLEEP WELL"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 3
-                        color: chrome.teaA(0.6)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "☾"
-                        font.pixelSize: 10
-                        color: chrome.pal.cyan
-                        opacity: 0.8
-                    }
+                    text: "☾"
+                    font.pixelSize: 10
+                    color: chrome.pal.cyan
+                    opacity: 0.8
                 }
             }
         }

@@ -3,11 +3,10 @@ import QtQuick
 // downpour: breath-fog chrome for the Super+M control menu. The shell mounts
 // these pieces around its shared tabs: backdrop (a condensation pane —
 // wobbled corners, a pale breath pooling in the middle, beads gathered on
-// the lower rim), header (a listening bead + the theme's name in her hand +
-// three beads that swell with the music + how long the glass has been
-// awake), footer (the connection + one patient drip), overlay (two still
-// beads in the corners). Item root that renders nothing itself; no
-// MouseAreas, clicks pass through.
+// the lower rim), header (a listening bead + three beads that swell with
+// the music + uptime), footer (the connection + one patient drip), overlay
+// (two still beads in the corners). Item root that renders nothing itself;
+// no MouseAreas, clicks pass through.
 Item {
     id: chrome
 
@@ -82,7 +81,7 @@ Item {
         }
     }
 
-    // ── header: bead + name + three swelling beads + awake time ─────────────
+    // ── header: bead + three swelling beads + uptime ────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 10
@@ -103,16 +102,6 @@ Item {
                         color: chrome.paneA(0.85)
                         Rectangle { x: 1.6; y: 1.8; width: 2.2; height: 2.2; radius: 1.1; color: chrome.inkA(0.85) }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "downpour"
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.pixelSize: 17
-                        font.letterSpacing: 2
-                        color: chrome.inkA(0.92)
-                    }
-
                     // three beads hanging from a tiny rail, swelling with the music
                     Item {
                         anchors.verticalCenter: parent.verticalCenter
@@ -144,7 +133,7 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "awake " + chrome.popup.uptimeText.replace("up ", "")
+                    text: chrome.popup.uptimeText
                     font.family: chrome.serif
                     font.italic: true
                     font.pixelSize: 11
@@ -175,7 +164,7 @@ Item {
         }
     }
 
-    // ── footer: the outside + one patient drip ──────────────────────────────
+    // ── footer: the connection + one patient drip ───────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 10
@@ -218,8 +207,8 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "no one out there"
-                            : (chrome.popup.connName || "outside")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "connected")
                         textFormat: Text.PlainText
                         font.family: chrome.serif
                         font.italic: true
@@ -232,15 +221,6 @@ Item {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "the rain keeps time"
-                        font.family: chrome.serif
-                        font.italic: true
-                        font.pixelSize: 10
-                        font.letterSpacing: 1
-                        color: chrome.paneA(0.55)
-                    }
                     // the patient drip: a bead slides its 10px and rests
                     Item {
                         anchors.verticalCenter: parent.verticalCenter

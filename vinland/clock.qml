@@ -79,14 +79,6 @@ Item {
         transformOrigin: Item.TopLeft
 
         Text {
-            text: "ᚹᛁᚾᛚᚨᚾᛞ"
-            color: root.iceA(0.72)
-            font.family: "Noto Sans Runic"
-            font.pixelSize: 15
-            font.letterSpacing: 9
-        }
-
-        Text {
             id: timeText
             text: Qt.formatDateTime(clock.date, "HH:mm")
             color: root.snow

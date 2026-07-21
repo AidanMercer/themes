@@ -272,8 +272,8 @@ Item {
         }
         Text {
             anchors.verticalCenter: parent.verticalCenter
-            text: !root.engine.lyricsLoaded ? "SIGN WARMING UP…"
-                  : !root.engine.lyricsSynced ? "SIGN DARK — NO LYRICS"
+            text: !root.engine.lyricsLoaded ? "LOADING LYRICS…"
+                  : !root.engine.lyricsSynced ? "NO LYRICS"
                   : "♪"
             color: root.glassTube
             opacity: 0.8
@@ -292,7 +292,7 @@ Item {
         x: root.boxX + root.boxW - width
         y: root.boxY - Math.round(24 * pal.uiScale)
         opacity: 0
-        text: "SIGN TIMING " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
+        text: "OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
         color: root.amber
         font.family: root.mono
         font.weight: Font.Bold

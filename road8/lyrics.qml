@@ -227,8 +227,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 0
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "▪ TUNING…"
-                  : !root.engine.lyricsSynced ? "▪ NO SIGNAL ON THIS ROAD"
+            text: !root.engine.lyricsLoaded ? "▪ SEARCHING…"
+                  : !root.engine.lyricsSynced ? "▪ NO SYNCED LYRICS"
                   : "▪"
             textFormat: Text.PlainText
             color: root.slateA(1)

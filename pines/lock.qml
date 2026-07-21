@@ -6,12 +6,12 @@ import Quickshell
 // Locking the station doesn't black the windows — the rain keeps falling and
 // the video stays sharp; only a pane of the cab glass fogs over. A sheet of
 // breath-condensation condenses mid-screen (its own blurred, desaturated
-// slice of the mountain), carrying the station heading, the time in thin
+// slice of the mountain), carrying the theme wordmark, the time in thin
 // serif, and the passcode as a survey: each keystroke plots a benchmark
 // triangle onto a bearing line, condensing out of fog as it lands. A wrong
-// code LOSES FIX — the marks flash ember and the line is knocked off its
+// code flashes the marks ember and the line is knocked off its
 // bearing before it damps level again — and when the code lands, the line
-// closes with one warm sweep of lamplight and the watch resumes.
+// closes with one warm sweep of lamplight.
 Item {
     id: root
     anchors.fill: parent
@@ -126,7 +126,7 @@ Item {
             y: Math.round(30 * root.ui)
             spacing: Math.round(14 * root.ui)
 
-            // the heading
+            // the wordmark — the theme's one signature
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 10
@@ -137,7 +137,7 @@ Item {
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: root.host.unlocking ? "WATCH RESUMED" : "STANDING WATCH"
+                    text: "PINES"
                     color: root.host.unlocking ? root.fogSilver : root.lampA(0.95)
                     font.family: root.serif
                     font.pixelSize: Math.round(14 * root.ui)
@@ -256,11 +256,11 @@ Item {
                     id: prompt
                     anchors.horizontalCenter: parent.horizontalCenter
                     property bool breathe: true
-                    text: root.host.failed ? "NO FIX — RE-SIGHT AND ENTER"
-                        : root.host.busy ? "PLOTTING…"
-                        : root.host.unlocking ? "FIX ESTABLISHED"
-                        : root.host.pwLength > 0 ? "ENTER TO CLOSE THE TRAVERSE"
-                        : "SIGHT YOUR BEARING"
+                    text: root.host.failed ? "wrong password"
+                        : root.host.busy ? "checking…"
+                        : root.host.unlocking ? "unlocked"
+                        : root.host.pwLength > 0 ? "press enter"
+                        : "type your password"
                     color: root.host.failed ? root.ember
                          : root.host.unlocking ? root.fogSilver : root.inkA(0.5)
                     opacity: (root.host.pwLength === 0 && !root.host.failed && !root.host.unlocking)
@@ -294,16 +294,4 @@ Item {
         }
     }
 
-    // whose mountain this is
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(30 * root.ui)
-        text: "▵ PINES-9 LOOKOUT · ELEV 2130 M"
-        color: root.inkA(0.6)
-        font.family: root.mono
-        font.pixelSize: Math.round(10 * root.ui)
-        font.letterSpacing: 5
-        opacity: root.p
-    }
 }

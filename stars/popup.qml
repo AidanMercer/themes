@@ -3,10 +3,9 @@ import QtQuick
 // stars: vending-machine chrome for the Super+M control popup. The shell
 // mounts these pieces around its shared tabs: backdrop (the machine's front
 // — night glass, warm inner glow along the lit top, faint product-window
-// mullions, a coin slot bottom-right), header (the lit vendor sign with a
-// pulsing star pip + a tiny bottle EQ riding the music + uptime), footer
-// (NET + "thank you ✦ come again"), overlay (a static glass sheen). Item
-// root that renders nothing itself; no MouseAreas, clicks pass through.
+// mullions, a coin slot bottom-right), header (a pulsing star pip + a tiny
+// bottle EQ riding the music + uptime), footer (net + a pulsing star).
+// Item root that renders nothing itself; no MouseAreas, clicks pass through.
 Item {
     id: chrome
 
@@ -125,16 +124,6 @@ Item {
                             NumberAnimation { to: 1.0; duration: 1300; easing.type: Easing.InOutSine }
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "SEASIDE VENDOR"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 4
-                        color: chrome.pal.neon
-                    }
-
                     // tiny bottle EQ — three bottles filling with bass/mid/high
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -173,26 +162,13 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "COLD DRINKS · 24H"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.pal.cyan
-                        opacity: 0.75
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "UP " + chrome.popup.uptimeText.replace("up ", "").toUpperCase()
-                        font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.slateA(1.0)
-                    }
+                    text: chrome.popup.uptimeText
+                    font.family: chrome.mono
+                    font.pixelSize: 10
+                    color: chrome.slateA(1.0)
                 }
             }
 
@@ -222,7 +198,7 @@ Item {
         }
     }
 
-    // ── footer: net + the vendor's goodbye ──────────────────────────────────
+    // ── footer: net + a pulsing star ────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -260,29 +236,17 @@ Item {
                     }
                 }
 
-                Row {
+                Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "THANK YOU ✦ COME AGAIN"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.amberA(0.6)
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "✧"
-                        font.pixelSize: 10
-                        color: chrome.pal.cyan
-                        SequentialAnimation on opacity {
-                            running: chrome.popup.open
-                            loops: Animation.Infinite
-                            NumberAnimation { to: 0.2; duration: 1700; easing.type: Easing.InOutSine }
-                            NumberAnimation { to: 0.9; duration: 1700; easing.type: Easing.InOutSine }
-                        }
+                    text: "✧"
+                    font.pixelSize: 10
+                    color: chrome.pal.cyan
+                    SequentialAnimation on opacity {
+                        running: chrome.popup.open
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 0.2; duration: 1700; easing.type: Easing.InOutSine }
+                        NumberAnimation { to: 0.9; duration: 1700; easing.type: Easing.InOutSine }
                     }
                 }
             }

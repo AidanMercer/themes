@@ -1,14 +1,13 @@
 import QtQuick
 
-// pines: the PLANE TABLE — chrome for the Super+Tab exposé. The shell keeps
-// the radial layout, thumbnails and nav; this file lays the sighting round
-// out on the lookout's plane table: a compass ring with degree ticks and
-// cardinal letters inked at the tile orbit, pencil bearing lines running
-// from the table's center to every sighted window (the acquired sighting's
-// bearing inked in lamplight), a live bearing readout in the corner, and
-// each window mounted as a map sheet — the hot sheet takes a surveyor's pin
-// (a benchmark triangle condensing in at its head). No sweep, no glitch:
-// pencil, paper, and one warm lamp.
+// pines: chrome for the Super+Tab exposé. The shell keeps the radial
+// layout, thumbnails and nav; this file lays the round out on the lookout's
+// plane table: a compass ring with degree ticks and cardinal letters inked
+// at the tile orbit, pencil bearing lines running from the table's center
+// to every window (the selection's bearing inked in lamplight), a live
+// bearing readout in the corner, and each window mounted as a map sheet —
+// the hot sheet takes a surveyor's pin (a benchmark triangle condensing in
+// at its head). No sweep, no glitch: pencil, paper, and one warm lamp.
 //
 // Visual-only by contract: no input handlers; loops gate on overview.open.
 Item {
@@ -18,7 +17,6 @@ Item {
     required property var overview   // exposé root — open, reveal, selected, tiles…
 
     readonly property string mono: pal.fontMono
-    readonly property string serif: "Noto Serif Display"
     readonly property real ui: pal.uiScale
     function lampA(a)   { return Qt.rgba(pal.neon.r, pal.neon.g, pal.neon.b, a) }
     function silverA(a) { return Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, a) }
@@ -45,10 +43,10 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: silverA(0.75)
-    readonly property string hintText: "◄ ► ▲ ▼  SIGHT      ↵  WALK IN      ESC  STAND DOWN"
-    readonly property string emptyText: "▵ NO SIGHTINGS FROM THE TOWER"
+    readonly property string hintText: "◄ ► ▲ ▼  move      ↵  focus      esc  close"
+    readonly property string emptyText: "no open windows"
 
-    // bearing of the current sighting, plane-table style
+    // bearing of the current selection, plane-table style
     readonly property string brgText: {
         const ts = overview.tiles
         const i = overview.selected
@@ -155,7 +153,7 @@ Item {
                 }
             }
 
-            // top-left: lamp pip + PLANE TABLE + sighting count
+            // top-left: lamp pip + window count
             Row {
                 x: Math.round(32 * chrome.ui); y: Math.round(32 * chrome.ui)
                 spacing: 9
@@ -174,15 +172,7 @@ Item {
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "PLANE TABLE"
-                    font.family: chrome.serif
-                    font.pixelSize: Math.round(14 * chrome.ui)
-                    font.letterSpacing: 5
-                    color: chrome.pal.neon
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "SIGHTINGS " + String(chrome.overview.windows.length).padStart(2, "0")
+                    text: "windows " + String(chrome.overview.windows.length).padStart(2, "0")
                     font.family: chrome.mono
                     font.pixelSize: Math.round(10 * chrome.ui)
                     font.letterSpacing: 2
@@ -190,20 +180,7 @@ Item {
                 }
             }
 
-            // top-right: the station's mark
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: Math.round(32 * chrome.ui)
-                y: Math.round(34 * chrome.ui)
-                text: "▵ PINES-9 · TREELINE +200 M"
-                font.family: chrome.mono
-                font.pixelSize: Math.round(10 * chrome.ui)
-                font.letterSpacing: 2
-                color: chrome.silverA(0.7)
-                opacity: chrome.overview.reveal
-            }
-
-            // bottom-left: the live sighting log
+            // bottom-left: selection + bearing readout
             Column {
                 x: Math.round(32 * chrome.ui)
                 anchors.bottom: parent.bottom
@@ -212,7 +189,7 @@ Item {
                 opacity: 0.9 * chrome.overview.reveal
 
                 Text {
-                    text: "SIGHT " + (chrome.overview.selected >= 0
+                    text: (chrome.overview.selected >= 0
                         ? String(chrome.overview.selected + 1).padStart(2, "0") : "--")
                         + "/" + String(chrome.overview.tiles.length).padStart(2, "0")
                     font.family: chrome.mono
@@ -221,30 +198,22 @@ Item {
                     color: chrome.pal.neon
                 }
                 Text {
-                    text: "BRG " + chrome.brgText + "°"
+                    text: chrome.brgText + "°"
                     font.family: chrome.mono
                     font.pixelSize: Math.round(10 * chrome.ui)
                     font.letterSpacing: 2
                     color: chrome.silverA(0.8)
                 }
-                Text {
-                    text: "▵ STANDING WATCH"
-                    font.family: chrome.mono
-                    font.pixelSize: Math.round(9 * chrome.ui)
-                    font.letterSpacing: 2
-                    color: chrome.silverA(0.6)
-                }
             }
         }
     }
 
-    // ── per-sheet dressing: class label, pin on the hot sheet, FIX tag ─────
+    // ── per-sheet dressing: class label, pin on the hot sheet ──────────────
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
             property var tile: null
             readonly property bool hot: tile ? tile.hot === true : false
-            readonly property bool ctr: tile ? tile.isCenter === true : false
 
             // the sheet's label chip, riding the top edge
             Rectangle {
@@ -268,19 +237,6 @@ Item {
                     elide: Text.ElideRight
                     width: Math.min(implicitWidth, (ov.tile ? ov.tile.width : 100) - 36)
                 }
-            }
-
-            // the focused sheet's tag
-            Text {
-                visible: ov.ctr
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.top
-                anchors.bottomMargin: 6
-                text: "FIX"
-                font.family: chrome.mono
-                font.pixelSize: 10
-                font.letterSpacing: 4
-                color: chrome.silverA(0.85)
             }
 
             // the surveyor's pin: a benchmark condenses onto the hot sheet

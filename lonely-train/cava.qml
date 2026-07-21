@@ -8,7 +8,7 @@ import Quickshell.Services.Mpris
 // wind from left to right as the track plays, spokes turning only while
 // audio is audible, and between them the spectrum rises off the tape line
 // like passing city lights — amber, with a faint blue reflection under the
-// line. SIDE A in the corner, a red REC pip while the tape rolls.
+// line. A red pip in the corner while the tape rolls.
 // Runs its own cava against the conf next door; silence = a still deck.
 Item {
     id: root
@@ -19,8 +19,6 @@ Item {
     readonly property color amber: pal.neon
     readonly property color dusk:  pal.cyan
     readonly property color tail:  pal.magenta
-    readonly property color ink:   pal.text
-    readonly property string mono: pal.fontMono
 
     readonly property int barCount: 44
     property var levels: []
@@ -282,52 +280,16 @@ Item {
             }
         }
 
-        // SIDE A · 90 — the label corner
-        Row {
-            anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.leftMargin: 26
-            anchors.topMargin: 18
-            spacing: 8
-            Text {
-                text: "SIDE A"
-                color: Qt.rgba(root.amber.r, root.amber.g, root.amber.b, 0.9)
-                font.family: root.mono
-                font.pixelSize: 12
-                font.weight: Font.Bold
-                font.letterSpacing: 4
-            }
-            Text {
-                text: "· 90 min"
-                color: Qt.rgba(root.dusk.r, root.dusk.g, root.dusk.b, 0.6)
-                font.family: root.mono
-                font.pixelSize: 10
-                font.letterSpacing: 2
-            }
-        }
-
-        // REC pip — steady red while the tape rolls, gone at rest
-        Row {
+        // red pip — steady while the tape rolls, gone at rest
+        Rectangle {
             anchors.right: parent.right
             anchors.top: parent.top
             anchors.rightMargin: 26
             anchors.topMargin: 18
-            spacing: 6
+            width: 7; height: 7; radius: 3.5
+            color: root.tail
             opacity: root.loud > 0.05 ? 1 : 0
             Behavior on opacity { NumberAnimation { duration: 400 } }
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 7; height: 7; radius: 3.5
-                color: root.tail
-            }
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "REC"
-                color: Qt.rgba(root.ink.r, root.ink.g, root.ink.b, 0.6)
-                font.family: root.mono
-                font.pixelSize: 10
-                font.letterSpacing: 3
-            }
         }
     }
 }

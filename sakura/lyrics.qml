@@ -188,7 +188,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         y: root.bandY - root.lyricSize * 1.4
         opacity: 0
-        text: "petal drift " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
+        text: "offset " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
         color: root.sky
         style: Text.Raised
         styleColor: root.plumA(0.7)

@@ -4,7 +4,7 @@ import Quickshell.Services.Mpris
 
 // sleeper: the brass plaque over the berth, screwed to the wood wall right of
 // the window. A thin double frame with corner screws, a small crescent moon,
-// the time in tall serif linen, then a perforated rule and the service line.
+// the time in tall serif linen, then a perforated rule and the date.
 // Digits change the paper way — the new figure SLIDES down into place and the
 // old one slides out below, tucked, never faded. Once a minute a band of warm
 // city light sweeps across the plaque (a lamp passing the window), and while
@@ -113,7 +113,7 @@ Item {
             y: 20
             spacing: 10
 
-            // header: crescent moon + the service name
+            // header: the crescent moon
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 9
@@ -145,14 +145,6 @@ Item {
                         NumberAnimation { to: 0.5; duration: 3400; easing.type: Easing.InOutSine }
                         NumberAnimation { to: 1.0; duration: 3400; easing.type: Easing.InOutSine }
                     }
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "THE OVERNIGHT BERTH"
-                    color: root.linenA(0.55)
-                    font.family: root.mono
-                    font.pixelSize: 10
-                    font.letterSpacing: 5
                 }
             }
 
@@ -223,10 +215,10 @@ Item {
                 }
             }
 
-            // the service line
+            // the date line
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase() + " · CAR 7"
+                text: Qt.formatDateTime(clock.date, "ddd d MMM").toUpperCase()
                 color: root.linenA(0.6)
                 font.family: root.mono
                 font.pixelSize: 11

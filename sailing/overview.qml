@@ -50,8 +50,8 @@ Item {
     readonly property string titleFont: mono
     readonly property string hintFont: mono
     readonly property color hintColor: duskA(0.85)
-    readonly property string hintText: "helm: arrows · enter to board · esc back to bunk"
-    readonly property string emptyText: "becalmed — no windows"
+    readonly property string hintText: "arrows · enter to focus · esc to close"
+    readonly property string emptyText: "no windows"
 
     // ── backdrop: the rose — ticks, rope line, and the N ────────────────────
     readonly property Component backdrop: Component {
@@ -130,7 +130,7 @@ Item {
         }
     }
 
-    // ── per-tile: brass corners + chart number, deck-roll on hot ────────────
+    // ── per-tile: brass corners, deck-roll on hot ───────────────────────────
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
@@ -180,18 +180,6 @@ Item {
                             x: parent.modelData.lx ? 0 : parent.width - width
                         }
                     }
-                }
-
-                // chart number tab, top-right, above the frame
-                Text {
-                    anchors.right: parent.right
-                    anchors.bottom: parent.top
-                    anchors.bottomMargin: 3
-                    text: "no. " + String((ov.tile ? ov.tile.index : 0) + 1).padStart(2, "0")
-                    font.family: chrome.mono
-                    font.pixelSize: Math.round(8 * chrome.ui)
-                    font.letterSpacing: 1
-                    color: chrome.slateA(0.95)
                 }
             }
 

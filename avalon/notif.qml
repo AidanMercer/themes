@@ -21,7 +21,7 @@ Item {
     property color panelBorder: goldA(0.35)
     property int panelBorderWidth: 1
     property int panelRadius: 14
-    property string panelTitle: "Missives"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             property var panel: null

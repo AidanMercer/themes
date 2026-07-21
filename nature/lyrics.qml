@@ -251,8 +251,8 @@ Item {
         x: root.bedX
         y: root.bedY + root.lyricSize * 0.3
         visible: root.engine.player !== null && root.engine.tokens.length === 0
-        text: !root.engine.lyricsLoaded ? "gathering seeds…"
-              : !root.engine.lyricsSynced ? "no lyrics on this breeze"
+        text: !root.engine.lyricsLoaded ? "fetching lyrics…"
+              : !root.engine.lyricsSynced ? "no synced lyrics"
               : "❀"
         textFormat: Text.PlainText
         color: root.goldA(0.8)
@@ -272,7 +272,7 @@ Item {
         x: root.bedX
         y: root.bedY - root.lyricSize * 1.1
         opacity: 0
-        text: "breeze offset  " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
+        text: "offset  " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
         color: root.goldA(0.95)
         style: Text.Raised
         styleColor: root.pineA(0.85)

@@ -241,7 +241,7 @@ Item {
             text: label
             color: root.tintA(root.sage, 0.9)
             font.family: root.mono
-            font.pixelSize: 9
+            font.pixelSize: 10
             font.letterSpacing: 3
         }
         Row {
@@ -525,17 +525,6 @@ Item {
                         font.family: root.mono
                         font.pixelSize: 8
                     }
-                }
-
-                // the whisper
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "where the small gods sleep"
-                    color: root.tintA(root.sage, 0.85)
-                    font.family: root.serif
-                    font.pixelSize: 10
-                    font.italic: true
-                    font.letterSpacing: 1
                 }
             }
         }

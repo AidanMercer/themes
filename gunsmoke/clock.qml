@@ -2,13 +2,13 @@ import QtQuick
 import Quickshell
 
 // gunsmoke: the ledger entry, written into the fog of the upper-left where
-// the wallpaper has only murk. A page heading — "№ 1887 · THE BOUNTY LEDGER"
-// — then the time in big stamped serif capitals. Digits don't fade or roll:
-// they are STAMPED (hammer law) — the new digit slams down with a one-frame
-// bone flash and a wisp of powder smoke curls off the strike and dissipates
-// (smoke law). The colon is two bullet holes, still. Below the double ledger
-// rule, the date as an entry line and the hour counted in gate-tally strokes
-// (groups of five, fifth slashed) — the theme's tally renderer.
+// the wallpaper has only murk. The time in big stamped serif capitals.
+// Digits don't fade or roll: they are STAMPED (hammer law) — the new digit
+// slams down with a one-frame bone flash and a wisp of powder smoke curls
+// off the strike and dissipates (smoke law). The colon is two bullet holes,
+// still. Below the double ledger rule, the date, and the hour counted in
+// gate-tally strokes (groups of five, fifth slashed) — the theme's tally
+// renderer.
 // Click-through scenery; everything stops while occluded.
 Item {
     id: root
@@ -128,34 +128,6 @@ Item {
             id: col
             spacing: 10
 
-            // page heading
-            Row {
-                spacing: 12
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "№ 1887"
-                    color: root.ashA(1)
-                    font.family: root.serif
-                    font.pixelSize: 12
-                    font.weight: Font.Bold
-                    font.letterSpacing: 2
-                }
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 46; height: 1
-                    color: root.ashA(0.8)
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "THE BOUNTY LEDGER"
-                    color: root.boneA(0.5)
-                    font.family: root.serif
-                    font.pixelSize: 12
-                    font.weight: Font.Bold
-                    font.letterSpacing: 7
-                }
-            }
-
             // the time, stamped
             Row {
                 id: digitRow
@@ -187,9 +159,9 @@ Item {
                 Rectangle { width: digitRow.width; height: 1; color: root.boneA(0.18) }
             }
 
-            // the entry line
+            // the date line
             Text {
-                text: "ENTRY · " + Qt.formatDateTime(clock.date, "ddd d MMM yyyy").toUpperCase()
+                text: Qt.formatDateTime(clock.date, "ddd d MMM yyyy").toUpperCase()
                 color: root.inkA(0.7)
                 font.family: root.serif
                 font.pixelSize: 15
@@ -245,10 +217,10 @@ Item {
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "HOURS ON THE HUNT"
+                    text: "HOURS"
                     color: root.ashA(0.9)
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     font.letterSpacing: 3
                 }
             }

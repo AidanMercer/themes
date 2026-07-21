@@ -10,7 +10,7 @@ import "chalk.js" as Chalk
 // own blurred slice of the room behind it), the time is WRITTEN onto it in
 // the house chalk hand, and above the board the halo — the room's one
 // supernatural thing, saved for exactly this — draws itself in and breathes.
-// Sign-in is attendance: every keystroke chalks a tally stroke, every fifth
+// Sign-in: every keystroke chalks a tally stroke, every fifth
 // gates the four before it. A wrong code flashes the tallies stripe-pink,
 // knocks the board on its pins, and the eraser smudges the marks away. The
 // right code: the halo flares wide, "good morning", and the room lets you in.
@@ -127,7 +127,7 @@ Item {
 
             Text {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "good morning" : "morning homeroom"
+                text: root.host.unlocking ? "good morning" : "homeroom"
                 color: root.host.unlocking ? root.halo : root.chalkA(0.66)
                 font.family: root.mono
                 font.pixelSize: Math.round(13 * root.ui)
@@ -190,7 +190,7 @@ Item {
 
             Item { width: 1; height: Math.round(2 * root.ui) }
 
-            // ── attendance: the tally strip ─────────────────────────────────
+            // ── sign-in: the tally strip ────────────────────────────────────
             Column {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: Math.round(10 * root.ui)
@@ -247,10 +247,10 @@ Item {
                     id: prompt
                     anchors.horizontalCenter: parent.horizontalCenter
                     property bool breath: true
-                    text: root.host.failed ? "see me after class — try again"
-                        : root.host.busy ? "checking attendance…"
-                        : root.host.pwLength > 0 ? "⏎ to come in"
-                        : "sign in to homeroom"
+                    text: root.host.failed ? "wrong password — try again"
+                        : root.host.busy ? "checking…"
+                        : root.host.pwLength > 0 ? "⏎ to unlock"
+                        : "type your password"
                     color: root.host.failed ? root.pink : root.chalkA(0.6)
                     opacity: (root.host.pwLength === 0 && !root.host.failed) ? (breath ? 0.9 : 0.35) : 1
                     Behavior on opacity { NumberAnimation { duration: 700; easing.type: Easing.InOutSine } }
@@ -339,18 +339,5 @@ Item {
             from: 0; to: 1; duration: 650; easing.type: Easing.OutQuad
             onStopped: { bigHalo.sweep = 0; bigHalo.flareT = 0 }
         }
-    }
-
-    // whose room this is
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(28 * root.ui)
-        text: "homeroom · before anyone else arrives"
-        color: root.chalkA(0.38)
-        font.family: root.mono
-        font.pixelSize: Math.round(10 * root.ui)
-        font.letterSpacing: 4
-        opacity: root.p
     }
 }

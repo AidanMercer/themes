@@ -417,34 +417,6 @@ Item {
             spacing: Math.round(7 * root.ui)
             opacity: Math.max(0, (panel.borderT - 0.5) * 2)
 
-            // header
-            Item {
-                width: parent.width
-                height: Math.round(16 * root.ui)
-                Row {
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: Math.round(7 * root.ui)
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: Math.round(12 * root.ui); height: Math.round(2.5 * root.ui)
-                        rotation: -32
-                        color: root.blood
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "MARGIN NOTES"
-                        font.family: root.serif
-                        font.pixelSize: Math.round(12 * root.ui)
-                        font.letterSpacing: 4
-                        font.weight: Font.Bold
-                        color: root.ink
-                    }
-                }
-            }
-
-            Rectangle { width: parent.width; height: 1; color: root.inkA(0.35) }
-
             // CPU
             NoteRow {
                 label: "cpu"
@@ -459,8 +431,8 @@ Item {
                 anchors.right: parent.right
                 text: (root.cpuTemp > 0 ? root.cpuTemp + "°c · " : "") + "load " + root.load1.toFixed(2)
                 font.family: root.mono
-                font.pixelSize: Math.round(9 * root.ui)
-                color: root.inkA(0.45)
+                font.pixelSize: Math.round(10 * root.ui)
+                color: root.inkA(0.7)
             }
 
             // GPU (nvidia only)
@@ -492,8 +464,8 @@ Item {
                 anchors.right: parent.right
                 text: root.ramUsedGb.toFixed(1) + " / " + root.ramTotalGb.toFixed(1) + " gb"
                 font.family: root.mono
-                font.pixelSize: Math.round(9 * root.ui)
-                color: root.inkA(0.45)
+                font.pixelSize: Math.round(10 * root.ui)
+                color: root.inkA(0.7)
             }
 
             // battery (laptops)
@@ -535,7 +507,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "severed"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText   // SSID is external data
                         font.family: root.serif
                         font.italic: true
@@ -548,8 +520,8 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: Math.round(9 * root.ui)
-                    color: root.inkA(0.45)
+                    font.pixelSize: Math.round(10 * root.ui)
+                    color: root.inkA(0.7)
                 }
             }
             Item {
@@ -558,19 +530,11 @@ Item {
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "awake " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.serif
                     font.italic: true
                     font.pixelSize: Math.round(10 * root.ui)
-                    color: root.inkA(0.45)
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "// the brand of sacrifice"
-                    font.family: root.serif
-                    font.pixelSize: Math.round(9 * root.ui)
-                    color: Qt.rgba(root.blood.r, root.blood.g, root.blood.b, 0.7)
+                    color: root.inkA(0.7)
                 }
             }
         }

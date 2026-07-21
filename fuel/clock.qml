@@ -5,10 +5,10 @@ import Quickshell
 // fuel: gas-price-sign clock, hung in the empty upper-left night sky.
 // A chamfered roadside placard whose top edge carries the canopy's neon
 // stripe (bending 45° at the corners). The time is four hand-built
-// seven-segment digits — neon-tube orange over unpowered ghost segments —
-// with a gas-price "9/10" fraction riding the minutes. Each digit buzzes
-// on with a fluorescent-starter stutter at mount, and once in a long while
-// a single random digit browns out for a beat, like a tired tube.
+// seven-segment digits — neon-tube orange over unpowered ghost segments.
+// Each digit buzzes on with a fluorescent-starter stutter at mount, and
+// once in a long while a single random digit browns out for a beat, like
+// a tired tube.
 // Also mounted on the (non-bare) lock screen — the dark placard reads fine.
 Item {
     id: root
@@ -19,14 +19,11 @@ Item {
     // pushed by the loader: true while locked or covered by a fullscreen window
     property bool occluded: false
     readonly property color neon:  pal.neon
-    readonly property color ice:   pal.cyan
     readonly property color red:   pal.magenta
     readonly property color amber: pal.amber
     readonly property color dim:   pal.dim
     readonly property color ink:   pal.text
     readonly property string mono: pal.fontMono
-    function neonA(a) { return Qt.rgba(neon.r, neon.g, neon.b, a) }
-    function iceA(a)  { return Qt.rgba(ice.r, ice.g, ice.b, a) }
     function inkA(a)  { return Qt.rgba(ink.r, ink.g, ink.b, a) }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
@@ -207,45 +204,21 @@ Item {
             anchors.topMargin: 24
             spacing: 14
 
-            // header: pump stripe band + FUEL wordmark + sign number
+            // header: the retro 3-stripe pump band
             Item {
                 width: parent.width
                 height: 20
-                Row {
+                Column {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    spacing: 10
-                    // the retro 3-stripe pump band
-                    Column {
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: 2
-                        Rectangle { width: 26; height: 3; color: root.amber }
-                        Rectangle { width: 26; height: 3; color: root.neon }
-                        Rectangle { width: 26; height: 3; color: root.red }
-                    }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "FUEL"
-                        color: root.ink
-                        font.family: root.mono
-                        font.weight: Font.Black
-                        font.pixelSize: 16
-                        font.letterSpacing: 7
-                    }
-                }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "Nº 07"
-                    color: root.ice
-                    opacity: 0.7
-                    font.family: root.mono
-                    font.pixelSize: 10
-                    font.letterSpacing: 3
+                    spacing: 2
+                    Rectangle { width: 26; height: 3; color: root.amber }
+                    Rectangle { width: 26; height: 3; color: root.neon }
+                    Rectangle { width: 26; height: 3; color: root.red }
                 }
             }
 
-            // the price: HH : MM with a raised 9/10 fraction
+            // the price: HH : MM
             Item {
                 width: parent.width
                 height: 84
@@ -282,63 +255,14 @@ Item {
                     z: -1
                 }
 
-                // the gas-price fraction, riding top-right of the minutes
-                Column {
-                    anchors.left: timeRow.right
-                    anchors.leftMargin: 10
-                    anchors.top: timeRow.top
-                    spacing: 2
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: "9"
-                        color: root.neon
-                        font.family: root.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 17
-                    }
-                    Rectangle { width: 18; height: 2; color: root.neonA(0.75) }
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: "10"
-                        color: root.neon
-                        font.family: root.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                    }
-                }
             }
 
-            // icy divider with the price grade rows below
+            // icy divider with the date below
             Rectangle { width: parent.width; height: 1; color: root.dim; opacity: 0.55 }
 
             Item {
                 width: parent.width
                 height: 15
-                Row {
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 8
-                    Text {
-                        text: "SELF SERVE"
-                        color: root.ice
-                        font.family: root.mono
-                        font.pixelSize: 10
-                        font.letterSpacing: 4
-                    }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 4; height: 4; rotation: 45
-                        color: root.amber
-                    }
-                    Text {
-                        text: "24 HR"
-                        color: root.amber
-                        font.family: root.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 10
-                        font.letterSpacing: 3
-                    }
-                }
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter

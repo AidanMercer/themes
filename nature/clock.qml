@@ -120,7 +120,7 @@ Item {
             anchors.centerIn: parent
             spacing: Math.round(8 * root.ui)
 
-            // header: a tiny blossom + the theme's name, letterspaced
+            // header: a tiny blossom above the time
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: Math.round(9 * root.ui)
@@ -150,18 +150,6 @@ Item {
                         function onNeonChanged() { headBud.requestPaint() }
                         function onMagentaChanged() { headBud.requestPaint() }
                     }
-                }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "golden hour"
-                    color: root.goldA(1.0)
-                    font.family: root.serif
-                    font.italic: true
-                    font.weight: Font.Medium
-                    font.pixelSize: Math.round(15 * root.ui)
-                    font.letterSpacing: 5
-                    style: Text.Raised
-                    styleColor: Qt.rgba(0.08, 0.13, 0.09, 0.75)
                 }
             }
 

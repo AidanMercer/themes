@@ -176,8 +176,8 @@ Item {
             x: root.boxX
             y: root.boxY
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "SEARCHING THE LEDGER…"
-                  : !root.engine.lyricsSynced ? "NO VERSES ON FILE"
+            text: !root.engine.lyricsLoaded ? "SEARCHING…"
+                  : !root.engine.lyricsSynced ? "NO LYRICS"
                   : "♪"
             color: root.ashA(1)
             style: Text.Raised
@@ -188,14 +188,14 @@ Item {
             font.letterSpacing: 4
         }
 
-        // sight-adjust OSD — flashes while calibrating the offset by ear
+        // offset OSD — flashes while calibrating the offset by ear
         Text {
             id: offsetOsd
             function flash() { opacity = 1; osdHide.restart() }
             x: root.boxX
             y: root.boxY - root.lyricSize * 1.1
             opacity: 0
-            text: "SIGHT ADJUST " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " MS"
+            text: "OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " MS"
             color: root.boneA(0.9)
             style: Text.Raised
             styleColor: Qt.rgba(0, 0, 0, 0.5)

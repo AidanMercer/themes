@@ -1,11 +1,10 @@
 import QtQuick
 
-// sakura: hanami chrome for the Super+M control menu. Dusk-plum card with a
+// sakura: chrome for the Super+M control menu. Dusk-plum card with a
 // twig drawn across the top edge carrying three small blossoms — the middle
 // trio doubles as a live EQ, each flower opening with its band while music
-// plays (law 1). Header speaks the theme's voice; footer carries the net
-// status and the sign-off. Item root; the shell mounts the pieces around its
-// shared tabs.
+// plays (law 1). Header holds the blossom EQ and uptime; footer carries the
+// net status. Item root; the shell mounts the pieces around its shared tabs.
 Item {
     id: chrome
 
@@ -107,7 +106,7 @@ Item {
         }
     }
 
-    // ── header: blossom pip + hanami + the blossom EQ, uptime right ─────────
+    // ── header: the blossom EQ left, uptime right ───────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -120,15 +119,6 @@ Item {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 8
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "hanami"
-                        font.family: chrome.sans
-                        font.pixelSize: 14
-                        font.letterSpacing: 4
-                        color: chrome.creamA(0.95)
-                    }
 
                     // three blossoms as a live EQ — bass, mid, high
                     Row {
@@ -164,7 +154,7 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "held " + chrome.popup.uptimeText.replace("up ", "")
+                    text: chrome.popup.uptimeText
                     font.family: chrome.mono
                     font.pixelSize: 10
                     font.letterSpacing: 1
@@ -180,7 +170,7 @@ Item {
         }
     }
 
-    // ── footer: net status + sign-off ───────────────────────────────────────
+    // ── footer: net status ──────────────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -210,8 +200,8 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "off the wind"
-                            : (chrome.popup.connName || "on the wind")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.sans
                         font.pixelSize: 10
@@ -219,15 +209,6 @@ Item {
                     }
                 }
 
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "❀ under the canopy"
-                    font.family: chrome.sans
-                    font.pixelSize: 10
-                    font.letterSpacing: 2
-                    color: chrome.pinkA(0.6)
-                }
             }
         }
     }

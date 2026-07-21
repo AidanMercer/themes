@@ -4,11 +4,10 @@ import "chalk.js" as Chalk
 // homeroom: staff-room notice chrome for the Super+M control popup. The
 // shell mounts these pieces around its shared tabs: backdrop (a slate
 // notice board — tape tabs, a hand-chalked frame, morning sun pooling in
-// from the top, a doodle in the bottom corner), header (halo pip + the
-// room's name + three bunting flags that lift on bass/mid/high + how long
-// the room's been open), footer (attendance + the send-off), overlay (a
-// breath of chalk dust on the glass). Item root that renders nothing
-// itself; no MouseAreas, clicks pass through.
+// from the top, a doodle in the bottom corner), header (halo pip + three
+// bunting flags that lift on bass/mid/high + uptime), footer (the
+// connection), overlay (a breath of chalk dust on the glass). Item root
+// that renders nothing itself; no MouseAreas, clicks pass through.
 Item {
     id: chrome
 
@@ -106,7 +105,7 @@ Item {
         }
     }
 
-    // ── header: halo pip + name + bunting + room-open time ─────────────────
+    // ── header: halo pip + bunting + uptime ────────────────────────────────
     readonly property Component header: Component {
         Column {
             spacing: 10
@@ -127,16 +126,6 @@ Item {
                         border.width: 2
                         border.color: Qt.rgba(chrome.pal.neon.r, chrome.pal.neon.g, chrome.pal.neon.b, 0.9)
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "HOMEROOM"
-                        font.family: chrome.mono
-                        font.weight: Font.Bold
-                        font.pixelSize: 13
-                        font.letterSpacing: 5
-                        color: chrome.chalkA(0.95)
-                    }
-
                     // bunting: three little flags lifting on bass / mid / high
                     Row {
                         anchors.verticalCenter: parent.verticalCenter
@@ -176,9 +165,9 @@ Item {
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "room open " + chrome.popup.uptimeText.replace("up ", "")
+                    text: chrome.popup.uptimeText
                     font.family: chrome.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: chrome.slateA(1.0)
                 }
             }
@@ -201,7 +190,7 @@ Item {
         }
     }
 
-    // ── footer: attendance + the send-off ───────────────────────────────────
+    // ── footer: the connection ──────────────────────────────────────────────
     readonly property Component footer: Component {
         Column {
             spacing: 10
@@ -239,40 +228,12 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: chrome.popup.connType === "none" ? "absent"
-                            : "present — " + (chrome.popup.connName || "online")
+                        text: chrome.popup.connType === "none" ? "offline"
+                            : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: chrome.mono
-                        font.pixelSize: 9
-                        color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.chalkA(0.7)
-                    }
-                }
-
-                Row {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 6
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "see you after class"
-                        font.family: chrome.mono
-                        font.pixelSize: 8
-                        font.letterSpacing: 2
-                        color: chrome.sunA(0.85)
-                    }
-                    Text {
-                        id: dots
-                        anchors.verticalCenter: parent.verticalCenter
-                        property int step: 0
-                        text: step === 0 ? "·  " : step === 1 ? "·· " : "···"
-                        font.family: chrome.mono
                         font.pixelSize: 10
-                        color: chrome.chalkA(0.7)
-                        Timer {
-                            interval: 600; repeat: true
-                            running: chrome.popup.open
-                            onTriggered: dots.step = (dots.step + 1) % 3
-                        }
+                        color: chrome.popup.connType === "none" ? chrome.pal.magenta : chrome.chalkA(0.7)
                     }
                 }
             }

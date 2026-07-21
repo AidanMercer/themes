@@ -13,7 +13,7 @@ import Quickshell.Services.Mpris
 // the next one when you switch, in chunky 3px steps, flipping to face its
 // direction of travel, coughing two exhaust pixels as it goes. Apps on a
 // workspace hang above its dash like signs beside the road.
-//   left   — the dash radio: FM plate, hard-blinking play pip, title, and a
+//   left   — the dash radio: hard-blinking play pip, title, and a
 //            progress line built from tiny road dashes
 //   right  — CHECK engine lamp (hover = the dash diagnostic panel), a pixel
 //            signal mast, a pixel battery, the time in house 5×7 pixel
@@ -324,15 +324,6 @@ Item {
             anchors.verticalCenterOffset: -1
             spacing: 8
 
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                text: "FM"
-                color: root.amber
-                font.family: root.mono
-                font.pixelSize: 9
-                font.weight: Font.Bold
-                font.letterSpacing: 1
-            }
             // the play pip: a hard-blinking pixel while the radio's on
             Rectangle {
                 id: pip

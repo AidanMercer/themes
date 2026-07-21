@@ -142,18 +142,6 @@ Item {
             y: 18
             spacing: 10
 
-            // whose hour this is
-            Text {
-                text: "the last quiet hour"
-                color: root.inkA(0.42)
-                font.family: root.serif
-                font.italic: true
-                font.pixelSize: 15
-                font.letterSpacing: 3
-                opacity: 0
-                NumberAnimation on opacity { running: true; to: 1; duration: 2200; easing.type: Easing.InOutSine }
-            }
-
             // the time, written on the glass
             Row {
                 id: digitRow

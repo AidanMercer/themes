@@ -2,13 +2,12 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// sailing: the wheelhouse — instrument cluster for the "THROUGH SILENCE"
-// wallpaper. A slate cabin panel pinned bottom-right under the canopy shadow,
-// carrying a row of porthole-shaped needle gauges: ENG = CPU, HOLD = MEM,
-// GPU (nvidia only), FUEL = battery. Each gauge is a brass-rimmed dial with
-// a red zone at the top of the scale; needles ease to each reading. Below,
-// the RADIO strip: shore connection + up/down rates, and time at sea.
-// Self-contained: /proc, nmcli, nvidia-smi. Polls only — idle-cheap.
+// sailing: instrument cluster for the "THROUGH SILENCE" wallpaper.
+// A slate cabin panel pinned bottom-right under the canopy shadow, carrying
+// a row of porthole-shaped needle gauges: cpu, mem, gpu (nvidia only), bat.
+// Each gauge is a brass-rimmed dial with a red zone at the top of the scale;
+// needles ease to each reading. Below, a net strip: connection up/down rates
+// and uptime. Self-contained: /proc, nmcli, nvidia-smi. Polls only — idle-cheap.
 Item {
     id: root
     anchors.fill: parent
@@ -223,7 +222,7 @@ Item {
         const d = Math.floor(s / 86400); s -= d * 86400
         const h = Math.floor(s / 3600);  s -= h * 3600
         const m = Math.floor(s / 60)
-        uptimeText = d > 0 ? `${d}D ${h}H` : h > 0 ? `${h}H ${m}M` : `${m}M`
+        uptimeText = d > 0 ? `${d}d ${h}h` : h > 0 ? `${h}h ${m}m` : `${m}m`
     }
 
     Process {
@@ -324,11 +323,11 @@ Item {
         // the reading, set into the bottom gap of the dial
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            y: 48
+            y: 47
             text: g.value < 0 ? "--" : g.value + "%"
             color: root.paleA(0.9)
             font.family: root.mono
-            font.pixelSize: 9
+            font.pixelSize: 11
         }
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -337,7 +336,7 @@ Item {
             color: root.duskA(0.9)
             font.family: root.mono
             font.pixelSize: 10
-            font.letterSpacing: 3
+            font.letterSpacing: 2
         }
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -345,8 +344,7 @@ Item {
             text: g.sub
             color: root.slateA(1)
             font.family: root.mono
-            font.pixelSize: 8
-            font.letterSpacing: 1
+            font.pixelSize: 9
         }
     }
 
@@ -354,7 +352,7 @@ Item {
     Rectangle {
         id: panel
         width: gaugeRow.width + 40
-        height: 158
+        height: 162
         anchors.right: parent.right
         anchors.bottom: parent.bottom
         anchors.rightMargin: 26
@@ -379,7 +377,7 @@ Item {
         border.width: 1
         border.color: root.lampA(0.4)
 
-        // header: lamp dot + INSTRUMENTS, deck tag right
+        // header: lamp dot + a plain title
         Item {
             id: header
             anchors.top: parent.top
@@ -399,21 +397,12 @@ Item {
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "WHEELHOUSE"
+                    text: "system"
                     color: root.duskA(0.95)
                     font.family: root.mono
                     font.pixelSize: 10
-                    font.letterSpacing: 4
+                    font.letterSpacing: 2
                 }
-            }
-            Text {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                text: "DECK B"
-                color: root.slateA(1)
-                font.family: root.mono
-                font.pixelSize: 8
-                font.letterSpacing: 2
             }
         }
 
@@ -449,41 +438,41 @@ Item {
             spacing: 12
 
             Gauge {
-                label: "ENG"
+                label: "cpu"
                 value: root.cpuPercent
                 sub: root.cpuTemp > 0 ? root.cpuTemp + "°C" : ""
             }
             Gauge {
-                label: "HOLD"
+                label: "mem"
                 value: root.ramPercent
                 sub: root.ramUsedGb.toFixed(1) + "/" + root.ramTotalGb.toFixed(0) + " GB"
             }
             Gauge {
                 visible: root.hasGpu
                 width: root.hasGpu ? 64 : 0
-                label: "GPU"
+                label: "gpu"
                 value: root.gpuPercent
                 sub: root.gpuTemp > 0 ? root.gpuTemp + "°C" : ""
             }
             Gauge {
                 visible: root.hasBattery
                 width: root.hasBattery ? 64 : 0
-                label: "FUEL"
+                label: "bat"
                 value: root.batteryPercent
                 charging: root.batteryCharging
-                sub: root.batteryCharging ? "TAKING ON" : "RESERVE"
+                sub: root.batteryCharging ? "charging" : ""
             }
         }
 
-        // RADIO strip: shore link + rates left, time at sea right
+        // bottom strip: net rates left, uptime right
         Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.leftMargin: 12
             anchors.rightMargin: 12
-            anchors.bottomMargin: 9
-            height: 12
+            anchors.bottomMargin: 8
+            height: 14
 
             Row {
                 anchors.left: parent.left
@@ -491,30 +480,28 @@ Item {
                 spacing: 6
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "RADIO"
+                    text: "net"
                     color: root.online ? root.duskA(0.8) : root.alarm
                     font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
+                    font.pixelSize: 10
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     text: root.online
                         ? "↓ " + root.fmtRate(root.rxRate) + "  ↑ " + root.fmtRate(root.txRate)
-                        : "NO SIGNAL"
+                        : "no signal"
                     color: root.online ? root.slateA(1) : root.alarm
                     font.family: root.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                 }
             }
             Text {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                text: "AT SEA " + root.uptimeText
+                text: "up " + root.uptimeText
                 color: root.slateA(1)
                 font.family: root.mono
-                font.pixelSize: 8
-                font.letterSpacing: 1
+                font.pixelSize: 10
             }
         }
     }

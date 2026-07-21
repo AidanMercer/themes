@@ -176,7 +176,7 @@ Item {
                     }
                 }
                 Text {
-                    readonly property string full: "NC.SEC ▸ LOCKDOWN ENGAGED"
+                    readonly property string full: "SESSION LOCKED"
                     text: full.substring(0, Math.round(Math.min(1, root.p * 1.4) * full.length))
                     color: root.cyan
                     font.family: root.mono
@@ -283,7 +283,7 @@ Item {
                     opacity: root.host.pwLength === 0 ? 1 : 0
                     Behavior on opacity { NumberAnimation { duration: 140 } }
                     Text {
-                        text: root.host.busy ? "// HANDSHAKE"
+                        text: root.host.busy ? "// CHECKING"
                             : root.host.failed ? "// ACCESS DENIED" : "// ENTER PASSCODE"
                         color: root.host.failed ? root.magenta : root.dim
                         font.family: root.mono
@@ -335,19 +335,5 @@ Item {
                 }
             }
         }
-    }
-
-    // bottom status ticker
-    Text {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: Math.round(30 * root.ui)
-        opacity: root.p
-        text: "// ICE ACTIVE — TRACE 0.00% — DO NOT RUN"
-        color: root.dim
-        font.family: root.mono
-        font.weight: Font.Bold
-        font.pixelSize: Math.round(11 * root.ui)
-        font.letterSpacing: 4
     }
 }

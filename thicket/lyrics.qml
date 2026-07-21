@@ -244,7 +244,7 @@ Item {
             y: 0
             visible: root.engine.player !== null && root.engine.tokens.length === 0
             text: !root.engine.lyricsLoaded ? "listening…"
-                  : !root.engine.lyricsSynced ? "the brush keeps this one to itself"
+                  : !root.engine.lyricsSynced ? "no synced lyrics"
                   : "·"
             textFormat: Text.PlainText
             color: root.leafA(1)
@@ -262,7 +262,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: -root.lyricSize * 1.4
             opacity: 0
-            text: "OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " MS"
+            text: "offset " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
             color: root.ember
             font.family: root.mono
             font.pixelSize: Math.round(root.lyricSize * 0.42)

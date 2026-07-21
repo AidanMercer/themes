@@ -45,8 +45,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: ivoryA(0.55)
-    readonly property string hintText: "wander · choose · wake"
-    readonly property string emptyText: "nothing stirs in the meadow"
+    readonly property string hintText: "⏎ focus · esc close"
+    readonly property string emptyText: "no windows open"
 
     // ── backdrop: moss vignette + fairy ring + loosed petals ──
     readonly property Component backdrop: Component {

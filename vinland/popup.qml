@@ -1,9 +1,9 @@
 import QtQuick
 
 // vinland: chrome for the Super+M control popup — night glass card with an
-// ice hairline, a compass-star watermark in the corner, and thorfinn's creed
-// in the footer. Item root that renders nothing itself; the shell mounts the
-// Components below around its tabs.
+// ice hairline and a compass-star watermark in the corner. Item root that
+// renders nothing itself; the shell mounts the Components below around its
+// tabs.
 Item {
     id: chrome
 
@@ -83,7 +83,7 @@ Item {
         }
     }
 
-    // ── header: gold star pip + vinland + a soft EQ, uptime on the right ──
+    // ── header: gold star pip + a soft EQ, uptime on the right ──
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -120,17 +120,6 @@ Item {
                             function onCyanChanged() { pip.requestPaint() }
                         }
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "vinland"
-                        font.family: chrome.serif
-                        font.pixelSize: 14
-                        font.letterSpacing: 6
-                        font.italic: true
-                        font.weight: Font.Medium
-                        color: chrome.snow
-                    }
-
                     // quiet EQ — sways while something plays, rests when silent
                     Item {
                         anchors.verticalCenter: parent.verticalCenter
@@ -175,7 +164,7 @@ Item {
         }
     }
 
-    // ── footer: connection on the left, the creed on the right ──
+    // ── footer: connection state ──
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -209,23 +198,11 @@ Item {
                             : (chrome.popup.connName || "online")
                         textFormat: Text.PlainText
                         font.family: "Noto Sans"
-                        font.pixelSize: 9
+                        font.pixelSize: 10
                         font.weight: Font.Medium
                         font.letterSpacing: 1
                         color: chrome.snowA(0.55)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "i have no enemies."
-                    font.family: chrome.serif
-                    font.pixelSize: 9
-                    font.italic: true
-                    font.weight: Font.Medium
-                    font.letterSpacing: 2
-                    color: chrome.goldA(0.55)
                 }
             }
         }

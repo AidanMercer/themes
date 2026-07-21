@@ -259,8 +259,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 0
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "≈ the pond is listening"
-                  : !root.engine.lyricsSynced ? "≈ no words on this water"
+            text: !root.engine.lyricsLoaded ? "≈ searching lyrics"
+                  : !root.engine.lyricsSynced ? "≈ no lyrics"
                   : "≈"
             textFormat: Text.PlainText
             color: root.reedA(1)
@@ -279,7 +279,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: -root.lyricSize * 1.4
             opacity: 0
-            text: "the current runs " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
+            text: "offset " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
             color: root.sun
             font.family: root.serif
             font.italic: true

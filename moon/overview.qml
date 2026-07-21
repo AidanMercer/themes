@@ -1,11 +1,11 @@
 import QtQuick
 
-// Cyberpunk: Edgerunners TARGET.GRID chrome for the Super+Tab exposé.
+// Cyberpunk: Edgerunners target-grid chrome for the Super+Tab exposé.
 //
 // The shell keeps the radial layout, live thumbnails and nav; this file turns
 // it into a netrunner target-acquisition HUD: chamfered chassis tiles wired to
 // the center by grid spokes, a rotating sweep reticle behind the focused
-// window, corner readouts (signal count, azimuth of the current lock), CRT
+// window, corner readouts (window count, azimuth of the selection), CRT
 // scanlines over everything, and a snap-in targeting bracket + RGB-split
 // glitch on whichever tile the cursor acquires. Same HUD grammar as
 // moon/popup.qml and moon/sysinfo.qml — chamfer, fake-glow double stroke,
@@ -42,10 +42,10 @@ Item {
     readonly property string titleFont: pal.fontMono
     readonly property string hintFont: pal.fontMono
     readonly property color hintColor: Qt.rgba(pal.cyan.r, pal.cyan.g, pal.cyan.b, 0.8)
-    readonly property string hintText: "◄ ► ▲ ▼  ACQUIRE      ↵  JACK IN      ESC  ABORT"
-    readonly property string emptyText: "// NO SIGNALS ON GRID"
+    readonly property string hintText: "◄ ► ▲ ▼  SELECT      ↵  FOCUS      ESC  CLOSE"
+    readonly property string emptyText: "// NO WINDOWS"
 
-    // azimuth of the current lock, HUD-style (12 o'clock = 000.0)
+    // azimuth of the current selection, HUD-style (12 o'clock = 000.0)
     readonly property string azText: {
         const ts = overview.tiles
         const i = overview.selected
@@ -201,7 +201,7 @@ Item {
             }
 
             // ── corner readouts ──
-            // top-left: pip + TARGET.GRID + signal count
+            // top-left: pip + window count
             Row {
                 x: Math.round(30 * chrome.ui); y: Math.round(32 * chrome.ui)
                 spacing: 8
@@ -220,38 +220,16 @@ Item {
                 }
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "TARGET.GRID"
+                    text: "WINDOWS " + String(chrome.overview.windows.length).padStart(2, "0")
                     font.family: chrome.mono
                     font.weight: Font.Bold
                     font.pixelSize: Math.round(13 * chrome.ui)
                     font.letterSpacing: 4
                     color: chrome.pal.neon
                 }
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "// SIG " + String(chrome.overview.windows.length).padStart(2, "0")
-                    font.family: chrome.mono
-                    font.pixelSize: Math.round(10 * chrome.ui)
-                    font.letterSpacing: 2
-                    color: chrome.pal.cyan
-                    opacity: 0.8
-                }
             }
 
-            // top-right: sector-scan tag
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: Math.round(30 * chrome.ui)
-                y: Math.round(34 * chrome.ui)
-                text: "// SECTOR SCAN : EXPOSÉ"
-                font.family: chrome.mono
-                font.pixelSize: Math.round(9 * chrome.ui)
-                font.letterSpacing: 2
-                color: chrome.pal.cyan
-                opacity: 0.6 * chrome.overview.reveal
-            }
-
-            // bottom-left: live lock telemetry
+            // bottom-left: live selection telemetry
             Column {
                 x: Math.round(30 * chrome.ui)
                 anchors.bottom: parent.bottom
@@ -260,7 +238,7 @@ Item {
                 opacity: 0.85 * chrome.overview.reveal
 
                 Text {
-                    text: "LOCK " + (chrome.overview.selected >= 0
+                    text: "SELECTED " + (chrome.overview.selected >= 0
                         ? String(chrome.overview.selected).padStart(2, "0") : "--")
                         + "/" + String(chrome.overview.tiles.length).padStart(2, "0")
                     font.family: chrome.mono
@@ -275,13 +253,6 @@ Item {
                     font.letterSpacing: 2
                     color: chrome.pal.cyan
                     opacity: 0.8
-                }
-                Text {
-                    text: "// NETRUNNER EXPO"
-                    font.family: chrome.mono
-                    font.pixelSize: Math.round(8 * chrome.ui)
-                    font.letterSpacing: 2
-                    color: chrome.pal.dim
                 }
             }
 
@@ -366,33 +337,32 @@ Item {
         }
     }
 
-    // ── per-tile HUD dressing: class tag, hex id, focus tag, and the
-    // snap-in targeting bracket + RGB-split glitch on acquisition ──
+    // ── per-tile HUD dressing: class tag, hex id, and the snap-in
+    // targeting bracket + RGB-split glitch on acquisition ──
     readonly property Component tileOverlay: Component {
         Item {
             id: ov
             property var tile: null
             readonly property bool hot: tile ? tile.hot === true : false
-            readonly property bool ctr: tile ? tile.isCenter === true : false
 
             onHotChanged: if (hot) { snap.restart(); glitch.restart() }
 
-            // signal tag riding the top edge: window class, uppercased
+            // class tag riding the top edge, uppercased
             Rectangle {
                 x: 10
                 y: -7
                 width: sigText.width + 12
-                height: 14
+                height: 16
                 color: "#07070c"
                 border.color: ov.hot ? chrome.pal.neon : chrome.pal.dim
                 border.width: 1
                 Text {
                     id: sigText
                     anchors.centerIn: parent
-                    text: "SIG." + ((ov.tile && ov.tile.win.cls) ? ov.tile.win.cls : "UNKNOWN").toUpperCase()
+                    text: ((ov.tile && ov.tile.win.cls) ? ov.tile.win.cls : "UNKNOWN").toUpperCase()
                     textFormat: Text.PlainText
                     font.family: chrome.mono
-                    font.pixelSize: 8
+                    font.pixelSize: 10
                     font.letterSpacing: 1
                     color: ov.hot ? chrome.pal.neon : chrome.pal.cyan
                     elide: Text.ElideRight
@@ -410,20 +380,6 @@ Item {
                 font.family: chrome.mono
                 font.pixelSize: 8
                 color: chrome.pal.dim
-            }
-
-            // the focused window's crown tag
-            Text {
-                visible: ov.ctr
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.top
-                anchors.bottomMargin: 6
-                text: "// FOCUSED"
-                font.family: chrome.mono
-                font.pixelSize: 9
-                font.letterSpacing: 3
-                color: chrome.pal.magenta
-                opacity: 0.9
             }
 
             // targeting brackets: four L-corners that snap in from outside

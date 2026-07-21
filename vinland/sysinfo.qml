@@ -1,9 +1,9 @@
 import QtQuick
 import Quickshell.Io
 
-// vinland: the saga — a quiet ledger of vitals, bottom-right over the blurred
-// grass. Runic header between carved staves, thin snow meters filled with
-// ice. Sections whose source is missing (battery on the desktop) hide.
+// vinland: a quiet ledger of vitals, bottom-right over the blurred grass.
+// Plain header between carved staves, thin snow meters filled with ice.
+// Sections whose source is missing (battery on the desktop) hide.
 Item {
     id: root
     anchors.fill: parent
@@ -73,11 +73,12 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
-                text: "ᛊᚨᚷᚨ"
+                text: "system"
                 color: root.iceA(0.90)
-                font.family: "Noto Sans Runic"
-                font.pixelSize: 11
-                font.letterSpacing: 6
+                font.family: root.sans
+                font.pixelSize: 10
+                font.weight: Font.Medium
+                font.letterSpacing: 3
             }
             Rectangle {
                 width: 26; height: 1
@@ -86,19 +87,19 @@ Item {
             }
         }
 
-        VitalRow { label: "CPU"; value: root.cpuPct; detail: root.cpuTemp > 0 ? root.cpuTemp + "°" : Math.round(root.cpuPct * 100) + "%" }
-        VitalRow { label: "MEM"; value: root.memPct; detail: Math.round(root.memPct * 100) + "%" }
+        VitalRow { label: "cpu"; value: root.cpuPct; detail: root.cpuTemp > 0 ? root.cpuTemp + "°" : Math.round(root.cpuPct * 100) + "%" }
+        VitalRow { label: "mem"; value: root.memPct; detail: Math.round(root.memPct * 100) + "%" }
 
         Row {
             anchors.right: parent.right
             spacing: 9
             Text {
-                text: "NET"
+                text: "net"
                 color: root.iceA(0.88)
                 font.family: root.sans
-                font.pixelSize: 9
+                font.pixelSize: 10
                 font.weight: Font.Medium
-                font.letterSpacing: 3
+                font.letterSpacing: 1
                 anchors.verticalCenter: parent.verticalCenter
             }
             Text {
@@ -119,7 +120,7 @@ Item {
 
         VitalRow {
             visible: root.batPct >= 0
-            label: "BAT"
+            label: "bat"
             value: Math.max(0, root.batPct) / 100
             warn: false
             fill: root.batPct >= 0 && root.batPct < 20 && !root.batCharging ? root.rose
@@ -141,9 +142,9 @@ Item {
             text: parent.label
             color: root.iceA(0.88)
             font.family: root.sans
-            font.pixelSize: 9
+            font.pixelSize: 10
             font.weight: Font.Medium
-            font.letterSpacing: 3
+            font.letterSpacing: 1
             anchors.verticalCenter: parent.verticalCenter
         }
         Item {

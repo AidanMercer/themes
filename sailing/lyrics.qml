@@ -209,14 +209,14 @@ Item {
         x: root.lineX
         y: root.lineY + 6
         visible: root.engine.player !== null && root.engine.tokens.length === 0
-        text: !root.engine.lyricsLoaded ? "· TUNING ·"
-              : !root.engine.lyricsSynced ? "· NO WORDS FROM SHORE ·"
+        text: !root.engine.lyricsLoaded ? "searching…"
+              : !root.engine.lyricsSynced ? "no synced lyrics"
               : "· · —"
         textFormat: Text.PlainText
-        color: root.duskA(0.55)
+        color: root.duskA(0.7)
         font.family: root.mono
         font.pixelSize: Math.round(12 * root.ui)
-        font.letterSpacing: 5
+        font.letterSpacing: 2
     }
 
     // ── offset OSD: the radio operator retunes ──────────────────────────────
@@ -226,7 +226,7 @@ Item {
         x: root.lineX
         y: root.lineY - Math.round(26 * root.ui)
         opacity: 0
-        text: "RX OFFSET " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " MS"
+        text: "offset " + (root.engine.offsetMs > 0 ? "+" : "") + root.engine.offsetMs + " ms"
         color: root.pale
         font.family: root.mono
         font.pixelSize: Math.round(11 * root.ui)

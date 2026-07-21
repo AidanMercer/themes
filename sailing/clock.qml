@@ -1,14 +1,12 @@
 import QtQuick
 import Quickshell
 
-// sailing: the ship's log — desktop clock for the "THROUGH SILENCE" wallpaper.
+// sailing: desktop clock for the "THROUGH SILENCE" wallpaper.
 //
 // Pinned upper-left in the open dusk sky, left of the girl and above the
-// horizon. A log entry writes itself in: the vessel name types out, the time
-// surfaces in thin serif numerals, a railing rule (two hairlines + stanchion
-// posts — the theme's signature) draws underneath, then the instrument line
-// "HDG 214° · 12.4 KN · LIGHT RAIN" and the watch line. Heading and knots
-// drift almost imperceptibly like real instruments at sea, and the whole
+// horizon. The entry writes itself in: the time surfaces in thin serif
+// numerals, a railing rule (two hairlines + stanchion posts — the theme's
+// signature) draws underneath, then the date line fades up. The whole
 // entry sways ±2px on one slow swell animation.
 Item {
     id: root
@@ -30,31 +28,6 @@ Item {
     function lampA(a)  { return Qt.rgba(lamp.r, lamp.g, lamp.b, a) }
 
     SystemClock { id: clock; precision: SystemClock.Minutes }
-
-    // ship's watch, from the hour — the log's idea of "time of day"
-    function watchName(h) {
-        if (h < 4)  return "MIDDLE WATCH"
-        if (h < 8)  return "MORNING WATCH"
-        if (h < 12) return "FORENOON WATCH"
-        if (h < 16) return "AFTERNOON WATCH"
-        if (h < 20) return "DOG WATCH"
-        return "FIRST WATCH"
-    }
-
-    // ── drifting instruments ────────────────────────────────────────────────
-    // heading wanders around 214°, speed around 12.4 kn; new targets land
-    // every 9s and ease over 5s — slow enough to feel like open water.
-    property real heading: 214
-    property real knots: 12.4
-    Behavior on heading { NumberAnimation { duration: 5200; easing.type: Easing.InOutSine } }
-    Behavior on knots   { NumberAnimation { duration: 5200; easing.type: Easing.InOutSine } }
-    Timer {
-        interval: 9000; running: !root.occluded; repeat: true
-        onTriggered: {
-            root.heading = 214 + (Math.random() - 0.5) * 9
-            root.knots = 12.4 + (Math.random() - 0.5) * 1.4
-        }
-    }
 
     // ── boot-in: the entry writes itself ────────────────────────────────────
     property real bootT: 0
@@ -112,25 +85,6 @@ Item {
             id: col
             spacing: 6
 
-            // vessel name, typing out — a small deck lamp keeps it company
-            Row {
-                spacing: 9
-                Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 5; height: 5; radius: 2.5
-                    color: root.lamp
-                    opacity: 0.4 + 0.5 * root.seg(0.0, 0.25)
-                }
-                Text {
-                    readonly property string full: "M.V. THROUGH SILENCE — FERRY LOG"
-                    text: full.substring(0, Math.round(root.seg(0.0, 0.55) * full.length))
-                    color: root.duskA(0.92)
-                    font.family: root.mono
-                    font.pixelSize: 13
-                    font.letterSpacing: 5
-                }
-            }
-
             // the time — thin serif numerals surfacing
             Text {
                 id: timeText
@@ -164,26 +118,13 @@ Item {
                 }
             }
 
-            // instrument line — degrees and knots gently adrift
+            // the date line
             Text {
-                opacity: root.seg(0.55, 0.85)
-                text: "HDG " + ("00" + Math.round((root.heading + 360) % 360)).slice(-3) + "°"
-                      + "   " + root.knots.toFixed(1) + " KN"
-                      + "   LIGHT RAIN"
+                opacity: root.seg(0.55, 0.9)
+                text: Qt.formatDateTime(clock.date, "ddd dd MMM")
                 color: root.duskA(0.85)
                 font.family: root.mono
-                font.pixelSize: 15
-                font.letterSpacing: 4
-            }
-
-            // the watch line — date, and which watch has the bridge
-            Text {
-                opacity: root.seg(0.7, 1.0) * 0.8
-                text: Qt.formatDateTime(clock.date, "ddd dd MMM").toUpperCase()
-                      + "  ·  " + root.watchName(clock.date.getHours())
-                color: root.duskA(0.7)
-                font.family: root.mono
-                font.pixelSize: 12
+                font.pixelSize: 14
                 font.letterSpacing: 4
             }
         }

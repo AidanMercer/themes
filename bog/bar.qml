@@ -12,7 +12,7 @@ import Quickshell.Services.Mpris
 // squash on landing, a ripple where it comes down). Apps rest above their
 // pads like things drying in the sun. Left: the music floats by on a leaf —
 // a cork pip that bobs while the song plays, the title, a row of surfacing
-// progress dots. Right: a cattail (hover = the depth soundings), a perched
+// progress dots. Right: a cattail (hover = the system readout), a perched
 // dragonfly for the net, a firefly jar for the battery, the time in serif
 // with its upside-down ghost beneath the line, and the leaf-sail for the
 // control menu. Everything bobs on its own phase; everything sits still
@@ -553,7 +553,7 @@ Item {
         height: parent.height
         opacity: root.surfaceT
 
-        // the cattail — hover to take the depth soundings.
+        // the cattail — hover to raise the system readout.
         // gone while the readout is toggled off in settings.
         Item {
             visible: root.pal.sysinfoOn !== false

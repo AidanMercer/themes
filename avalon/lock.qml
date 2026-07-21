@@ -212,18 +212,6 @@ Item {
                 NumberAnimation { target: passArea; property: "anchors.horizontalCenterOffset"; to: -5; duration: 50 }
                 NumberAnimation { target: passArea; property: "anchors.horizontalCenterOffset"; to: 0; duration: 60 }
             }
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 34
-                text: "where the small gods sleep"
-                color: root.ivoryA(0.30)
-                font.family: root.serif
-                font.pixelSize: Math.round(11 * root.ui)
-                font.italic: true
-                font.letterSpacing: 3
-            }
         }
     }
 }

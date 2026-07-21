@@ -199,8 +199,8 @@ Item {
                 color: root.blood
             }
             Text {
-                text: !root.engine.lyricsLoaded ? "seeking the words…"
-                      : !root.engine.lyricsSynced ? "silence — no verse"
+                text: !root.engine.lyricsLoaded ? "searching lyrics…"
+                      : !root.engine.lyricsSynced ? "no synced lyrics"
                       : "…"
                 color: root.inkA(0.55)
                 font.family: root.serif

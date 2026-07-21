@@ -16,7 +16,6 @@ Item {
     readonly property color gold:  pal.cyan
     readonly property color rose:  pal.magenta
     readonly property color moss:  pal.glass
-    readonly property string serif: "Noto Serif Display"
     readonly property string icon: "Symbols Nerd Font"
     function ivoryA(a) { return Qt.rgba(ivory.r, ivory.g, ivory.b, a) }
     function goldA(a)  { return Qt.rgba(gold.r, gold.g, gold.b, a) }
@@ -69,7 +68,7 @@ Item {
         }
     }
 
-    // ── header: blossom pip + AVALON + a soft EQ, uptime on the right ──
+    // ── header: blossom pip + a soft EQ, uptime on the right ──
     readonly property Component header: Component {
         Column {
             spacing: 12
@@ -89,16 +88,6 @@ Item {
                         rotation: 45
                         color: chrome.leaf
                     }
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "avalon"
-                        font.family: chrome.serif
-                        font.pixelSize: 14
-                        font.letterSpacing: 6
-                        font.italic: true
-                        color: chrome.ivory
-                    }
-
                     // quiet EQ — sways while something plays, rests when silent
                     Item {
                         anchors.verticalCenter: parent.verticalCenter
@@ -143,7 +132,7 @@ Item {
         }
     }
 
-    // ── footer: connection on the left, the shrine's whisper on the right ──
+    // ── footer: connection on the left ──
     readonly property Component footer: Component {
         Column {
             spacing: 12
@@ -181,17 +170,6 @@ Item {
                         font.letterSpacing: 1
                         color: chrome.ivoryA(0.55)
                     }
-                }
-
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "where the small gods sleep"
-                    font.family: chrome.serif
-                    font.pixelSize: 9
-                    font.italic: true
-                    font.letterSpacing: 2
-                    color: chrome.goldA(0.50)
                 }
             }
         }

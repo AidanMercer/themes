@@ -216,8 +216,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: 0
             visible: root.engine.player !== null && root.engine.tokens.length === 0
-            text: !root.engine.lyricsLoaded ? "· finding the frequency ·"
-                  : !root.engine.lyricsSynced ? "· the night hums along on its own ·"
+            text: !root.engine.lyricsLoaded ? "· finding lyrics ·"
+                  : !root.engine.lyricsSynced ? "· no synced lyrics ·"
                   : "·"
             textFormat: Text.PlainText
             color: root.colA(root.green, 0.5)

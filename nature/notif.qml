@@ -36,7 +36,7 @@ Item {
     property color panelBorder: creamA(0.24)
     property int panelBorderWidth: 1
     property int panelRadius: 14
-    property string panelTitle: "Field notes"
+    property string panelTitle: "Notifications"
     property Component panelBackdrop: Component {
         Item {
             property var panel: null

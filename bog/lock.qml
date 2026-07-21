@@ -186,21 +186,9 @@ Item {
 
         Column {
             anchors.horizontalCenter: parent.horizontalCenter
-            y: Math.round(26 * root.ui)
+            // rebalanced after the header line came out
+            y: Math.round(38 * root.ui)
             spacing: Math.round(6 * root.ui)
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "the pond lets you go"
-                                          : "the pond keeps you a while"
-                color: root.host.unlocking ? root.moss : root.sunA(0.85)
-                font.family: root.serif
-                font.italic: true
-                font.pixelSize: Math.round(15 * root.ui)
-                font.letterSpacing: 2
-            }
-
-            Item { width: 1; height: Math.round(2 * root.ui) }
 
             Item {
                 id: timeBlock
@@ -310,10 +298,10 @@ Item {
             id: prompt
             anchors.horizontalCenter: parent.horizontalCenter
             y: Math.round(panel.height * 0.66) + Math.round(22 * root.ui)
-            text: root.host.failed ? "the line snagged — cast again"
-                : root.host.busy ? "drawing up the line…"
-                : root.host.pwLength > 0 ? "enter, and come ashore"
-                : "cast your line"
+            text: root.host.failed ? "wrong password — try again"
+                : root.host.busy ? "checking…"
+                : root.host.pwLength > 0 ? "enter to unlock"
+                : "type your password"
             color: root.host.failed ? root.rust : root.strawA(0.6)
             font.family: root.serif
             font.italic: true
@@ -361,12 +349,12 @@ Item {
         }
     }
 
-    // whose pond this is
+    // the theme's signature
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(30 * root.ui)
-        text: "≈ slow noon"
+        text: "bog"
         color: root.strawA(0.35)
         font.family: root.serif
         font.italic: true

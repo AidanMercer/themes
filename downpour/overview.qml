@@ -44,8 +44,8 @@ Item {
     readonly property string titleFont: serif
     readonly property string hintFont: serif
     readonly property color hintColor: inkA(0.42)
-    readonly property string hintText: "every pane holds a life · ⏎ step through"
-    readonly property string emptyText: "no one at the window"
+    readonly property string hintText: "⏎ focus · esc close"
+    readonly property string emptyText: "no windows open"
 
     // ── backdrop: the fogged glass itself ──
     readonly property Component backdrop: Component {

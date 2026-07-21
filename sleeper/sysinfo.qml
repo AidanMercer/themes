@@ -2,16 +2,15 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 
-// sleeper: the BERTH CARD — the little service card the attendant keeps in
-// the door slot, listing what the compartment is drawing tonight. Hover the
+// sleeper: the system card the attendant keeps in the door slot. Hover the
 // card slot in the bar (or pin with Super+.) and the card slides out of its
 // slot at the top right and settles with one damped sway on the carriage
-// rhythm. Every subsystem is a service line — CPU, MEM, GPU, NET, PWR — and
-// its meter is the house punch language: ten punch circles, one punched
-// through per tenth of load (running hot re-inks the punches tea-amber, then
-// stamp-red). Uptime runs along the foot as DISTANCE. Sections with no
-// source (no nvidia-smi, no battery) stay unprinted. Reads /proc + nmcli
-// itself; self-contained, click-through scenery.
+// rhythm. Every subsystem is a row — cpu, mem, gpu, bat, net — and its meter
+// is the house punch language: ten punch circles, one punched through per
+// tenth of load (running hot re-inks the punches tea-amber, then stamp-red).
+// Uptime runs along the foot. Sections with no source (no nvidia-smi, no
+// battery) stay unprinted. Reads /proc + nmcli itself; self-contained,
+// click-through scenery.
 Item {
     id: root
     anchors.fill: parent
@@ -242,10 +241,10 @@ Item {
         online = true
     }
 
-    // ── a service line: label, ten punch circles, readout ───────────────────
+    // ── a row: label, ten punch circles, readout ────────────────────────────
     component ServiceRow: Item {
         id: row
-        property string label: "CPU"
+        property string label: "cpu"
         property int value: -1        // 0..100, -1 = unprinted
         property color tone: root.green
         property string readout: ""
@@ -376,35 +375,26 @@ Item {
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "CAR 7 · BERTH CARD"
+                    text: "system"
                     font.family: root.mono
                     font.weight: Font.Bold
                     font.pixelSize: 11
                     font.letterSpacing: 3
                     color: root.tea
                 }
-                Text {
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: "НОЧНОЙ"
-                    font.family: root.mono
-                    font.pixelSize: 8
-                    font.letterSpacing: 2
-                    color: root.woodA(1.0)
-                }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.woodA(0.6) }
 
             ServiceRow {
-                label: "CPU"
+                label: "cpu"
                 value: root.cpuPercent
                 tone: root.tone(root.cpuPercent, 60, 85)
                 readout: root.cpuPercent < 0 ? "--"
                     : root.cpuPercent + "%" + (root.cpuTemp > 0 ? " " + root.cpuTemp + "°" : "")
             }
             ServiceRow {
-                label: "MEM"
+                label: "mem"
                 value: root.ramPercent
                 tone: root.tone(root.ramPercent, 70, 90)
                 readout: root.ramPercent < 0 ? "--"
@@ -413,7 +403,7 @@ Item {
             ServiceRow {
                 visible: root.hasGpu
                 height: root.hasGpu ? 30 : 0
-                label: "GPU"
+                label: "gpu"
                 value: root.gpuPercent
                 tone: root.tone(root.gpuPercent, 60, 85)
                 readout: root.gpuPercent + "% " + root.gpuTemp + "°"
@@ -421,7 +411,7 @@ Item {
             ServiceRow {
                 visible: root.hasBattery
                 height: root.hasBattery ? 30 : 0
-                label: "PWR"
+                label: "bat"
                 value: root.batteryPercent
                 tone: root.batteryCharging ? root.moonpale
                     : root.batteryPercent <= 15 ? root.stamp
@@ -429,7 +419,7 @@ Item {
                 readout: (root.batteryCharging ? "⚡" : "") + root.batteryPercent + "%"
             }
 
-            // NET is a written line: name left, rates right
+            // net is a written line: name left, rates right
             Item {
                 width: parent.width
                 height: 24
@@ -439,7 +429,7 @@ Item {
                     spacing: 6
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "NET"
+                        text: "net"
                         font.family: root.mono
                         font.pixelSize: 11
                         font.letterSpacing: 3
@@ -456,7 +446,7 @@ Item {
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: root.online ? root.connName : "OFF THE LINE"
+                        text: root.online ? root.connName : "offline"
                         textFormat: Text.PlainText
                         font.family: root.mono
                         font.pixelSize: 10
@@ -468,33 +458,31 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     text: "↓" + root.fmtRate(root.rxRate) + " ↑" + root.fmtRate(root.txRate)
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     color: root.woodA(1.0)
                 }
             }
 
             Rectangle { width: parent.width; height: 1; color: root.woodA(0.6) }
 
-            // the foot: distance travelled + the send-off
+            // the foot: uptime + the crescent
             Item {
                 width: parent.width
                 height: 18
                 Text {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "DISTANCE " + root.uptimeText
+                    text: "up " + root.uptimeText
                     font.family: root.mono
-                    font.pixelSize: 9
+                    font.pixelSize: 10
                     font.letterSpacing: 1
-                    color: root.linenA(0.6)
+                    color: root.linenA(0.7)
                 }
                 Text {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    text: "☾ sleep well"
-                    font.family: root.mono
-                    font.pixelSize: 9
-                    font.letterSpacing: 1
+                    text: "☾"
+                    font.pixelSize: 10
                     color: root.teaA(0.6)
                 }
             }

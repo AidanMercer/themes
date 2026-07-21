@@ -60,7 +60,7 @@ Item {
 
     // ── the breath-fog pane ─────────────────────────────────────────────────
     readonly property real panelW: Math.round(470 * ui)
-    readonly property real panelH: Math.round(330 * ui)
+    readonly property real panelH: Math.round(296 * ui)
 
     Item {
         id: panel
@@ -141,16 +141,6 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             y: Math.round(36 * root.ui)
             spacing: Math.round(16 * root.ui)
-
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: root.host.unlocking ? "the glass clears" : "the storm can wait"
-                color: root.host.unlocking ? root.paneA(0.95) : root.inkA(0.5)
-                font.family: root.serif
-                font.italic: true
-                font.pixelSize: Math.round(16 * root.ui)
-                font.letterSpacing: 3
-            }
 
             // the hour, finger-written across the fog
             Item {
@@ -287,12 +277,12 @@ Item {
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    text: root.host.failed ? "not that — breathe, try again"
-                        : root.host.busy ? "listening…"
-                        : root.host.pwLength > 0 ? "enter, when you're ready"
-                        : "write it on the glass"
+                    text: root.host.failed ? "wrong password — try again"
+                        : root.host.busy ? "checking…"
+                        : root.host.pwLength > 0 ? "enter when ready"
+                        : "type your password"
                     textFormat: Text.PlainText
-                    color: root.host.failed ? root.warmA(0.95) : root.inkA(0.48)
+                    color: root.host.failed ? root.warmA(0.95) : root.inkA(0.7)
                     font.family: root.serif
                     font.italic: true
                     font.pixelSize: Math.round(13 * root.ui)
@@ -315,12 +305,12 @@ Item {
         }
     }
 
-    // whose window this is
+    // the signature
     Text {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: Math.round(32 * root.ui)
-        text: "downpour · the last quiet hour before the storm"
+        text: "downpour"
         color: root.inkA(0.32)
         font.family: root.serif
         font.italic: true

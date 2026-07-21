@@ -4,9 +4,9 @@ import QtQuick
 // glass: cold slate, a hairline frame, and down the left edge a bearing
 // rail — a vertical hairline with degree ticks and a benchmark triangle at
 // its head, inked in the urgency's tone. The shell keeps the daemon, stack,
-// text and actions. The Super+I history drawer is the WATCH LOG: same rail
-// grammar on the panel, with the lamp pip going ember when the lamp is
-// shuttered (DND) and the entry count logged in the head rule.
+// text and actions. The Super+I history drawer keeps the same rail grammar
+// on the panel, with the lamp pip going ember while dnd is on and the entry
+// count logged in the head rule.
 Item {
     id: root
     required property var pal
@@ -19,19 +19,19 @@ Item {
     property int cardBorderWidth: 1
     property bool cardSpine: false   // the bearing rail below replaces it
 
-    // the WATCH LOG (Super+I)
+    // the history drawer (Super+I)
     property color panelBg: Qt.rgba(pal.glass.r, pal.glass.g, pal.glass.b, 0.96)
     property color panelBorder: silverA(0.38)
     property int panelBorderWidth: 1
     property int panelRadius: 5
-    property string panelTitle: "WATCH LOG"
+    property string panelTitle: "notifications"
     property Component panelBackdrop: Component {
         Item {
             id: logbook
             property var panel: null
             readonly property bool shuttered: panel ? panel.dnd === true : false
 
-            // head rule + the lamp pip (ember while shuttered)
+            // head rule + the lamp pip (ember while dnd is on)
             Rectangle {
                 anchors { top: parent.top; left: parent.left; right: parent.right; margins: 8 }
                 height: 1
@@ -52,8 +52,8 @@ Item {
             }
             Text {
                 anchors { top: parent.top; right: parent.right; topMargin: 10; rightMargin: 26 }
-                text: (logbook.shuttered ? "LAMP SHUTTERED · " : "")
-                    + "ENTRIES " + String(logbook.panel ? logbook.panel.count : 0).padStart(2, "0")
+                text: (logbook.shuttered ? "dnd · " : "")
+                    + String(logbook.panel ? logbook.panel.count : 0).padStart(2, "0") + " entries"
                 font.family: root.pal.fontMono
                 font.pixelSize: 10
                 font.letterSpacing: 2

@@ -26,13 +26,6 @@ Item {
     readonly property string hh: Qt.formatDateTime(clock.date, "HH")
     readonly property string mm: Qt.formatDateTime(clock.date, "mm")
 
-    // day-of-year → the panel's "page number"
-    readonly property int pageNo: {
-        const d = clock.date
-        const start = new Date(d.getFullYear(), 0, 0)
-        return Math.floor((d - start) / 86400000)
-    }
-
     // boot-in
     property real bootT: 0
     NumberAnimation on bootT { running: true; from: 0; to: 1; duration: 900; easing.type: Easing.OutCubic }
@@ -146,31 +139,6 @@ Item {
             x: 26 * root.ui
             y: 20 * root.ui
             spacing: Math.round(10 * root.ui)
-
-            // caption strip: title left, page number right
-            Item {
-                width: timeRow.width
-                height: capL.height
-                Text {
-                    id: capL
-                    text: "THE BLACK SWORDSMAN"
-                    color: root.inkA(0.62)
-                    width: Math.min(implicitWidth, parent.width - capR.width - Math.round(14 * root.ui))
-                    elide: Text.ElideRight
-                    font.family: root.sans
-                    font.pixelSize: Math.round(12 * root.ui)
-                    font.letterSpacing: 3
-                }
-                Text {
-                    id: capR
-                    anchors.right: parent.right
-                    text: "fol. " + root.pageNo
-                    color: root.blood
-                    font.family: root.serif
-                    font.pixelSize: Math.round(12 * root.ui)
-                    font.letterSpacing: 2
-                }
-            }
 
             // the time — each digit inks itself in
             Row {
