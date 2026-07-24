@@ -155,17 +155,12 @@ Item {
             readonly property int activeId: special ? root.splitRight : root.regularActive
             readonly property color edge: live ? root.neon : root.dim
 
-            // the right half counts up without end, so show its first five and
-            // append whatever it's actually on once it climbs past them
+            // both halves page the same way — ten slots, rolling over to the next
+            // ten once that half's stack climbs past them
             readonly property var ids: {
+                const cur = deck.activeId
+                const base = cur >= 1 ? Math.floor((cur - 1) / 10) * 10 + 1 : 1
                 const a = []
-                if (deck.special) {
-                    for (let i = 1; i <= 5; i++) a.push(i)
-                    if (deck.activeId > 5) a.push(deck.activeId)
-                    return a
-                }
-                const base = root.regularActive >= 1
-                    ? Math.floor((root.regularActive - 1) / 10) * 10 + 1 : 1
                 for (let i = 0; i < 10; i++) a.push(base + i)
                 return a
             }
