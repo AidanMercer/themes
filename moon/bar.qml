@@ -36,6 +36,86 @@ Item {
 
     readonly property var monitor: barScreen ? Hyprland.monitorFor(barScreen) : Hyprland.focusedMonitor
 
+    // ── split mode ──────────────────────────────────────────────────────────
+    // The hypr scripts mirror what they did into a runtime file; themes can't
+    // import shell singletons so we read it directly, same as the lyric offset.
+    // While it says split, the deck splits with it: one panel per half, each
+    // driving its own stack.
+    property bool splitOn: false
+    property int splitSeam: 0
+    property int splitRight: 1
+    property string splitZone: "l"
+    property string splitMonitor: ""
+    readonly property bool split: splitOn && barScreen && barScreen.name === splitMonitor
+    readonly property string zoneScript: Quickshell.env("HOME") + "/dotfiles/.config/hypr/zone.sh"
+
+    FileView {
+        path: (Quickshell.env("XDG_RUNTIME_DIR") || "/tmp") + "/world80-split"
+        watchChanges: true
+        blockLoading: true
+        preload: true
+        printErrors: false
+        onLoaded: {
+            try {
+                const s = JSON.parse(text())
+                root.splitOn = !!s.on
+                root.splitSeam = s.seam ?? 0
+                root.splitRight = s.right ?? 1
+                root.splitZone = s.zone ?? "l"
+                root.splitMonitor = s.monitor ?? ""
+            } catch (e) {
+                root.splitOn = false
+            }
+        }
+        onFileChanged: reload()
+    }
+
+    readonly property int regularActive: monitor?.activeWorkspace?.id ?? 1
+
+    // one deck when whole, two when split — each centred in its own half
+    readonly property var decks: root.split
+        ? [{ side: "l", centre: root.splitSeam / 2, special: false },
+           { side: "r", centre: root.splitSeam + (root.width - root.splitSeam) / 2, special: true }]
+        : [{ side: "", centre: root.width / 2, special: false }]
+
+    // keep the .desktop database observed so heuristicLookup() works
+    readonly property int _keepAlive: DesktopEntries.applications.values.length
+
+    // Hyprland.toplevels is empty until refreshed; re-query on window events
+    // so each slot's app icon stays current.
+    Component.onCompleted: Hyprland.refreshToplevels()
+    Connections {
+        target: Hyprland
+        function onRawEvent(event) {
+            switch (event.name) {
+            case "openwindow":
+            case "closewindow":
+            case "movewindow":
+            case "movewindowv2":
+            case "activewindowv2":
+                Hyprland.refreshToplevels()
+            }
+        }
+    }
+
+    function iconForClass(cls) {
+        if (!cls) return ""
+        const entry = DesktopEntries.heuristicLookup(cls)
+        const name = (entry && entry.icon) ? entry.icon : cls.toLowerCase()
+        return Quickshell.iconPath(name, "application-x-executable")
+    }
+    function iconForWindows(wins) {
+        let best = null, bestFh = Infinity
+        for (const w of wins) {
+            const cls = w.lastIpcObject?.class ?? ""
+            if (!cls) continue
+            const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
+            if (fh < bestFh) { best = w; bestFh = fh }
+        }
+        return best ? iconForClass(best.lastIpcObject.class)
+                    : Quickshell.iconPath("application-x-executable")
+    }
+
     // boot-in: panels drop into place once on load (replays on theme reload).
     // bootMedia trails bootT so the chip lands a beat after the workspaces.
     property real bootT: 0
@@ -61,158 +141,158 @@ Item {
         ctx.stroke()
     }
 
-    // ── center: workspace tabs ──────────────────────────────────────────────
-    Item {
-        id: leftPanel
-        height: 30
-        width: leftRow.width + 30
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -6 * (1 - root.bootT)
-        opacity: root.bootT
+    // ── the deck: workspace tabs, one per half while split ──────────────────
+    Repeater {
+        model: root.decks
 
-        Canvas {
-            id: leftBg
-            anchors.fill: parent
-            onPaint: root.paintPanel(getContext("2d"), width, height, root.neon)
-            onWidthChanged: requestPaint()
-        }
+        delegate: Item {
+            id: deck
+            required property var modelData
+            readonly property bool special: modelData.special
+            // whole-screen deck always reads as live; split decks light the one
+            // holding focus so you can see where the next keystroke lands
+            readonly property bool live: !root.split || root.splitZone === modelData.side
+            readonly property int activeId: special ? root.splitRight : root.regularActive
+            readonly property color edge: live ? root.neon : root.dim
 
-        readonly property int wsCount: 10
-        readonly property int activeWsId: root.monitor?.activeWorkspace?.id ?? 1
-        readonly property int pageBase: activeWsId >= 1
-            ? Math.floor((activeWsId - 1) / wsCount) * wsCount + 1
-            : 1
-
-        // keep the .desktop database observed so heuristicLookup() works
-        readonly property int _keepAlive: DesktopEntries.applications.values.length
-
-        // Hyprland.toplevels is empty until refreshed; re-query on window events
-        // so each slot's app icon stays current.
-        Component.onCompleted: Hyprland.refreshToplevels()
-        Connections {
-            target: Hyprland
-            function onRawEvent(event) {
-                switch (event.name) {
-                case "openwindow":
-                case "closewindow":
-                case "movewindow":
-                case "movewindowv2":
-                case "activewindowv2":
-                    Hyprland.refreshToplevels()
+            // the right half counts up without end, so show its first five and
+            // append whatever it's actually on once it climbs past them
+            readonly property var ids: {
+                const a = []
+                if (deck.special) {
+                    for (let i = 1; i <= 5; i++) a.push(i)
+                    if (deck.activeId > 5) a.push(deck.activeId)
+                    return a
                 }
+                const base = root.regularActive >= 1
+                    ? Math.floor((root.regularActive - 1) / 10) * 10 + 1 : 1
+                for (let i = 0; i < 10; i++) a.push(base + i)
+                return a
             }
-        }
 
-        function iconForClass(cls) {
-            if (!cls) return ""
-            const entry = DesktopEntries.heuristicLookup(cls)
-            const name = (entry && entry.icon) ? entry.icon : cls.toLowerCase()
-            return Quickshell.iconPath(name, "application-x-executable")
-        }
-        function iconForWindows(wins) {
-            let best = null, bestFh = Infinity
-            for (const w of wins) {
-                const cls = w.lastIpcObject?.class ?? ""
-                if (!cls) continue
-                const fh = w.lastIpcObject?.focusHistoryID ?? Infinity
-                if (fh < bestFh) { best = w; bestFh = fh }
+            function windowsOn(id) {
+                return deck.special
+                    ? Hyprland.toplevels.values.filter(t => (t.workspace?.name ?? "") === "special:sp" + id)
+                    : Hyprland.toplevels.values.filter(t => (t.workspace?.id ?? -1) === id)
             }
-            return best ? iconForClass(best.lastIpcObject.class)
-                        : Quickshell.iconPath("application-x-executable")
-        }
 
-        Row {
-            id: leftRow
-            anchors.centerIn: parent
-            spacing: 9
+            height: 30
+            width: deckRow.width + 30
+            x: Math.round(modelData.centre - width / 2)
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -6 * (1 - root.bootT)
+            opacity: root.bootT * (live ? 1.0 : 0.72)
+
+            Behavior on x { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+            Behavior on opacity { NumberAnimation { duration: 180 } }
+
+            Canvas {
+                id: deckBg
+                anchors.fill: parent
+                onPaint: root.paintPanel(getContext("2d"), width, height, deck.edge)
+                onWidthChanged: requestPaint()
+            }
+            onEdgeChanged: deckBg.requestPaint()
 
             Row {
-                id: wsRow
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 5
+                id: deckRow
+                anchors.centerIn: parent
+                spacing: 9
 
-                Repeater {
-                    model: leftPanel.wsCount
-                delegate: Item {
-                    id: slot
-                    required property int index
-                    readonly property int wsId: leftPanel.pageBase + index
-                    readonly property bool isActive: leftPanel.activeWsId === wsId
-                    readonly property var windowsHere: Hyprland.toplevels.values
-                        .filter(t => (t.workspace?.id ?? -1) === wsId)
-                    readonly property bool isOccupied: windowsHere.length > 0
+                Row {
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 5
 
-                    width: 22
-                    height: 24
+                    Repeater {
+                        model: deck.ids
 
-                    // empty: a thin neon dash, dim
-                    Rectangle {
-                        anchors.centerIn: parent
-                        visible: !slot.isOccupied
-                        width: 8; height: 2
-                        color: root.neon
-                        opacity: slot.isActive ? 0.9 : 0.3
-                        Behavior on opacity { NumberAnimation { duration: 180 } }
+                        delegate: Item {
+                            id: slot
+                            required property int modelData
+                            readonly property int wsId: modelData
+                            readonly property bool isActive: deck.activeId === wsId
+                            readonly property var windowsHere: deck.windowsOn(wsId)
+                            readonly property bool isOccupied: windowsHere.length > 0
+
+                            width: 22
+                            height: 24
+
+                            // empty: a thin neon dash, dim
+                            Rectangle {
+                                anchors.centerIn: parent
+                                visible: !slot.isOccupied
+                                width: 8; height: 2
+                                color: deck.edge
+                                opacity: slot.isActive ? 0.9 : 0.3
+                                Behavior on opacity { NumberAnimation { duration: 180 } }
+                            }
+
+                            // occupied: app icon, dimmed unless active
+                            IconImage {
+                                anchors.centerIn: parent
+                                visible: slot.isOccupied
+                                width: 16; height: 16
+                                source: slot.isOccupied ? root.iconForWindows(slot.windowsHere) : ""
+                                opacity: slot.isActive ? 1.0 : 0.55
+                                Behavior on opacity { NumberAnimation { duration: 180 } }
+                            }
+
+                            // active marker: neon underline
+                            Rectangle {
+                                anchors.bottom: parent.bottom
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                visible: slot.isActive
+                                width: parent.width; height: 2
+                                color: deck.edge
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                // split: go through zone.sh so the click switches
+                                // THIS half, not whichever one happens to be focused
+                                onClicked: {
+                                    if (root.split)
+                                        Quickshell.execDetached([root.zoneScript, "space",
+                                            String(slot.wsId), deck.modelData.side])
+                                    else
+                                        Hyprland.dispatch(`workspace ${slot.wsId}`)
+                                }
+                            }
+                        }
                     }
+                }
 
-                    // occupied: app icon, dimmed unless active
-                    IconImage {
+                // divider + status button: toggles the control popup over IPC
+                // (qs ipc → ControlBus → the per-screen ControlPopup in shell.qml)
+                Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 1; height: 16
+                    color: root.dim
+                    opacity: 0.6
+                }
+
+                Item {
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 20; height: 24
+
+                    Text {
                         anchors.centerIn: parent
-                        visible: slot.isOccupied
-                        width: 16; height: 16
-                        source: slot.isOccupied ? leftPanel.iconForWindows(slot.windowsHere) : ""
-                        opacity: slot.isActive ? 1.0 : 0.55
-                        Behavior on opacity { NumberAnimation { duration: 180 } }
-                    }
-
-                    // active marker: neon underline + cyan top tick
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        visible: slot.isActive
-                        width: parent.width; height: 2
-                        color: root.neon
+                        text: String.fromCodePoint(0xF303)   // nf-linux-archlinux
+                        font.family: root.icon
+                        font.pixelSize: 15
+                        color: deck.edge
+                        opacity: statusMa.containsMouse ? 1.0 : 0.78
+                        Behavior on opacity { NumberAnimation { duration: 150 } }
                     }
 
                     MouseArea {
+                        id: statusMa
                         anchors.fill: parent
+                        hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch(`workspace ${slot.wsId}`)
+                        onClicked: Quickshell.execDetached(["qs", "ipc", "call", "controlPopup", "toggle"])
                     }
-                }
-                }
-            }
-
-            // divider + status button: toggles the control popup over IPC
-            // (qs ipc → ControlBus → the per-screen ControlPopup in shell.qml)
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 1; height: 16
-                color: root.dim
-                opacity: 0.6
-            }
-
-            Item {
-                anchors.verticalCenter: parent.verticalCenter
-                width: 20; height: 24
-
-                Text {
-                    anchors.centerIn: parent
-                    text: String.fromCodePoint(0xF303)   // nf-linux-archlinux
-                    font.family: root.icon
-                    font.pixelSize: 15
-                    color: root.neon
-                    opacity: statusMa.containsMouse ? 1.0 : 0.78
-                    Behavior on opacity { NumberAnimation { duration: 150 } }
-                }
-
-                MouseArea {
-                    id: statusMa
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: Quickshell.execDetached(["qs", "ipc", "call", "controlPopup", "toggle"])
                 }
             }
         }
