@@ -56,16 +56,23 @@ Item {
         preload: true
         printErrors: false
         onLoaded: {
+            // the writers truncate before writing, so a read can land on an empty
+            // or half-written file. keep the last good values rather than reading
+            // it as "not split" — that flipped the deck back to one centred panel
+            // for a frame on every switch
+            const t = text()
+            if (!t || !t.trim()) return
+            let s
             try {
-                const s = JSON.parse(text())
-                root.splitOn = !!s.on
-                root.splitSeam = s.seam ?? 0
-                root.splitRight = s.right ?? 1
-                root.splitZone = s.zone ?? "l"
-                root.splitMonitor = s.monitor ?? ""
+                s = JSON.parse(t)
             } catch (e) {
-                root.splitOn = false
+                return
             }
+            root.splitOn = !!s.on
+            root.splitSeam = s.seam ?? 0
+            root.splitRight = s.right ?? 1
+            root.splitZone = s.zone ?? "l"
+            root.splitMonitor = s.monitor ?? ""
         }
         onFileChanged: reload()
     }
