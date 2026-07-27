@@ -1,0 +1,27 @@
+# nightshift — "STILL UP". The small hours over a hillside city, seen from a
+# stair landing. Almost everyone is asleep; every lit window down there is
+# someone who isn't. The whole desktop is a census of the awake — machine
+# state rendered as which windows are burning. Palette sampled from the
+# video: void #030917, deep blue #0a1d42, haze #194180, sky #2467e7,
+# window sodium #b5c997.
+bar_position = "top"
+
+accent      = "#c8dc9e"   # sodium window light — the one room that's awake
+accent2     = "#6fa2f2"   # city haze blue — rules, traces, the cold majority
+accent3     = "#e0574a"   # tower beacon — the only red light in a blue city
+accent_warn = "#e0a860"   # street lamp amber — cautions, warming floors
+accent_dim  = "#2c4a7d"   # unlit slate — dark windows, facades, hairlines
+text  = "#cfdcef"   # pale blue-white, the light off the haze
+glass = "#071426"   # deep navy glass
+
+# terminal base + the hues the accents don't cover; theme-colors.sh
+# builds the kitty/fuzzel/hyprlock palettes from these on switch
+bg        = "#050c19"
+fg        = "#c6d6ea"
+hue_green = "#8fb573"   # sodium green, the window glow at distance
+hue_blue  = "#4d8ff5"   # the sky band over the skyline
+
+font_mono = "Noto Sans Mono"
+
+# marketplace one-liner (shown in the Super+/ store)
+tagline = "still up — a sleeping blue city, counted one lit window at a time"
