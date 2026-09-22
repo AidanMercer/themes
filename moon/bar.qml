@@ -168,11 +168,6 @@ Item {
                 const cur = deck.activeId
                 const base = cur >= 1 ? Math.floor((cur - 1) / 10) * 10 + 1 : 1
                 const a = []
-                // Super+` scratchpad rides in front of workspace 1 as slot 0
-                // while it holds windows — on the regular deck only (the split
-                // deck's specials are its own halves). pal.scratchpad tracks it.
-                if (!deck.special && (root.pal.scratchpad?.count ?? 0) > 0)
-                    a.push(root.pal.scratchpad.id)
                 for (let i = 0; i < 10; i++) a.push(base + i)
                 return a
             }
@@ -217,9 +212,7 @@ Item {
                             id: slot
                             required property int modelData
                             readonly property int wsId: modelData
-                            readonly property bool isActive: wsId < 0
-                                ? root.pal.scratchpad.shown[root.monitor?.name ?? ""] === true
-                                : deck.activeId === wsId
+                            readonly property bool isActive: deck.activeId === wsId
                             readonly property var windowsHere: deck.windowsOn(wsId)
                             readonly property bool isOccupied: windowsHere.length > 0
 
@@ -261,9 +254,7 @@ Item {
                                 // split: go through zone.sh so the click switches
                                 // THIS half, not whichever one happens to be focused
                                 onClicked: {
-                                    if (slot.wsId < 0)
-                                        Hyprland.dispatch("togglespecialworkspace scratchpad")
-                                    else if (root.split)
+                                    if (root.split)
                                         Quickshell.execDetached([root.zoneScript, "space",
                                             String(slot.wsId), deck.modelData.side])
                                     else

@@ -100,12 +100,6 @@ Item {
     // maths down as model data keeps each delegate self-contained.
     function _slots(base, act, special, side) {
         const out = []
-        // Super+` scratchpad rides in front of workspace 1 as slot 0 while it
-        // holds windows — regular deck only (the right half's specials are its
-        // own). pal.scratchpad is the shell's tracker (count / id / shown).
-        if (!special && (pal.scratchpad?.count ?? 0) > 0)
-            out.push({ id: pal.scratchpad.id, special: false, side: side,
-                       active: pal.scratchpad.shown[monitor?.name ?? ""] === true })
         for (let i = 0; i < wsCount; i++)
             out.push({ id: base + i, active: (base + i) === act, special: special, side: side })
         return out
@@ -223,7 +217,7 @@ Item {
                 required property var modelData        // { centre, live, side, slots }
                 readonly property bool live: modelData.live
 
-                width: deck.modelData.slots.length * root.slotW   // 11 wide while the scratchpad rides
+                width: root.stripW
                 height: root.height
                 x: Math.round(modelData.centre - width / 2)
                 anchors.verticalCenter: parent.verticalCenter
@@ -298,9 +292,7 @@ Item {
                             // while split, route through zone.sh so the click
                             // switches THIS half, not whichever holds focus
                             onClicked: {
-                                if (slot.wsId < 0)
-                                    Hyprland.dispatch("togglespecialworkspace scratchpad")
-                                else if (root.split)
+                                if (root.split)
                                     Quickshell.execDetached([root.zoneScript, "space",
                                         String(slot.wsId), slot.modelData.side])
                                 else

@@ -123,13 +123,6 @@ Item {
                     spacing: 2
 
                     readonly property int wsCount: 10
-                    // Super+` scratchpad: rides in front of workspace 1 as slot 0 while it
-                    // holds windows — same slot chrome, it's a workspace that floats over
-                    // the others. pal.scratchpad is the shell's tracker (count / id / shown).
-                    readonly property bool scratchOn: (root.pal.scratchpad?.count ?? 0) > 0
-                    readonly property var slotIds: (scratchOn ? [root.pal.scratchpad.id] : [])
-                        .concat(Array.from({ length: wsCount }, (_, i) => pageBase + i))
-                    readonly property string monName: root.monitor?.name ?? ""
                     readonly property int activeWsId: root.monitor?.activeWorkspace?.id ?? 1
                     readonly property int pageBase: activeWsId >= 1
                         ? Math.floor((activeWsId - 1) / wsCount) * wsCount + 1
@@ -139,13 +132,12 @@ Item {
                     readonly property int _keepAlive: DesktopEntries.applications.values.length
 
                     Repeater {
-                        model: wsCol.slotIds
+                        model: wsCol.wsCount
                         delegate: Item {
                             id: slot
                             required property int index
-                            required property var modelData
-                            readonly property int wsId: modelData      // < 0 = the scratchpad
-                            readonly property bool isActive: wsId < 0 ? root.pal.scratchpad.shown[wsCol.monName] === true : wsCol.activeWsId === wsId
+                            readonly property int wsId: wsCol.pageBase + index
+                            readonly property bool isActive: wsCol.activeWsId === wsId
                             readonly property var windowsHere: Hyprland.toplevels.values
                                 .filter(t => (t.workspace?.id ?? -1) === wsId)
                             readonly property bool isOccupied: windowsHere.length > 0
@@ -208,7 +200,7 @@ Item {
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: Hyprland.dispatch(slot.wsId < 0 ? "togglespecialworkspace scratchpad" : `workspace ${slot.wsId}`)
+                                onClicked: Hyprland.dispatch(`workspace ${slot.wsId}`)
                             }
                         }
                     }
