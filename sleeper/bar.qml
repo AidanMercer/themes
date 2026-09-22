@@ -228,6 +228,13 @@ Item {
     Item {
         id: ticket
         readonly property int wsCount: 10
+        // Super+` scratchpad: rides in front of workspace 1 as slot 0 while it
+        // holds windows — same slot chrome, it's a workspace that floats over
+        // the others. pal.scratchpad is the shell's tracker (count / id / shown).
+        readonly property bool scratchOn: (root.pal.scratchpad?.count ?? 0) > 0
+        readonly property var slotIds: (scratchOn ? [root.pal.scratchpad.id] : [])
+            .concat(Array.from({ length: wsCount }, (_, i) => pageBase + i))
+        readonly property string monName: root.monitor?.name ?? ""
         readonly property int activeWsId: root.monitor?.activeWorkspace?.id ?? 1
         readonly property int pageBase: activeWsId >= 1
             ? Math.floor((activeWsId - 1) / wsCount) * wsCount + 1
@@ -235,7 +242,7 @@ Item {
         readonly property real slotW: 32
         readonly property int activeSlot: activeWsId - pageBase
 
-        width: wsCount * slotW
+        width: slotIds.length * slotW
         height: Math.min(28, parent.height - 10)
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -265,12 +272,13 @@ Item {
             border.color: root.linenA(0.28)
         }
         Repeater {
-            model: ticket.wsCount
+            model: ticket.slotIds
             delegate: Item {
                 id: stub
                 required property int index
-                readonly property int wsId: ticket.pageBase + index
-                readonly property bool isActive: ticket.activeWsId === wsId
+                required property var modelData
+                readonly property int wsId: modelData      // < 0 = the scratchpad
+                readonly property bool isActive: wsId < 0 ? root.pal.scratchpad.shown[ticket.monName] === true : ticket.activeWsId === wsId
                 readonly property var windowsHere: Hyprland.toplevels.values
                     .filter(t => (t.workspace?.id ?? -1) === wsId)
                 readonly property bool isOccupied: windowsHere.length > 0
@@ -296,7 +304,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 1
-                    text: String(stub.wsId)
+                    text: stub.wsId < 0 ? "\u0060" : String(stub.wsId)   // the scratchpad stub wears its key
                     color: stub.isActive ? root.teaA(0.9) : root.linenA(stub.isOccupied ? 0.55 : 0.3)
                     font.family: root.mono
                     font.pixelSize: 7
@@ -359,7 +367,7 @@ Item {
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
-                    onClicked: Hyprland.dispatch(`workspace ${stub.wsId}`)
+                    onClicked: Hyprland.dispatch(stub.wsId < 0 ? "togglespecialworkspace scratchpad" : `workspace ${stub.wsId}`)
                 }
             }
         }
