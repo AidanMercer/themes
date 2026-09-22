@@ -1,7 +1,7 @@
 {
   "repo": "AidanMercer/themes",
   "branch": "master",
-  "commit": "5a52008",
+  "commit": "71b2ad4",
   "themes": [
     {
       "name": "bog",
@@ -16,8 +16,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/bog.jpg",
-      "bytes": 90093783,
-      "rev": "5a52008",
+      "bytes": 90094522,
+      "rev": "71b2ad4",
       "best": true,
       "files": [
         {
@@ -26,7 +26,7 @@
         },
         {
           "path": "bog/bar.qml",
-          "bytes": 34030
+          "bytes": 34769
         },
         {
           "path": "bog/beryl.qml",
@@ -124,8 +124,8 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/moon.jpg",
-      "bytes": 44107297,
-      "rev": "5a52008",
+      "bytes": 44112163,
+      "rev": "71b2ad4",
       "best": true,
       "files": [
         {
@@ -134,7 +134,7 @@
         },
         {
           "path": "moon/bar.qml",
-          "bytes": 13154
+          "bytes": 18020
         },
         {
           "path": "moon/beryl.qml",
@@ -242,13 +242,13 @@
       "video": true,
       "variants": 3,
       "thumb": ".catalog/thumbs/nature.jpg",
-      "bytes": 42491024,
-      "rev": "5a52008",
+      "bytes": 42491760,
+      "rev": "71b2ad4",
       "best": true,
       "files": [
         {
           "path": "nature/bar.qml",
-          "bytes": 30275
+          "bytes": 31011
         },
         {
           "path": "nature/beryl.qml",
@@ -354,13 +354,13 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/road8.jpg",
-      "bytes": 28654962,
-      "rev": "5a52008",
+      "bytes": 28655701,
+      "rev": "71b2ad4",
       "best": true,
       "files": [
         {
           "path": "road8/bar.qml",
-          "bytes": 25654
+          "bytes": 26393
         },
         {
           "path": "road8/beryl.qml",
@@ -462,13 +462,13 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/avalon.jpg",
-      "bytes": 21487238,
-      "rev": "5a52008",
+      "bytes": 21488066,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "avalon/bar.qml",
-          "bytes": 20940
+          "bytes": 21768
         },
         {
           "path": "avalon/beryl.qml",
@@ -566,8 +566,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/downpour.jpg",
-      "bytes": 31125756,
-      "rev": "5a52008",
+      "bytes": 31126495,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -576,7 +576,7 @@
         },
         {
           "path": "downpour/bar.qml",
-          "bytes": 21593
+          "bytes": 22332
         },
         {
           "path": "downpour/beryl.qml",
@@ -674,8 +674,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/encore.jpg",
-      "bytes": 40637532,
-      "rev": "5a52008",
+      "bytes": 40638271,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -684,7 +684,7 @@
         },
         {
           "path": "encore/bar.qml",
-          "bytes": 19806
+          "bytes": 20545
         },
         {
           "path": "encore/beryl.qml",
@@ -774,13 +774,13 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/fuel.jpg",
-      "bytes": 16625313,
-      "rev": "5a52008",
+      "bytes": 16626053,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "fuel/bar.qml",
-          "bytes": 27042
+          "bytes": 27782
         },
         {
           "path": "fuel/beryl.qml",
@@ -878,8 +878,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/gunsmoke.jpg",
-      "bytes": 18997931,
-      "rev": "5a52008",
+      "bytes": 18998670,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -888,7 +888,7 @@
         },
         {
           "path": "gunsmoke/bar.qml",
-          "bytes": 22750
+          "bytes": 23489
         },
         {
           "path": "gunsmoke/beryl.qml",
@@ -978,13 +978,13 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/guts.jpg",
-      "bytes": 26408912,
-      "rev": "5a52008",
+      "bytes": 26409740,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "guts/bar.qml",
-          "bytes": 26374
+          "bytes": 27202
         },
         {
           "path": "guts/beryl.qml",
@@ -1082,8 +1082,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/homeroom.jpg",
-      "bytes": 16865300,
-      "rev": "5a52008",
+      "bytes": 16866039,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -1092,7 +1092,7 @@
         },
         {
           "path": "homeroom/bar.qml",
-          "bytes": 24116
+          "bytes": 24855
         },
         {
           "path": "homeroom/beryl.qml",
@@ -1186,13 +1186,13 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/lonely-train.jpg",
-      "bytes": 29044986,
-      "rev": "5a52008",
+      "bytes": 29045722,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "lonely-train/bar.qml",
-          "bytes": 20913
+          "bytes": 21649
         },
         {
           "path": "lonely-train/beryl.qml",
@@ -1278,6 +1278,126 @@
       "oversizedOmitted": []
     },
     {
+      "name": "nightshift",
+      "tagline": "still up — a sleeping blue city, counted one lit window at a time",
+      "accents": [
+        "#c8dc9e",
+        "#6fa2f2",
+        "#e0574a"
+      ],
+      "cyber": false,
+      "light": false,
+      "video": true,
+      "variants": 1,
+      "thumb": ".catalog/thumbs/nightshift.jpg",
+      "bytes": 9287408,
+      "rev": "71b2ad4",
+      "best": false,
+      "files": [
+        {
+          "path": "nightshift/DESIGN.md",
+          "bytes": 6020
+        },
+        {
+          "path": "nightshift/Facade.qml",
+          "bytes": 3944
+        },
+        {
+          "path": "nightshift/bar.qml",
+          "bytes": 33019
+        },
+        {
+          "path": "nightshift/beryl.qml",
+          "bytes": 4627
+        },
+        {
+          "path": "nightshift/cava.conf",
+          "bytes": 556
+        },
+        {
+          "path": "nightshift/cava.qml",
+          "bytes": 10579
+        },
+        {
+          "path": "nightshift/clock.qml",
+          "bytes": 6098
+        },
+        {
+          "path": "nightshift/cobalt.qml",
+          "bytes": 3692
+        },
+        {
+          "path": "nightshift/config.toml",
+          "bytes": 1373
+        },
+        {
+          "path": "nightshift/frostify.qml",
+          "bytes": 5205
+        },
+        {
+          "path": "nightshift/haze.frag",
+          "bytes": 2181
+        },
+        {
+          "path": "nightshift/haze.frag.qsb",
+          "bytes": 3761
+        },
+        {
+          "path": "nightshift/lock.qml",
+          "bytes": 8114
+        },
+        {
+          "path": "nightshift/lyrics.qml",
+          "bytes": 19086
+        },
+        {
+          "path": "nightshift/mica.qml",
+          "bytes": 4489
+        },
+        {
+          "path": "nightshift/mote.png",
+          "bytes": 98
+        },
+        {
+          "path": "nightshift/notif.qml",
+          "bytes": 5196
+        },
+        {
+          "path": "nightshift/overview.qml",
+          "bytes": 7422
+        },
+        {
+          "path": "nightshift/particles.qml",
+          "bytes": 2954
+        },
+        {
+          "path": "nightshift/popup.qml",
+          "bytes": 6721
+        },
+        {
+          "path": "nightshift/pulse.qml",
+          "bytes": 5123
+        },
+        {
+          "path": "nightshift/sysinfo.qml",
+          "bytes": 20247
+        },
+        {
+          "path": "nightshift/vellum.qml",
+          "bytes": 4443
+        },
+        {
+          "path": "nightshift/wallpaper.mp4",
+          "bytes": 9109482
+        },
+        {
+          "path": "nightshift/windows.js",
+          "bytes": 12978
+        }
+      ],
+      "oversizedOmitted": []
+    },
+    {
       "name": "pines",
       "tagline": "standing watch — a fire lookout's glass cab above the fog",
       "accents": [
@@ -1290,8 +1410,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/pines.jpg",
-      "bytes": 22149926,
-      "rev": "5a52008",
+      "bytes": 22150729,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -1300,7 +1420,7 @@
         },
         {
           "path": "pines/bar.qml",
-          "bytes": 25858
+          "bytes": 26661
         },
         {
           "path": "pines/beryl.qml",
@@ -1398,13 +1518,13 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sailing.jpg",
-      "bytes": 21584571,
-      "rev": "5a52008",
+      "bytes": 21585307,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "sailing/bar.qml",
-          "bytes": 19973
+          "bytes": 20709
         },
         {
           "path": "sailing/beryl.qml",
@@ -1502,8 +1622,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sakura.jpg",
-      "bytes": 6202997,
-      "rev": "5a52008",
+      "bytes": 6203825,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -1512,7 +1632,7 @@
         },
         {
           "path": "sakura/bar.qml",
-          "bytes": 23734
+          "bytes": 24562
         },
         {
           "path": "sakura/beryl.qml",
@@ -1602,13 +1722,13 @@
       "video": true,
       "variants": 2,
       "thumb": ".catalog/thumbs/shiro.jpg",
-      "bytes": 26755970,
-      "rev": "37bb037",
+      "bytes": 26756798,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "shiro/bar.qml",
-          "bytes": 20702
+          "bytes": 21530
         },
         {
           "path": "shiro/beryl.qml",
@@ -1710,8 +1830,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/sleeper.jpg",
-      "bytes": 31197877,
-      "rev": "5a52008",
+      "bytes": 31198682,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -1720,7 +1840,7 @@
         },
         {
           "path": "sleeper/bar.qml",
-          "bytes": 24175
+          "bytes": 24980
         },
         {
           "path": "sleeper/beryl.qml",
@@ -1810,13 +1930,13 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stars.jpg",
-      "bytes": 23361220,
-      "rev": "5a52008",
+      "bytes": 23361959,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
           "path": "stars/bar.qml",
-          "bytes": 28973
+          "bytes": 29712
         },
         {
           "path": "stars/beryl.qml",
@@ -1914,8 +2034,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/stillwater.jpg",
-      "bytes": 22888001,
-      "rev": "5a52008",
+      "bytes": 22888740,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -1924,7 +2044,7 @@
         },
         {
           "path": "stillwater/bar.qml",
-          "bytes": 22402
+          "bytes": 23141
         },
         {
           "path": "stillwater/beryl.qml",
@@ -2022,8 +2142,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/thicket.jpg",
-      "bytes": 18665576,
-      "rev": "5a52008",
+      "bytes": 18666315,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -2032,7 +2152,7 @@
         },
         {
           "path": "thicket/bar.qml",
-          "bytes": 27798
+          "bytes": 28537
         },
         {
           "path": "thicket/beryl.qml",
@@ -2122,8 +2242,8 @@
       "video": true,
       "variants": 1,
       "thumb": ".catalog/thumbs/vinland.jpg",
-      "bytes": 3289817,
-      "rev": "5a52008",
+      "bytes": 3290645,
+      "rev": "71b2ad4",
       "best": false,
       "files": [
         {
@@ -2136,7 +2256,7 @@
         },
         {
           "path": "vinland/bar.qml",
-          "bytes": 22885
+          "bytes": 23713
         },
         {
           "path": "vinland/beryl.qml",
